@@ -10,5 +10,5 @@ Für HTTP Auth:
 
 Dann email/name eintragen:
 
-   git config --global user.name "Nick"
-   git config --global user.email "vor.nachname@hof-university.de"
+    git config --global user.name "Nick"
+    git config --global user.email "vor.nachname@hof-university.de"
