@@ -1,6 +1,7 @@
 #-- bin content
 build/*
 nbproject/*
+javadoc/*
 
 #-- vim files
 *.vim

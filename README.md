@@ -37,6 +37,7 @@ Möge eure IDE gut funktionieren.
 Source ist in src/; .jar files werden in build/jar/ abgelegt.
 Liste der Targets:
 
+    $ ant -p
     ant clean
     ant run 
     ant doc
