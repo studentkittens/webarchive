@@ -1,0 +1,9 @@
+#-- bin content
+build/*
+nbproject/*
+
+#-- vim files
+*.vim
+*.swp
+*.swo
+*.swn
