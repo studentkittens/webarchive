@@ -1,0 +1,43 @@
+Komponenten:
+------------
+* Crawler (1 bis n Instanzen)
+    -Arbeitet von einem (oder mehreren) Startknoten und arbeitet alle Links ab
+    -Seitensprache konfigurierbar, als Liste
+        Methoden zur Spracherkennung einhängbar (z.B. Attribut in Header, Keywords)
+    -Weitere Filter (pre) als Plugin einhängbar, zum Entscheiden ob Seite akzeptiert
+        (für Wikipedia -> Domainfilter)
+    -vor dem Speichern, mehrere parallele unabhängige Analysen
+
+* AnalyseMethoden
+    -Speicherung von Metadaten in Dateien
+    ???-Normalisierung von Zeichenketten?
+
+* CrawlerManager
+    -Frequenz der Suche konfigurierbar
+    -Suchtiefe konfigurierbar
+    -Dictionary mit allen aktiv berarbeiteten Seiten pro Zyklus
+* Ingestion (DB Backend)
+    -Test auf Duplikate 
+    -Test auf Änderungen
+    ???-soll konfigurierbar sein, so dass auch Metadaten lesen kann, die von zukünftigen Analysetools erzeugt werden
+Metadaten:
+    -URI
+    -TimeStamp "Akquisition"
+    -TimeStamp "Letzte Änderung" oder Checksum
+    -Title
+    -Language 
+    (-Autor)
+
+* FileManager
+    -Komprimierung (? jedes File einzeln oder gesamtes System oder Strukturen)
+
+
+
+Datenmodell
+
+Ablauf
+CrawlerMangager erstellt Crawlerthreads mit Startseite usw.
+Wenn Seite im Dictionary als "Besucht" eingetragen worden ist: Abbruch
+Crawler parsed alle Links auf der Seite
+Rekursiver Aufruf der neuen Seiten, neue Threads bis Obergrenze
+

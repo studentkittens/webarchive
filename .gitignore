@@ -1,0 +1,10 @@
+#-- bin content
+build/*
+nbproject/*
+javadoc/*
+
+#-- vim files
+*.vim
+*.swp
+*.swo
+*.swn
