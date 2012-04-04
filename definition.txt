@@ -41,3 +41,47 @@ Wenn Seite im Dictionary als "Besucht" eingetragen worden ist: Abbruch
 Crawler parsed alle Links auf der Seite
 Rekursiver Aufruf der neuen Seiten, neue Threads bis Obergrenze
 
+stand 04.04.2012
+crawl-vorgang
+- mehrere wget-instanzen crallen domain (parameter über ui einstellbar)
+- je wget ein tmp ordner
+- optional tmp ordner ins ramfs (tempfs) laden
+- html dateien in gleichnamigen ordner verschieben (ordner vorher erzeugen)
+	der ordner wird dann später als archiv benutzt --> komprimierung teilweise über git
+- xml-metadaten (parallel) auf tmp-ordner erzeugen, evtl. ordner bereinigen
+- tmp-ordner ins archiv syncen (rsync), dabei wird über domain-ordner gelockt (fs-mutex).
+	--> sonst warteschlange, mit anderem ordner weitermachen
+- tmp-ordner löschen
+- archiv wird über git versioniert, commit dann nach aktualisierung
+- liste für db-aktualisierung erzeugen, db updaten (sqlite)
+--> Analyse starten
+
+wiederherstellung db
+- db anlegen (datei)
+- tabellen anlegen
+- archiv ordnerstruktur rekursiv durchsuchen und xml-metadaten in die db schreiben
+
+analyse
+- Schnittstelle (interface) definieren, Analyseobjekte werden beim Start statisch eingehängt
+- optional: Socket / TCP/IP - Verbindung, Textbasierte commands verschicken. 
+  Beispielsweise:
+    - listfiles
+    - query <argumente>
+    - idle (lässt die verbindung solange schlafen bis events auftreten (neue files zB.))
+- alternativ: HTTP Webserver, abfrage durch ein webservice (zB: http://webarchive.fh-hof/api/crawl?depth=5&domain=heise.de
+
+ui 
+- webarchivserver, kann textbasierte anfragen erhalten
+	-Abfrage einzelne HTML-Files, Rückgabe Archiv des HTMLS mit Metadaten und Analysefiles
+	-Abfrage Domain, Rückgabe von HTML-Fileliste
+-optional: Analysetools registrieren
+
+config
+-alle parameter,
+-URI zum crallen
+
+
+
+
+- kommandenzeilen client
+
