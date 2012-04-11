@@ -56,6 +56,7 @@ crawl-vorgang
 	(achtung commit hash in db schreiben, besser taggen, wg. xml-metadatei)
 - liste für db-aktualisierung erzeugen, db updaten (sqlite)
 --> Analyse starten
+- 1 git repo / domain
 
 wiederherstellung db
 - db anlegen (datei)

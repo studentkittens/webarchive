@@ -1,0 +1,57 @@
+\chapter{Spezifikation}
+
+Crawlermodul
+
+Die Steuerung erfolgt über ein Configfile (optional Kommandozeileninterface).
+Es können folgende Parameter eingestellt werden:
+	-Crawltiefe
+	-Zeitintervalle der Crawlvorgänge
+	-maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen
+	-Domains, also die Startpunkte für die Crawler, pro Domain wird dann ein Crawler gestartet,
+		bis die Obergrenze erreicht wurde.
+
+Archiv
+Das Verzeichnis ist in einzelne Domainordner getrennt. Jeder Domainordner wird über ein Versionsverwaltung
+(z.B. git) versioniert. Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich.
+Beim Dateisystem wird von einem Linuxsystem ausgegangen.
+
+xml-Metadaten
+Die xml-Datei enthält grundsätzliche Metainformationen über eine archivierte html-Datei.
+Die xml-Datei soll auch nachträglich über eine Programmierschnittstelle um weitere xml-tags erweiterbar sein.
+Folgende Informationen stehen bereits fest: 
+- Git Commit Tag
+- URL
+- Dateipfad im Archiv
+- Hashsumme über den Content
+
+Datenbank
+Die Datenbank dient zur Speicherung der grundlegenden Metadaten.
+Diese soll während des Crawlvorgangs auf dem neuesten Stand gehalten werden.
+Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
+xml-Metadaten rekonstruiert werden können.
+ 
+Crawlvorgang
+Für die Crawlerinstanzen wird ein externes Tool verwendet (z.B. wget).
+Jede Instanz kopiert den Inhalt der Seite in je ein temporäres Verzeichnis.
+Dabei sollen die html-Dateien je Domain in einen Ordner geschrieben werden.
+Nach diesem Vorgang werden die tmp-Ordner bereinigt (z.B. leere Ordner entfernt)
+und die html-Dateien in einen Ordner gleichen Namens kopiert.
+Nun werden die Metadateien im xml-Format extrahiert und im o.g. Ordner gespeichert.
+Zuletzt werden die so vorbereiteten tmp-Ordner in das vorhandene Archivverzeichnis
+hineinsynchronisiert (z.B. mit rsync). Dabei wird jeder Domainordner über ein Dateimutex gelockt, um
+gleichzeitiges Schreiben zu verhindern.
+Zum Abschluss werden die Änderungen den Versionsverwaltungen der Domainordner mit einem Commit bestätigt.
+Während oder nach dem Synchronisationsvorgang wird ein Datenbank-dump für die neuen oder geänderten Daten
+erstellt. 
+
+Programmierschnittstelle - Java-Client
+Über diesen Client können vorbereitete Sql-Statements an einen Java-Server geschickt werden. Als return-Wert
+wird eine Liste von Metadatenobjekten zurückgegeben.
+Über diese Metadatenobjekte kann man sich nun über eine Anfrage die vorhandenen Archivordner aus dem Archiv herunterladen.
+Auch eine Erweiterung der xml-Dateien um neue Tags bzw. die Abfrage von Tags soll über die 
+Metadatenobjekte möglich sein.
+Bei schreibendem Zugriff auf das Archiv muss immer auf das Setzen von Dateilocks geachtet werden.
+
+% Diagramm
+
+ 
