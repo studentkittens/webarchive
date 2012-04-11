@@ -52,7 +52,8 @@ crawl-vorgang
 - tmp-ordner ins archiv syncen (rsync), dabei wird über domain-ordner gelockt (fs-mutex).
 	--> sonst warteschlange, mit anderem ordner weitermachen
 - tmp-ordner löschen
-- archiv wird über git versioniert, commit dann nach aktualisierung
+- archiv wird über git versioniert, commit dann nach aktualisierung, log file für db aktualisierung erstellen
+	(achtung commit hash in db schreiben, besser taggen, wg. xml-metadatei)
 - liste für db-aktualisierung erzeugen, db updaten (sqlite)
 --> Analyse starten
 
@@ -62,7 +63,7 @@ wiederherstellung db
 - archiv ordnerstruktur rekursiv durchsuchen und xml-metadaten in die db schreiben
 
 analyse
-- Schnittstelle (interface) definieren, Analyseobjekte werden beim Start statisch eingehängt
+- Schnittstelle (interface) definieren, (Analyseobjekte werden beim Start statisch eingehängt)
 - optional: Socket / TCP/IP - Verbindung, Textbasierte commands verschicken. 
   Beispielsweise:
     - listfiles
