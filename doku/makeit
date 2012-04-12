@@ -1,0 +1,1 @@
+pdflatex -output-directory ../texout dokumentation.tex
