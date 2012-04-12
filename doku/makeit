@@ -1,1 +1,2 @@
-pdflatex -output-directory ../texout dokumentation.tex
+pdflatex -output-directory texout dokumentation.tex
+mv texout/dokumentation.pdf .
