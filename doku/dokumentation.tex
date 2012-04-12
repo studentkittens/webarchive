@@ -1,0 +1,71 @@
+\documentclass[11pt,dvipsnames]{scrreprt}%oldschool: report
+
+\usepackage[utf8]{inputenc}
+\usepackage{ngerman}
+\usepackage{fullpage} % kleinere Ränder
+
+\usepackage{comment} % für größere comments: \begin{comment} ... \end{comment}
+
+% *** für eingefügte (pdf-)Grafiken
+\usepackage[pdftex]{graphicx} 
+%\pdfminorversion=6
+% ***
+
+\usepackage{enumerate} %für geschachtelte Aufzählungen
+
+
+\linespread{1.25}
+\usepackage{amsmath} %Matheformeln usw.
+\usepackage{amssymb} %mathfrak
+
+\usepackage[bookmarks=true]{hyperref} % hyperrefs aktivieren
+\setcounter{secnumdepth}{3} %Numerierung bis Tiefe 3, also ab \paragraph ohne
+
+% *** java listings
+\usepackage{listings} 
+\usepackage{courier} % courier schrift
+\lstset{
+	language=Java, 
+	basicstyle=\ttfamily, 
+	tabsize=4,
+	literate= {Ö}{{\"O}}1 {Ä}{{\"A}}1 {Ü}{{\"U}}1 {ß}{{\ss}}2 {ü}{{\"u}}1
+ 	{ä}{{\"a}}1 {ö}{{\"o}}1
+}
+% end listing ***
+
+%*** title usw.
+\title{Dokumentation\\
+Praktikum Software Entwicklung
+
+Internettechniken}
+\author{Dozent: Prof. Dr. Richard Göbel \\
+Beteiligte Studenten: \\
+Christoph Piechula \\
+Christoph Cwelich \\
+Christopher Pahl\\
+Eduard Schneider \\
+Florian Bauer \\
+Sabrina Biersack \\
+}
+\date{\today}
+%***
+
+%newcommands
+%\newcommand{\neuesKommando}{Was zu tun ist}
+
+\newcommand{\code}[1]{\lstinline{#1}}
+\begin{document}
+
+\graphicspath{
+{./analyse/img/}
+}
+\maketitle
+
+\tableofcontents
+
+\part{Spezifikation}
+\input{./spezi/spezi.tex}
+\end{document}
+
+
+
