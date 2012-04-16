@@ -7,9 +7,11 @@ dabei auf das Archiv abgebildet, wobei jede HTML-Datei in einen eigenen Archivor
 Beim Crawlvorgang werden zusätzlich Metadaten der HTML-Seiten erstellt. 
 Diese werden in einer Datenbank und als XML-Datei im jeweiligen HTML-Ordner gespeichert.
 Die Datenbank soll dabei wieder aus den XML-daten rekonstruierbar sein. \\
+Außerdem sollen Filter eingehängt werden können, die bereits in den TMP-Ordnern ungültige Dateien löscht.
 Über eine Java-Schnittstelle kann anschließend wieder auf die Daten zugegriffen werden.
 Dabei sollen neben dem Auslesen von vorhandenen Dateien auch neue Dateien den Archivordnern hinzugefügt werden können.
 Ebenso sollen die oben genannten XML-Daten um neue Nodes erweiterbar sein.
+Zu Vorführzwecken wird ein Testanalysetool erstellt, welches die bereitgestellte Schnittstelle testet.
 
 \chapter{Datenmodell der Metadaten}
 Für vereinfachte Such- und Sortieraufgaben wird bereits ein vereinfachtes Datenmodell festgelegt, welches
@@ -25,49 +27,69 @@ später auf Datenbank und XML-Daten umgesetzt werden soll: \\\\
 	\hline
 \end{tabular}
 
-\chapter{Programmteile}
+\chapter{Anforderungen}
 
 \section{Crawlermodul}
-Die Steuerung des bzw. der Crawler erfolgt über eine Config-Datei. 
-Optional kann das Modul mittels Kommandozeileninterface mit Parametern gestartet werden.
-Es können folgende Parameter eingestellt werden:
-\begin{itemize}
-	\item Tiefe bis zu der Links gefolgt werden soll
-	\item Zeitintervalle der Crawlvorgänge
-	\item maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen
-	\item Domains, also die Startpunkte für die Crawler. 
-		Pro Domain wird eine Crawlerinstanz gestartet, bis die Obergrenze an Instanzen erreicht wurde.
-\end{itemize}
+\subsection{Crawlersteuerung} \label{l:spec:crawler:control}
+	\subsubsection{Config-Datei} \label{l:spec:crawler:control:config} 
+		Die Steuerung des bzw. der Crawler erfolgt über eine Config-Datei.
+		Darin werden bereits Default- und Fallbackwerte festgelegt  
+		Es können folgende Parameter eingestellt werden:
+		\begin{enumerate}
+			\item Tiefe bis zu der Links gefolgt werden soll
+			\item Zeitintervalle der Crawlvorgänge
+			\item maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen
+			\item Filtereinstellungen
+		\end{enumerate}
 
-\subsection{Crawlvorgang} \label{l:spez:crawler}
-Für die Crawlerinstanzen wird ein externes Tool verwendet (z.B. wget).
-Jede gestartete Instanz kopiert den Inhalt der Seite in je ein temporäres Verzeichnis.
-Dabei wird die online vorhandene URL-Pfadstruktur der HTML-Dateien auf das Dateisystem abgebildet.
-Je Domain wird dadurch ein Hauptverzeichnis erzeugt. \\
-Nach diesem Vorgang werden die temp-Ordner bereinigt (z.B. leere Ordner entfernt)
-und die HTML-Dateien in ein Archiv-Ordner gleichen Namens kopiert.
-Nun werden die Metadateien im XML-Format extrahiert und im o.g. Ordner gespeichert.
-Zuletzt werden die so vorbereiteten tmp-Ordner in das vorhandene Archiv hineinsynchronisiert (z.B. mit rsync). 
-Dabei wird jeder Domainordner über ein Dateimutex gelockt, um
-gleichzeitiges Schreiben zu verhindern. \\
-Zum Abschluss werden die Änderungen den Versionsverwaltungen der Domainordner mit einem Commit bestätigt.
-Während oder nach dem Synchronisationsvorgang wird ein Datenbank-Dump für die neuen oder geänderten Daten
-zur Aktualisierung der Datenbank erstellt.
+	\subsubsection{Kommandozeileninterface} \label{l:spec:crawler:control:cmd} 
+		Optional kann das Modul mittels Kommandozeileninterface mit Parametern gestartet werden.
+		Damit kann man z.B. Werte aus der Config-Datei überschreiben.
+		Außerdem kann man Domains als Liste angeben, die als Startpunkte für die Crawler verwendet werden sollen. 
+ 
+\subsection{Crawlerinstanziierung} \label{l:spec:crawler:instance}
+	Pro Domain wird eine Crawlerinstanz gestartet bis die Obergrenze an Instanzen erreicht wird.
+	Für die Crawlerinstanzen wird ein externes Tool verwendet (z.B. wget).
+	Jede gestartete Instanz kopiert den Inhalt der Seite in je ein temporäres Verzeichnis.
+	Dabei wird die online vorhandene URL-Pfadstruktur der HTML-Dateien auf das Dateisystem abgebildet.
+	Je Domain wird dadurch ein Hauptverzeichnis erzeugt.
+\subsection{Bereinigung und Normalisierung} \label{l:spec:crawler:normalize}
+	Nach diesem Vorgang werden die temp-Ordner bereinigt (z.B. leere Ordner entfernt)
+	und die HTML-Dateien in ein Archiv-Ordner gleichen Namens (inklusive Dateiendung) kopiert.
+\subsection{Extraktion der Metadaten}\label{l:spec:crawler:extraction}
+	Nun werden die Metadateien im XML-Format extrahiert und im o.g. Ordner gespeichert.
+\subsection{Synchronisation}\label{l:spec:crawler:sync}
+	Zuletzt werden die so vorbereiteten tmp-Ordner in das vorhandene Archiv hineinsynchronisiert (z.B. mit rsync). 
+	Dabei wird jeder Domainordner über ein Dateimutex gelockt, um gleichzeitiges Schreiben zu verhindern. \\
+	Zum Abschluss werden die Änderungen den Versionsverwaltungen der Domainordner mit einem Commit bestätigt.
+	Während oder nach dem Synchronisationsvorgang wird ein Datenbank-Dump für die neuen oder geänderten Daten
+	zur Aktualisierung der Datenbank erstellt.
 
 \section{Archiv}
-Das Verzeichnis ist in einzelne Domainordner getrennt. Jeder Domainordner wird über ein Versionsverwaltung
-(z.B. git) versioniert. Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich,
-wobei diese aber manuell über die git-Schnittstellen abgerufen werden müssen.
-Bei Schreibvorgängen muss ähnlich wie unter \ref{l:spez:crawler} beschrieben, 
-die Daten gegen konkurrierende Dateizugriffe gesichert werden.
-\paragraph{Dateisystem:} Beim darunterliegenden Dateisystem wird von einem Linuxsystem ausgegangen.
-\paragraph{Komprimierung:} Eine explizite Dateikomprimierung wird erstmal nicht vorgesehen, ist aber 
-	zum Teil schon durch die Versionsverwaltung gegeben.
+\subsection{Aufteilung:}
+	Das Verzeichnis ist in einzelne Domainordner getrennt. 
+\subsection{Versionierung:}
+	Jeder Domainordner wird über ein Versionsverwaltung (z.B. git) versioniert. 
+	Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich,
+	wobei diese aber manuell über die git-Schnittstellen abgerufen werden müssen.
+\subsection{Synchronisation}
+	Bei Schreibvorgängen muss ähnlich wie unter \ref{l:spec:crawler:sync} beschrieben, 
+	die Daten gegen konkurrierende Dateizugriffe gesichert werden.
+	Dabei wird immer der ganze Domainordner gesperrt.
+\subsection{Dateisystem:} 
+	Beim darunterliegenden Dateisystem wird von einem vorhandenen Unix-FS ausgegangen.
+\subsection{Komprimierung:} 
+	Eine explizite Dateikomprimierung wird erstmal nicht vorgesehen, ist aber zum Teil schon durch die Versionierung gegeben.
+	In der Regel werden alte Revisionen gepackt.
 
 \section{Programmierschnittstelle - Java-Client}
-Über diesen Client können vorbereitete Sql-Statements an einen Java-Server geschickt werden. Als return-Wert
-wird eine Liste von Metadatenobjekten zurückgegeben.
-Über diese Metadatenobjekte kann man sich nun über eine gesonderte Anfrage die vorhandenen Archivordner aus dem Archiv nachladen.
+\subsection{Datenbankabfragen}
+	Über diesen Client können vorbereitete SQL-Statements an einen Java-Server geschickt werden. 
+	Die SQL-Abfrage wird soweit vorbereitet, dass nur noch ein SQL-Bedingungsausdruck für die WHERE-Clause angegeben werden muss.
+	Als return-Wert wird eine Liste von Metadatenobjekten zurückgegeben.
+\subsection{Dateiabfrage}
+	Über die Metadatenobjekte kann man sich über eine gesonderte Anfrage die vorhandenen Archivordner aus dem Archiv nachladen.
+\subsection{Erweiterung	der XML-Dateien}
 Auch eine Erweiterung der XML-Dateien um neue Tags bzw. die Abfrage von Tags soll über die 
 Metadatenobjekte möglich sein.
 
