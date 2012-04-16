@@ -2,7 +2,7 @@
 Über einen konfigurierbaren Crawler können HTML-Inhalte von Webseiten bis zu einer bestimmten Tiefe
 aus dem Netz in ein Archiv geladen werden. Da dies parallelisiert erfolgen soll,
 müssen die Daten nach dem Herunterladen von temporären Verzeichnissen in das gemeinsame
-Archivverzeichnis synchronisiert kopiert werden. Der extrahierte Pfad der HTML-Dateien wird
+Archivverzeichnis synchronisiert werden. Der aus der URI extrahierte Pfad der HTML-Dateien wird
 dabei auf das Archiv abgebildet, wobei jede HTML-Datei in einen eigenen Archivordner verschoben wird. \\
 Beim Crawlvorgang werden zusätzlich Metadaten der HTML-Seiten erstellt. 
 Diese werden in einer Datenbank und als XML-Datei im jeweiligen HTML-Ordner gespeichert.
@@ -20,7 +20,6 @@ später auf Datenbank und XML-Daten umgesetzt werden soll: \\\\
 	\hline
 	URL & String \\
 	Dateipfad des Archivordners im Archiv & String \\
-	Hashsumme über den Content &  String \\
 	Datum der letzten Änderung & TimeStamp oder Integer \\
 	Commit Tag der Versionsverwaltung & String \\
 	\hline
@@ -36,8 +35,8 @@ Es können folgende Parameter eingestellt werden:
 	\item Tiefe bis zu der Links gefolgt werden soll
 	\item Zeitintervalle der Crawlvorgänge
 	\item maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen
-	\item Domains, also die Startpunkte für die Crawler, pro Domain wird dann ein Crawler gestartet,
-		bis die Obergrenze erreicht wurde.
+	\item Domains, also die Startpunkte für die Crawler. 
+		Pro Domain wird eine Crawlerinstanz gestartet, bis die Obergrenze an Instanzen erreicht wurde.
 \end{itemize}
 
 \subsection{Crawlvorgang} \label{l:spez:crawler}
@@ -81,17 +80,17 @@ Mittels einer set-Methode, die Namen und Inhalt des Tags als Parameter erhält, 
 
 \section{Datenbank}
 Die Datenbank dient zur Speicherung der grundlegenden Metadaten und soll schnelle Suchanfragen zu ermöglichen.
-Die Datenband muss beim Fertigstellen des Crawlvorgangs auf den neuesten Stand gebracht werden.
+Die Datenbank muss beim Fertigstellen des Crawlvorgangs auf den neuesten Stand gebracht werden.
 Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
 XML-Metadaten rekonstruiert werden können.
 Aus diesem Grund wird erstmal von einer sqlite-Datenbank ausgegangen, 
 da diese relativ einfach als Datei erstellt und wieder gelöscht werden kann. 
 
 \section{Anmerkung: Programmiersprachen}
-Für die systemnahen Programmteile, wie die Steuerung der Crawler wird die Sprache Python in der Version 2 verwendet,
+Für die systemnahen Programmteile, wie die Steuerung der Crawler wird die Sprache Python in der Version 2 (2.7) verwendet,
 da hier bereits gute Libraries für den Zugriff auf das Dateisystem und die Versionsverwaltung vorhanden sind.
-Die mehr objektorientierten Teile und Schnittstellen nach außen werden in Java umgesetzt.
- 
+Die mehr objektorientierten Teile und Schnittstellen nach außen werden in Java 1.7 umgesetzt.
+\newpage 
 % Diagramm
 
 \begin{figure}
