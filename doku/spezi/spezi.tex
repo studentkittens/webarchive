@@ -54,9 +54,9 @@ und die Daten in das Archiv schreiben.
 		Optional können beim Start mittels Kommandozeile zusätzliche Parameter übergeben werden:
 		\begin{itemize}
 			\item Damit lassen sich Werte aus der Config-Datei überschreiben.
-			\item Es kann man eine Liste von Domains übergeben werden, die als Startpunkte für die Crawler verwendet werden sollen.
+			\item Es kann eine Liste von Domains übergeben werden, die als Startpunkte für die Crawler verwendet werden sollen.
 				Wobei mindestens ein Element obligatorisch ist.
-			\item Es kann ein Datenbank-Recovery erzwungen werden. siehe \label{db:recovery}
+			\item Es kann ein Datenbank-Recovery erzwungen werden. siehe \ref{spec:db:recovery}
 		\end{itemize}
 \subsection{Ausführung des Crawlvorgangs}
 	Die Folgenden Teilvorgänge sind so ausgelegt, dass sie parallelisiert abgearbeitet werden können.
@@ -86,15 +86,15 @@ und die Daten in das Archiv schreiben.
 	Filter können über die Konfiguration beim Starten bekannt gemacht werden und werden als Module/Plugins hinzugefügt.
 	Während des Teilvorgangs \ref{spec:req:crawler:filter} erhalten diese eine HTML-Datei und geben nach Prüfung einen Wahrheitswert zurück
 	ob die übergebene HTML-Datei behalten werden soll.
-	\subsubsection{Testfilter: Englische Sprache}
-		Als Testfilter wird ein Filter implementiert, der nichtenglische Seiten aussortiert.
+	\subsubsection{Testfilter: Werbefilter}
+		Als Testfilter wird ein Filter implementiert, der über eine Blacklist bestimmte Werbedomains aussortiert.
 
 
 \section{Archiv} \label{spec:req:archive}
-\subsection{Aufteilung:}\label{spec:req:archive:dist}
+\subsection{Aufteilung}\label{spec:req:archive:dist}
 	Das Verzeichnis ist in einzelne Domainordner getrennt. 
-\subsection{Versionierung:}\label{spec:req:archive:vers}
-	Jeder Domainordner wird über ein Versionsverwaltung (z.B. git) versioniert. 
+\subsection{Versionierung}\label{spec:req:archive:vers}
+	Jeder Domainordner wird über eine Versionsverwaltung (z.B. git) versioniert. 
 	Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich,
 	wobei diese aber manuell über die git-Schnittstellen abgerufen werden müssen.
 	Änderungen an Dateien müssen immer mit einem Commit bestätigt werden.
@@ -102,9 +102,9 @@ und die Daten in das Archiv schreiben.
 	Bei Schreibvorgängen muss ähnlich wie unter \ref{spec:req:crawler:sync} beschrieben, 
 	die Daten gegen konkurrierende Dateizugriffe gesichert werden.
 	Dabei wird immer der ganze Domainordner gesperrt.
-\subsection{Dateisystem:} \label{spec:req:archive:fs}
+\subsection{Dateisystem} \label{spec:req:archive:fs}
 	Beim darunterliegenden Dateisystem wird von einem vorhandenen Unix-FS ausgegangen.
-\subsection{Komprimierung:} \label{spec:req:archive:comp}
+\subsection{Komprimierung} \label{spec:req:archive:comp}
 	Eine explizite Dateikomprimierung wird erstmal nicht vorgesehen, ist aber zum Teil schon durch die Versionierung gegeben.
 	In der Regel werden alte Revisionen gepackt.
 
@@ -150,22 +150,22 @@ und die Daten in das Archiv schreiben.
 	Für die Validierung der XML-Daten muss eine XML-Schema ausgearbeitet werden.
 	Besonderes Augenmerk ist hierbei auf die Erweiterbarkeit zu legen.
 
-\section{Entwicklungsumgebung} \label{spec:req:devenv}
-\subsection{Programmiersprachen}
+\chapter{Entwicklungsumgebung} \label{spec:req:devenv}
+\section{Programmiersprachen}
 	Es werden die Sprachen Python und Java benutzt.
-	\subsubsection{Python}
+	\subsection{Python}
 		Python in der Version 2 (2.7) wird für die systemnahen Teile verwendet, wie das gesamte Crawlermodul, 
 		der Zugriff auf das Dateisystem (Archiv) und die notwendige Ordnersynchronisation, 
 		da hier bereits leistungsfähige Libraries für den Zugriff auf das Dateisystem und die Versionsverwaltung vorhanden sind.
-	\subsubsection{Java}
+	\subsection{Java}
 		Die Client-Server Architektur der oben genannten Programmierschnittstelle werden mit Java 1.7 umgesetzt.
 		Hierzu ist Java besonders geeignet und es ist gewährleistet, eine an der Hochschule Hof allgemein verständliche
 		Schnittstelle zu schaffen.
-\subsection{Dokumentation}
+\section{Dokumentation}
 	Die Dokumentation wird in Latex als ein fortlaufendes Gesamtdokument erstellt, welches je nach Phase um weitere Teile erweitert wird.
-\subsection{Teamsynchronisation}
+\section{Teamsynchronisation}
 	Dokumente und Quellcode werden über ein gemeinsames Repository bei github.com synchronisiert.
-\subsection{Sprache}	
+\section{Sprache}	
 	Die Sprache der Dokumentation ist Deutsch wobei natürlich geläufige Fremdwörter enthalten sind. Quellcode, Kommentare und daraus abgeleitete APIs (z.B. Javadoc) sind in Englisch zu verfassen.
 
 \newpage 
