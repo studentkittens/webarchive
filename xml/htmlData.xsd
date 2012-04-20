@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<xs:schema version="1.0"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns="http://www.hof-university.de/webarchive"
+		   targetNamespace="http://www.hof-university.de/webarchive"
+		   elementFormDefault="qualified"
+		   attributeFormDefault="qualified"
+>
+	<xs:element name="htmlData">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="metaData">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="url" type="xs:anyURI" />
+							<xs:element name="title" type="xs:string" />
+							<xs:element name="archivePath" type="xs:anyURI" />
+							<xs:element name="lastCrawl" type="xs:dateTime" />
+							<xs:element name="commitTag" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>	
+				</xs:element>
+				<xs:element name="analysisData"> 
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="analysisFile" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>	
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+
+	<xs:element name="analysisFile" />
+	
+	
+	<xs:element name="testAnalysis1" substitutionGroup="analysisFile">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="content" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>	
+	</xs:element>
+	
+</xs:schema>
