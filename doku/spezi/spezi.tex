@@ -9,9 +9,11 @@ Diese werden in einer Datenbank und als XML-Datei im jeweiligen HTML-Ordner gesp
 Die Datenbank soll dabei wieder aus den XML-Daten rekonstruierbar sein. \\
 Außerdem sollen Filter eingehängt werden können, die bereits in den TMP-Ordnern ungültige Dateien löschen.
 Über eine Java-Schnittstelle kann anschließend wieder auf die Daten zugegriffen werden.
-Dabei sollen neben dem Auslesen von vorhandenen Dateien auch neue Dateien den Archivordnern hinzugefügt werden können.
+Hierzu müssen sich Clients über eine vorgegebene Schnittstelle beim Textarchiv anmelden.
+Die Clients werden anschließend bei Änderungen oder neuen Einträgen benachrichtig und können sich selbstständig über die Schnittstelle einen beliebigen Stand der Daten herunterladen und an Analysetools weitergeben.
+Dabei sollen auch neue Dateien den Archivordnern hinzugefügt werden können.
 Ebenso sollen die oben genannten XML-Daten um neue Nodes erweiterbar sein.
-Zu Vorführzwecken wird ein Testanalysetool erstellt, welches die bereitgestellte Schnittstelle testet.
+Zu Vorführzwecken wird ein Testanalysetool erstellt.
 
 \chapter{Datenmodell der Metadaten}
 Für vereinfachte Such- und Sortieraufgaben wird bereits ein vereinfachtes Datenmodell festgelegt, welches
@@ -112,6 +114,11 @@ und die Daten in das Archiv schreiben.
 \section{Programmierschnittstelle - Java-Client/Server}\label{spec:req:jcs}
 	Diese Schnittstelle soll die Anbindung der Analysemethoden ermöglichen und macht gleichzeitig einen Zugriff über das Netzwerk möglich.
 \subsection{Schnittstelle - Client}\label{spec:req:jcs:client}
+	\subsubsection{Registrierung am Server} \label{spec:req:jcs:client:register}
+		Der Java-Client muss sich am Server mit seiner Netzwerkadresse anmelden, um bei Benachrichtigungen kontaktierbar zu sein.
+	\subsubsection{Benachrichtigungen} \label{spec:req:jcs:client:notify}
+		Sobald serverseitig Änderungen der archivierten Daten vorliegen, müssen alle Clienten das aktualisierte Datum und einen Commit-Tag empfangen können.
+		Mithilfe dieser Daten entscheiden die Clienten, ob die aktuellen Änderungen für das an den Client angebundene Modul (z.B. Analysetool) relevant sind und erzeugen gegebenenfalls SQL-Statements für die Datenbankabfrage.
 	\subsubsection{Datenbankabfragen} \label{spec:req:jcs:client:dbquery}
 		Über diesen Client können vorbereitete SQL-Statements an einen Java-Server geschickt werden. 
 		Die SQL-Abfrage wird soweit vorbereitet, dass nur noch ein SQL-Bedingungsausdruck für die WHERE-Klausel angegeben werden muss.
@@ -130,7 +137,16 @@ und die Daten in das Archiv schreiben.
 	Im Hintergrund nimmt ein Java-Server die Nachrichten der Clients entgegen
 	und führt die o.g. Funktionen aus und gibt die Ergebnisse oder Fehlermeldungen an den Client zurück.
 	Datei- und Datenbankfunktionen können evtl. mit dem Crawlermodul geteilt werden.
-
+	\subsubsection{Clienten registrieren} \label{spec:req:jcs:server:register}
+		Der Server hält eine Liste von angemeldeten Java-Clienten und verwaltet die Verbindungen der Clienten und verwirft sie bei Verbindungsverlust.
+	\subsubsection{Update-Notifier} \label{spec:req:jcs:server:notifier}
+		Der Update-Notifier ist ein eigens laufender Thread des Servers, der in einem vorgegebenen Intervall (z.B. stündlich) die Datenbank nach neuen oder aktualisierten Dateien durchsucht.
+		Hierfür speichert er sich den Zeitpunkt der letzten Update-Suche und vergleicht ihn mit dem Datum der Datensätze in der Datenbank.
+		Wird eine Änderung gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
+	\subsubsection{Clienten informieren} \label{spec:req:jcs:server:clientnotify}
+		Sobald die Update-Suche fertig ist, werden die gepufferten Informationen an die regisitrierten Clienten geschickt.
+	\subsubsection{Dateien liefern} \label{spec:req:jcs:server:data}
+		Von den Clienten können nun Anfragen in Form von vordefinierten SQL-Statements empfangen werden, worauf der Server die zu den Statements gehörenden Dateien den Clients zur Verfügung stellt.
 \section{Test Analysetool}
 	Zur Demonstrations- und Testzwecken der Java-Clientschnittstelle wird ein Analysetool erstellt, welches bestimmte Wörter zählt
 	und das Ergebnis im Archiv als Datei sowie im XML als zusätzliches Tag speichert.
