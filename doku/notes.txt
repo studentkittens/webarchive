@@ -8,6 +8,7 @@
   aber sind damit verschiedene Programme gemeint?
 - "Der java client muss sich mit seiner netzwerkadresse anmelden" - wie ist das gemeint?!
 - Python 2.7 nur wegen der git library, da es auf subprocess rauflaufen wird, vlt. doch Python3
+- Tagnamen eher: <timeStamp><domain> für leichteres durchsuchen
 - Ordnerstruktur vlt.:
   domain/
     voller_name_der_html_datei/
