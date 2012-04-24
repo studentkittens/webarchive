@@ -1,0 +1,26 @@
+# Git Rezept zum editieren alter commits
+# Wir haben eine git history wie die folgende:
+$ git log --pretty=format:'%h %s'
+    993516f Second commit
+    0fbc8ed First commit
+    abcdefg Initital commit
+# Wir sind also im second commit (== HEAD) und wollen den ersten commit verändern
+# Vorrausgesetzt wir haben ein sauberes working directory (git diff zeigt nichts an)
+# können wir einfach jetzt unsere änderungen machen:
+$ echo 'Hello Kitteh!' > a_new_file
+$ git add new_file
+# Und nun? Jetzt haben wir was zum committen.
+# Also nutzen wir commit --fixup:
+# Das erstellt einen neuen commit mit der commit message des angegebenen + 'fixup!' vorne.
+$ git commit --fixup '0fbc8ed'
+      [master a224f1e] fixup! First commit
+       1 file changed, 1 insertion(+)
+       create mode 100644 a_new_file
+$ git rebase -i --autosquash '0fbc8ed~1'
+       # editor ploppt auf
+       Successfully rebased and updated refs/heads/master.
+# Ein git log wird jetzt die gleiche history zeigen, aber 'first commit' enthält jetzt 
+# auch 'a_new_file', danach ist man auch wieder im HEAD.
+# git rebase öffnet leider einen editor, in dem die aktionen abgenickt werden.
+# Man kann aber auch einfach vor dem git rebase EDITOR='/bin/true' ausführen damit
+# es auto-akzeptiert wird.

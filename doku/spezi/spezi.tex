@@ -3,14 +3,14 @@
 aus dem Netz in ein Archiv geladen werden. Da dies parallelisiert erfolgen soll,
 müssen die Daten nach dem Herunterladen von temporären Verzeichnissen in das gemeinsame
 Archivverzeichnis synchronisiert werden. Der aus der URL extrahierte Pfad der HTML-Dateien wird
-dabei auf das Archiv abgebildet, wobei jede HTML-Datei in einen eigenen Archivordner verschoben wird. \\
+dabei auf das Archiv abgebildet, wobei jede HTML-Datei in einen eigenen Archivordner verschoben wird. \\ \\
 Beim Crawlvorgang werden zusätzlich Metadaten der HTML-Seiten erstellt. 
 Diese werden in einer Datenbank und als XML-Datei im jeweiligen HTML-Ordner gespeichert.
-Die Datenbank soll dabei wieder aus den XML-Daten rekonstruierbar sein. \\
+Die Datenbank soll dabei wieder aus den XML-Daten rekonstruierbar sein. \\ \\
 Außerdem sollen Filter eingehängt werden können, die bereits in den TMP-Ordnern ungültige Dateien löschen.
 Über eine Java-Schnittstelle kann anschließend wieder auf die Daten zugegriffen werden.
 Hierzu müssen sich Clients über eine vorgegebene Schnittstelle beim Textarchiv anmelden.
-Die Clients werden anschließend bei Änderungen oder neuen Einträgen benachrichtig und können sich selbstständig über die Schnittstelle einen beliebigen Stand der Daten herunterladen und an Analysetools weitergeben.
+Die Clients werden anschließend bei Änderungen oder neuen Einträgen benachrichtigt und können sich selbstständig über die Schnittstelle einen beliebigen Stand der Daten herunterladen und an Analysetools weitergeben.
 Dabei sollen auch neue Dateien den Archivordnern hinzugefügt werden können.
 Ebenso sollen die oben genannten XML-Daten um neue Nodes erweiterbar sein.
 Zu Vorführzwecken wird ein Testanalysetool erstellt.
@@ -65,23 +65,23 @@ und die Daten in das Archiv schreiben.
 	Die Folgenden Teilvorgänge sind so ausgelegt, dass sie parallelisiert abgearbeitet werden können.
 	\subsubsection{Instanziierung} \label{spec:req:crawler:instance}
 		Pro Domain wird eine Crawlerinstanz gestartet bis die Obergrenze an Instanzen erreicht wird.
-		Für die Crawlerinstanzen wird ein externes Tool verwendet (z.B. wget).
+		Für die Crawlerinstanzen wird ein externes Tool verwendet (wget).
 		Jede gestartete Instanz kopiert den Inhalt der Seite in je ein temporäres Verzeichnis.
 		Dabei wird die online vorhandene URL-Pfadstruktur der HTML-Dateien auf das Dateisystem abgebildet.
 		Je Domain wird dadurch ein Hauptverzeichnis erzeugt.
 	\subsubsection{Bereinigung und Normalisierung} \label{spec:req:crawler:normalize}
-		Nun werden die temp-Ordner bereinigt (z.B. leere Ordner entfernt)
+		Nun werden die temp-Ordner bereinigt (u.a. leere Ordner entfernt)
 		und die HTML-Dateien in ein Archiv-Ordner gleichen Namens (inklusive Dateiendung) kopiert.
 	\subsubsection{Filterung} \label{spec:req:crawler:filter}
 		Die Daten werden in diesem Teilvorgang von Filtern überprüft und ggf. gleich aussortiert.
 	\subsubsection{Extraktion der Metadaten}\label{spec:req:crawler:extraction}
 		In diesem Teilvorgang werden die Metadateien im XML-Format extrahiert und jeweils als Datei im zugehörigen Archivordner gespeichert.
 	\subsubsection{Synchronisation}\label{spec:req:crawler:sync}
-		Zuletzt werden die so vorbereiteten temporären Ordner in das vorhandene Archiv synchronisiert (z.B. mit rsync). 
+		Zuletzt werden die so vorbereiteten temporären Ordner in das vorhandene Archiv synchronisiert (mit rsync). 
 		Dabei wird jeder Domainordner über ein Dateimutex gesperrt, um gleichzeitiges Schreiben zu verhindern. 
 		Veraltete Archivordner werden dabei komplett überschrieben (können aber ggf. durch die Versionierung wieder hergestellt werden),
 		sodass auch veraltete Analysedaten gelöscht werden.\\
-		Zum Abschluss werden die Änderungen den Versionsverwaltungen der Domainordner mit einem Commit bestätigt.
+		Zum Abschluss werden die Änderungen der Domainordner mit einem Commit versioniert.
 	\subsubsection{Datenbankaktualisierung}
 		Während oder nach dem Synchronisationsvorgang wird ein Batch von SQL-Statements für die neuen oder geänderten Daten
 		zur Aktualisierung der Datenbank erstellt.
@@ -97,7 +97,7 @@ und die Daten in das Archiv schreiben.
 \subsection{Aufteilung}\label{spec:req:archive:dist}
 	Das Verzeichnis ist in einzelne Domainordner getrennt. 
 \subsection{Versionierung}\label{spec:req:archive:vers}
-	Jeder Domainordner wird über eine Versionsverwaltung (z.B. git) versioniert. 
+	Jeder Domainordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
 	Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich,
 	wobei diese aber manuell über die git-Schnittstellen abgerufen werden müssen.
 	Änderungen an Dateien müssen immer mit einem Commit bestätigt werden.
@@ -108,14 +108,13 @@ und die Daten in das Archiv schreiben.
 \subsection{Dateisystem} \label{spec:req:archive:fs}
 	Beim darunterliegenden Dateisystem wird von einem vorhandenen Unix-FS ausgegangen.
 \subsection{Komprimierung} \label{spec:req:archive:comp}
-	Eine explizite Dateikomprimierung wird erstmal nicht vorgesehen, ist aber zum Teil schon durch die Versionierung gegeben.
-	In der Regel werden alte Revisionen gepackt.
+	Eine explizite Dateikomprimierung wird erstmal nicht vorgesehen, ist aber zum Teil schon durch die Versionierung gegeben, da alte Revisionen gepackt abgelegt werden.
 
 \section{Programmierschnittstelle - Java-Client/Server}\label{spec:req:jcs}
 	Diese Schnittstelle soll die Anbindung der Analysemethoden ermöglichen und macht gleichzeitig einen Zugriff über das Netzwerk möglich.
 \subsection{Schnittstelle - Client}\label{spec:req:jcs:client}
 	\subsubsection{Registrierung am Server} \label{spec:req:jcs:client:register}
-		Der Java-Client muss sich am Server mit seiner Netzwerkadresse anmelden, um bei Benachrichtigungen kontaktierbar zu sein.
+		Der Java-Client muss sich am Server mit seiner Netzwerkadresse anmelden, um bei Benachrichtigungen kontaktierbar zu sein. % ?!
 	\subsubsection{Benachrichtigungen} \label{spec:req:jcs:client:notify}
 		Sobald serverseitig Änderungen der archivierten Daten vorliegen, müssen alle Clienten das aktualisierte Datum und einen Commit-Tag empfangen können.
 		Mithilfe dieser Daten entscheiden die Clienten, ob die aktuellen Änderungen für das an den Client angebundene Modul (z.B. Analysetool) relevant sind und erzeugen gegebenenfalls SQL-Statements für die Datenbankabfrage.
@@ -140,7 +139,7 @@ und die Daten in das Archiv schreiben.
 	\subsubsection{Clienten registrieren} \label{spec:req:jcs:server:register}
 		Der Server hält eine Liste von angemeldeten Java-Clienten und verwaltet die Verbindungen der Clienten und verwirft sie bei Verbindungsverlust.
 	\subsubsection{Update-Notifier} \label{spec:req:jcs:server:notifier}
-		Der Update-Notifier ist ein eigens laufender Thread des Servers, der in einem vorgegebenen Intervall (z.B. stündlich) die Datenbank nach neuen oder aktualisierten Dateien durchsucht.
+		Der Update-Notifier ist ein eigens laufender Thread des Servers, der in einem vorgegebenen Intervall (z.B. stündlich) in der Datenbank prüft ob neue Commit-Tags vorhanden sind.
 		Hierfür speichert er sich den Zeitpunkt der letzten Update-Suche und vergleicht ihn mit dem Datum der Datensätze in der Datenbank.
 		Wird eine Änderung gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
 	\subsubsection{Clienten informieren} \label{spec:req:jcs:server:clientnotify}
@@ -160,8 +159,8 @@ und die Daten in das Archiv schreiben.
 \subsection{Wiederherstellung} \label{spec:req:db:recovery}
 	Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
 	XML-Metadaten rekonstruiert werden können.
-	Aus diesem Grund wird erstmal von einer sqlite-Datenbank ausgegangen, 
-	da diese relativ einfach als Datei erstellt und wieder gelöscht werden kann.
+	Aus diesem Grund wird erstmal von einer einfachen SQLite-Datenbank ausgegangen, 
+	da diese dateibasiert ist und daher relativ simpel erstellt und wieder gelöscht werden kann.
 
 \section{XML-Dateien} \label{spec:req:xml}
 	Für die Validierung der XML-Daten muss eine XML-Schema ausgearbeitet werden.
@@ -173,7 +172,7 @@ und die Daten in das Archiv schreiben.
 	\subsection{Python}
 		Python in der Version 2 (2.7) wird für die systemnahen Teile verwendet, wie das gesamte Crawlermodul, 
 		der Zugriff auf das Dateisystem (Archiv) und die notwendige Ordnersynchronisation, 
-		da hier bereits leistungsfähige Libraries für den Zugriff auf das Dateisystem und die Versionsverwaltung vorhanden sind.
+		da hier bereits leistungsfähige Libraries für den Zugriff auf das Dateisystem, SQLite und die Versionsverwaltung vorhanden sind.
 	\subsection{Java}
 		Die Client-Server Architektur der oben genannten Programmierschnittstelle werden mit Java 1.7 umgesetzt.
 		Hierzu ist Java besonders geeignet und es ist gewährleistet, eine an der Hochschule Hof allgemein verständliche
@@ -181,9 +180,9 @@ und die Daten in das Archiv schreiben.
 \section{Dokumentation}
 	Die Dokumentation wird in Latex als ein fortlaufendes Gesamtdokument erstellt, welches je nach Phase um weitere Teile erweitert wird.
 \section{Teamsynchronisation}
-	Dokumente und Quellcode werden über ein gemeinsames Repository bei github.com synchronisiert.
+	Dokumente und Quellcode werden über ein gemeinsames Repository auf github.com synchronisiert.
 \section{Sprache}	
-	Die Sprache der Dokumentation ist Deutsch wobei natürlich geläufige Fremdwörter enthalten sind. Quellcode, Kommentare und daraus abgeleitete APIs (z.B. Javadoc) sind in Englisch zu verfassen.
+	Die Sprache der Dokumentation ist Deutsch wobei natürlich geläufige Fremdwörter enthalten sind. Quellcode, Kommentare und daraus abgeleitete APIs (Javadoc und Sphinx) sind in Englisch zu verfassen.
 
 \newpage 
 % Diagramm
