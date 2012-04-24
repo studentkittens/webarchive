@@ -1,5 +1,5 @@
 - Wird das editieren alter Stände wirklich gebraucht? Widerspricht das nicht dem sinn eines archivs?
-  Sollte es gebraucht werden: Gehen würde es wäre aber 
+  Sollte es gebraucht werden: Gehen würde es wäre (siehe git_edit_old_commits.txt) 
   Auch: Für das editieren alter stände brauchen wir das commit tag in dem xml tags.
 - Soll das xml wirklich mit versioniert werden? Welchen vorteil bringt das? 
   Ohne versionierung dieser hätten wir das problem mit dem synchronisieren der xml dateien nicht.
@@ -7,7 +7,7 @@
 - Wieso Trennung von Analysetool und Client? Klar, Analysetools werden intern aus einen client modul bestehen,
   aber sind damit verschiedene Programme gemeint?
 - "Der java client muss sich mit seiner netzwerkadresse anmelden" - wie ist das gemeint?!
-- Python 2.7 nur wegen der git library, da es auf subprocess rauflaufen wird, vlt. doch Python3
+- Python 2.7 nur wegen der git library, da es auf subprocess rauflaufen wird, vlt. doch Python3??
 - Tagnamen eher: <timeStamp><domain> für leichteres durchsuchen
 - Ordnerstruktur vlt.:
   domain/
