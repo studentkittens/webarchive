@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Observes changes in webarchive
  * @author ccwelich
+ * @version 1
  */
 public interface WebarchiveObserver {
 	/**

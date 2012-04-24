@@ -59,7 +59,7 @@ und die Daten in das Archiv schreiben.
 			\item Damit lassen sich Werte aus der Config-Datei überschreiben.
 			\item Es kann eine Liste von Domains übergeben werden, die als Startpunkte für die Crawler verwendet werden sollen.
 				Wobei mindestens ein Element obligatorisch ist.
-			\item Es kann ein Datenbank-Recovery erzwungen werden. siehe \ref{spec:db:recovery}
+			\item Es kann ein Datenbank-Recovery erzwungen werden. siehe \ref{spec:req:db:recovery}
 		\end{itemize}
 \subsection{Ausführung des Crawlvorgangs}
 	Die Folgenden Teilvorgänge sind so ausgelegt, dass sie parallelisiert abgearbeitet werden können.
@@ -114,10 +114,13 @@ und die Daten in das Archiv schreiben.
 	Diese Schnittstelle soll die Anbindung der Analysemethoden ermöglichen und macht gleichzeitig einen Zugriff über das Netzwerk möglich.
 \subsection{Schnittstelle - Client}\label{spec:req:jcs:client}
 	\subsubsection{Registrierung am Server} \label{spec:req:jcs:client:register}
-		Der Java-Client muss sich am Server mit seiner Netzwerkadresse anmelden, um bei Benachrichtigungen kontaktierbar zu sein. % ?!
+		Alle aktiven Java-Clients werden beim Server gespeichert, um diese über Änderungen informieren zu können.
+		Beim Abmelden oder Beenden muss ein Client aus dieser Registrierung gelöscht werden.
 	\subsubsection{Benachrichtigungen} \label{spec:req:jcs:client:notify}
-		Sobald serverseitig Änderungen der archivierten Daten vorliegen, müssen alle Clienten das aktualisierte Datum und einen Commit-Tag empfangen können.
-		Mithilfe dieser Daten entscheiden die Clienten, ob die aktuellen Änderungen für das an den Client angebundene Modul (z.B. Analysetool) relevant sind und erzeugen gegebenenfalls SQL-Statements für die Datenbankabfrage.
+		Sobald serverseitig Änderungen der archivierten Daten vorliegen, müssen alle Clienten das aktualisierte Datum und ein oder mehrere CommitTags empfangen können.
+		Die Clients sollen von Observern beobachtet werden können. Bei diesen Beobachtern kann es sich zum Beispiel um Analysetools handeln, die dann selbst entscheiden können,
+		welche Daten sie benötigen und mithilfe der CommitTags entsprechende Datenbankabfragen auslösen. 
+		Die Clients erhalten also Updateinformationen vom Server und geben diese an registrierte Observer weiter.
 	\subsubsection{Datenbankabfragen} \label{spec:req:jcs:client:dbquery}
 		Über diesen Client können vorbereitete SQL-Statements an einen Java-Server geschickt werden. 
 		Die SQL-Abfrage wird soweit vorbereitet, dass nur noch ein SQL-Bedingungsausdruck für die WHERE-Klausel angegeben werden muss.
@@ -144,8 +147,7 @@ und die Daten in das Archiv schreiben.
 		Wird eine Änderung gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
 	\subsubsection{Clienten informieren} \label{spec:req:jcs:server:clientnotify}
 		Sobald die Update-Suche fertig ist, werden die gepufferten Informationen an die regisitrierten Clienten geschickt.
-	\subsubsection{Dateien liefern} \label{spec:req:jcs:server:data}
-		Von den Clienten können nun Anfragen in Form von vordefinierten SQL-Statements empfangen werden, worauf der Server die zu den Statements gehörenden Dateien den Clients zur Verfügung stellt.
+		Der weitere Vorgang ist dann unter \ref{spec:req:jcs:client:notify} beschrieben.
 \section{Test Analysetool}
 	Zur Demonstrations- und Testzwecken der Java-Clientschnittstelle wird ein Analysetool erstellt, welches bestimmte Wörter zählt
 	und das Ergebnis im Archiv als Datei sowie im XML als zusätzliches Tag speichert.

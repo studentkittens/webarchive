@@ -10,7 +10,7 @@ import java.util.Date;
  * archives data.
  *
  * @author ccwelich
- * @version 1.0
+ * @version 1
  */
 public interface MetaData {
 
