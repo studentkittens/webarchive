@@ -1,4 +1,4 @@
-package server;
+﻿package server;
 
 import headers.classes.HandShakeHeader;
 
@@ -68,6 +68,12 @@ public class Server  {
 			else
 			{
 				System.out.println("HANDSHAKE FAILED");
+				try {
+					sock.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				continue;
 			}
 			
@@ -83,7 +89,7 @@ public class Server  {
 	
 	private boolean doHandShake(Connection c)
 	{
-		// Nur ein Beispiel, ginge natürlich viel effizienter ohne die ganzen Objekte, aber OOP wills halt so extrem
+		// Nur ein Beispiel, ginge natÃ¼rlich viel effizienter ohne die ganzen Objekte, aber OOP wills halt so extrem
 		HandShakeMessage h = null;
 		try {
 			System.out.println("try sending handshake");
