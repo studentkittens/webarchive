@@ -1,0 +1,643 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: /home/abraham/eddY/webarchive/webarchive/src/webarchive/server-client-sample/Server-Client-Klassen.dia
+%%Creator: Dia v0.97.2
+%%CreationDate: Thu Apr 26 05:12:59 2012
+%%For: abraham
+%%Orientation: Portrait
+%%Magnification: 1.0000
+%%BoundingBox: 0 0 1546 684
+%%BeginSetup
+%%EndSetup
+%%EndComments
+%%BeginProlog
+[ /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright
+/parenleft /parenright /asterisk /plus /comma /hyphen /period /slash /zero /one
+/two /three /four /five /six /seven /eight /nine /colon /semicolon
+/less /equal /greater /question /at /A /B /C /D /E
+/F /G /H /I /J /K /L /M /N /O
+/P /Q /R /S /T /U /V /W /X /Y
+/Z /bracketleft /backslash /bracketright /asciicircum /underscore /quoteleft /a /b /c
+/d /e /f /g /h /i /j /k /l /m
+/n /o /p /q /r /s /t /u /v /w
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section /dieresis /copyright
+/ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron /degree /plusminus /twosuperior /threesuperior
+/acute /mu /paragraph /periodcentered /cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf
+/threequarters /questiondown /Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis /Eth /Ntilde
+/Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply /Oslash /Ugrave /Uacute /Ucircumflex
+/Udieresis /Yacute /Thorn /germandbls /agrave /aacute /acircumflex /atilde /adieresis /aring
+/ae /ccedilla /egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide /oslash /ugrave
+/uacute /ucircumflex /udieresis /yacute /thorn /ydieresis] /isolatin1encoding exch def
+/cp {closepath} bind def
+/c {curveto} bind def
+/f {fill} bind def
+/a {arc} bind def
+/ef {eofill} bind def
+/ex {exch} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth pop} bind def
+/tr {translate} bind def
+
+/ellipsedict 8 dict def
+ellipsedict /mtrx matrix put
+/ellipse
+{ ellipsedict begin
+   /endangle exch def
+   /startangle exch def
+   /yrad exch def
+   /xrad exch def
+   /y exch def
+   /x exch def   /savematrix mtrx currentmatrix def
+   x y tr xrad yrad sc
+   0 0 1 startangle endangle arc
+   savematrix setmatrix
+   end
+} def
+
+/mergeprocs {
+dup length
+3 -1 roll
+dup
+length
+dup
+5 1 roll
+3 -1 roll
+add
+array cvx
+dup
+3 -1 roll
+0 exch
+putinterval
+dup
+4 2 roll
+putinterval
+} bind def
+/Times-Roman-latin1
+    /Times-Roman findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Times-Italic-latin1
+    /Times-Italic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Times-Bold-latin1
+    /Times-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Times-BoldItalic-latin1
+    /Times-BoldItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/AvantGarde-Gothic-latin1
+    /AvantGarde-Gothic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/AvantGarde-BookOblique-latin1
+    /AvantGarde-BookOblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/AvantGarde-Demi-latin1
+    /AvantGarde-Demi findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/AvantGarde-DemiOblique-latin1
+    /AvantGarde-DemiOblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Bookman-Light-latin1
+    /Bookman-Light findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Bookman-LightItalic-latin1
+    /Bookman-LightItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Bookman-Demi-latin1
+    /Bookman-Demi findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Bookman-DemiItalic-latin1
+    /Bookman-DemiItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Courier-latin1
+    /Courier findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Courier-Oblique-latin1
+    /Courier-Oblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Courier-Bold-latin1
+    /Courier-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Courier-BoldOblique-latin1
+    /Courier-BoldOblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-latin1
+    /Helvetica findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Oblique-latin1
+    /Helvetica-Oblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Bold-latin1
+    /Helvetica-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-BoldOblique-latin1
+    /Helvetica-BoldOblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Narrow-latin1
+    /Helvetica-Narrow findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Narrow-Oblique-latin1
+    /Helvetica-Narrow-Oblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Narrow-Bold-latin1
+    /Helvetica-Narrow-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Helvetica-Narrow-BoldOblique-latin1
+    /Helvetica-Narrow-BoldOblique findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/NewCenturySchlbk-Roman-latin1
+    /NewCenturySchlbk-Roman findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/NewCenturySchlbk-Italic-latin1
+    /NewCenturySchlbk-Italic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/NewCenturySchlbk-Bold-latin1
+    /NewCenturySchlbk-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/NewCenturySchlbk-BoldItalic-latin1
+    /NewCenturySchlbk-BoldItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Palatino-Roman-latin1
+    /Palatino-Roman findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Palatino-Italic-latin1
+    /Palatino-Italic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Palatino-Bold-latin1
+    /Palatino-Bold findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Palatino-BoldItalic-latin1
+    /Palatino-BoldItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/Symbol-latin1
+    /Symbol findfont
+definefont pop
+/ZapfChancery-MediumItalic-latin1
+    /ZapfChancery-MediumItalic findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+/ZapfDingbats-latin1
+    /ZapfDingbats findfont
+    dup length dict begin
+	{1 index /FID ne {def} {pop pop} ifelse} forall
+	/Encoding isolatin1encoding def
+    currentdict end
+definefont pop
+28.346000 -28.346000 scale
+-15.980826 -33.468854 translate
+%%EndProlog
+
+
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 16.030826 14.205000 m 16.030826 15.605000 l 30.775826 15.605000 l 30.775826 14.205000 l f
+0.000000 0.000000 0.000000 srgb
+n 16.030826 14.205000 m 16.030826 15.605000 l 30.775826 15.605000 l 30.775826 14.205000 l cp s
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(Server) dup sw 2 div 23.403326 ex sub 14.955000 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 16.030826 15.605000 m 16.030826 19.005000 l 30.775826 19.005000 l 30.775826 15.605000 l f
+0.000000 0.000000 0.000000 srgb
+n 16.030826 15.605000 m 16.030826 19.005000 l 30.775826 19.005000 l 30.775826 15.605000 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(-listenPort: int) 16.180826 16.145000 m
+ gs 1 -1 sc sh gr
+(-svSock: ServerSocket) 16.180826 16.945000 m
+ gs 1 -1 sc sh gr
+(-cList: ArrayList<Connection>) 16.180826 17.745000 m
+ gs 1 -1 sc sh gr
+(+DEFAULT_PORT: int = 21000) 16.180826 18.545000 m
+ gs 1 -1 sc sh gr
+0.050000 slw
+n 16.180826 18.985000 m 26.190826 18.985000 l s
+0.100000 slw
+1.000000 1.000000 1.000000 srgb
+n 16.030826 19.005000 m 16.030826 21.605000 l 30.775826 21.605000 l 30.775826 19.005000 l f
+0.000000 0.000000 0.000000 srgb
+n 16.030826 19.005000 m 16.030826 21.605000 l 30.775826 21.605000 l 30.775826 19.005000 l cp s
+(+run\(\): void) 16.180826 19.545000 m
+ gs 1 -1 sc sh gr
+(-addNewConnection\(c:Connection\): void) 16.180826 20.345000 m
+ gs 1 -1 sc sh gr
+(-doHandShake\(c:Connection\): boolean) 16.180826 21.145000 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 42.343338 9.423051 m 42.343338 11.623051 l 47.848338 11.623051 l 47.848338 9.423051 l f
+0.000000 0.000000 0.000000 srgb
+n 42.343338 9.423051 m 42.343338 11.623051 l 47.848338 11.623051 l 47.848338 9.423051 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(<<interface>>) dup sw 2 div 45.095838 ex sub 10.063051 m
+ gs 1 -1 sc sh gr
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(Runnable) dup sw 2 div 45.095838 ex sub 10.973051 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 35.800000 14.200000 m 35.800000 15.600000 l 54.395000 15.600000 l 54.395000 14.200000 l f
+0.000000 0.000000 0.000000 srgb
+n 35.800000 14.200000 m 35.800000 15.600000 l 54.395000 15.600000 l 54.395000 14.200000 l cp s
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(Connection) dup sw 2 div 45.097500 ex sub 14.950000 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 35.800000 15.600000 m 35.800000 19.000000 l 54.395000 19.000000 l 54.395000 15.600000 l f
+0.000000 0.000000 0.000000 srgb
+n 35.800000 15.600000 m 35.800000 19.000000 l 54.395000 19.000000 l 54.395000 15.600000 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(-ois: ObjectInputStream) 35.950000 16.140000 m
+ gs 1 -1 sc sh gr
+(-oos: ObjectOutputStream) 35.950000 16.940000 m
+ gs 1 -1 sc sh gr
+(-sock: Socket) 35.950000 17.740000 m
+ gs 1 -1 sc sh gr
+(-conHandler: ConnectionHandler) 35.950000 18.540000 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 35.800000 19.000000 m 35.800000 23.200000 l 54.395000 23.200000 l 54.395000 19.000000 l f
+0.000000 0.000000 0.000000 srgb
+n 35.800000 19.000000 m 35.800000 23.200000 l 54.395000 23.200000 l 54.395000 19.000000 l cp s
+(+send\(obj:Transferable\): void) 35.950000 19.540000 m
+ gs 1 -1 sc sh gr
+(+receive\(\): Transferable) 35.950000 20.340000 m
+ gs 1 -1 sc sh gr
+(+run\(\): void) 35.950000 21.140000 m
+ gs 1 -1 sc sh gr
+(+Connection\(sock:Socket,oos:ObjectOutputStream,) 35.950000 21.940000 m
+ gs 1 -1 sc sh gr
+(            ois:ObjectInputStream\)) 35.950000 22.740000 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[1.000000] 0 sd
+[0.400000] 0 sd
+0 slj
+0 slc
+n 45.095838 12.585136 m 45.095838 13.336666 l 45.097500 13.336666 l 45.097500 14.200000 l s
+0 slj
+1.000000 1.000000 1.000000 srgb
+n 45.495838 12.585136 m 45.095838 11.785136 l 44.695838 12.585136 l ef
+0.100000 slw
+[] 0 sd
+0 slj
+0.000000 0.000000 0.000000 srgb
+n 45.495838 12.585136 m 45.095838 11.785136 l 44.695838 12.585136 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 32.034405 14.905000 m 33.637913 14.905000 l 33.637913 14.900000 l 35.800000 14.900000 l s
+[] 0 sd
+0 slj
+0 slc
+1.000000 1.000000 1.000000 srgb
+n 30.775826 14.905000 m 31.475826 14.665000 l 32.175826 14.905000 l 31.475826 15.145000 l ef
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+0.000000 0.000000 0.000000 srgb
+n 30.775826 14.905000 m 31.475826 14.665000 l 32.175826 14.905000 l 31.475826 15.145000 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(1) 32.375826 14.605000 m
+ gs 1 -1 sc sh gr
+(0...*) dup sw 35.600000 ex sub 14.600000 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 36.750000 26.818854 m 36.750000 29.018854 l 53.420000 29.018854 l 53.420000 26.818854 l f
+0.000000 0.000000 0.000000 srgb
+n 36.750000 26.818854 m 36.750000 29.018854 l 53.420000 29.018854 l 53.420000 26.818854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(<<abstract>>) dup sw 2 div 45.085000 ex sub 27.458854 m
+ gs 1 -1 sc sh gr
+/Helvetica-BoldOblique-latin1 ff 0.700000 scf sf
+(ConnectionHandler) dup sw 2 div 45.085000 ex sub 28.368854 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 36.750000 29.018854 m 36.750000 30.018854 l 53.420000 30.018854 l 53.420000 29.018854 l f
+0.000000 0.000000 0.000000 srgb
+n 36.750000 29.018854 m 36.750000 30.018854 l 53.420000 30.018854 l 53.420000 29.018854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(-c: Connection) 36.900000 29.558854 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 36.750000 30.018854 m 36.750000 33.418854 l 53.420000 33.418854 l 53.420000 30.018854 l f
+0.000000 0.000000 0.000000 srgb
+n 36.750000 30.018854 m 36.750000 33.418854 l 53.420000 33.418854 l 53.420000 30.018854 l cp s
+(+<<abstract>> handle\(t:Transferable\): void) 36.900000 30.558854 m
+ gs 1 -1 sc sh gr
+(+getSocket\(\): Socket) 36.900000 31.358854 m
+ gs 1 -1 sc sh gr
+(+getConnection\(\): Connection) 36.900000 32.158854 m
+ gs 1 -1 sc sh gr
+(+ConnectionHandler\(c:Connection\)) 36.900000 32.958854 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 45.097500 23.423607 m 45.097500 26.625000 l 45.085000 26.625000 l 45.085000 26.595247 l s
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 45.497500 24.111803 m 45.097500 23.311803 l 44.697500 24.111803 l s
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 44.685000 25.907051 m 45.085000 26.707051 l 45.485000 25.907051 l s
+/Courier-latin1 ff 0.560000 scf sf
+(1) 45.647500 23.650000 m
+ gs 1 -1 sc sh gr
+(1) 45.635000 26.468854 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 19.533811 27.218854 m 19.533811 28.618854 l 34.663811 28.618854 l 34.663811 27.218854 l f
+0.000000 0.000000 0.000000 srgb
+n 19.533811 27.218854 m 19.533811 28.618854 l 34.663811 28.618854 l 34.663811 27.218854 l cp s
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(ServerConnectionHandler) dup sw 2 div 27.098811 ex sub 27.968854 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 19.533811 28.618854 m 19.533811 29.018854 l 34.663811 29.018854 l 34.663811 28.618854 l f
+0.000000 0.000000 0.000000 srgb
+n 19.533811 28.618854 m 19.533811 29.018854 l 34.663811 29.018854 l 34.663811 28.618854 l cp s
+1.000000 1.000000 1.000000 srgb
+n 19.533811 29.018854 m 19.533811 30.818854 l 34.663811 30.818854 l 34.663811 29.018854 l f
+0.000000 0.000000 0.000000 srgb
+n 19.533811 29.018854 m 19.533811 30.818854 l 34.663811 30.818854 l 34.663811 29.018854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(+ServerConnectionHandler\(c:Connection\)) 19.683811 29.558854 m
+ gs 1 -1 sc sh gr
+(+handle\(t:Transferable\): void) 19.683811 30.358854 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 35.838197 27.918854 m 35.900000 27.918854 l 34.713811 27.918854 l 34.663811 27.918854 l s
+0 slj
+1.000000 1.000000 1.000000 srgb
+n 35.838197 28.318854 m 36.638197 27.918854 l 35.838197 27.518854 l ef
+0.100000 slw
+[] 0 sd
+0 slj
+0.000000 0.000000 0.000000 srgb
+n 35.838197 28.318854 m 36.638197 27.918854 l 35.838197 27.518854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 55.330793 27.223854 m 55.330793 28.623854 l 70.460793 28.623854 l 70.460793 27.223854 l f
+0.000000 0.000000 0.000000 srgb
+n 55.330793 27.223854 m 55.330793 28.623854 l 70.460793 28.623854 l 70.460793 27.223854 l cp s
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(ClientConnectionHandler) dup sw 2 div 62.895793 ex sub 27.973854 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 55.330793 28.623854 m 55.330793 29.023854 l 70.460793 29.023854 l 70.460793 28.623854 l f
+0.000000 0.000000 0.000000 srgb
+n 55.330793 28.623854 m 55.330793 29.023854 l 70.460793 29.023854 l 70.460793 28.623854 l cp s
+1.000000 1.000000 1.000000 srgb
+n 55.330793 29.023854 m 55.330793 30.823854 l 70.460793 30.823854 l 70.460793 29.023854 l f
+0.000000 0.000000 0.000000 srgb
+n 55.330793 29.023854 m 55.330793 30.823854 l 70.460793 30.823854 l 70.460793 29.023854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(+ClientConnectionHandler\(c:Connection\)) 55.480793 29.563854 m
+ gs 1 -1 sc sh gr
+(+handle\(t:Transferable\): void) 55.480793 30.363854 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 54.331803 27.918854 m 54.775396 27.918854 l 54.775396 27.923854 l 55.330793 27.923854 l s
+0 slj
+1.000000 1.000000 1.000000 srgb
+n 54.331803 27.518854 m 53.531803 27.918854 l 54.331803 28.318854 l ef
+0.100000 slw
+[] 0 sd
+0 slj
+0.000000 0.000000 0.000000 srgb
+n 54.331803 27.518854 m 53.531803 27.918854 l 54.331803 28.318854 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+0.100000 slw
+[] 0 sd
+1.000000 1.000000 1.000000 srgb
+n 57.783844 14.200000 m 57.783844 15.600000 l 68.293844 15.600000 l 68.293844 14.200000 l f
+0.000000 0.000000 0.000000 srgb
+n 57.783844 14.200000 m 57.783844 15.600000 l 68.293844 15.600000 l 68.293844 14.200000 l cp s
+/Helvetica-Bold-latin1 ff 0.700000 scf sf
+(Client) dup sw 2 div 63.038844 ex sub 14.950000 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 57.783844 15.600000 m 57.783844 19.000000 l 68.293844 19.000000 l 68.293844 15.600000 l f
+0.000000 0.000000 0.000000 srgb
+n 57.783844 15.600000 m 57.783844 19.000000 l 68.293844 19.000000 l 68.293844 15.600000 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(+DEFAULT_PORT: int = 21000) 57.933844 16.140000 m
+ gs 1 -1 sc sh gr
+(-ip: String) 57.933844 16.940000 m
+ gs 1 -1 sc sh gr
+(-port: int) 57.933844 17.740000 m
+ gs 1 -1 sc sh gr
+(-c: Connection) 57.933844 18.540000 m
+ gs 1 -1 sc sh gr
+1.000000 1.000000 1.000000 srgb
+n 57.783844 19.000000 m 57.783844 21.600000 l 68.293844 21.600000 l 68.293844 19.000000 l f
+0.000000 0.000000 0.000000 srgb
+n 57.783844 19.000000 m 57.783844 21.600000 l 68.293844 21.600000 l 68.293844 19.000000 l cp s
+(+connectToServer\(\): void) 57.933844 19.540000 m
+ gs 1 -1 sc sh gr
+(+setIp\(ip:String\): void) 57.933844 20.340000 m
+ gs 1 -1 sc sh gr
+(+setPort\(port:int\): void) 57.933844 21.140000 m
+ gs 1 -1 sc sh gr
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+n 56.525265 14.900000 m 57.047550 14.900000 l 57.047550 14.900000 l 54.395000 14.900000 l s
+[] 0 sd
+0 slj
+0 slc
+1.000000 1.000000 1.000000 srgb
+n 57.783844 14.900000 m 57.083844 15.140000 l 56.383844 14.900000 l 57.083844 14.660000 l ef
+0.100000 slw
+[] 0 sd
+0 slj
+0 slc
+0.000000 0.000000 0.000000 srgb
+n 57.783844 14.900000 m 57.083844 15.140000 l 56.383844 14.900000 l 57.083844 14.660000 l cp s
+/Courier-latin1 ff 0.560000 scf sf
+(1) dup sw 56.183844 ex sub 14.600000 m
+ gs 1 -1 sc sh gr
+(1) 54.595000 14.600000 m
+ gs 1 -1 sc sh gr
+showpage
