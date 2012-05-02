@@ -14,24 +14,22 @@ and open the template in the editor.
 	<xs:element name="htmlData">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="metaData">
+				<xs:element name="meta">
+					<xs:complexType>
+						<xs:attribute name="url" type="xs:anyURI" use="required"/>
+						<xs:attribute name="title" type="xs:string" use="required" />
+						<xs:attribute name="archivePath" type="xs:anyURI" use="required" />
+						<xs:attribute name="lastCrawl" type="xs:dateTime" use="required" />
+						<xs:attribute name="commitTag" type="xs:string" use="required" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="data">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="url" type="xs:anyURI" />
-							<xs:element name="title" type="xs:string" />
-							<xs:element name="archivePath" type="xs:anyURI" />
-							<xs:element name="lastCrawl" type="xs:dateTime" />
-							<xs:element name="commitTag" type="xs:string" />
-						</xs:sequence>
-					</xs:complexType>	
-				</xs:element>
-				<xs:element name="analysisData"> 
-					<xs:complexType>
-						<xs:sequence minOccurs="0" maxOccurs="unbounded">
-							<xs:element ref="analysisFile" />
+							<xs:element ref="analysisFile"  minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
 					</xs:complexType>
-				</xs:element>	
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

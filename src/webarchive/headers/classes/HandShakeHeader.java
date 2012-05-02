@@ -1,6 +1,6 @@
-package headers.classes;
+package webarchive.headers.classes;
 
-import headers.Header;
+import webarchive.headers.Header;
 
 public class HandShakeHeader implements Header {
 

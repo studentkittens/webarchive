@@ -1,8 +1,8 @@
-package transfer.classes;
+package webarchive.transfer.classes;
 
 import headers.Header;
 import headers.classes.HandShakeHeader;
-import transfer.Transferable;
+import webarchive.transfer.Transferable;
 
 public class Message implements Transferable {
 

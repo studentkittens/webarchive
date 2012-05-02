@@ -1,4 +1,4 @@
-package transfer;
+package webarchive.transfer;
 
 import headers.Header;
 

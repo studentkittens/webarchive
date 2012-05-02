@@ -1,4 +1,4 @@
-package headers;
+package webarchive.headers;
 
 import java.io.Serializable;
 

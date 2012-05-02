@@ -1,17 +1,14 @@
-﻿package server;
+package webarchive.server;
 
-import headers.classes.HandShakeHeader;
-
+import webarchive.connection.Connection;
+import webarchive.headers.classes.HandShakeHeader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import connection.Connection;
-
-import transfer.classes.HandShakeMessage;
+import webarchive.transfer.classes.HandShakeMessage;
 
 public class Server  {
 

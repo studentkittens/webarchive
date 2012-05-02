@@ -4,17 +4,17 @@
 	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xmlns:warc='http://www.hof-university.de/webarchive'
 	xsi:schemaLocation='htmlData.xsd'>
-	<warc:metaData>
-		<warc:url>http://www.heise.de</warc:url>
-		<warc:title>Startseite</warc:title>
-		<warc:archivePath>file://$ARCHIVE_PATH$/resrc/www.heise.de</warc:archivePath>
-		<warc:lastCrawl>2012-04-20T11:00:00</warc:lastCrawl>
-		<warc:commitTag>20120420</warc:commitTag>
-	</warc:metaData>
-	<warc:analysisData> 
+	<warc:meta
+		warc:url="http://www.heise.de/index.html"
+		warc:title="Startseite"
+		warc:archivePath="www.heise.de/index.html"
+		warc:lastCrawl="2012-04-20T11:00:00"
+		warc:commitTag="www.heise.de@0815"
+	/>
+	<warc:data>
 		<warc:testAnalysis1>
 			<warc:content>some data</warc:content>
 		</warc:testAnalysis1> 
-	</warc:analysisData>
+	</warc:data>
 
 </warc:htmlData>

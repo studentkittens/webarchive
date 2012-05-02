@@ -1,13 +1,11 @@
-package client;
+package webarchive.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-
-
-import connection.Connection;
+import webarchive.connection.Connection;
 
 public class Client  {
 	public static final int DEFAULT_PORT = 21000;

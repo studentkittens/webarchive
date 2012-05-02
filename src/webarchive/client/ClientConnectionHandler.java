@@ -1,9 +1,9 @@
-package client;
+package webarchive.client;
 
-import headers.classes.HandShakeHeader;
-import connection.Connection;
-import connection.ConnectionHandler;
-import transfer.Transferable;
+import webarchive.connection.Connection;
+import webarchive.connection.ConnectionHandler;
+import webarchive.headers.classes.HandShakeHeader;
+import webarchive.transfer.Transferable;
 
 public class ClientConnectionHandler extends ConnectionHandler {
 
