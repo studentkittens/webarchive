@@ -1,5 +1,5 @@
 
-package webarchive.iface;
+package webarchive.api;
 
 import java.util.List;
 

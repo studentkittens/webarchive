@@ -1,4 +1,4 @@
-package webarchive.iface;
+package webarchive.api;
 
 import java.io.File;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import java.util.List;
  * extending XML-Metadata. Each html-file has its own html-archive-folder, which
  * contains at minimum the html itself, XML-Metadata. The folder is extendable
  * by arbitrary files.
- *
  *
  * @author ccwelich
  * @version 1
@@ -26,7 +25,7 @@ public interface WebarchiveClient {
 	 * @param orderByClause minimal sql-syntax ORDER BY clause, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
 	 * @return a list selected of MetaData-objects
-	 * @throws Exception *
+	 * @throws Exception 
 	 */
 	public List<MetaData> select(String whereClause, String orderByClause) throws Exception;
 
@@ -55,11 +54,11 @@ public interface WebarchiveClient {
 	 * overwritten with this method.
 	 *
 	 * @param meta key to archive-folder
-	 * @param relativePath relative path of file inside archive-folder
-	 * @param data data output stream
+	 * @param relativePath relative path and name of file inside archive-folder
+	 * @return output stream to write data into archive file
 	 * @throws Exception
 	 */
-	public void addToFolder(MetaData meta, File relativePath, OutputStream data) throws Exception;
+	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
 
 	/**
 	 * get XML-Nodes from XML-Metadata-file by tagname. This method works only

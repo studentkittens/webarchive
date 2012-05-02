@@ -1,4 +1,4 @@
-package webarchive.iface;
+package webarchive.api;
 
 import java.io.File;
 import java.net.URL;
