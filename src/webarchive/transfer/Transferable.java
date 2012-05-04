@@ -1,6 +1,6 @@
 package webarchive.transfer;
 
-import headers.Header;
+import webarchive.headers.Header;
 
 import java.io.Serializable;
 
