@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import org.w3c.dom.Element;
 
 /**
  * Interface to webarchive. provides functions to select metadata from the
@@ -69,7 +70,7 @@ public interface WebarchiveClient {
 	 * @return String of a found elements content
 	 * @throws Exception
 	 */
-	public String getXMLData(MetaData meta, String tagName) throws Exception;
+	public Element getXMLData(MetaData meta, String tagName) throws Exception;
 
 	/**
 	 * add new XML-Nodes to XML-Metadata-file using a new tagname. Existing tags
@@ -80,7 +81,7 @@ public interface WebarchiveClient {
 	 * @param content
 	 * @throws Exception
 	 */
-	public void addXMLData(MetaData meta, String tagName, String content) throws Exception;
+	public void addXMLData(MetaData meta, Element content) throws Exception;
 
 	/**
 	 * @see java.util.Observable
