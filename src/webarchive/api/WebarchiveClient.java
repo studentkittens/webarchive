@@ -47,7 +47,7 @@ public interface WebarchiveClient {
 	 * @return inputstream of byte data
 	 * @throws Exception
 	 */
-	public InputStream getFileOf(MetaData meta, File relativePath) throws Exception;
+	public InputStream getInputStream(MetaData meta, File relativePath) throws Exception;
 
 	/**
 	 * add new files to the html-archive-folder. Existing files cannot be
@@ -69,7 +69,7 @@ public interface WebarchiveClient {
 	 * @return String of a found elements content
 	 * @throws Exception
 	 */
-	public String getXMLAnalysisElement(MetaData meta, String tagName) throws Exception;
+	public String getXMLData(MetaData meta, String tagName) throws Exception;
 
 	/**
 	 * add new XML-Nodes to XML-Metadata-file using a new tagname. Existing tags
@@ -80,7 +80,7 @@ public interface WebarchiveClient {
 	 * @param content
 	 * @throws Exception
 	 */
-	public void addXMLAnalysisElement(MetaData meta, String tagName, String content) throws Exception;
+	public void addXMLData(MetaData meta, String tagName, String content) throws Exception;
 
 	/**
 	 * @see java.util.Observable
