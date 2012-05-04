@@ -48,7 +48,7 @@ public interface WebarchiveClient {
 	 * @return inputstream of byte data
 	 * @throws Exception
 	 */
-	public InputStream getInputStream(MetaData meta, File relativePath) throws Exception;
+	public byte[] read(MetaData meta, File relativePath) throws Exception;
 
 	/**
 	 * add new files to the html-archive-folder. Existing files cannot be
@@ -59,7 +59,7 @@ public interface WebarchiveClient {
 	 * @return output stream to write data into archive file
 	 * @throws Exception
 	 */
-	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
+	public void write(MetaData meta, File relativePath, byte[] data) throws Exception;
 
 	/**
 	 * get XML-Nodes from XML-Metadata-file by tagname. This method works only
