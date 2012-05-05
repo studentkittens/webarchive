@@ -1,9 +1,10 @@
 package webarchive.headers;
 
-import java.io.Serializable;
 
-public interface Header extends Serializable {
+public enum Header {
 
-	public int getId();
-	
+	HANDSHAKE,
+	EXCEPTION,
+	SUCCESS
+
 }

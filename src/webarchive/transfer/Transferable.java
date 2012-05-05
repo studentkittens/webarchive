@@ -9,5 +9,7 @@ public interface Transferable extends Serializable {
 	
 	public Header getHeader();
 	public Object getData();
+	public void setData(Object data);
+	public void setHeader(Header h);
 	
 }

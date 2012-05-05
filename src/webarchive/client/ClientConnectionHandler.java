@@ -2,7 +2,6 @@ package webarchive.client;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
-import webarchive.headers.classes.HandShakeHeader;
 import webarchive.transfer.Transferable;
 
 public class ClientConnectionHandler extends ConnectionHandler {
@@ -16,11 +15,10 @@ public class ClientConnectionHandler extends ConnectionHandler {
 	public void handle(Transferable t) {
 		// TODO Auto-generated method stub
 
-		int id=t.getHeader().getId();
 		
-		switch(id)
+		switch(t.getHeader())
 		{
-		case HandShakeHeader.ID:
+		case HANDSHAKE:
 			{
 				try {
 					super.getConnection().send(t);

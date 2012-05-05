@@ -1,14 +1,15 @@
 package webarchive.server;
 
 import webarchive.connection.Connection;
-import webarchive.headers.classes.HandShakeHeader;
+import webarchive.headers.Header;
+import webarchive.transfer.classes.Message;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import webarchive.transfer.classes.HandShakeMessage;
 
 public class Server  {
 
@@ -87,14 +88,14 @@ public class Server  {
 	private boolean doHandShake(Connection c)
 	{
 		// Nur ein Beispiel, ginge natÃ¼rlich viel effizienter ohne die ganzen Objekte, aber OOP wills halt so extrem
-		HandShakeMessage h = null;
+		Message h = null;
 		try {
 			System.out.println("try sending handshake");
 
-			c.send(new HandShakeMessage());
+			c.send(new Message(Header.HANDSHAKE));
 			System.out.println("handshake sent, try receiving handshake");
 
-			h = (HandShakeMessage) c.receive();
+			h = (Message) c.receive();
 			System.out.println("handshake received");
 
 		} catch (Exception e) {
@@ -106,7 +107,7 @@ public class Server  {
 		if( 
 			(h != null) 
 			&& 
-			(h.getHeader().getId() == HandShakeHeader.ID) 
+			(h.getHeader() == Header.HANDSHAKE) 
 		)
 		{
 			return true;
