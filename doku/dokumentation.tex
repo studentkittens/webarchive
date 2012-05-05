@@ -33,7 +33,49 @@
 }
 % end listing ***
 
-%*** title usw.
+% *** requirements commands definition
+% use \initReqgrp{<group-ref>} to set group
+% use \req{<title>}{<requirement-ref>} to set a main requirement (label inclusive)
+% use \subreq{<title>}{<subrequirement-ref> to set a sub requirement (label inclusive)
+% use \reqref{req:<group-ref>:<requirement-ref>:<subrequirement-ref>} to referenc a requirement
+
+\gdef \reqGrp{x}% 										requirement group prefix
+\gdef \reqMain{x}% 										requirement reference shortcut
+\gdef \reqSub{x}% 										requirement reference shortcut
+\newcounter{cReqGrp}% 									requirement group counter
+\newcounter{cReq}[cReqGrp]% 							main requirement counter
+\newcounter{cSubReq}[cReq]% 							sub requirement counter
+\renewcommand{\thecReq}{\thecReqGrp.\arabic{cReq}}% 	set output or cReq
+\renewcommand{\thecSubReq}{\thecReq.\arabic{cSubReq}}% 	set output of cSubReq
+\newenvironment{reqtxt}{/Rq}{/}% 						requirement text pattern: "/Rq*/"
+\newcommand{\req}[2] {% 								define new requirement, input: title, reference shortcut
+	\refstepcounter{cReq}% 								update counter
+	\gdef \reqMain{#2}% 								update requirement reference
+	\begin{reqtxt}\thecReq\end{reqtxt} #1% 				set output \end{reqtxt} label text
+	\label{req:\reqGrp:#2}% 							set label 
+}
+
+\newcommand{\subreq}[2] {% 								define new sub requirement, input: title, reference shortcut
+	\refstepcounter{cSubReq}% 							update counter
+	\gdef \reqSub{#2}% 									update requirement reference
+	\begin{reqtxt}\thecSubReq\end{reqtxt} #1% 			set output text 
+	\label{req:\reqGrp:\reqMain:\reqSub}% 				set label
+}
+
+\newcommand{\reqref}[1]{% 								wrap requirement link number into reqtxt pattern
+	\begin{reqtxt}\ref{#1}\end{reqtxt}
+}
+\newcommand{\initReqgrp}[1] {% 							init new requirement group, input: prefix
+	\gdef \reqGrp{#1}% 									overwrite variable reqgrp
+	\refstepcounter{cReqGrp}% 							update group counter
+}
+% *** end requirements commands
+
+% *** shortcuts
+\def \htmlarc{HTML-Archiv}
+% ***
+
+%*** title etc.
 \title{Dokumentation\\
 Praktikum Software Entwicklung }
 \author{Dozent: Prof. Dr. Richard Göbel \\
@@ -62,8 +104,9 @@ Sabrina Biersack \\
 \tableofcontents
 
 \part{Spezifikation}
-\input{./spezi/spezi.tex}
+\input{./spec/spec01-overview.tex}
+\input{./spec/spec02-datamodel.tex}
+\input{./spec/spec03-requirements.tex}
+\input{./spec/spec04-development.tex}
 \end{document}
-
-
 
