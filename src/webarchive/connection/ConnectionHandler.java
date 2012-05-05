@@ -1,7 +1,7 @@
 package webarchive.connection;
 
 import java.net.Socket;
-import webarchive.transfer.Transferable;
+import webarchive.transfer.Message;
 
 public abstract class ConnectionHandler {
 
@@ -11,8 +11,7 @@ public abstract class ConnectionHandler {
 		this.c = c;
 	}
 
-	public abstract void handle(Transferable t);
-	//zum beispiel c.send(new Transferable(some_random_Data));
+	public abstract void handle(Message msg);
 
 	public Connection getConnection() {
 		return c;

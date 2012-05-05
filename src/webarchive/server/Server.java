@@ -2,7 +2,7 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.headers.Header;
-import webarchive.transfer.classes.Message;
+import webarchive.transfer.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

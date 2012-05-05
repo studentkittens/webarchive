@@ -2,7 +2,7 @@ package webarchive.client;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
-import webarchive.transfer.Transferable;
+import webarchive.transfer.Message;
 
 public class ClientConnectionHandler extends ConnectionHandler {
 
@@ -12,16 +12,16 @@ public class ClientConnectionHandler extends ConnectionHandler {
 	}
 
 	@Override
-	public void handle(Transferable t) {
+	public void handle(Message msg) {
 		// TODO Auto-generated method stub
 
-		
-		switch(t.getHeader())
+
+		switch(msg.getHeader())
 		{
 		case HANDSHAKE:
 			{
 				try {
-					super.getConnection().send(t);
+					super.getConnection().send(msg);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -2,7 +2,7 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
-import webarchive.transfer.Transferable;
+import webarchive.transfer.Message;
 
 public class ServerConnectionHandler extends ConnectionHandler {
 
@@ -12,9 +12,9 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	}
 
 	@Override
-	public void handle(Transferable t) {
+	public void handle(Message msg) {
 
-		switch (t.getHeader()) {
+		switch (msg.getHeader()) {
 			case HANDSHAKE: 
 			{
 				// THEY DO NOTHIN

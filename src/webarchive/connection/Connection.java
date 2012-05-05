@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import webarchive.transfer.Transferable;
+import webarchive.transfer.Message;
 
 public class Connection implements Runnable {
 
@@ -52,12 +52,12 @@ public class Connection implements Runnable {
 		this.conHandler = conHandler;
 	}
 
-	public void send(Transferable obj) throws Exception {
-		oos.writeObject(obj);
+	public void send(Message msg) throws Exception {
+		oos.writeObject(msg);
 	}
 
-	public Transferable receive() throws Exception {
-		return (Transferable) ois.readObject();
+	public Message receive() throws Exception {
+		return (Message) ois.readObject();
 	}
 
 	// YOU HAVE TO SET conHandler FIRST! OTHERWISE NULLPOINTEREXCEPTION :D
@@ -65,9 +65,9 @@ public class Connection implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		while (sock.isConnected()) {
-			Transferable t = null;
+			Message msg = null;
 			try {
-				t = this.receive();
+				msg = this.receive();
 			} catch (EOFException end) {
 				System.out.println("lost connection");
 				//do something, like delete connection from cList
@@ -78,7 +78,7 @@ public class Connection implements Runnable {
 				continue;
 			}
 
-			conHandler.handle(t);
+			conHandler.handle(msg);
 		}
 		try {
 			sock.close();
