@@ -3,11 +3,11 @@ Im folgenden sind die Anforderungen an die Software spezifiziert. Soweit möglic
 die Anforderungen schon in einzelne Komponenten und Module gegliedert. Eine grobe Übersicht gibt auch Diagramm \ref{spec:dia:moduls}.
 
 Alle Anforderungen werden mit einer Kennnummer in der Form 
-\[ /<Gruppennummer> . <Anforderungsnummer> [. <Unternummer> ]/ \]
+\[ \text{\reqPrefix}<Gruppenprefix> . <Anforderungsnummer> [. <Unternummer> ]\text{\reqPostfix} \]
 gekennzeichnet, damit diese später wieder referenziert werden können.
 
 \section{Crawlermodul}
-\initReqgrp{crawler}
+\initReqgrp{Cr}
 Dieses Modul soll als eigenständiger Prozess laufen und in regelmäßigen Abständen Crawlvorgänge starten
 und die Daten in das Archiv schreiben.
 
@@ -37,17 +37,17 @@ und die Daten in das Archiv schreiben.
 				die als Startpunkte für die Crawler verwendet werden sollen.
 				Die Übergabe von mindestens einem Element ist aber immer notwendig.
 			\item [\subreq{DB-Recovery}{recover}]
-				Es kann ein Datenbank-Recovery erzwungen werden. Siehe auch \reqref{req:db:recovery}
+				Es kann ein Datenbank-Recovery erzwungen werden. Siehe auch \ref{req:Db:recovery}
 		\end{description}
 \end{description}
-
+%\ref{req:Cr:conf:depth}
 \subsection{Ausführung des Crawlvorgangs}
 \begin{description}
 	\item [\req{Parallelität}{concurrent}]
 		Die Ausführung der Crawlvorgänge soll parallel durchgeführt werden.
 	\item [\req{Instanziierung}{instance}] 		
 		Pro angegebener URL wird eine Crawlerinstanz gestartet bis die Obergrenze an Instanzen  
-		(siehe \reqref{req:crawler:conf:maxInst}) erreicht wird.
+		(siehe \ref{req:Cr:conf:maxInst}) erreicht wird.
 		Um Überschneidungen zu vermeiden, werden Domainnamen anderer Instanzen ausgeschlossen.
 		Für die Crawlerinstanzen wird ein externes Tool verwendet (wget).
 	\item [\req{Crawlen}{crawl}]
@@ -62,24 +62,24 @@ und die Daten in das Archiv schreiben.
 				Je Domain wird dadurch ein Hauptverzeichnis im TMP-Ordner erzeugt.
 		\end{description}
 	\item [\req{Filterung}{filter}]
-		Für alle HTML-Dateien wird eine Liste von Filter durchlaufen.
+		Für alle HTML-Dateien wird eine Liste von Filtern durchlaufen.
 		Jeder Filter prüft, ob die HTML-Datei behalten oder verworfen werden soll.
 		Verworfene Dateien werden sogleich gelöscht.
 	\item [\req{Bereinigung}{clean}]
 		In diesem Teil werden die heruntergeladenen Ordner bereinigt,
 		also leere Ordner oder Nicht-HTML-Dateien gelöscht.
 	\item [\req{Normalisierung}{normalize}]
-		Es wird ein Archivordner (im Folgenden \htmlarc genannt) 
+		Es wird ein Archivordner (im Folgenden \htmlarc\ genannt) 
 		mit dem Namen des HTML-files (inklusive Dateiendung) 
 		erzeugt, das HTML-file in ''data.html'' umbenannt und 
-		in das soeben erzeugte HTML-Archiv verschoben.
+		in das soeben erzeugte \htmlarc\ verschoben.
 	\item [\req{Extraktion der Metadaten}{metaextract}]
-		In diesem Vorgang werden die im Datenmodell \ref{spec:model} definierten Metadaten 
+		In diesem Vorgang werden die im Datenmodell (\ref{spec:model}) definierten Metadaten 
 		aus dem HTML extrahiert und zwischengespeichert. Es wird auch der
 		CommitTag erzeugt, wobei der Zeitpunkt für alle Dateien pro Domain und Crawler-Instanz gleich ist.
 	\item [\req{Erzeugung von XML-Dateien}{xml}]
-		Die zwischengespeicherten Metadaten werden in XML-Metadatein (siehe auch \ref{spec:xml}) 
-		geschrieben und jeweils im zugehörige \htmlarc gespeichert. 
+		Die zwischengespeicherten Metadaten werden in XML-Metadateien (siehe auch \ref{spec:xml}) 
+		geschrieben und jeweils im zugehörigen \htmlarc\ gespeichert. 
 	\item [\req{Synchronisation}{sync}]
 		Die vorbereiteten Daten in den TMP-Ordnern werden nun in das vorhandene Archiv synchronisiert 
 		(mit rsync). 
@@ -92,12 +92,12 @@ und die Daten in das Archiv schreiben.
 \end{description}
 
 \section{Filtermodule}
-\initReqgrp{filter}
+\initReqgrp{Fi}
 \begin{description}
 	\item [\req{Schnittstelle}{interface}]
 		Alle Filtermodule sollen eine vorgegebene Schnittstelle erfüllen.
 	\item [\req{Konfiguration}{conf}]
-		Alle Module müssen wie unter \reqref{req:crawler:conf:filter} beschrieben dem Crawlmodul bekanntgemacht werden.
+		Alle Module müssen wie unter \ref{req:Cr:conf:filter} beschrieben dem Crawlmodul bekanntgemacht werden.
 		Eine Zentrale Speicherung der einzelnen Module in einem Filterverzeichnis ist anzustreben.
 	\item [\req{HTML Überprüfung}{htmlchk}]
 		Ein Filter soll ein gegebenes HTML-File überprüfen und einen Wahrheitswert zurückgeben,
@@ -109,45 +109,44 @@ und die Daten in das Archiv schreiben.
 \end{description}
 
 \section{Dateiarchiv} \label{spec:filearchive}
-\initReqgrp{arc}
+\initReqgrp{Ar}
 \begin{description}
 	\item [\req{Struktur}{structure}]
 		Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochmal erläutert:
 		\begin{itemize}
-			\item Auf der obersten ebene stehen die Domain-Ordner.
+			\item Auf der obersten Ebene stehen die Domain-Ordner.
 			\item Darunter wird die von der URL abgebildeten Struktur
 				innerhalb der Domain nachgebildet.
-			\item Die einzelnen HTML-Datein werden durch \htmlarc-Ordner ersetzt.
-			\item Jedes \htmlarc enthält die Quell-HTML-datei, 
+			\item Die einzelnen HTML-Dateien werden durch \htmlarc-Ordner ersetzt, bzw. in diese verschoben.
+			\item Jedes \htmlarc enthält die Quell-HTML-Datei, 
 				die aber in data.html unbenannt wurde
 				sowie die dazugehörige XML-Datei (data.xml). 
-				Ein \htmlarc kann aber auch weitere Dateien enthalten, welche nach dem
+				Ein \htmlarc\ kann aber auch weitere Dateien enthalten, welche nach dem
 				Crawlen hinzugefügt werden können.
 		\end{itemize}
 	\item [\req{Berechtigungen}{rights}]
 		Generell dürfen keine Änderungen an bestehenden Dateien durchgeführt werden 
-		(Ausname: siehe \ref{spec:xml}).
+		(Ausname: siehe \ref{req:Xm:extense}).
 		\begin{description}
 			\item [\subreq{Externe Benutzer}{extern}]
 				Von exterenen Nutzern (Java-Clients) dürfen nur Dateien in \emph{aktuelle} \htmlarc-Ordner
 				hinzugefügt werden.
 			\item [\subreq{Crawler}{crawler}]
 				Crawler dürfen neue \htmlarc-Ordner hinzufügen oder alte löschen bzw. ersetzen, 
-				wobei immer das gesamte \htmlarc ersetzt wird. 
+				wobei immer das gesamte \htmlarc\ ersetzt wird. 
 		\end{description}
 	\item [\req{Synchronisation}{sync}]
 		Um gleichzeitige Zugriffe auf Dateien zu verhindern, 
-		müssen Teile des Archivs über Locks gesichtert werden.
+		muss mit Locks oder Mutexen gearbeitet werden.
 		Dabei wird immer der gesamte Domain-Ordner gesperrt.
-		Dabei muss vor jedem Lese- oder Schreibvorgang ein Lock gesetzt und
+		Es muss vor jedem Lese- oder Schreibvorgang ein Lock gesetzt und
 		beim Beenden des Vorgangs wieder entfernt werden.
 	\item [\req{Versionierung}{version}]	
-		Jeder Domainordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
-		Damit ist das Wiederherstellen älterer Versionen grundsätzlich möglich,
-		wobei diese aber manuell über die git-Schnittstellen abgerufen werden müssen.
+		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
+		Damit ist auch das Wiederherstellen älterer Versionen möglich.
 		\begin{description}
 			\item [\subreq{Hinzufügen}{add}]
-				Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden.
+				Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
 			\item [\subreq{Commit}{commit}]
 				Änderungen müssen stets mit einem Commit bestätigt werden.
 				Dabei wird zur Identifikation immer ein bestimmter CommitTag verwendet.
@@ -155,12 +154,12 @@ und die Daten in das Archiv schreiben.
 				\begin{itemize}
 					\item wurden Dateien während des Crawlvorgangs hinzugefügt,
 						wird ein neuer CommitTag erzeugt.
-					\item bei nachträglichen Änderung wird der alte CommitTag wiederverwendet.
+					\item beim nachträglichen Hinzufügen von Dateien wird der alte CommitTag wiederverwendet.
 				\end{itemize}
 			\item [\subreq{Ändern und Löschen}{update}]
 				Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen
 				getroffen werden.
-				Diese werden von der Versionierung ,,in tieferen Ebenen'' gespeichert.
+				Diese werden von der Versionierung in tiefere Versionsebenen verschoben.
 			\item [\subreq{Schreiben in veraltete Verzeichnisse}{writeToOldDirs}]
 				Sollte in Ausnahmefällen in veraltete Verzeichnisse geschrieben werden, 
 				zum Beispiel weil die Daten von den Crawlern während einer Analyse geändert wurden,
@@ -177,7 +176,7 @@ und die Daten in das Archiv schreiben.
 
 
 \section{Programmierschnittstelle - Java-Client}\label{spec:client}
-\initReqgrp{client}
+\initReqgrp{Cl}
 	Diese Schnittstelle soll die Anbindung der Analysemethoden ermöglichen und 
 	macht gleichzeitig einen Zugriff über das Netzwerk möglich.
 \begin{description}
@@ -195,15 +194,15 @@ und die Daten in das Archiv schreiben.
 				Zentrale Schnittstelle zum Zugriff auf das Webarchiv, Details siehe unten.
 			\item [\subreq{Observer}{observer}]
 				Implementierungen dieses Observers können sich beim Client anmelden, 
-				um über Änderungen informiert zu werden.
+				um über Änderungen informiert zu werden. 
+				Die Schnittstelle enthält eine Methode um Update-Informationen zu erhalten.
 		\end{description}
 	\item [\req{Registrierung am Server}{register}]
 		Alle aktiven Java-Clients werden beim Server gespeichert, 
 		um diese über Änderungen informieren zu können.
 		Beim Abmelden oder Beenden muss ein Client aus dieser Registrierung gelöscht werden.
-	\item [\req{Observer}{observer}]
-		Benutzer des Clients können sich beim Client als Observer anmelden, 
-		um über Änderungen informiert zu werden.
+	\item [\req{Observerregistrierung}{observer}]
+		Benutzer des Clients können sich mittels o.g. Schnittstelle beim Client als Observer an- und abmelden.
 	\item [\req{Benachrichtigungen}{notifies}]
 		Vom Server kommen in regelmäßigen Abständen Nachrichten über Änderungen.
 		Diese werden an angemeldete Observer weitergegeben.
@@ -222,7 +221,7 @@ und die Daten in das Archiv schreiben.
 		Mittels Metadatenobjekt und Dateipfadangabe wird ein Dateistream zum Lesen zurückgegeben.
 	\item [\req{Datei Schreiben}{writeFile}]
 		Mittels Metadatenobjekt und Dateipfadangabe wird ein Dateistream zum Schreiben zurückgegeben.
-		Wie oben beschrieben, dürfen dabei keine Dateien überschrieben werden. 
+		Wie in \ref{req:Ar:rights} beschrieben, dürfen dabei keine Dateien überschrieben werden. 
 	\item [\req{Auslesen von zusätzlichen Tags}{selectTag}]
 		Durch Übergabe eines Metadata-objekts und eines Tagnamens an eine get-Methode 
 		wird ein passender XML-Node herausgesucht.
@@ -236,7 +235,7 @@ und die Daten in das Archiv schreiben.
 	\end{description}
 
 \section{Server} \label{spec:server}
-\initReqgrp{server}
+\initReqgrp{Sv}
 \begin{description}
 	\item [\req{Konfiguration}{conf}]
 		Es sind die IP und der Port des Servers in einer Config-Datei zu hinterlegen.
@@ -254,10 +253,10 @@ und die Daten in das Archiv schreiben.
 		Vom Clientanwender verursachte Exceptions werden an diesen weitergeleitet und 
 		im Client erneut geworfen.
 	\item [\subreq{Datenbankabfragen}{dbquery}]
-		Datenbankanfragen werden in Form von sql vom Client geschickt und diesem
+		Datenbankanfragen werden in Form von SQL vom Client geschickt und diesem
 		in Form von Metadaten-Objekten beantwortet.
 	\item [\subreq{Änderungen im Archiv}{changes}]
-		Ein Client wird über Änderungen im Archiv informiert.
+		Diese Nachrichtenform enthält Informationen für Client, welche Änderungen im Archiv betreffen.
 \end{description}
 	\item [\req{Clienten registrieren}{register}]
 		Der Server hält eine Liste von angemeldeten Java-Clienten und 
@@ -273,16 +272,16 @@ und die Daten in das Archiv schreiben.
 			\item [\subreq{Clienten informieren}{notify}]
 				Sobald die Update-Suche fertig ist, 
 				werden die gepufferten Informationen an alle registrierten Clienten geschickt.
-				Siehe auch \reqref{req:client:notify}
+				Siehe auch \ref{req:Cl:notifies}
 		\end{description}
 \end{description}
 
 \section{XML-Dateien} \label{spec:xml}
-\initReqgrp{xml}
+\initReqgrp{Xm}
 \begin{description}
 	\item [\req{Inhalt}{content}]
 		Die XML-Dateien enthalten in ihrem Wurzelknoten eine Meta- und einen Datenknoten.
-		Der Metaknoten ist für die oben beschriebenen Metadaten reserviert.
+		Der Metaknoten ist für die in \ref{spec:model} beschriebenen Metadaten reserviert.
 		Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knöten erweitert werden.
 	\item [\req{Validierung}{validate}]
 		Für die Validierung der XML-Daten muss eine XML-Schema ausgearbeitet werden.
@@ -304,24 +303,26 @@ und die Daten in das Archiv schreiben.
 \end{description}
 	
 \section{Datenbank} \label{spec:db}
-\initReqgrp{db}
+\initReqgrp{Db}
 \begin{description}
 	\item [\req{Konfiguration}{conf}]
-		Die Struktur der Datenbank wird als create-table statement in einer sql-Datei gespeichert.
-		Falls nötig werden auch alle weiteren vorbereiteten sql-Dateien im selben Ordner abgelegt.
+		Die Struktur der Datenbank wird als CREATE-TABLE-statement in einer SQL-Datei gespeichert.
+		Falls nötig werden auch alle weiteren vorbereiteten SQL-Dateien im selben Ordner abgelegt.
+		Da SQLITE verwendet wird, kann die Datenbank über einfache Dateioperationen erzeugt werden.
 	\item [\req{Inhalt}{content}]
 		Die Datenbank enthält nur eine Tabelle deren Zeilen die Metadaten 
 		(siehe \ref{spec:model}) enthalten. 
 		Es werden die Speicherstände aller HTML-Dateien und Versionen im Archiv festgehalten.
+	\item [\req{Erweiterbarkeit}{extense}] 
+		Ein Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen und gewünscht.
 	\item [\req{Berechtigungen}{rights}]
 		Schreibrechte werden nur dem Crawlmodul erteilt.
 		Gelesen kann falls notwendig von allen Komponenten werden.
-		Wobei externe Benutzer über die Schnittstellen der Clients select-statements abzusetzen können.
+		Wobei externe Benutzer über die Schnittstellen der Clients SELECT-statements abzusetzen können.
 	\item [\req{Aktualisierung}{update}]
-		Die Datenbank muss beim Fertigstellen des Crawlvorgangs auf den neuesten Stand gebracht werden.
+		Die Datenbank muss immer beim Fertigstellen eines Crawlvorgangs auf den neuesten Stand gebracht werden.
 	\item [\req{Wiederherstellung}{recovery}]
 		Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
 		im Archiv vorhanden XML-Metadaten rekonstruiert werden können.
-		Aus diesem Grund wird erstmal von einer einfachen SQLite-Datenbank ausgegangen, 
-		da diese dateibasiert ist und daher relativ leicht erstellt und wieder gelöscht werden kann.
+		Dabei müssen auch alte Versionstände wieder mit eingefügt werden.
 \end{description}

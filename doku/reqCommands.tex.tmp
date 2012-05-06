@@ -1,0 +1,37 @@
+% *** requirements commands definition
+% use \initReqgrp{<group-ref>} to set group
+% use \req{<title>}{<requirement-ref>} to set a main requirement (label inclusive)
+% use \subreq{<title>}{<subrequirement-ref> to set a sub requirement (label inclusive)
+% use \reqref{req:<group-ref>:<requirement-ref>:<subrequirement-ref>} to referenc a requirement
+
+\gdef \reqGrp{x}% 										requirement group prefix
+\gdef \reqMain{x}% 										requirement reference shortcut
+\gdef \reqSub{x}% 										requirement reference shortcut
+\newcounter{cntReqGrp}% 									requirement group counter
+\newcounter{cntReq}[cntReqGrp]% 							main requirement counter
+\newcounter{cntSubReq}[cntReq]% 							sub requirement counter
+\renewcommand{\thecntReq}{\thecntReqGrp.\arabic{cntReq}}% 	set output or cntReq
+\renewcommand{\thecntSubReq}{\thecntReq.\arabic{cntSubReq}}% 	set output of cntSubReq
+\newenvironment{reqtxt}{/Rq}{/}% 						requirement text pattern: "/Rq*/"
+\newcommand{\req}[2] {% 								define new requirement, input: title, reference shortcut
+	\refstepcounter{cntReq}% 								update counter
+	\gdef \reqMain{#2}% 								update requirement reference
+	\begin{reqtxt}\thecntReq\end{reqtxt} #1% 				set output \end{reqtxt} label text
+	\label{req:\reqGrp:#2}% 							set label 
+}
+
+\newcommand{\subreq}[2] {% 								define new sub requirement, input: title, reference shortcut
+	\refstepcounter{cntSubReq}% 							update counter
+	\gdef \reqSub{#2}% 									update requirement reference
+	\begin{reqtxt}\thecntSubReq\end{reqtxt} #1% 			set output text 
+	\label{req:\reqGrp:\reqMain:\reqSub}% 				set label
+}
+
+\newcommand{\reqref}[1]{% 								wrap requirement link number into reqtxt pattern
+	\begin{reqtxt}\ref{#1}\end{reqtxt}
+}
+\newcommand{\initReqgrp}[1] {% 							init new requirement group, input: prefix
+	\gdef \reqGrp{#1}% 									overwrite variable reqgrp
+	\refstepcounter{cntReqGrp}% 							update group counter
+}
+% *** end requirements commands
