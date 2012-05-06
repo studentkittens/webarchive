@@ -15,7 +15,8 @@ und die Daten in das Archiv schreiben.
 \begin{description}
 	\item [\req{Config-file}{conf}]
 		Die Steuerung des bzw. der Crawler erfolgt über eine Config-Datei.
-		Darin werden bereits Default- und Fallbackwerte festgelegt  
+		Ist die Config-Datei nicht vorhanden oder kann sie nicht gelesen werden,
+        so wird auf eine interne Config-Datei zurückgefallen.
 		Es können folgende Parameter eingestellt werden:
 		\begin{description}
 			\item [\subreq{Suchtiefe}{depth}]
@@ -282,7 +283,7 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Inhalt}{content}]
 		Die XML-Dateien enthalten in ihrem Wurzelknoten eine Meta- und einen Datenknoten.
 		Der Metaknoten ist für die in \ref{spec:model} beschriebenen Metadaten reserviert.
-		Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knöten erweitert werden.
+		Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knoten erweitert werden.
 	\item [\req{Validierung}{validate}]
 		Für die Validierung der XML-Daten muss eine XML-Schema ausgearbeitet werden.
 		Eine Validierung ist dann durchzuführen, nachdem eine XML-Datei erweitert worden ist.
@@ -290,7 +291,7 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Erweiterbarkeit}{extense}]
 		Wie oben beschrieben ist beim Design auf Erweiterbarkeit zu achten.
 		Der Inhalt des Knotens ist frei wählbar, der Name des Knotens muss aber
-		eindeutig sein und darf mit vorhandenen Knöten nicht kollidieren
+		eindeutig sein und darf mit vorhandenen Knoten nicht kollidieren
 		(ggf. mit namespaces arbeiten).
 		Sollten die XML-Dateien erweitert werden, so muss vom Benutzer auch das Schema erweitert werden.
 	\item [\req{Schreibschutz}{writeprotect}]
@@ -298,7 +299,7 @@ und die Daten in das Archiv schreiben.
 		dass nur neue Knoten hinzugefügt werden dürfen und
 		keine vorhandenen überschrieben oder geändert werden können.
 		Desweiteren muss der Metaknoten geschützt werden.
-		Es dürfen auch keine gleichnamigen Knöten in der obersten Ebene des Datenknotens
+		Es dürfen auch keine gleichnamigen Knoten in der obersten Ebene des Datenknotens
 		vorhanden sein.
 \end{description}
 	
@@ -310,9 +311,8 @@ und die Daten in das Archiv schreiben.
 		Falls nötig werden auch alle weiteren vorbereiteten SQL-Dateien im selben Ordner abgelegt.
 		Da SQLITE verwendet wird, kann die Datenbank über einfache Dateioperationen erzeugt werden.
 	\item [\req{Inhalt}{content}]
-		Die Datenbank enthält nur eine Tabelle deren Zeilen die Metadaten 
-		(siehe \ref{spec:model}) enthalten. 
 		Es werden die Speicherstände aller HTML-Dateien und Versionen im Archiv festgehalten.
+        Die gespeicherten Daten entsprechen den Knoten aus \ref{spec:model}.
 	\item [\req{Erweiterbarkeit}{extense}] 
 		Ein Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen und gewünscht.
 	\item [\req{Berechtigungen}{rights}]
