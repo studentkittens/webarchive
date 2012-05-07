@@ -51,7 +51,7 @@ public interface WebarchiveClient {
 	public InputStream getInputStream(MetaData meta, File relativePath) throws Exception;
 
 	/**
-	 * add new files to a buffer, which can be send to the archive with flushOutputStream(). Existing files cannot be
+	 * add new files to a buffer, which will be send when closing the stream. Existing files cannot be
 	 * overwritten with this method.
 	 *
 	 * @param meta key to archive-folder
@@ -60,15 +60,6 @@ public interface WebarchiveClient {
 	 * @throws Exception
 	 */
 	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
-
-	/**
-	 * trys to flush and close the outputstream, then send the buffer to the archive.
-	 *
-	 * @param os outputstream will be closed and the data inside the buffer will be send to the archive to be written
-	 * @return a boolean which indicates success
-	 * @throws Exception
-	 */
-	public boolean flushOutputStream(OutputStream os) throws Exception;
 
 	/**
 	 * get XML-Nodes from XML-Metadata-file by tagname. This method works only
