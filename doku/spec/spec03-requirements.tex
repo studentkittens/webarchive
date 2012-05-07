@@ -1,6 +1,7 @@
 \chapter{Anforderungen}
 Im folgenden sind die Anforderungen an die Software spezifiziert. Soweit möglich wurden
-die Anforderungen schon in einzelne Komponenten und Module gegliedert. Eine grobe Übersicht gibt auch Diagramm \ref{spec:dia:moduls}.
+die Anforderungen schon in einzelne Komponenten und Module gegliedert. Eine grobe Übersicht gibt auch Diagramm
+im Abschnitt \ref{spec:dia:moduls}.
 
 Alle Anforderungen werden mit einer Kennnummer in der Form 
 \[ \text{\reqPrefix}<Gruppenprefix> . <Anforderungsnummer> [. <Unternummer> ]\text{\reqPostfix} \]
@@ -16,13 +17,13 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Config-file}{conf}]
 		Die Steuerung des bzw. der Crawler erfolgt über eine Config-Datei.
 		Ist die Config-Datei nicht vorhanden oder kann sie nicht gelesen werden,
-        so wird auf eine interne Config-Datei zurückgefallen.
+        so werden hart codierte Werte verwendet.
 		Es können folgende Parameter eingestellt werden:
 		\begin{description}
 			\item [\subreq{Suchtiefe}{depth}]
 				Suchtiefe bis zu der Links gefolgt werden soll.
-			\item [\subreq{Suchintervall}{tinterval}]
-				Zeitintervalle der Crawlvorgänge.
+			\item [\subreq{Crawlintervall}{tinterval}]
+				Zeitintervalle zwischen den Crawlvorgängen.
 			\item [\subreq{Maximale Instanzen}{maxInst}]
 				maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen.
 			\item [\subreq{Filtereinstellungen}{filter}]
@@ -33,24 +34,44 @@ und die Daten in das Archiv schreiben.
 		\begin{description}
 			\item [\subreq{Überschreiben}{overwrite}]
 				Werte aus dem Config-file werden damit überschrieben.
-			\item [\subreq{Domainliste}{list}]
-				Es kann eine Liste von Domains übergeben werden, 
+			\item [\subreq{URL-Liste}{urllist}]
+				Es kann eine Liste von URLs übergeben werden, 
 				die als Startpunkte für die Crawler verwendet werden sollen.
 				Die Übergabe von mindestens einem Element ist aber immer notwendig.
 			\item [\subreq{DB-Recovery}{recover}]
 				Es kann ein Datenbank-Recovery erzwungen werden. Siehe auch \ref{req:Db:recovery}
 		\end{description}
 \end{description}
-%\ref{req:Cr:conf:depth}
-\subsection{Ausführung des Crawlvorgangs}
+
+\subsection{Ausführung des Crawlvorgangs} \label{spec:crawler:exec}
 \begin{description}
+	\item [\req{Start in Intervallen}{startInterval}]
+		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:conf:tinterval} festgelegtem
+		Interval neu in Gang gesetzt. 
+	\item [\req{Zeitpunkt speichern}{starttime}]
+		Der Startzeitpunkt wird sofort nach dem Beginn des Crawlvorgangs zwischengespeichert.
+		Siehe auch Abschnitt \ref{spec:model}.
 	\item [\req{Parallelität}{concurrent}]
 		Die Ausführung der Crawlvorgänge soll parallel durchgeführt werden.
-	\item [\req{Instanziierung}{instance}] 		
-		Pro angegebener URL wird eine Crawlerinstanz gestartet bis die Obergrenze an Instanzen  
-		(siehe \ref{req:Cr:conf:maxInst}) erreicht wird.
-		Um Überschneidungen zu vermeiden, werden Domainnamen anderer Instanzen ausgeschlossen.
-		Für die Crawlerinstanzen wird ein externes Tool verwendet (wget).
+	\item [\req{URL-Queue}{urlqueue}]
+		Alle aus \ref{req:Cr:cmd:urllist} werden in eine Warteschlange geschrieben.
+	\item [\req{Instanziierung}{instance}]
+				Für die Crawlerinstanzen wird ein externes Tool verwendet: WGET
+		\begin{description}
+			\item [\subreq{Temporäre Ordner anlegen}{createTmp}]
+				Für jede Crawlerinstanz wird ein eigenes temporäres Verzeichnis zum Speichern
+				der Downloads angelegt. Im folgenden mit TMP abgekürzt.
+			\item [\subreq{Start}{start}]
+				Es werden solange Crawlerinstanzen mit URLs als Startpunkt aus der URL-Queue erzeugt,
+				bis diese leer ist. 
+			\item [\subreq{maximale Instanzen}{maxInst}]
+				Wird die Obergrenze an maximal erzeugbaren Instanzen erreicht 
+				(siehe \ref{req:Cr:conf:maxInst}),
+				wird immer solange mit dem Erzeugen neuer Instanzen gewartet,
+				bis die nächste	Crawlerinstanz fertig ist.
+			\item [\subreq{Domain-Überschneidungen}{domain-intersection}]
+				Um Überschneidungen zu vermeiden, werden Domainnamen anderer Instanzen ausgeschlossen.
+		\end{description}
 	\item [\req{Crawlen}{crawl}]
 		Jede gestartete Instanz beginnt nun den Crawlvorgang.
 		\begin{description}
@@ -68,26 +89,52 @@ und die Daten in das Archiv schreiben.
 		Verworfene Dateien werden sogleich gelöscht.
 	\item [\req{Bereinigung}{clean}]
 		In diesem Teil werden die heruntergeladenen Ordner bereinigt,
-		also leere Ordner oder Nicht-HTML-Dateien gelöscht.
+		also leere Ordner gelöscht.
 	\item [\req{Normalisierung}{normalize}]
-		Es wird ein Archivordner (im Folgenden \htmlarc\ genannt) 
-		mit dem Namen des HTML-files (inklusive Dateiendung) 
-		erzeugt, das HTML-file in ''data.html'' umbenannt und 
-		in das soeben erzeugte \htmlarc\ verschoben.
+		\begin{description}
+			\item [\subreq{Datei umbenennen}{rename}]
+				Das HTML-file in ''data.html'' umbenannt. 
+			\item [\subreq{Archivordner erzeugen}{createArc}] 
+				Es wird ein Archivordner (im Folgenden kurz \arc\ genannt) 
+				mit dem Namen des HTML-files (inklusive Dateiendung) 
+				erzeugt.
+			\item [\subreq{Datei verschieben}{move}]
+				Die data-Datei wird in den soeben erzeugte \arc\ verschoben.
+		\end{description}
 	\item [\req{Extraktion der Metadaten}{metaextract}]
-		In diesem Vorgang werden die im Datenmodell (\ref{spec:model}) definierten Metadaten 
-		aus dem HTML extrahiert und zwischengespeichert. Es wird auch der
-		CommitTag erzeugt, wobei der Zeitpunkt für alle Dateien pro Domain und Crawler-Instanz gleich ist.
+		In diesem Vorgang werden die im Datenmodell (Abschnitt \ref{spec:model}) definierten Metadaten 
+		aus dem HTML extrahiert und zwischengespeichert. 
+		\begin{description}
+			\item [\subreq{url}{url}]
+				Die Original-URL wird aus dem aktuellen Ordnerpfad abgeleitet.
+			\item [\subreq{title}{title}]
+				%Falls die Datei ein HTML ist, 
+				muss der Titel aus dem Inhalt geparst werden.
+		%	\item [\subreq{mimeType}]
+		%		Der MIME-Typ der Datei wird mit einer geeigneten Maßnahme ermittelt.
+			\item [\subreq{path}{path}]
+				Es wird der aktuelle absolute Ordnerpfad auf das \arc gespeichert.
+			\item [\subreq{crawlTime}{crawlTime}]
+				Es wird der Beginn des Crawlvorgangs (\ref{req:Cr:starttime}) 
+				als Timestamp bzw. als Ganzzahl in ms gespeichert.
+			\item [\subreq{commitTag}{commitTag}]
+				Der commitTag wird aus Domainordnername und crawlTime (im Textformat) zusammen.
+		\end{description}
 	\item [\req{Erzeugung von XML-Dateien}{xml}]
-		Die zwischengespeicherten Metadaten werden in XML-Metadateien (siehe auch \ref{spec:xml}) 
-		geschrieben und jeweils im zugehörigen \htmlarc\ gespeichert. 
+		Die zwischengespeicherten Metadaten werden in XML-Metadateien 
+		(siehe auch Abschnitt \ref{spec:xml}) 
+		geschrieben und jeweils im zugehörigen \arc\ gespeichert. 
 	\item [\req{Synchronisation}{sync}]
 		Die vorbereiteten Daten in den TMP-Ordnern werden nun in das vorhandene Archiv synchronisiert 
-		(mit rsync). 
-		Veraltete Domain-Ordner werden dabei komplett überschrieben, 
-		können aber gegebenfalls mithilfe der Versionierung wiederhergestellt werden. 
-		Dabei sollen auch veraltete Analysedaten gelöscht werden.
-		(Siehe auch \ref{spec:filearchive})
+		(mit RSYNC). (Siehe auch Abschnitt \ref{spec:filearchive})
+		\begin{description}
+			\item [\subreq{Update}{update}]
+				Veraltete \arc s werden komplett durch die neuen ersetzt
+				(und dadurch von der Versionierung in einen älteren Versionstand verschoben).
+			\item [\subreq{Nicht vorhandene Ordner}{del}]
+				\arc s, welche im TMP-Ordner aber nicht im Webarchiv vorhanden sind, werden
+				komplett aus dem Archiv gelöscht (und landen ebenfalls in der Versionierung)
+		\end{description}
 	\item [\req{Datenbankaktualisierung}{dbupdate}]
 		Die Datenbank wird nun mithilfe der zwischengespeicherten Metadaten aktualisiert.
 \end{description}
@@ -96,76 +143,62 @@ und die Daten in das Archiv schreiben.
 \initReqgrp{Fi}
 \begin{description}
 	\item [\req{Schnittstelle}{interface}]
-		Alle Filtermodule sollen eine vorgegebene Schnittstelle erfüllen.
+		Alle Filtermodule sollen eine vorgegebene Funktionsschnittstelle erfüllen, 
+		welcher ein Dateipfad übergeben werden kann und einen Wahrheitswert zurückgibt.
 	\item [\req{Konfiguration}{conf}]
-		Alle Module müssen wie unter \ref{req:Cr:conf:filter} beschrieben dem Crawlmodul bekanntgemacht werden.
-		Eine Zentrale Speicherung der einzelnen Module in einem Filterverzeichnis ist anzustreben.
+		Ein Filtermodul kann über eigenes Config-file verfügen, welches im Verzeichnis
+		der anderen Config-dateien gespeichert werden soll.
 	\item [\req{HTML Überprüfung}{htmlchk}]
-		Ein Filter soll ein gegebenes HTML-File überprüfen und einen Wahrheitswert zurückgeben,
+		Ein Filter soll ein gegebenes File überprüfen und einen Wahrheitswert zurückgeben,
 		ob dieses behalten oder verworfen werden soll.
 		Die Prüfmethode ist dabei vom einzelnen Zweck des Filters abhängig.
 	\item [\req{Implementierung Testfilter: Werbefilter}{testfilter}]
-		Als Testfilter wird ein Filter implementiert, 
-		der mittels einer Blacklist HTML-Dateien bestimmter Werbedomains aussortiert.
+%		Als Testfilter wird ein Filter implementiert, 
+%		der mittels einer Blacklist HTML-Dateien bestimmter Werbedomains aussortiert.
 \end{description}
 
 \section{Dateiarchiv} \label{spec:filearchive}
+Das Dateiarchiv stellt den zentralen Speicherort aller Quell-, Meta-XML und sonstiger
+hinzugefügter Daten dar.
+Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochmal kurz erläutert:
+\begin{itemize}
+	\item Auf der obersten Ebene stehen die Domain-Ordner.
+	\item Darunter wird die von der URL abgebildeten Struktur
+		innerhalb der Domain nachgebildet.
+	\item Die einzelnen HTML-Dateien werden durch \arc-Ordner ersetzt, bzw. in diese verschoben.
+	\item Jedes \arc\ enthält die Quell-HTML-Datei, 
+		die aber in data.html unbenannt wurde.
+		sowie die dazugehörige XML-Datei (data.xml). 
+		Ein \arc\ kann aber auch weitere Dateien enthalten, welche nach dem
+		Crawlen hinzugefügt werden können.
+\end{itemize}
 \initReqgrp{Ar}
 \begin{description}
-	\item [\req{Struktur}{structure}]
-		Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochmal erläutert:
-		\begin{itemize}
-			\item Auf der obersten Ebene stehen die Domain-Ordner.
-			\item Darunter wird die von der URL abgebildeten Struktur
-				innerhalb der Domain nachgebildet.
-			\item Die einzelnen HTML-Dateien werden durch \htmlarc-Ordner ersetzt, bzw. in diese verschoben.
-			\item Jedes \htmlarc enthält die Quell-HTML-Datei, 
-				die aber in data.html unbenannt wurde
-				sowie die dazugehörige XML-Datei (data.xml). 
-				Ein \htmlarc\ kann aber auch weitere Dateien enthalten, welche nach dem
-				Crawlen hinzugefügt werden können.
-		\end{itemize}
 	\item [\req{Berechtigungen}{rights}]
 		Generell dürfen keine Änderungen an bestehenden Dateien durchgeführt werden 
 		(Ausname: siehe \ref{req:Xm:extense}).
 		\begin{description}
 			\item [\subreq{Externe Benutzer}{extern}]
-				Von exterenen Nutzern (Java-Clients) dürfen nur Dateien in \emph{aktuelle} \htmlarc-Ordner
+				Von exterenen Nutzern (Java-Clients) dürfen nur Dateien in \emph{aktuelle} \arc
 				hinzugefügt werden.
 			\item [\subreq{Crawler}{crawler}]
-				Crawler dürfen neue \htmlarc-Ordner hinzufügen oder alte löschen bzw. ersetzen, 
-				wobei immer das gesamte \htmlarc\ ersetzt wird. 
+				Crawler dürfen neue \arc-Ordner hinzufügen oder alte löschen bzw. ersetzen, 
+				wobei immer das gesamte \arc\ ersetzt wird. 
 		\end{description}
 	\item [\req{Synchronisation}{sync}]
 		Um gleichzeitige Zugriffe auf Dateien zu verhindern, 
-		muss mit Locks oder Mutexen gearbeitet werden.
-		Dabei wird immer der gesamte Domain-Ordner gesperrt.
-		Es muss vor jedem Lese- oder Schreibvorgang ein Lock gesetzt und
-		beim Beenden des Vorgangs wieder entfernt werden.
-	\item [\req{Versionierung}{version}]	
-		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
-		Damit ist auch das Wiederherstellen älterer Versionen möglich.
+		muss Synchronisiert werden.
 		\begin{description}
-			\item [\subreq{Hinzufügen}{add}]
-				Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
-			\item [\subreq{Commit}{commit}]
-				Änderungen müssen stets mit einem Commit bestätigt werden.
-				Dabei wird zur Identifikation immer ein bestimmter CommitTag verwendet.
-				Dabei ist zu beachten:
-				\begin{itemize}
-					\item wurden Dateien während des Crawlvorgangs hinzugefügt,
-						wird ein neuer CommitTag erzeugt.
-					\item beim nachträglichen Hinzufügen von Dateien wird der alte CommitTag wiederverwendet.
-				\end{itemize}
-			\item [\subreq{Ändern und Löschen}{update}]
-				Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen
-				getroffen werden.
-				Diese werden von der Versionierung in tiefere Versionsebenen verschoben.
-			\item [\subreq{Schreiben in veraltete Verzeichnisse}{writeToOldDirs}]
-				Sollte in Ausnahmefällen in veraltete Verzeichnisse geschrieben werden, 
-				zum Beispiel weil die Daten von den Crawlern während einer Analyse geändert wurden,
-				dann werden die Daten verworfen und der Schreiber muss benachrichtigt werden.
-				(z.B. mittels einer Exception)
+			\item [\subreq{Sicherungsmechanismus}{lock}]
+				Zum Schutz der kritischen Stellen wird mit Locks bzw. Mutexen gearbeitet.
+			\item [\subreq{Umfang des Schutzes}{lockarea}]
+				Es wird immer der gesamte Domain-Ordner gesperrt.
+			\item [\subreq{Lesezugriffe}{read}]
+				Es muss vor jedem Lesezugriff ein Lock gesetzt und
+				sofort wieder entfernt werden, nachdem die Daten ausgelesen wurden.
+			\item [\subreq{Schreibzugriffe}{write}]
+				Es muss vor jedem Schreibvorgang ein Lock gesetzt und
+				nach dem Beenden des Vorgangs wieder entfernt werden.
 		\end{description}
 	\item [\req{Dateisystem}{fs}]
 		Beim darunterliegenden Dateisystem wird von einem vorhandenen Unix-Filesystem ausgegangen.
@@ -173,6 +206,37 @@ und die Daten in das Archiv schreiben.
 		Eine explizite Dateikomprimierung wird nicht vorgesehen, 
 		ist aber zum Teil schon durch die Versionierung gegeben, 
 		da alte Revisionen gepackt abgelegt werden.
+\end{description}
+
+\subsection{Versionierung}
+\begin{description}
+	\item [\req{Versionsverwaltungssystem}{versionsystem}]
+		Es wird das Versionsverwaltungssystem GIT verwendet.
+	\item [\req{Domainversionierung}{domainversion}]	
+		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
+		Damit ist auch das Wiederherstellen älterer Versionen möglich.
+	\item [\req{Hinzufügen}{add}]
+		Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
+	\item [\req{Commit}{commit}]
+		Änderungen müssen stets mit einem Commit bestätigt werden.
+		Dabei wird zur Identifikation immer der in Abschnitt \ref{spec:model} 
+		definierte commitTag verwendet.
+		Dabei ist zu beachten:
+		\begin{description}
+			\item [Während des Crawlvorgangs]
+				Das Erzeugen neuer commitTags während des Crawlvorgangs ist 
+				im Abschnitt \ref{spec:crawler:exec} beschrieben
+			\item [\subreq{Nach dem Crawlen}{postCrawl}]
+				Beim nachträglichen Hinzufügen von Dateien wird der alte commitTag wiederverwendet.
+		\end{description}
+	\item [\req{Ändern und Löschen}{update}]
+		Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen getroffen werden.
+		Diese werden von der Versionierung in eine tiefere Versionsebene verschoben.
+	\item [\req{Schreiben in veraltete Verzeichnisse}{writeToOldDirs}]
+		Sollte in Ausnahmefällen in veraltete Verzeichnisse geschrieben werden, 
+		zum Beispiel weil die Daten von den Crawlern während einer Analyse geändert wurden,
+		dann werden die Daten verworfen und der Schreiber muss benachrichtigt werden.
+		(z.B. mittels einer Exception)
 \end{description}
 
 
@@ -205,10 +269,7 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Observerregistrierung}{observer}]
 		Benutzer des Clients können sich mittels o.g. Schnittstelle beim Client als Observer an- und abmelden.
 	\item [\req{Benachrichtigungen}{notifies}]
-		Vom Server kommen in regelmäßigen Abständen Nachrichten über Änderungen.
-		Diese werden an angemeldete Observer weitergegeben.
-		Die Informationen bestehen dabei aus einer Liste von neuen CommitTags.
-		Benutzer des Client können dann entscheiden, welche Daten Sie abrufen wollen.
+		Vom Server erhaltene Änderungen (in Form von commitTags) werden an die Observer weitergereicht.
 	\item [\req{Datenbankabfragen}{dbquery}]
 		Es sollen auch vorbereitete SQL-Statements an den Server geschickt werden können. 
 		Die SQL-Abfrage wird soweit vorbereitet, 
@@ -217,7 +278,7 @@ und die Daten in das Archiv schreiben.
 		Als return-Wert wird eine Liste von Metadatenobjekten zurückgegeben.
 	\item [\req{Datei Listing}{ls}]
 		Mittels der Metadatenobjekte kann man sich über eine gesonderte Anfrage eine Auflistung
-		über den Inhalt eines \htmlarc-Ordners zurückgeben lassen.
+		über den Inhalt eines \arc-Ordners zurückgeben lassen.
 	\item [\req{Datei Lesen}{readFile}]
 		Mittels Metadatenobjekt und Dateipfadangabe wird ein Dateistream zum Lesen zurückgegeben.
 	\item [\req{Datei Schreiben}{writeFile}]
@@ -247,32 +308,42 @@ und die Daten in das Archiv schreiben.
 		Über bestimmte Kennungen (z.B. über enums) ist der Inhalt einer Nachricht zu kennzeichnen.
 		Dabei müssen folgende Informationen Ausgetauscht werden können:
 		\begin{description}
-	\item [\subreq{Austausch von Stream-Daten}{streams}]
-		Zwischen C. und S. müssen Daten in Form von Streams verschickt werden können.
-		Diese müssen in geeigneter Form bei der Übertragung gepuffert werden.
-	\item [\subreq{Exceptions}{exceptions}]
-		Vom Clientanwender verursachte Exceptions werden an diesen weitergeleitet und 
-		im Client erneut geworfen.
-	\item [\subreq{Datenbankabfragen}{dbquery}]
-		Datenbankanfragen werden in Form von SQL vom Client geschickt und diesem
-		in Form von Metadaten-Objekten beantwortet.
-	\item [\subreq{Änderungen im Archiv}{changes}]
-		Diese Nachrichtenform enthält Informationen für Client, welche Änderungen im Archiv betreffen.
-\end{description}
+			\item [\subreq{Austausch von Stream-Daten}{streams}]
+				Zwischen C. und S. müssen Daten in Form von Streams verschickt werden können.
+				Diese müssen in geeigneter Form bei der Übertragung gepuffert werden.
+			\item [\subreq{Exceptions}{exceptions}]
+				Vom Clientanwender verursachte Exceptions werden an diesen weitergeleitet und 
+				im Client erneut geworfen.
+			\item [\subreq{Datenbankabfragen}{dbquery}]
+				Datenbankanfragen werden in Form von SQL vom Client geschickt und diesem
+				in Form von Metadaten-Objekten beantwortet.
+			\item [\subreq{Änderungen im Archiv}{changes}]
+				Diese Nachrichtenform enthält Informationen für Client, welche Änderungen im Archiv betreffen.
+		\end{description}
 	\item [\req{Clienten registrieren}{register}]
 		Der Server hält eine Liste von angemeldeten Java-Clienten und 
-		verwaltet die Verbindungen der Clienten und verwirft sie bei Verbindungsverlust oder 
+		verwaltet die Verbindungen der Clienten.
+	\item [\req{Clienten entfernen}{rmClients}]
+		Clients werden aus der Registrierung entfernt bei Verbindungsverlust oder 
 		beim Beenden der Clients. 
 	\item [\req{Update-Notifier}{notifier}]
-		Der Update-Notifier ist ein eigens laufender Thread des Servers, der in einem vorgegebenen Intervall (z.B. stündlich) in der Datenbank prüft ob neue Commit-Tags vorhanden sind.
-		Hierfür speichert er sich den Zeitpunkt der letzten Update-Suche und vergleicht ihn mit dem Datum der Datensätze in der Datenbank.
-\		Werden Änderungen gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
+		Hierfür speichert er sich den Zeitpunkt der letzten Update-Suche und 
+		vergleicht ihn mit dem Datum der Datensätze in der Datenbank.
+		Werden Änderungen gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
 		\begin{description}
 			\item [\subreq{Konfiguration}{config}]
 				Der Benachrichtigungsintervall muss in einem Configfile gespeichert werden.
+			\item [\subreq{Thread}{thread}]
+				Der Update-Notifier ist ein eigens laufender Thread des Servers. 
+			\item [\subreq{Suchintervalle}{interval}]
+				Der Notifier in dem vorgegebenen Intervall (z.B. stündlich) in der Datenbank,
+				ob neue Commit-Tags vorhanden sind.
+			\item [\subreq{Zeitpunkt der letzten Suche}{lastSearch}]
+				Es wird immer der Zeitpunkt der letzten Suche gespeichert, um die 
+				Datenbank auf aktuelle Daten zu prüfen.
 			\item [\subreq{Clienten informieren}{notify}]
-				Sobald die Update-Suche fertig ist, 
-				werden die gepufferten Informationen an alle registrierten Clienten geschickt.
+				Sollte die Suche Ergebnisse zutage gefördert haben,
+				wird eine Liste mit den neuen commitTags an die registrierten Clients geschickt.
 				Siehe auch \ref{req:Cl:notifies}
 		\end{description}
 \end{description}
@@ -282,47 +353,58 @@ und die Daten in das Archiv schreiben.
 \begin{description}
 	\item [\req{Inhalt}{content}]
 		Die XML-Dateien enthalten in ihrem Wurzelknoten eine Meta- und einen Datenknoten.
-		Der Metaknoten ist für die in \ref{spec:model} beschriebenen Metadaten reserviert.
-		Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knoten erweitert werden.
-	\item [\req{Validierung}{validate}]
+		\begin{description}
+			\item [\subreq{Metaknoten}{meta}]
+				Der Metaknoten ist für die in \ref{spec:model} beschriebenen Metadaten reserviert.
+			\item [\subreq{Datenknoten}{data}]
+				Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knoten erweitert werden.
+		\end{description}
+	\item [\req{Erstellung eines XML-Schemas}{schema}]
 		Für die Validierung der XML-Daten muss eine XML-Schema ausgearbeitet werden.
+	\item [\req{Erweiterbarkeit des Datenelements}{extense}]
+		Wie oben beschrieben ist beim Design auf Erweiterbarkeit zu achten.
+		\begin{description}
+			\item [\subreq{Name eines Elements}{name}]
+				Der Name eines hinzugefügten Elements ist frei wählbar, darf aber nur einmal
+				auf der Ebene unter dem Datenknoten vorkommen.
+			\item [\subreq{Inhalt}{content}]
+				Struktur und Inhalt der hinzugefügten Elemente ist frei wählbar.
+			\item [\subreq{Erweiterung des Schemas}{schema}]
+				Bei Erweiterung des Datenknotens ist das Schema auch entsprechend zu erweitern.
+		\end{description}
+	\item [\req{Validierung}{validate}]
 		Eine Validierung ist dann durchzuführen, nachdem eine XML-Datei erweitert worden ist.
 		Dabei auftretende Fehler werden in eine Log-Datei geschrieben.
-	\item [\req{Erweiterbarkeit}{extense}]
-		Wie oben beschrieben ist beim Design auf Erweiterbarkeit zu achten.
-		Der Inhalt des Knotens ist frei wählbar, der Name des Knotens muss aber
-		eindeutig sein und darf mit vorhandenen Knoten nicht kollidieren
-		(ggf. mit namespaces arbeiten).
-		Sollten die XML-Dateien erweitert werden, so muss vom Benutzer auch das Schema erweitert werden.
 	\item [\req{Schreibschutz}{writeprotect}]
-		Bei schreibenden Zugriffen auf die XML-Datei ist darauf zu achten, 
-		dass nur neue Knoten hinzugefügt werden dürfen und
-		keine vorhandenen überschrieben oder geändert werden können.
-		Desweiteren muss der Metaknoten geschützt werden.
-		Es dürfen auch keine gleichnamigen Knoten in der obersten Ebene des Datenknotens
-		vorhanden sein.
+		Es dürfen nur neue Knoten hinzugefügt werden dürfen und
+		\begin{description}
+			\item [\subreq{Kein Überschreiben}{noOverwrite}]
+				Es dürfen keine vorhandenen Elemente überschrieben oder geändert werden können.
+			\item [\subreq{Metaknoten gesperrt}{meta}]
+				Der Metaknoten darf nicht geändert werden.
+		\end{description}
 \end{description}
 	
 \section{Datenbank} \label{spec:db}
 \initReqgrp{Db}
 \begin{description}
 	\item [\req{Konfiguration}{conf}]
-		Die Struktur der Datenbank wird als CREATE-TABLE-statement in einer SQL-Datei gespeichert.
-		Falls nötig werden auch alle weiteren vorbereiteten SQL-Dateien im selben Ordner abgelegt.
-		Da SQLITE verwendet wird, kann die Datenbank über einfache Dateioperationen erzeugt werden.
+		Die Datenbank wird als CREATE-TABLE-statement in einer SQL-Datei gespeichert.
+	\item [\req{SQL in externen Dateien}{sqlFiles}]
+		Vorbereitete SQL-Statements werden in je einer SQL-Datei in einem Ordner gespeichert.
+		Inlinedefinitionen im Quellcode sind also zu vermeiden.
 	\item [\req{Inhalt}{content}]
 		Es werden die Speicherstände aller HTML-Dateien und Versionen im Archiv festgehalten.
-        Die gespeicherten Daten entsprechen den Knoten aus \ref{spec:model}.
+        Die gespeicherten Daten entsprechen den Knoten des Abschnitts \ref{spec:model}.
 	\item [\req{Erweiterbarkeit}{extense}] 
-		Ein Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen und gewünscht.
+		Eine Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen.
 	\item [\req{Berechtigungen}{rights}]
-		Schreibrechte werden nur dem Crawlmodul erteilt.
-		Gelesen kann falls notwendig von allen Komponenten werden.
-		Wobei externe Benutzer über die Schnittstellen der Clients SELECT-statements abzusetzen können.
-	\item [\req{Aktualisierung}{update}]
-		Die Datenbank muss immer beim Fertigstellen eines Crawlvorgangs auf den neuesten Stand gebracht werden.
+		\begin{description}
+			\item [\subreq{Schreiben}{write}] Schreibrechte werden nur dem Crawlmodul erteilt.
+			\item [\subreq{Lesen}{read}] Gelesen kann falls notwendig von allen Komponenten werden.
+				Wobei externe Benutzer über die Schnittstellen der Clients SELECT-statements abzusetzen können.
+		\end{description}
 	\item [\req{Wiederherstellung}{recovery}]
 		Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
-		im Archiv vorhanden XML-Metadaten rekonstruiert werden können.
-		Dabei müssen auch alte Versionstände wieder mit eingefügt werden.
+		im Archiv vorhanden XML-Metadaten aller Versionen rekonstruiert werden können.
 \end{description}

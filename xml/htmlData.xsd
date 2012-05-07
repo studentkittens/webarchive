@@ -18,6 +18,7 @@ and open the template in the editor.
 					<xs:complexType>
 						<xs:attribute name="url" type="xs:anyURI" use="required"/>
 						<xs:attribute name="title" type="xs:string" use="required" />
+						<xs:attribute name="mimeType" type="xs:string" use="required" />
 						<xs:attribute name="archivePath" type="xs:anyURI" use="required" />
 						<xs:attribute name="lastCrawl" type="xs:dateTime" use="required" />
 						<xs:attribute name="commitTag" type="xs:string" use="required" />

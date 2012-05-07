@@ -11,16 +11,25 @@ Die Metadaten sollen vor allen Dingen Such- und Sortieraufgaben erleichtern.
 	\hline
 	Name 		& Datentyp 				& Beschreibung \\
 	\hline
-	URL 		& String 				& Original URL der HTML-Datei\\
-	Titel 		& String 				& Soweit vorhanden wird der Titel der Seite \\ 
+	url 		& String 				& Original URL der HTML-Datei\\
+	\hline
+	%mimeType	& String 				& MIME-Typ der Datei\\
+	%\hline
+	title 		& String 				& Soweit vorhanden wird der Titel der Seite \\ 
 	 			& 						& gespeichert \\ 
-	Archivpfad 	& String 				& Dateipfad des \htmlarc-Ordners im Webarchiv \\
-	Crawlzeit 	& Timestamp oder 		& Zeitpunkt des Crawls \\
+	\hline
+	path 		& String 				& Dateipfad zum Archivordner der Datei im Webarchiv \\
+	\hline
+	crawlTime 	& Timestamp oder 		& Beginn des Crawls \\
 				& Integer (UTC in ms) 	&  \\
-	Commit Tag 	& String 				& Der Committag dient zum Wiederauffinden \\
-	 			& 						& in der Versionsverwaltung. \\ 
+	\hline
+	commitTag 	& String 				& Der Committag dient zum Wiederauffinden \\
+	 			& Form: 				& in der Versionsverwaltung. \\ 
 				& 						& Der Tag setzt sich aus Domainnamme und \\
 				& 						& dem Zeitpunkt des Crawlvorgangs zusammen.\\
+				&  						& Form: \\
+				&  						& commitTag := <domainName>\@<crawlTime> \\
+				& 						& crawlTime := \quad <YYYY-MM-DD HH:MM:SS> \\
 	\hline
 \end{tabular}
 \caption{Metadaten}
