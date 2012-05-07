@@ -240,7 +240,7 @@ und die Daten in das Archiv schreiben.
 \begin{description}
 	\item [\req{Konfiguration}{conf}]
 		Es ist der Port des Servers in einer Config-Datei zu hinterlegen.
-		Desweiteren werden darin auch alle Pfade zu externe Libraries, Treibern und Ressourcen
+		Desweiteren werden darin auch alle Pfade zu externe Ressourcen
 		hinterlegt.
 	\item [\req{Client-Server Kommunikation}{comm}]
 		Es muss ein Nachrichtensystem zwischen dem Client und dem Server implementiert werden.
@@ -266,7 +266,7 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Update-Notifier}{notifier}]
 		Der Update-Notifier ist ein eigens laufender Thread des Servers, der in einem vorgegebenen Intervall (z.B. stündlich) in der Datenbank prüft ob neue Commit-Tags vorhanden sind.
 		Hierfür speichert er sich den Zeitpunkt der letzten Update-Suche und vergleicht ihn mit dem Datum der Datensätze in der Datenbank.
-		Werden Änderungen gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
+\		Werden Änderungen gefunden, werden das Datum und der Commit-Tag zwischengepuffert.
 		\begin{description}
 			\item [\subreq{Konfiguration}{config}]
 				Der Benachrichtigungsintervall muss in einem Configfile gespeichert werden.
