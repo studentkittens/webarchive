@@ -76,16 +76,16 @@ und die Daten in das Archiv schreiben.
 		Jede gestartete Instanz beginnt nun den Crawlvorgang.
 		\begin{description}
 			\item [\subreq{Herunterladen}{download}]
-				Jede Instanz kopiert die heruntergeladene HTML-Dateien 
+				Jede Instanz kopiert die heruntergeladene Dateien 
 				der Seite in ein temporäres Verzeichnis je Crawlerinstanz.
 			\item [\subreq{Ordnerstruktur}{structure}]
-				Dabei wird die online vorhandene URL-Pfadstruktur der HTML-Dateien 
+				Dabei wird die online vorhandene URL-Pfadstruktur der Dateien 
 				auf das Dateisystem abgebildet.
 				Je Domain wird dadurch ein Hauptverzeichnis im TMP-Ordner erzeugt.
 		\end{description}
 	\item [\req{Filterung}{filter}]
-		Für alle HTML-Dateien wird eine Liste von Filtern durchlaufen.
-		Jeder Filter prüft, ob die HTML-Datei behalten oder verworfen werden soll.
+		Für alle Dateien wird eine Liste von Filtern durchlaufen.
+		Jeder Filter prüft, ob die Datei behalten oder verworfen werden soll.
 		Verworfene Dateien werden sogleich gelöscht.
 	\item [\req{Bereinigung}{clean}]
 		In diesem Teil werden die heruntergeladenen Ordner bereinigt,
@@ -93,37 +93,41 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Normalisierung}{normalize}]
 		\begin{description}
 			\item [\subreq{Datei umbenennen}{rename}]
-				Das HTML-file in ''data.html'' umbenannt. 
+				Das File wird in ''data.<Endung>'' umbenannt. 
 			\item [\subreq{Archivordner erzeugen}{createArc}] 
 				Es wird ein Archivordner (im Folgenden kurz \arc\ genannt) 
-				mit dem Namen des HTML-files (inklusive Dateiendung) 
+				mit dem Namen der Datei (inklusive Dateiendung) 
 				erzeugt.
 			\item [\subreq{Datei verschieben}{move}]
-				Die data-Datei wird in den soeben erzeugte \arc\ verschoben.
+				Die data-Datei wird in das soeben erzeugte \arc\ verschoben.
 		\end{description}
 	\item [\req{Extraktion der Metadaten}{metaextract}]
-		In diesem Vorgang werden die im Datenmodell (Abschnitt \ref{spec:model}) definierten Metadaten 
-		aus dem HTML extrahiert und zwischengespeichert. 
+		In diesem Vorgang werden die im Datenmodell (Abschnitt \ref{spec:model}) 
+		definierten Metadaten 
+		aus der Datei extrahiert und zwischengespeichert. 
 		\begin{description}
 			\item [\subreq{url}{url}]
 				Die Original-URL wird aus dem aktuellen Ordnerpfad abgeleitet.
 			\item [\subreq{title}{title}]
-				%Falls die Datei ein HTML ist, 
+				Falls die Datei ein HTML ist, 
 				muss der Titel aus dem Inhalt geparst werden.
-		%	\item [\subreq{mimeType}]
-		%		Der MIME-Typ der Datei wird mit einer geeigneten Maßnahme ermittelt.
+			\item [\subreq{mimeType}{mimeType}]
+				Der MIME-Typ der Datei wird mit einer geeigneten Maßnahme ermittelt.
 			\item [\subreq{path}{path}]
 				Es wird der aktuelle absolute Ordnerpfad auf das \arc gespeichert.
+			\item [\subreq{domain}{domain}]
+				Der Name der Domain wird aus der dem Domainordnernamen kopiert.
 			\item [\subreq{crawlTime}{crawlTime}]
-				Es wird der Beginn des Crawlvorgangs (\ref{req:Cr:starttime}) 
-				als Timestamp bzw. als Ganzzahl in ms gespeichert.
+				Es wird der Beginn des Crawlvorgangs (\ref{req:Cr:starttime}) verwendet. 
+			\item [\subreq{createTime}{createTime}]
+				Das Erzeugungsdatum der Datei wird ermittelt.
 			\item [\subreq{commitTag}{commitTag}]
-				Der commitTag wird aus Domainordnername und crawlTime (im Textformat) zusammen.
+				Der commitTag wird aus domain-Name und crawlTime zusammengesetzt.
 		\end{description}
 	\item [\req{Erzeugung von XML-Dateien}{xml}]
 		Die zwischengespeicherten Metadaten werden in XML-Metadateien 
 		(siehe auch Abschnitt \ref{spec:xml}) 
-		geschrieben und jeweils im zugehörigen \arc\ gespeichert. 
+		geschrieben und jeweils im zugehörigen \arc\ als ''data.xml'' gespeichert. 
 	\item [\req{Synchronisation}{sync}]
 		Die vorbereiteten Daten in den TMP-Ordnern werden nun in das vorhandene Archiv synchronisiert 
 		(mit RSYNC). (Siehe auch Abschnitt \ref{spec:filearchive})
@@ -139,6 +143,7 @@ und die Daten in das Archiv schreiben.
 		Die Datenbank wird nun mithilfe der zwischengespeicherten Metadaten aktualisiert.
 \end{description}
 
+%\begin{comment}
 \section{Filtermodule}
 \initReqgrp{Fi}
 \begin{description}
@@ -148,13 +153,23 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Konfiguration}{conf}]
 		Ein Filtermodul kann über eigenes Config-file verfügen, welches im Verzeichnis
 		der anderen Config-dateien gespeichert werden soll.
-	\item [\req{HTML Überprüfung}{htmlchk}]
+	\item [\req{Dateiüberprüfung}{filechk}]
 		Ein Filter soll ein gegebenes File überprüfen und einen Wahrheitswert zurückgeben,
 		ob dieses behalten oder verworfen werden soll.
 		Die Prüfmethode ist dabei vom einzelnen Zweck des Filters abhängig.
-	\item [\req{Implementierung Testfilter: Werbefilter}{testfilter}]
-%		Als Testfilter wird ein Filter implementiert, 
-%		der mittels einer Blacklist HTML-Dateien bestimmter Werbedomains aussortiert.
+	\item [\req{Implementierung Testfilter: MIME-Type-filter}{testfilter}]
+		übergebene Dateien werden anhand ihres MIME-Types geprüft, ob sie behalten oder verworfen werden sollen.
+		\begin{description}
+			\item [\subreq{Konfiguration}{conf}]
+				Alle Einstellungen werden in einem Configfile getroffen.
+			\item [\subreq{Includes}{includes}]
+				Es kann eine Liste von MIME-Types angegeben werden, die behalten werden sollen. 
+			\item [\subreq{Excludes}{excludes}]
+				Es kann eine Liste von MIME-Types angegeben werden, die verworfen werden sollen. 
+			\item [\subreq{Pattern}{pattern}]
+				Es kann eine Liste von regulären Ausdrücken übergeben werden, mit denen der
+				MIME-Type der Datei verglichen wird.
+		\end{description}
 \end{description}
 
 \section{Dateiarchiv} \label{spec:filearchive}
@@ -165,9 +180,9 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 	\item Auf der obersten Ebene stehen die Domain-Ordner.
 	\item Darunter wird die von der URL abgebildeten Struktur
 		innerhalb der Domain nachgebildet.
-	\item Die einzelnen HTML-Dateien werden durch \arc-Ordner ersetzt, bzw. in diese verschoben.
-	\item Jedes \arc\ enthält die Quell-HTML-Datei, 
-		die aber in data.html unbenannt wurde.
+	\item Die einzelnen Dateien werden durch \arc-Ordner ersetzt, bzw. in diese verschoben.
+	\item Jedes \arc\ enthält die Quell-Datei, 
+		die aber in data.<Endung> unbenannt wurde.
 		sowie die dazugehörige XML-Datei (data.xml). 
 		Ein \arc\ kann aber auch weitere Dateien enthalten, welche nach dem
 		Crawlen hinzugefügt werden können.
@@ -292,8 +307,13 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		können neue Tags zur XML-Datei hinzugefügt werden.
 	\item [\req{Test Analysetool}{testanalyzer}]
 		Zur Demonstrations- und Testzwecken der Java-Clientschnittstelle wird ein Analysetool erstellt, 
-		welches die Wörter im HTML zählt und das Ergebnis im Archiv 
-		als Datei sowie im XML als zusätzliches Tag speichert.
+		welches die Wörter in HTML-Dateien zählt. 
+		\begin{description}
+			\item [\subreq{Speicherung als Textdatei}{txt}]
+				Das Ergebnis wird als Textdatei im Archiv gespeichert.
+			\item [\subreq{Speicherung im XML}{xml}]
+				Das Ergebnis wird der Stamm-XML-Datei als zusätzliches Element hinzugefügt.
+		\end{description}
 	\end{description}
 
 \section{Server} \label{spec:server}
@@ -394,8 +414,8 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Vorbereitete SQL-Statements werden in je einer SQL-Datei in einem Ordner gespeichert.
 		Inlinedefinitionen im Quellcode sind also zu vermeiden.
 	\item [\req{Inhalt}{content}]
-		Es werden die Speicherstände aller HTML-Dateien und Versionen im Archiv festgehalten.
-        Die gespeicherten Daten entsprechen den Knoten des Abschnitts \ref{spec:model}.
+		Es werden die Speicherstände aller Dateien und Versionen im Archiv festgehalten.
+        Die gespeicherten Daten entsprechen dem Datenmodell des Abschnitts \ref{spec:model}.
 	\item [\req{Erweiterbarkeit}{extense}] 
 		Eine Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen.
 	\item [\req{Berechtigungen}{rights}]
@@ -408,3 +428,4 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Sollte die Datenbank beschädigt oder geändert werden, dann soll diese wieder aus den
 		im Archiv vorhanden XML-Metadaten aller Versionen rekonstruiert werden können.
 \end{description}
+%\end{comment}
