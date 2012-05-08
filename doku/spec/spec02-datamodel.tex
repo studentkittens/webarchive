@@ -1,8 +1,9 @@
 \chapter{Datenmodell der Metadaten} \label{spec:model}
-An dieser Stelle wird bereits ein vereinfachtes Datenmodell festgelegt, welches
-später auf Datenbank und XML-Daten umgesetzt wird und zentrale Metadaten über HTML-Seiten erfassen soll. 
+An dieser Stelle wird bereits ein vereinfachtes Datenmodell festgelegt, 
+welches später auf Datenbank und XML-Daten umgesetzt wird und zentrale Metadaten 
+der heruntergeladenen Dateien erfassen soll. 
 
-Für jede HTML-Datei wird dabei ein solcher Satz von Metadaten angelegt.
+Für jede Datei wird dabei ein solcher Satz von Metadaten angelegt.
 Die Metadaten sollen vor allen Dingen Such- und Sortieraufgaben erleichtern. 
 
 \begin{table}[h]
@@ -11,27 +12,32 @@ Die Metadaten sollen vor allen Dingen Such- und Sortieraufgaben erleichtern.
 	\hline
 	Name 		& Datentyp 				& Beschreibung \\
 	\hline
-	url 		& String 				& Original URL der HTML-Datei\\
+	url 		& String 				& Original URL der Datei\\
 	\hline
-	%mimeType	& String 				& MIME-Typ der Datei\\
-	%\hline
-	title 		& String 				& Soweit vorhanden wird der Titel der Seite \\ 
+	mimeType	& String 				& MIME-Typ der Datei\\
+	\hline
+	title 		& String 				& Soweit vorhanden, wird der Titel der Seite \\ 
 	 			& 						& gespeichert \\ 
 	\hline
 	path 		& String 				& Dateipfad zum Archivordner der Datei im Webarchiv \\
 	\hline
-	crawlTime 	& Timestamp oder 		& Beginn des Crawls \\
-				& Integer (UTC in ms) 	&  \\
+	domain 		& String 				& Name der Domain \\
+	\hline
+	crawlTime 	& Timestamp 			& Beginn des Crawls \\
+	\hline
+	createTime 	& Timestamp 			& Erzeugungszeitpunkt der Datei \\
 	\hline
 	commitTag 	& String 				& Der Committag dient zum Wiederauffinden \\
-	 			& Form: 				& in der Versionsverwaltung. \\ 
-				& 						& Der Tag setzt sich aus Domainnamme und \\
-				& 						& dem Zeitpunkt des Crawlvorgangs zusammen.\\
+	 			& 		 				& in der Versionsverwaltung. \\ 
+				& 						& Der Tag setzt sich aus domain und crawlTime zusammen.\\
 				&  						& Form: \\
-				&  						& commitTag := <domainName>\@<crawlTime> \\
-				& 						& crawlTime := \quad <YYYY-MM-DD HH:MM:SS> \\
+				&  						& commitTag := $<$domainName$>@<$crawlTime$>$ \\
 	\hline
 \end{tabular}
 \caption{Metadaten}
 \end{table}
+
+\paragraph{Anmerkung Timestamp-typ:}
+Alle Timestamps werden als String in der Form behandelt:
+''yyyy-mm-dd hh:mm:ss'', bei der Speicherung im XML ist das Leerzeichen zwischen Datum und Zeit durch ein 'T' zu ersetzen. Als Zeitzone wird CET verwendet.
 
