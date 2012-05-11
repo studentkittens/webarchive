@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
+# wget module
+#
 import subprocess
 
 class Wget(object):

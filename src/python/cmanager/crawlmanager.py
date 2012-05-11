@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
+# crawlmanager module
+#
 import time
 import multiprocessing.pool as mpool
 import util.files as uff
-import cjob.crawljob as job
+import crawler.crawljob as job
 
 MAX_INSTANCES = 2
 CRAWL_DEPTH = 2
