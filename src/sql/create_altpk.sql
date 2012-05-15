@@ -8,7 +8,6 @@ CREATE TABLE domain (
 	name TEXT UNIQUE NOT NULL
 );
 CREATE TABLE metaData (
-	metaId INTEGER PRIMARY KEY AUTOINCREMENT,
 	url TEXT NOT NULL,
 	mimeId INTEGER NOT NULL,
 	title TEXT,
@@ -17,6 +16,7 @@ CREATE TABLE metaData (
 	-- date time as "%yyyy-%MM-%ddT%hh:%mm:%ss"
 	commitTime TEXT NOT NULL,
 	createTime TEXT NOT NULL,
+	PRIMARY KEY (url, commitTime),
 	FOREIGN KEY (mimeId) REFERENCES mimeType(mimeId),
 	FOREIGN KEY (domainId) REFERENCES domain(domainId)
 );
@@ -44,7 +44,7 @@ values(
 	'2012-05-15T17:28:42'
 );
 select * from metaData;
-insert into metaData (
+insert or replace into metaData (
 	url,
 	mimeId,
 	title,
@@ -62,4 +62,5 @@ values(
 	'2012-05-15T18:30:00', 
 	'2012-05-15T18:28:42'
 );
+select * from metaData;
 
