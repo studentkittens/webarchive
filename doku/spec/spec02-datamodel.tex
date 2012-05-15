@@ -23,15 +23,9 @@ Die Metadaten sollen vor allen Dingen Such- und Sortieraufgaben erleichtern.
 	\hline
 	domain 		& String 				& Name der Domain \\
 	\hline
-	crawlTime 	& Timestamp 			& Beginn des Crawls \\
+	commitTime 	& Timestamp 			& Zeitpunkt des Einspielens ins Archiv \\
 	\hline
 	createTime 	& Timestamp 			& Erzeugungszeitpunkt der Datei \\
-	\hline
-	commitTag 	& String 				& Der Committag dient zum Wiederauffinden \\
-	 			& 		 				& in der Versionsverwaltung. \\ 
-				& 						& Der Tag setzt sich aus domain und crawlTime zusammen.\\
-				&  						& Form: \\
-				&  						& commitTag := $<$crawlTime$>@<$domainName$>$ \\
 	\hline
 \end{tabular}
 \caption{Metadaten}
@@ -39,5 +33,5 @@ Die Metadaten sollen vor allen Dingen Such- und Sortieraufgaben erleichtern.
 
 \paragraph{Anmerkung Timestamp-typ:}
 Alle Timestamps werden als String in der Form behandelt:
-''yyyy-mm-dd hh:mm:ss'', bei der Speicherung im XML ist das Leerzeichen zwischen Datum und Zeit durch ein 'T' zu ersetzen. Als Zeitzone wird CET verwendet.
+''yyyy-mm-ddThh:mm:ss''. Als Zeitzone wird CET verwendet.
 

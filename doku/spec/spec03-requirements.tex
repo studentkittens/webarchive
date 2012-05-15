@@ -28,6 +28,12 @@ und die Daten in das Archiv schreiben.
 				maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen.
 			\item [\subreq{Filtereinstellungen}{filter}]
 				Liste von Verwendeten Ausschlussfiltern und deren Modulpfad.
+			\item [\subreq{Berücksichtigung von robots.txt}{robotsTxt}]
+				Man kann einstellen, ob robots.txt berücksichtigen werden soll.
+			\item [\subreq{User Agent}{userAgent}]
+				Man kann einen User Agent festlegen.
+			\item [\subreq{Archiv root Pfad}{root}]
+				Es wird der Wurzelpfad für die Archivordner festgelegt.
 		\end{description}
 	\item [\req{Kommandozeileninterface}{cmd}]
 		Optional können beim Start mittels Kommandozeile zusätzliche Parameter übergeben werden.
@@ -38,7 +44,7 @@ und die Daten in das Archiv schreiben.
 				Es kann eine Liste von URLs übergeben werden, 
 				die als Startpunkte für die Crawler verwendet werden sollen.
 				Die Übergabe von mindestens einem Element ist aber immer notwendig.
-			\item [\subreq{DB-Recovery}{recover}]
+			\item [\subreq{DB-Recovery erzwingen}{recover}]
 				Es kann ein Datenbank-Recovery erzwungen werden. Siehe auch \ref{req:Db:recovery}
 		\end{description}
 \end{description}
@@ -48,9 +54,6 @@ und die Daten in das Archiv schreiben.
 	\item [\req{Start in Intervallen}{startInterval}]
 		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:conf:tinterval} festgelegtem
 		Interval neu in Gang gesetzt. 
-	\item [\req{Zeitpunkt speichern}{starttime}]
-		Der Startzeitpunkt wird sofort nach dem Beginn des Crawlvorgangs zwischengespeichert.
-		Siehe auch Abschnitt \ref{spec:model}.
 	\item [\req{Parallelität}{concurrent}]
 		Die Ausführung der Crawlvorgänge soll parallel durchgeführt werden.
 	\item [\req{URL-Queue}{urlqueue}]
@@ -83,10 +86,6 @@ und die Daten in das Archiv schreiben.
 				auf das Dateisystem abgebildet.
 				Je Domain wird dadurch ein Hauptverzeichnis im TMP-Ordner erzeugt.
 		\end{description}
-	\item [\req{Filterung}{filter}]
-		Für alle Dateien wird eine Liste von Filtern durchlaufen.
-		Jeder Filter prüft, ob die Datei behalten oder verworfen werden soll.
-		Verworfene Dateien werden sogleich gelöscht.
 	\item [\req{Bereinigung}{clean}]
 		In diesem Teil werden die heruntergeladenen Ordner bereinigt,
 		also leere Ordner gelöscht.
@@ -117,13 +116,18 @@ und die Daten in das Archiv schreiben.
 				Es wird der aktuelle absolute Ordnerpfad auf das \arc gespeichert.
 			\item [\subreq{domain}{domain}]
 				Der Name der Domain wird aus der dem Domainordnernamen kopiert.
-			\item [\subreq{crawlTime}{crawlTime}]
-				Es wird der Beginn des Crawlvorgangs (\ref{req:Cr:starttime}) verwendet. 
 			\item [\subreq{createTime}{createTime}]
 				Das Erzeugungsdatum der Datei wird ermittelt.
 			\item [\subreq{commitTag}{commitTag}]
 				Der commitTag wird aus domain-Name und crawlTime zusammengesetzt.
 		\end{description}
+	\item [\req{Filterung}{filter}]
+		Für alle Dateien wird eine Liste von Filtern durchlaufen.
+		Jeder Filter prüft, ob die Datei behalten oder verworfen werden soll.
+		Verworfene Dateien werden sogleich gelöscht.
+	\item [\req{commitTime speichern}{commitTime}]
+		Der Startzeitpunkt wird sofort nach dem Beginn des Crawlvorgangs zwischengespeichert.
+		Siehe auch Abschnitt \ref{spec:model}.
 	\item [\req{Erzeugung von XML-Dateien}{xml}]
 		Die zwischengespeicherten Metadaten werden in XML-Metadateien 
 		(siehe auch Abschnitt \ref{spec:xml}) 
@@ -149,7 +153,7 @@ und die Daten in das Archiv schreiben.
 \begin{description}
 	\item [\req{Schnittstelle}{interface}]
 		Alle Filtermodule sollen eine vorgegebene Funktionsschnittstelle erfüllen, 
-		welcher ein Dateipfad übergeben werden kann und einen Wahrheitswert zurückgibt.
+		welcher ein Metadatenobjekt übergeben werden kann und einen Wahrheitswert zurückgibt.
 	\item [\req{Konfiguration}{conf}]
 		Ein Filtermodul kann über eigenes Config-file verfügen, welches im Verzeichnis
 		der anderen Config-dateien gespeichert werden soll.
@@ -234,15 +238,15 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
 	\item [\req{Commit}{commit}]
 		Änderungen müssen stets mit einem Commit bestätigt werden.
-		Dabei wird zur Identifikation immer der in Abschnitt \ref{spec:model} 
-		definierte commitTag verwendet.
+		Dabei wird zur Identifikation immer die in Abschnitt \ref{spec:model} 
+		definierte commitTime verwendet.
 		Dabei ist zu beachten:
 		\begin{description}
 			\item [Während des Crawlvorgangs]
-				Das Erzeugen neuer commitTags während des Crawlvorgangs ist 
+				Das Erzeugen neuer commitTimes während des Crawlvorgangs ist 
 				im Abschnitt \ref{spec:crawler:exec} beschrieben
 			\item [\subreq{Nach dem Crawlen}{postCrawl}]
-				Beim nachträglichen Hinzufügen von Dateien wird der alte commitTag wiederverwendet.
+				Beim nachträglichen Hinzufügen von Dateien wird die alte commitTime wiederverwendet.
 		\end{description}
 	\item [\req{Ändern und Löschen}{update}]
 		Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen getroffen werden.
