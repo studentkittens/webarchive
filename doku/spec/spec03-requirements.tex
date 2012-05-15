@@ -158,14 +158,13 @@ und die Daten in das Archiv schreiben.
 		Ein Filtermodul kann über eigenes Config-file verfügen, welches im Verzeichnis
 		der anderen Config-dateien gespeichert werden soll.
 	\item [\req{Dateiüberprüfung}{filechk}]
-		Ein Filter soll ein gegebenes File überprüfen und einen Wahrheitswert zurückgeben,
+		Ein Filter soll ein File mittels der gegebenen Metadaten überprüfen und 
+		einen Wahrheitswert zurückgeben,
 		ob dieses behalten oder verworfen werden soll.
 		Die Prüfmethode ist dabei vom einzelnen Zweck des Filters abhängig.
 	\item [\req{Implementierung Testfilter: MIME-Type-filter}{testfilter}]
 		übergebene Dateien werden anhand ihres MIME-Types geprüft, ob sie behalten oder verworfen werden sollen.
 		\begin{description}
-			\item [\subreq{Konfiguration}{conf}]
-				Alle Einstellungen werden in einem Configfile getroffen.
 			\item [\subreq{Includes}{includes}]
 				Es kann eine Liste von MIME-Types angegeben werden, die behalten werden sollen. 
 			\item [\subreq{Excludes}{excludes}]
@@ -265,7 +264,9 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 	macht gleichzeitig einen Zugriff über das Netzwerk möglich.
 \begin{description}
 	\item [\req{Konfiguration}{conf}]
-		Es sind die IP und der Port des Servers in einer Config-Datei zu hinterlegen.
+		Es ist Port des Servers in einer Config-Datei zu hinterlegen.
+	\item [\req{Addresse}{conf}]
+		Die URL des Servers ist bei der Initialisierung der Clients zu übergeben.
 	\item [\req{Client-API}{api}]
 		Für Benutzer des Clients wird eine Programmierschnittstelle in Java zur Verfügung gestellt.
 		Die API umfasst dabei folgende Schnittstellen:
