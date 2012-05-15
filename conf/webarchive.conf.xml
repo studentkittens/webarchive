@@ -1,20 +1,30 @@
 <webarchive>
-	<general>
-		<root>/archive</root>
-	</general>
-	<!-- modules -->	
-	<crawler> 
-		<depth>5</depth>
-		<tinterval>2:0:0</tinterval>
-		<maxInst>10</maxInst>
-		<userAgent>?</userAgent>
-		<tempRoot>/tmp</tmpRoot>
-		<filters>
-			<filter name="mimeFilter">
-				<srcPath>src/filter/mimeFilter.py</srcPath>
-				<excludes>*</excludes>
-				<includes>text/html</includes>
-			</filter>
-		</filters>
-	</crawler>
+    <general>
+        <root>/archive</root>
+        <filterpath>/filterpath/</filterpath>
+    </general>
+    <!-- modules -->	
+    <crawler> 
+        <depth>5</depth>
+        <tinterval>2:0:0</tinterval>
+        <maxInst>10</maxInst>
+        <userAgent>?</userAgent>
+        <tempRoot>/tmp</tmpRoot>
+        <IgnoreRobots>true</IgnoreRobots>
+    </crawler>
+    <db> 
+        <path>db/metadata.db</path>
+        <sqlSource>/some/path</sqlSource>
+    </db>
+    <xml>
+        <SchemaPath>xml/</SchemaPath>
+    </xml>
+    <server>
+        <port>42420</port>
+        <host>webarchive-server</host>
+        <notify>
+            <interval>1:0:0</interval>
+        </notify>
+
+    </server>
 </webarchive>
