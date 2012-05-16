@@ -1,7 +1,0 @@
-Fragen für morgen:
-* Schnittstellenabstimmung zwischen Suchmaschinen, uns und NER
-* Crawler bei Suchmaschinen? Oder bei uns? 
-* Cluster? Local? Threads? Prozesse?
-* Filesystem? Selber komprimieren? Ordnerweise komprimieren, ode fileweise?
-* Umgang mit Duplikaten (beim Content)? 
-* Sprechen sich die Crawler untereinander ab, wenn nein, welche Filterstrategie?
