@@ -3,7 +3,6 @@
  gibt dann eine Liste aus von html dateien aus.
  ich hab das mal mit *.txt dateien in meinem Musikordner probiert:
 
-
 Die Liste schaut dann ungefähr so aus:
 	...
 	cripple bastards - variante alla morte - 2008/
