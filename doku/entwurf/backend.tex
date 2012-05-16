@@ -1,0 +1,108 @@
+\chapter{Backend}
+\label{cha:backend}
+% chapter backend (end)
+Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentlich nicht sichtbar ist.
+
+\section{Zentrale Module} 
+\label{sec:zentrale_module}
+
+\subsection{Konfiguration}
+\label{sub:confighandler}
+
+% subsection confighandler (end)
+\subsection{Commandline Interface}
+\label{sub:commandline_interface}
+Dieses Interface realisiert die zentralle Administrationsschnittstelle zum Webarchiv. 
+Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktionieren:
+\begin{verbatim}
+archive [--general-options] submodule [--arguments-specific-to-submodule]
+\end{verbatim}
+submodule kann dabei einer der folgenden Module sein:
+\begin{enumerate}
+    \item init
+    \item crawler
+    \item javadapter 
+    \item db
+    \item config
+\end{enumerate}
+
+\subsection{Initialisierung} 
+\label{sub:initialisierung}
+Durch dieses Modul wird ein leerer Archivordner erstellt, der lediglich
+ein Default-Configtemplate mit dem Pfad zum Archiv enthält, sowie einen leeren Ordner ,,content'',
+in dem später die Crawldaten abgelegt werden.
+Weitere Einstellung müssen händisch in der Config nachgetragen werden.
+\\
+Angelegt wird der Ordner über ,,archive init /pfad/zum/archive''
+% subsection inititialisierung (end)
+
+\subsection{Crawlermanager}
+\label{sub:crawlermanager}
+
+% subsection crawlermanager (end)
+
+
+\subsection{Crawljob}
+\label{sub:crawljob}
+
+
+\subsubsection{Wget}
+\label{ssub:wget}
+% subsubsection wget (end)
+
+\subsubsection{Cleaner}
+\label{ssub:cleaner}
+
+% subsubsection cleaner (end)
+
+\subsubsection{Filtersystem}
+\label{ssub:filtersystem}
+
+% subsubsection filtersystem (end)
+
+\subsubsection{Rsync}
+\label{ssub:rsync}
+
+% subsubsection rsync (end)
+\subsubsection{XmlGen}
+\label{ssub:xmlgen}
+% subsubsection xmlgen (end)
+
+
+\subsubsection{DBGen}
+\label{ssub:dbgen}
+
+% subsubsection dbgen (end)
+
+
+\subsubsection{Git}
+\label{ssub:git}
+
+
+
+% subsubsection git (end)
+
+
+
+% subsection crawljob (end)
+
+
+\subsection{Logger}
+\label{sub:logger}
+
+% subsection logger (end)
+
+% subsubsection  (end)
+
+\section{Util} 
+\label{sec:util}
+
+% section util (end)
+
+
+\section{Javadapter} 
+\label{sec:javadapter}
+
+
+% section javadapter (end)
+
