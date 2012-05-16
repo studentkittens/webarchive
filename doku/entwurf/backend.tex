@@ -33,63 +33,113 @@ ein Default-Configtemplate mit dem Pfad zum Archiv enthält, sowie einen leeren 
 in dem später die Crawldaten abgelegt werden.
 Weitere Einstellung müssen händisch in der Config nachgetragen werden.
 \\
-Angelegt wird der Ordner über ,,archive init /pfad/zum/archive''
+Angelegt wird der Ordner über %\verbatim{archive init /pfad/zum/archive}
 % subsection inititialisierung (end)
 
 \subsection{Crawlermanager}
 \label{sub:crawlermanager}
-
+Der Crawlermanager liest eine Liste mit URLs aus einer Datei, die entweder auf der Kommandozeile oder in
+der Config definiert wurde. Die URLs sind in diese Datei zeilenweise einzutragen und können durch ein \# auskommentiert werden.
+Über einen ThreadPool wird dann für jede URL ein Crawljob gestartet. Die maximale Anzahl der dabei laufenden Crawljobs wird bei
+der Instanzierung des ThreadPools aus der Config gelesen.
+\\
+Desweiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen der laufenden Crawljobs.
 % subsection crawlermanager (end)
-
 
 \subsection{Crawljob}
 \label{sub:crawljob}
-
+Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beeinhaltet.
+Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsverzeichnis angelegt.
+Die Lage dieses Verzeichnisses kann in der Confug festgelegt werden.
 
 \subsubsection{Wget}
 \label{ssub:wget}
-% subsubsection wget (end)
+Eine Managementschicht zur Abstraktion von wget.
+Dieser wird eine Domain zugeteilt welche von wget mit konfigurierbaren Parametern gecrawlt wird.
+Die allgemeine Webseitenstruktur wird dabei intakt gelassen:
+
+\begin{verbatim}
+www.heise.de/
+    index.html
+    news/
+        newsfeeds.html
+        favicon.png
+        ...
+\end{verbatim}
+
 
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
+Der Cleaner bereingt die Verzeichnisstruktur indem er leere Ordner und Dateien löscht.
+Desweiteren wird folgende Restrukturierung durchgeführt:
+\begin{verbatim}
+www.heise.de/ 
+    index.html/
+        data
+    news/
+        newsfeeds.html/
+            data
+        favicon.png/
+            data
+        ...
+\end{verbatim}
 
-% subsubsection cleaner (end)
+
+\begin{itemize}
+    \item Ordner werden intakt gelassen
+    \item Für jede reguläre Datei wird ein gleichnamiges Verzeichnis angelegt
+    \item Die regulären Daten werden in dieses Verzeichnis mit den Namen ,,data'' verschoben.
+\end{itemize}
+
+Außerdem werden während des Strukturierens die grundlegenden Metadatan als Liste im Speicher gesammelt.
+Bevor die Datei an das Filtersystem weitergeleitet wird, wird ein ,,Titel'' abhängig vom MIME-Type ermittelt.
+Pro Datei werden die konfigurierten Filter ausgeführt, welche entscheiden ob eine Datei gelöscht werden soll oder nicht.
+Gibt ein Filter ,,false'' zurück, so wird der jeweilige Dateiordner samt Inhalt sowie die Metadatan gelöscht,
+ohne dass weitere Filter aufgerufen werden müssen.
+% subsubsection Cleaner (end)
 
 \subsubsection{Filtersystem}
 \label{ssub:filtersystem}
-
+Das Filtersystem entscheidet aufgrund eines übergebenen Metadaten-Dictionaries ob eine Datei behalten wird. Exemplarisch wird ein HTML-Filter
+implementiert. Die Filter werden jeweils in einem Subintepreter gestartet, wobei die Metadaten im Subintepreter global vorhanden sind.
 % subsubsection filtersystem (end)
 
-\subsubsection{Rsync}
-\label{ssub:rsync}
 
-% subsubsection rsync (end)
 \subsubsection{XmlGen}
 \label{ssub:xmlgen}
+Hierbei werden aus der Metadatenliste Xml-Dateien zum jeweiligen Content geschrieben (data.xml). 
+Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
 % subsubsection xmlgen (end)
 
 
 \subsubsection{DBGen}
 \label{ssub:dbgen}
-
+Analog zur Xmlgenerierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
+Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
 % subsubsection dbgen (end)
+
+
+\subsubsection{Rsync}
+\label{ssub:rsync}
+Rsync ist eine Managementschicht für das Unix Tool ,,rsync''. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
+% subsubsection rsync (end)
 
 
 \subsubsection{Git}
 \label{ssub:git}
-
-
-
 % subsubsection git (end)
 
 
 
 % subsection crawljob (end)
 
-
 \subsection{Logger}
 \label{sub:logger}
-
+Der Logger wird folgendermaßen arbeiten:
+\begin{verbatim}
+Logger.logger log = Logger.getLogger()
+log.logMessage('Hello Kitteh')
+\end{verbatim}
 % subsection logger (end)
 
 % subsubsection  (end)
@@ -105,4 +155,3 @@ Angelegt wird der Ordner über ,,archive init /pfad/zum/archive''
 
 
 % section javadapter (end)
-
