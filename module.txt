@@ -17,4 +17,4 @@
 6. Java Server
 
 7. Java (Test) Client
-	(nur als Beispiel)
+   (nur als Beispiel)
