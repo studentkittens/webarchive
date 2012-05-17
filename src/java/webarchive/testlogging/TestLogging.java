@@ -30,7 +30,9 @@ public class TestLogging {
 
 		FileReader r;
 		try {
-			r = new FileReader(new File("gibtsnicht"));
+			final File file = new File("gibtsnicht");
+			System.out.println(file.getAbsolutePath());
+			r = new FileReader(file);
 		} catch (FileNotFoundException ex) {
 			Logger.getLogger(TestLogging.class.getName()).log(Level.SEVERE, null, ex);
 		}

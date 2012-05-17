@@ -1,4 +1,4 @@
-package webarchive.persistence;
+package webarchive.dbaccess;
 
 import java.sql.Connection;
 import java.sql.SQLException;

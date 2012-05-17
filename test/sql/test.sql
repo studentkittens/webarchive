@@ -1,9 +1,9 @@
 --test values
-insert into mimeType(name) values('text/html');
-insert into mimeType(name) values('application/pdf');
+insert into mimeType(mimeName) values('text/html');
+insert into mimeType(mimeName) values('application/pdf');
 
-insert into domain(name) values('www.heise.de');
-insert into domain(name) values('www.wikipedia.de');
+insert into domain(domainName) values('www.heise.de');
+insert into domain(domainName) values('www.wikipedia.de');
 
 insert into commitTag(commitTime, domainId) values('2012-05-15T17:30:00', 1 );
 insert into commitTag(commitTime, domainId) values('2012-05-15T17:35:00', 2);

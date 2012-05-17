@@ -2,7 +2,6 @@ package webarchive.api;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Date;
 
 /**
  * Basic MetaData class in use with webarchive. It contains metadata of an
@@ -48,7 +47,7 @@ public class MetaData {
 	 * @return commit time
 	 */
 	public Date getCrawlTime() {
-		return commitTag.getCrawlTime();
+		return commitTag.getCommitTime();
 	}
 
 	/**

@@ -1,25 +1,30 @@
 
 package webarchive.api;
 
-import java.util.Date;
 import webarchive.util.DateFormatter;
 
 /**
  *
  * @author ccwelich
  */
-class CommitTag {
+public class CommitTag {
 	public static char SEPARATOR = '@';
-	private Date crawlTime;
+	private int id;
+	private Date commitTime;
 	private String domain;
 
-	public CommitTag(Date crawlTime, String domain) {
-		this.crawlTime = crawlTime;
+	public CommitTag(int id, Date crawlTime, String domain) {
+		this.id = id;
+		this.commitTime = crawlTime;
 		this.domain = domain;
 	}
 
-	public Date getCrawlTime() {
-		return crawlTime;
+	public int getId() {
+		return id;
+	}
+
+	public Date getCommitTime() {
+		return commitTime;
 	}
 
 	public String getDomain() {
@@ -31,7 +36,7 @@ class CommitTag {
 		StringBuilder bld = new StringBuilder(DateFormatter.XML_FORMAT.length()+1+domain.length());
 		bld.append(domain);
 		bld.append(SEPARATOR);
-		bld.append(DateFormatter.format(crawlTime));
+		bld.append(commitTime);
 		return bld.toString();
 	}
 	

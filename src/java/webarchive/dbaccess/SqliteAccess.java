@@ -1,4 +1,4 @@
-package webarchive.persistence;
+package webarchive.dbaccess;
 
 import java.io.File;
 import java.sql.Connection;
@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 public class SqliteAccess implements DBAccess {
 	
 	private String driver = "org.sqlite.JDBC";
-	private String url;
 	private File databasePath;
+	private String url;
 	
 	public SqliteAccess(File dbPath) {
 		setDatabasePath(dbPath);
