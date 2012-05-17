@@ -6,29 +6,29 @@ select * from domain;
 insert into metaData (
 	url,
 	mimeId,
-	title,
-	path,
-	domainId
+	domainId,
+	path
 )
 values(
 	'www.heise.de/index.html', 
 	1, 
-	'Heise', 
-	'www.heise.de/index.html', 
-	1
+	1,
+	'www.heise.de/index.html'
 );
 select * from metaData;
 
-insert into commitTag values(
-	1,
+insert into history values(
 	'2012-05-15T17:30:00', 
-	'2012-05-15T17:28:42'
+	1,
+	'2012-05-15T17:28:42',
+	'heise'
 );
-select * from commitTag;
-insert into commitTag values(
-	1,        
+select * from history;
+insert into history values(
 	'2012-05-15T18:30:00', 
-	'2012-05-15T18:28:42'
+	1, 
+	'2012-05-15T18:28:42',
+	'Heise'       
 );
-select * from commitTag;
+select * from history;
 
