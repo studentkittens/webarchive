@@ -171,6 +171,15 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 
 \section{Javadapter} 
 \label{sec:javadapter}
-
-
+Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar. Er ist als Daemon implementiert der über einen Socket über einen definierten Port
+erreichbar ist. Interagiert werden kann mit dem Adapter über ein Textprotokoll. Der Client (in unserem Fall der Java-Server) kann bestimmte Kommandos
+zeilenweise an den Server schicken, welcher dann mit ,,OK'' oder ,,ACK [Fehler]' antwortet.
+\\
+Folgende Kommandos sollen dabei implementiert werden:
+\begin{itemize}
+    \item \texttt{lock [domain]}
+        Lockt eine bestimmte Domain mittels einen Lockfiles
+    \item \texttt{unlock [domain]}
+        Löscht ein durch \texttt{lock} erzeugtes Lockfile
+\end{itemize}
 % section javadapter (end)
