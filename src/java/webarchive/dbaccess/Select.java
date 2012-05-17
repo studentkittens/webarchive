@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class Select<Type> {
 
-	private DBAccess dbAccess;
+	protected DBAccess dbAccess;
 
 	public Select(DBAccess dbAccess) {
 		super();

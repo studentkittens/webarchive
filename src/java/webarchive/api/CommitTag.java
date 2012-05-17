@@ -13,9 +13,9 @@ public class CommitTag {
 	private Date commitTime;
 	private String domain;
 
-	public CommitTag(int id, Date crawlTime, String domain) {
+	public CommitTag(int id, Date commitTime, String domain) {
 		this.id = id;
-		this.commitTime = crawlTime;
+		this.commitTime = commitTime;
 		this.domain = domain;
 	}
 

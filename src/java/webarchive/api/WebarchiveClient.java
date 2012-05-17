@@ -19,16 +19,36 @@ import org.w3c.dom.Element;
 public interface WebarchiveClient {
 
 	/**
+	 * selects metadata object from database by a list of CommitTags
+	 *
+	 * @param commits list of commit tags to use for WHERE clause
+	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
+	 * null<br /> examble: "lastCommitTime ASC"
+	 * @return a list of selected MetaData-objects
+	 * @throws Exception
+	 */
+	public List<MetaData> select(List<CommitTag> commits, String[] orderBy) throws Exception;
+
+	/**
 	 * selects metadata objects from database
 	 *
-	 * @param whereClause minimal sql-syntax WHERE clause in , omitted if
+	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table
+	 * , omitted if null<br /> example: "mimeName LIKE 'text/html'"
+	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
+	 * omitted if null<br /> example: "url LIKE 'www.heise.de%'"
+	 * @param whereDomain minimal sql-syntax WHERE clauses for domain-table ,
+	 * omitted if null<br />
+	 * @param whereCommitTagJoinHistory minimal sql-syntax WHERE clauses for
+	 * JOIN of commitTag and history-table , omitted if null<br /> example:
+	 * "WHERE title NOT null AND commitTime > '2012-05-15T17:30:00';"
+	 * @param where array of minimal sql-syntax WHERE clauses in , omitted if
 	 * null<br /> example: "url LIKE 'www.heise.de'"
-	 * @param orderByClause minimal sql-syntax ORDER BY clause, ommitted if
+	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
-	 * @return a list selected of MetaData-objects
-	 * @throws Exception 
+	 * @return a list of selected MetaData-objects
+	 * @throws Exception
 	 */
-	public List<MetaData> select(String whereClause, String orderByClause) throws Exception;
+	public List<MetaData> select(String whereMimeType, String whereMeta, String whereDomain, String whereCommitTagJoinHistory, String[] orderBy) throws Exception;
 
 	/**
 	 * get a file list of all files of a html-archive-folder
@@ -51,12 +71,13 @@ public interface WebarchiveClient {
 	public InputStream getInputStream(MetaData meta, File relativePath) throws Exception;
 
 	/**
-	 * add new files to a buffer, which will be send when closing the stream. Existing files cannot be
-	 * overwritten with this method.
+	 * add new files to a buffer, which will be send when closing the stream.
+	 * Existing files cannot be overwritten with this method.
 	 *
 	 * @param meta key to archive-folder
 	 * @param relativePath relative path and name of file inside archive-folder
-	 * @return output stream to write data into archive file if request was successful, otherwise null
+	 * @return output stream to write data into archive file if request was
+	 * successful, otherwise null
 	 * @throws Exception
 	 */
 	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
