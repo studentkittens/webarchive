@@ -6,8 +6,14 @@ Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentli
 \section{Zentrale Module} 
 \label{sec:zentrale_module}
 
-\subsection{Konfiguration}
+\subsection{ConfigHandler}
 \label{sub:confighandler}
+Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
+Xml geschreiben und hat folgenden Aufbau:
+\begin{figure}
+\label[lst:config]
+\lstinputlisting{../../conf/webarchive.conf.xml}
+\end{figure}
 
 % subsection confighandler (end)
 \subsection{Commandline Interface}
@@ -122,23 +128,34 @@ Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
 \subsubsection{Rsync}
 \label{ssub:rsync}
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync''. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
+Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt. 
 % subsubsection rsync (end)
 
 
 \subsubsection{Git}
 \label{ssub:git}
+Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu werden 
+die Dateien ins Archiv per Git hinzugefügt, der Stand wird ,,commited'' und ein CommitTag generiert.
 % subsubsection git (end)
-
 
 
 % subsection crawljob (end)
 
 \subsection{Logger}
 \label{sub:logger}
-Der Logger wird folgendermaßen arbeiten:
+Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert die folgenden Error Level:
+\begin{itemize}
+    \item DEBUG
+    \item CRITICAL
+    \item ERROR
+    \item WARNGING
+    \item INFO
+\end{itemize}
+
+Folgende Funktionen werden bereitgestellt:
 \begin{verbatim}
-Logger.logger log = Logger.getLogger()
-log.logMessage('Hello Kitteh')
+log.print(severity, *messages)
+log.verbosity(SEVERITY)
 \end{verbatim}
 % subsection logger (end)
 
@@ -146,6 +163,8 @@ log.logMessage('Hello Kitteh')
 
 \section{Util} 
 \label{sec:util}
+Das Util Modul stellt verscheidene Funktionen die von mehreren Modulen genutzt werden bereit. Erwähnenswert ist hier der ,,Lockmechanismus''
+auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schützen.
 
 % section util (end)
 
