@@ -1,6 +1,5 @@
 \chapter{Backend}
 \label{cha:backend}
-% chapter backend (end)
 Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentlich nicht sichtbar ist.
 
 \section{Zentrale Module} 
@@ -8,88 +7,194 @@ Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentli
 
 \subsection{ConfigHandler}
 \label{sub:confighandler}
+
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
 Xml geschrieben und hat folgenden Aufbau:
-\begin{figure}
-\label[lst:config]
-\lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
-\end{figure}
+    \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
 Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so lässt sich der Wert ,,Serverport'' folgendermaßen auslesen: \\
 \texttt{webarchive.server.port} \\
 Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher auch ausgelassen werden.
 
-% subsection confighandler (end)
+
 \subsection{Commandline Interface}
 \label{sub:commandline_interface}
+\paragraph{Beschreibung}
+\label{par:beschreibung}
 Dieses Interface realisiert die zentralle Administrationsschnittstelle zum Webarchiv. 
 Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktionieren:
 \begin{verbatim}
 archive [--general-options] submodule [--arguments-specific-to-submodule]
 \end{verbatim}
 submodule kann dabei einer der folgenden Module sein:
-\begin{enumerate}
-    \item init
-    \item crawler
-    \item javadapter 
-    \item db
-    \item config
-\end{enumerate}
+\begin{table}[h]
+
+\centering
+\begin{tabular}{|l|l|}
+    \hline
+init & Initialisiert ein leeres archiv an einem bestimmten Pfad \\
+    \hline
+crawler & Zugriff auf Starten und Stoppen des Crawlvorgangs \\
+    \hline
+javadapter & Starten und Stoppen der Java Schnittstelle \\
+    \hline
+db & Bietet Funktionen um die Datenbank neu zu generieren \\
+    \hline
+config & Bietet Zugriff um Werte aus der config zu holen oder zu überschreiben \\
+    \hline
+\end{tabular}
+\end{table}
 
 \subsection{Initialisierung} 
 \label{sub:initialisierung}
+\paragraph{Beschreibung:}
+\label{par:beschreibung}
+% paragraph beschreibung (end)
 Durch dieses Modul wird ein leerer Archivordner erstellt, der lediglich
 ein Default-Configtemplate mit dem Pfad zum Archiv enthält, sowie einen leeren Ordner ,,content'',
 in dem später die Crawldaten abgelegt werden.
 Weitere Einstellung müssen händisch in der Config nachgetragen werden.
 \\
 Angelegt wird der Ordner über %\verbatim{archive init /pfad/zum/archive}
-% subsection inititialisierung (end)
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle}
+\begin{lstlisting}[language=python]
+def init\_archive(path = '.'):
+    """
+    Initializes empty archive structure with default Config
+    at ,,path''
+    """
+    pass
+\end{lstlisting}
 
+
+% paragraph schnittstelle_ (end)
 \subsection{Crawlermanager}
 \label{sub:crawlermanager}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
+% paragraph beschreibung (end)
 Der Crawlermanager liest eine Liste mit URLs aus einer Datei, die entweder auf der Kommandozeile oder in
 der Config definiert wurde. Die URLs sind in diese Datei zeilenweise einzutragen und können durch ein \# auskommentiert werden.
 Über einen ThreadPool wird dann für jede URL ein Crawljob gestartet. Die maximale Anzahl der dabei laufenden Crawljobs wird bei
 der Instanzierung des ThreadPools aus der Config gelesen.
 \\
 Desweiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen der laufenden Crawljobs.
-% subsection crawlermanager (end)
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+Prinzipieller Aufbau des Crawlmanagers:
+% paragraph schnittstelle_ (end)
+\begin{lstlisting}[language=python]
+class CrawlManager:
+    def __init__(self):
+        pass
 
+    def start(self):
+        """
+        Reads configured URLs from Config, and start a new job for each
+        """
+        pass
+
+    def shutdown(self,hard=False): 
+        """
+        Shuts down currently running crawljobs
+        If hard is set to True, currently running jobs
+        are canceled immediately, instead of syncing already
+        gathered data to archive.
+        """
+        pass
+
+    def reload(self):
+        """
+        Reloads configured URLs and replaces current Queue with new URLs.
+        Leaves running Jobs untouched.
+        """
+        pass
+
+\end{lstlisting}
+
+
+% paragraph api_ (end)
 \subsection{Crawljob}
 \label{sub:crawljob}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beeinhaltet.
 Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsverzeichnis angelegt.
 Die Lage dieses Verzeichnisses kann in der Confug festgelegt werden.
+\paragraph{API:}
+\label{par:api_}
+
+\begin{lstlisting}[language=python]
+class CrawlJob():
+    def __init__(self,ident,url):
+        """
+        Gets Identity and Url that should be crawled,
+        Identity is needed to generate tmp folder
+        """
+        pass
+
+    def shutdown(self,hard=False): 
+        """
+        Shuts down currently running crawljob
+        If hard is set to True, currently running job
+        is canceled immediately, instead of syncing already
+        gathered data to archive.
+        """
+        pass
+\end{lstlisting}
 
 \subsubsection{Wget}
 \label{ssub:wget}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
+% paragraph beschreibung_ (end)
 Eine Managementschicht zur Abstraktion von wget.
 Dieser wird eine Domain zugeteilt welche von wget mit konfigurierbaren Parametern gecrawlt wird.
 Die allgemeine Webseitenstruktur wird dabei intakt gelassen:
 
 \begin{verbatim}
-www.heise.de/
-    index.html
-    news/
-        newsfeeds.html
-        favicon.png
+    www.heise.de/
+        index.html
+        news/
+            newsfeeds.html
+            favicon.png
         ...
 \end{verbatim}
 
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
 
+\begin{lstlisting}[language=python]
+class Wget():
+    def __init__(self,tmpfolder,url):
+        pass
+
+    def start(self): 
+        pass
+    def stop(self):
+        pass
+\end{lstlisting}
+
+% paragraph schnittstelle_ (end)
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Der Cleaner bereingt die Verzeichnisstruktur indem er leere Ordner und Dateien löscht.
 Desweiteren wird folgende Restrukturierung durchgeführt:
 \begin{verbatim}
-www.heise.de/ 
-    index.html/
-        data
-    news/
-        newsfeeds.html/
+    www.heise.de/ 
+        index.html/
             data
-        favicon.png/
-            data
+        news/
+            newsfeeds.html/
+                data
+            favicon.png/
+                data
         ...
 \end{verbatim}
 
@@ -105,72 +210,108 @@ Bevor die Datei an das Filtersystem weitergeleitet wird, wird ein ,,Titel'' abh�
 Pro Datei werden die konfigurierten Filter ausgeführt, welche entscheiden ob eine Datei gelöscht werden soll oder nicht.
 Gibt ein Filter ,,false'' zurück, so wird der jeweilige Dateiordner samt Inhalt sowie die Metadatan gelöscht,
 ohne dass weitere Filter aufgerufen werden müssen.
-% subsubsection Cleaner (end)
+\\
+Die gesammelten Metadaten werden in einem Metadatenobjekt gesammelt. Die gesammelten Daten entsprechen dabei 
+der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim Check-In erhoben wird.
 
+\paragraph{Schnittstelle:} 
+\label{par:schnittstelle_}
+\begin{lstlisting}[language=python]
+class Cleaner():
+    def __init__(self, path):
+        pass
+
+    def restructure(self): 
+        pass
+  
+    def cleanup(self):
+        pass
+\end{lstlisting}
+
+
+
+% paragraph schnittstelle_ (end)
 \subsubsection{Filtersystem}
 \label{ssub:filtersystem}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Das Filtersystem entscheidet aufgrund eines übergebenen Metadaten-Dictionaries ob eine Datei behalten wird. Exemplarisch wird ein HTML-Filter
 implementiert. Die Filter werden jeweils in einem Subintepreter gestartet, wobei die Metadaten im Subintepreter global vorhanden sind.
-% subsubsection filtersystem (end)
+
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
+\begin{lstlisting}[language=python]
+    # Inside the filter file two additional global variables
+    # are defined:
+    #     filter_input  : A copy of a metadata dictionary object
+    #     filter_result : The decision of the filter is stored here
+    #                     by default the decision is True.
+    #
+    # Example:
+    if filter_input['mimeType'] == 'image/gif':
+        filter_result = False
+\end{lstlisting}
+% paragraph schnittstelle_ (end)
 
 
 \subsubsection{XmlGen}
 \label{ssub:xmlgen}
 Hierbei werden aus der Metadatenliste Xml-Dateien zum jeweiligen Content geschrieben (data.xml). 
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
-% subsubsection xmlgen (end)
 
 
 \subsubsection{DBGen}
 \label{ssub:dbgen}
 Analog zur Xmlgenerierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
 Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
-% subsubsection dbgen (end)
 
 
 \subsubsection{Rsync}
 \label{ssub:rsync}
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync''. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt. 
-% subsubsection rsync (end)
 
 
 \subsubsection{Git}
 \label{ssub:git}
 Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu werden 
 die Dateien ins Archiv per Git hinzugefügt, der Stand wird ,,commited'' und ein CommitTag generiert.
-% subsubsection git (end)
-
-
-% subsection crawljob (end)
 
 \subsection{Logger}
 \label{sub:logger}
 Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert die folgenden Error Level:
-\begin{itemize}
-    \item DEBUG
-    \item CRITICAL
-    \item ERROR
-    \item WARNGING
-    \item INFO
-\end{itemize}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+    \hline
+    Critical & Schwere unerwartete Fehler \\
+    \hline
+    Error & Fehler aufgrund von fehlerhaften Eingaben \\
+    \hline
+    Warning & Unkritische Fehler \\
+    \hline
+    Info & Allgemeine Statusinformationen \\
+    \hline
+    Debug & Debug-Informationen für Entwickler \\
+    \hline
+\end{tabular} 
+\end{table}
 
 Folgende Funktionen werden bereitgestellt:
-\begin{verbatim}
-log.print(severity, *messages)
-log.verbosity(SEVERITY)
-\end{verbatim}
-% subsection logger (end)
+\begin{lstlisting}[language=python]
+def print(severity, *messages):
+    pass
 
-% subsubsection  (end)
+def verbosity(severity):
+    pass
+\end{lstlisting}
 
 \section{Util} 
 \label{sec:util}
 Das Util Modul stellt verscheidene Funktionen die von mehreren Modulen genutzt werden bereit. Erwähnenswert ist hier der ,,Lockmechanismus''
 auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schützen.
-
-% section util (end)
-
 
 \section{Javadapter} 
 \label{sec:javadapter}
@@ -185,4 +326,3 @@ Folgende Kommandos sollen dabei implementiert werden:
     \item \texttt{unlock [domain]}
         Löscht ein durch \texttt{lock} erzeugtes Lockfile
 \end{itemize}
-% section javadapter (end)
