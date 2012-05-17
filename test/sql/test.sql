@@ -43,8 +43,8 @@ select * from mimeType join (
 	) using (metaId)
 ) using (mimeId);
 
-select * from mimeType join (
-	select * from metaData join(
-		select * from history where commitId in (1)
-	) using (metaId)
-) using (mimeId);
+--select * from mimeType join (
+--	select * from metaData join(
+--		select * from history where commitId in (1)
+--	) using (metaId)
+--) using (mimeId);

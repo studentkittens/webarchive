@@ -21,12 +21,12 @@ CREATE TABLE commitTag ( -- commit tag on domain scale
 	FOREIGN KEY (domainId) REFERENCES domain(domainId)
 );
 CREATE TABLE history ( -- dynamic meta data changes
-	histId INTEGER PRIMARY KEY AUTOINCREMENT,
 	metaId INTEGER NOT NULL,
 	commitId INTEGER NOT NULL,
 	createTime TEXT NOT NULL, -- date time as "%yyyy-%MM-%ddT%hh:%mm:%ss"
 	title TEXT, --abstract title according to mimeType
 	FOREIGN KEY (metaId) REFERENCES metaData(metaId),
 	FOREIGN KEY (commitId) REFERENCES commitTag(commitId)
+	PRIMARY KEY (commitId, metaId)
 );
 
