@@ -255,28 +255,105 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
 % paragraph schnittstelle_ (end)
 
 
-\subsubsection{XmlGen}
+\subsubsection{Xml Generator}
 \label{ssub:xmlgen}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
+% paragraph beschreibung_ (end)
 Hierbei werden aus der Metadatenliste Xml-Dateien zum jeweiligen Content geschrieben (data.xml). 
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
 
+\begin{lstlisting}[language=python]
+class XmlGenerator:
+    def __init__(self, meta_obj):
+        """
+        Build a data.xml from a template and the meta_obj dictionary
+        """
+        pass
 
-\subsubsection{DBGen}
+    def write(self, path = None):
+        """
+        Write XML to location ,,path'', 
+        if not specified the path from meta_obj is taken
+
+        Throws: IOError on failure
+        """
+        pass
+\end{lstlisting}
+% paragraph schnittstelle_ (end)
+
+\subsubsection{DB Generator}
 \label{ssub:dbgen}
-Analog zur Xmlgenerierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
+Analog zur Xml-Generierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
 Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
+% paragraph beschreibung_ (end)
 
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\begin{lstlisting}[language=python]
+class DBGenerator:
+    def __init__(self, meta_obj_list):
+        """
+        Build a SQL Query from the meta_obj_list to update and insert new items the Database 
+        """
+        pass
+
+    def commit(self):
+        """
+        Send Query to Database
+
+        Throws: IOError on failure
+        """
+        pass
+\end{lstlisting}
+
+
+
+% paragraph schnittstelle_ (end)
 
 \subsubsection{Rsync}
 \label{ssub:rsync}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync''. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt. 
+% paragraph beschreibung_ (end)
 
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\begin{lstlisting}[language=python]
+class Rsync:
+    def __init__(self, path_src, path_dest):
+        pass
+
+    def start_sync(self):
+        pass
+\end{lstlisting}
 
 \subsubsection{Git}
 \label{ssub:git}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu werden 
 die Dateien ins Archiv per Git hinzugefügt, der Stand wird ,,commited'' und ein CommitTag generiert.
+
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\begin{lstlisting}[language=python]
+class Git:
+    def __init__(self, domain, check_in_date):
+        pass
+
+    def checkout(self, tag = None):
+        pass
+
+    def commit_and_tag(self):
+        pass
+\end{lstlisting}
 
 \subsection{Logger}
 \label{sub:logger}
@@ -307,6 +384,12 @@ def print(severity, *messages):
 def verbosity(severity):
     pass
 \end{lstlisting}
+
+\section{Database Recovery} 
+\label{sec:database_recovery}
+Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch die
+jeweilige Git-History von hinten nach vorne. Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
+% section database_recovery (end)
 
 \section{Util} 
 \label{sec:util}
