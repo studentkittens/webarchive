@@ -9,11 +9,14 @@ Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentli
 \subsection{ConfigHandler}
 \label{sub:confighandler}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
-Xml geschreiben und hat folgenden Aufbau:
+Xml geschrieben und hat folgenden Aufbau:
 \begin{figure}
 \label[lst:config]
 \lstinputlisting{../../conf/webarchive.conf.xml}
 \end{figure}
+Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so lässt sich der Wert ,,Serverport'' folgendermaßen auslesen: \\
+\texttt{webarchive.server.port} \\
+Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher auch ausgelassen werden.
 
 % subsection confighandler (end)
 \subsection{Commandline Interface}
