@@ -10,6 +10,5 @@ javadoc/*
 *.swn
 
 #-- LaTeX
-*.aux
-*.log
-*.toc
+doku/texout/*
+doku/dokumentation.pdf

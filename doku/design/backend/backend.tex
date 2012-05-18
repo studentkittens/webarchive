@@ -2,7 +2,34 @@
 \label{cha:backend}
 Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentlich nicht sichtbar ist.
 Im folgenden werden die zentralen Module aufgelistet, welche in eine Beschreibung ihrer Funktion und einer 
-Schnittstellenbeschreibung aufgeteilt sind.
+Schnittstellenbeschreibung aufgeteilt sind. Die Schnittstellenbeschreibungen sind dabei in englisch kommentierten
+Python Methoden-Beschreibungen gefasst. 
+
+\section{Testfälle}
+Als Testmethode werden Unit-Tests herangezogen, die mit dem bei Python mitgelieferten Frameworks \texttt{unittest}
+ausgeführt werden können. Dabei enthält jedes File den dazugehörigen Testcode, welcher durch direktes Aufführen des
+.py files ausgeführt wird:
+
+\begin{lstlisting}[language=Python]
+# Eigentlicher Source
+class XYZ:
+    def DoSomething(self, param):
+        ...
+
+# Abgetrennter Testcode
+if __name__ == '__main__'
+   import unittest
+
+   class TestXYZ(unittest.TestCase):
+       def TestDoSomething(self):
+           ...
+
+   unittest.main()
+\end{lstlisting}
+
+\section{Werkzeuge}
+TODO
+
 
 \section{Zentrale Module} 
 \label{sec:zentrale_module}
@@ -19,7 +46,7 @@ Xml geschrieben und hat folgenden Aufbau:
     \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
 Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so lässt sich der Wert ,,Serverport'' folgendermaßen auslesen: \\
 \texttt{webarchive.server.port} \\
-Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher auch ausgelassen werden.
+Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optional ausgelassen werden.
 
 
 \subsection{Commandline Interface}
@@ -33,7 +60,6 @@ archive [--general-options] submodule [--arguments-specific-to-submodule]
 \end{verbatim}
 submodule kann dabei einer der folgenden Module sein:
 \begin{table}[h]
-
 \centering
 \begin{tabular}{|l|l|}
     \hline
@@ -186,8 +212,8 @@ class Wget():
         Instance a new Wget Wrapper,
         which must be started with start()
 
-        :tmpfolder: The folder where the downloaded data will be stored
-        :url: The url you want to be crawled recursively
+        tmpfolder: The folder where the downloaded data will be stored
+        url: The url you want to be crawled recursively
         """
         pass
 
