@@ -99,7 +99,7 @@ public interface WebarchiveClient {
 	 * @return XMLEdit
 	 * @throws Exception
 	 */
-	public XMLEdit getXMLData(MetaData meta, String tagName) throws Exception;
+	public XmlEdit getXMLEdit(MetaData meta) throws Exception;
 
 	/**
 	 * @see java.util.Observable

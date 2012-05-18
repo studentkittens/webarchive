@@ -12,8 +12,8 @@ public interface WebarchiveObserver {
 	/**
 	 * update called in case of changes in webarchive
 	 * @param client the broadcasting client
-	 * @param commitTagChanges a list of commitTags (see {@link MetaData}).
+	 * @param changes a list of commitTags (see {@link CommitTag}).
 	 * Use commitTags combined with client.select() to get changed html-files.
 	 */
-	public void	update(WebarchiveClient client, List<String> commitTagChanges);
+	public void	update(WebarchiveClient client, List<CommitTag> changes);
 }

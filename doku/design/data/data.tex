@@ -33,13 +33,13 @@ wird die Struktur stark normalisiert \ref{req:Db:normalize}. Zusammengefasst:
 		Deshalb wird dieser ebenfalls ausgelagert.
 		Der mimeType wird unter anderem zum Herausfiltern von Dateien benötigt (\ref{req:Fi:testfilter}).
 \end{description}
-Tabellendiagramm \ref{design:dia:data:db} gibt einen graphischen Überblick.
+Tabellendiagramm \ref{dia:design:frontend:data:db} gibt einen graphischen Überblick.
 \paragraph{Anmerkung:} Für TimeStamps wird ebenfalls das in \ref{spec:model} spezifizierte (XML-)Textformat
 verwendet. Damit ist eine einfache Portierbarkeit zwischen XML, Java, Python und Datenbank am besten gewährleistet.
 
 \begin{figure}[h]
 	\centering
-	\label{design:dia:data:db}
+	\label{dia:design:frontend:data:db}
 	\includegraphics[width=0.6\textwidth]{design/data/db.eps}
 	\caption{Datenbankdiagramm}
 \end{figure}
@@ -68,8 +68,8 @@ Der Name des umschließenden Elements muss dabei einmalig sein.
 Folgendes Listing zeigt ein Beispiel XML mit leerem data-Knoten:
 \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../xml/example.xml}
 
-\section{Klassen}
-Diagramm \ref{design:dia:data:db} zeigt die Umsetzung des Modells in Klassen.
+\section{Klassen} \label{design:data:classes}
+Diagramm \ref{dia:design:frontend:data:classes} zeigt die Umsetzung des Modells in Klassen.
 Aufgrund der 1:n-Beziehung (siehe oben) von Metadaten und CommitTags sind die entsprechenden
 Klassen auch getrennt. 
 
@@ -84,7 +84,7 @@ Analog zu den XML-Daten enthält ein Metadatenobjekt immer den gesamten Zustand 
 
 \begin{figure}[h]
 	\centering
-	\label{design:dia:data:db}
+	\label{dia:design:frontend:data:classes}
 	\includegraphics[width=0.7\textwidth, angle=270]{design/data/model.pdf}
 	\caption{Datenbankdiagramm}
 \end{figure}
