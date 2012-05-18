@@ -8,21 +8,21 @@ import java.text.SimpleDateFormat;
  *
  * @author ccwelich
  */
-public class Date {
+public class TimeStamp {
 
 	public static final String XML_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
-	private static DateFormat df = new SimpleDateFormat(XML_FORMAT);
+	public static final DateFormat XML_FORMATTER = new SimpleDateFormat(XML_FORMAT);
 	private java.util.Date date;
 	private String xmlFormat;
 
-	public Date(java.util.Date date) {
+	public TimeStamp(java.util.Date date) {
 		this.date = date;
-		this.xmlFormat = df.format(date);
+		this.xmlFormat = XML_FORMATTER.format(date);
 	}
 
-	public Date(String xmlFormat) throws ParseException {
+	public TimeStamp(String xmlFormat) throws ParseException {
 		this.xmlFormat = xmlFormat;
-		this.date = df.parse(xmlFormat);
+		this.date = XML_FORMATTER.parse(xmlFormat);
 
 	}
 

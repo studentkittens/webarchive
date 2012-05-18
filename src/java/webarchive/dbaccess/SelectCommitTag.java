@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import webarchive.api.CommitTag;
-import webarchive.api.Date;
+import webarchive.api.TimeStamp;
 
 /**
  *
@@ -28,9 +28,9 @@ public class SelectCommitTag extends SelectJoin<CommitTag> {
 	protected CommitTag fromResultSet(ResultSet rs) throws SQLException {
 		int id = rs.getInt("commitId");
 		String domain = rs.getString("domainName");
-		Date date = null;
+		TimeStamp date = null;
 		try {
-			date = new Date(rs.getString("commitTime"));
+			date = new TimeStamp(rs.getString("commitTime"));
 		} catch (ParseException ex) {
 			Logger.getLogger(SelectCommitTag.class.getName()).log(Level.SEVERE, null, ex);
 		}

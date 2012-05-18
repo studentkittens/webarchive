@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import webarchive.api.CommitTag;
-import webarchive.api.Date;
+import webarchive.api.TimeStamp;
 import webarchive.api.MetaData;
 
 /**
@@ -61,10 +61,10 @@ public class SelectMetaData extends SelectJoin<MetaData> {
 			String mimeType = rs.getString("mimeName");
 			String title = rs.getString("title");
 			File path = new File(rs.getString("path"));
-			Date createTime = new Date(rs.getString("createTime")); 
+			TimeStamp createTime = new TimeStamp(rs.getString("createTime")); 
 			CommitTag commitTag = new CommitTag(
 				rs.getInt("commitId"), 
-				new Date(rs.getString("commitTime")),
+				new TimeStamp(rs.getString("commitTime")),
 				rs.getString("domainName")
 			);
 			meta = new MetaData(url, mimeType, title, path, createTime, commitTag);
@@ -93,7 +93,7 @@ public class SelectMetaData extends SelectJoin<MetaData> {
 			String mimeType = rs.getString("mimeName");
 			String title = rs.getString("title");
 			File path = new File(rs.getString("path"));
-			Date createTime = new Date(rs.getString("createTime")); 
+			TimeStamp createTime = new TimeStamp(rs.getString("createTime")); 
 			CommitTag commitTag = map.get(rs.getInt("commitId"));
 			meta = new MetaData(url, mimeType, title, path, createTime, commitTag);
 		} catch (ParseException ex) {

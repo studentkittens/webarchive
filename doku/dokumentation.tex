@@ -39,6 +39,13 @@
 
 % *** shortcuts
 \def \arc{ARC}
+\def \ci{Christoph Piechula}
+\def \cii{Christoph Cwelich}
+\def \ciii{Christopher Pahl}
+\def \eddy{Eduard Schneider}
+\def \flo{Florian Bauer}
+\def \sab{Sabrina Biersack}
+
 % ***
 
 %*** title etc.
@@ -46,12 +53,7 @@
 Praktikum Software Entwicklung }
 \author{Dozent: Prof. Dr. Richard Göbel \\
 Beteiligte Studenten: \\
-Christoph Piechula \\
-Christoph Cwelich \\
-Christopher Pahl\\
-Eduard Schneider \\
-Florian Bauer \\
-Sabrina Biersack \\
+\sab, \\ \flo, \\ \eddy, \\ \ci, \\ \cii, \\ \ciii
 }
 \date{\today}
 %***
@@ -60,11 +62,9 @@ Sabrina Biersack \\
 %\newcommand{\neuesKommando}{Was zu tun ist}
 \newcommand{\todo}[1]{\Huge{TODO: #1}}
 \newcommand{\code}[1]{\lstinline{#1}}
+\newcommand{\liable}[1]{Verantwortlich: #1 \\}
 \begin{document}
 
-\graphicspath{
-{./analyse/img/}
-}
 \maketitle
 
 \tableofcontents
@@ -75,6 +75,7 @@ Sabrina Biersack \\
 \input{./spec/spec03-requirements.tex}
 \input{./spec/spec04-development.tex}
 \part{Entwurf}
+\input{./design/data/data.tex}
 \input{./design/backend.tex}
 \input{./design/frontend/frontend.tex}
 \end{document}

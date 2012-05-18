@@ -8,12 +8,11 @@ import webarchive.util.DateFormatter;
  * @author ccwelich
  */
 public class CommitTag {
-	public static char SEPARATOR = '@';
 	private int id;
-	private Date commitTime;
+	private TimeStamp commitTime;
 	private String domain;
 
-	public CommitTag(int id, Date commitTime, String domain) {
+	public CommitTag(int id, TimeStamp commitTime, String domain) {
 		this.id = id;
 		this.commitTime = commitTime;
 		this.domain = domain;
@@ -23,7 +22,7 @@ public class CommitTag {
 		return id;
 	}
 
-	public Date getCommitTime() {
+	public TimeStamp getCommitTime() {
 		return commitTime;
 	}
 
@@ -33,13 +32,9 @@ public class CommitTag {
 
 	@Override
 	public String toString() {
-		StringBuilder bld = new StringBuilder(DateFormatter.XML_FORMAT.length()+1+domain.length());
-		bld.append(domain);
-		bld.append(SEPARATOR);
-		bld.append(commitTime);
-		return bld.toString();
+		return "CommitTag{" + "id=" + id + ", commitTime=" + commitTime + ", domain=" + domain + '}';
 	}
-	
+
 	
 	
 }

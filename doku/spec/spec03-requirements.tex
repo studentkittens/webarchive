@@ -118,8 +118,6 @@ und die Daten in das Archiv schreiben.
 				Der Name der Domain wird aus der dem Domainordnernamen kopiert.
 			\item [\subreq{createTime}{createTime}]
 				Das Erzeugungsdatum der Datei wird ermittelt.
-			\item [\subreq{commitTag}{commitTag}]
-				Der commitTag wird aus domain-Name und crawlTime zusammengesetzt.
 		\end{description}
 	\item [\req{Filterung}{filter}]
 		Für alle Dateien wird eine Liste von Filtern durchlaufen.
@@ -231,7 +229,7 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 	\item [\req{Versionsverwaltungssystem}{versionsystem}]
 		Es wird das Versionsverwaltungssystem GIT verwendet.
 	\item [\req{Domainversionierung}{domainversion}]	
-		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) versioniert. 
+		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) separat versioniert. 
 		Damit ist auch das Wiederherstellen älterer Versionen möglich.
 	\item [\req{Hinzufügen}{add}]
 		Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
@@ -421,6 +419,9 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 	\item [\req{Inhalt}{content}]
 		Es werden die Speicherstände aller Dateien und Versionen im Archiv festgehalten.
         Die gespeicherten Daten entsprechen dem Datenmodell des Abschnitts \ref{spec:model}.
+	\item [\req{Normalisierung}{normalize}]
+		Um die Datenbank bei der großen Datenmenge klein zu halten soll die Datenbankstruktur
+		weitestgehend normalisiert werden.
 	\item [\req{Erweiterbarkeit}{extense}] 
 		Eine Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen.
 	\item [\req{Berechtigungen}{rights}]

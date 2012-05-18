@@ -17,7 +17,7 @@ public class MetaData {
 	private String mimeType;
 	private String title;
 	private File path;
-	private Date createTime;
+	private TimeStamp createTime;
 	private CommitTag commitTag;
 
 	/**
@@ -32,7 +32,12 @@ public class MetaData {
 		return commitTag;
 	}
 
-	public MetaData(URL url, String mimeType, String title, File path, Date createTime, CommitTag commitTag) {
+	public MetaData(URL url, String mimeType, String title, File path, TimeStamp createTime, CommitTag commitTag) {
+		assert url!=null;
+		assert mimeType!=null;
+		assert path!=null;
+		assert createTime!=null;
+		assert commitTag!=null;
 		this.url = url;
 		this.mimeType = mimeType;
 		this.title = title;
@@ -42,20 +47,20 @@ public class MetaData {
 	}
 
 	/**
-	 * get the time of the last commit as a {@link java.util.Date}
+	 * get the time of the last commit as a {@link java.util.TimeStamp}
 	 *
 	 * @return commit time
 	 */
-	public Date getCrawlTime() {
+	public TimeStamp getCrawlTime() {
 		return commitTag.getCommitTime();
 	}
 
 	/**
-	 * get the time when the file has been created as a {@link java.util.Date}
+	 * get the time when the file has been created as a {@link java.util.TimeStamp}
 	 *
 	 * @return commit time
 	 */
-	public Date getCreateTime() {
+	public TimeStamp getCreateTime() {
 		return createTime;
 	}
 
