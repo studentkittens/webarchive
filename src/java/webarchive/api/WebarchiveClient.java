@@ -91,26 +91,15 @@ public interface WebarchiveClient {
 	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
 
 	/**
-	 * get XML-Nodes from XML-Metadata-file by tagname. This method works only
-	 * on extended XML-analysis-metadata nodes.
+	 * fetches a XML-file from the server and returns an XMLEdit object, which can
+	 * read or add an element from or to the XML-file
 	 *
 	 * @param meta key to XML-Metadata
 	 * @param tagName tagname of an element
-	 * @return String of a found elements content
+	 * @return XMLEdit
 	 * @throws Exception
 	 */
-	public Element getXMLData(MetaData meta, String tagName) throws Exception;
-
-	/**
-	 * add new XML-Nodes to XML-Metadata-file using a new tagname. Existing tags
-	 * cannot be overwritten with this method.
-	 *
-	 * @param meta
-	 * @param tagName
-	 * @param content
-	 * @throws Exception
-	 */
-	public void addXMLData(MetaData meta, Element content) throws Exception;
+	public XMLEdit getXMLData(MetaData meta, String tagName) throws Exception;
 
 	/**
 	 * @see java.util.Observable
