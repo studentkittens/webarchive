@@ -1,6 +1,8 @@
 \chapter{Backend}
 \label{cha:backend}
 Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentlich nicht sichtbar ist.
+Im folgenden werden die zentralen Module aufgelistet, welche in eine Beschreibung ihrer Funktion und einer 
+Schnittstellenbeschreibung aufgeteilt sind.
 
 \section{Zentrale Module} 
 \label{sec:zentrale_module}
@@ -65,7 +67,12 @@ Angelegt wird der Ordner über %\verbatim{archive init /pfad/zum/archive}
 def init\_archive(path = '.'):
     """
     Initializes empty archive structure with default Config
-    at ,,path''
+    at ,,path'' with the following structure:
+
+      archive/
+        content/ 
+           # empty
+        webarchive.config.xml
     """
     pass
 \end{lstlisting}
@@ -90,6 +97,10 @@ Prinzipieller Aufbau des Crawlmanagers:
 \begin{lstlisting}[language=python]
 class CrawlManager:
     def __init__(self):
+        """
+        Instance a new CrawlerManager,
+        which must be started via start()
+        """
         pass
 
     def start(self):
@@ -128,7 +139,6 @@ Die Lage dieses Verzeichnisses kann in der Confug festgelegt werden.
 \paragraph{API:}
 \label{par:api_}
 
-% paragraph  (end)
 \begin{lstlisting}[language=python]
 class CrawlJob():
     def __init__(self,ident,url):
@@ -171,12 +181,29 @@ Die allgemeine Webseitenstruktur wird dabei intakt gelassen:
 
 \begin{lstlisting}[language=python]
 class Wget():
-    def __init__(self,tmpfolder,url):
+    def __init__(self, tmpfolder, url):
+        """
+        Instance a new Wget Wrapper,
+        which must be started with start()
+
+        :tmpfolder: The folder where the downloaded data will be stored
+        :url: The url you want to be crawled recursively
+        """
         pass
 
     def start(self): 
+        """
+        Start crawling the URL in the background,
+        the function returns immediately
+        """
         pass
+
     def stop(self):
+        """
+        Stop a running wget instance
+        If start() was not called, or finished already,
+        this function is a No-op
+        """
         pass
 \end{lstlisting}
 
@@ -220,12 +247,24 @@ der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim
 \begin{lstlisting}[language=python]
 class Cleaner():
     def __init__(self, path):
+        """
+        Instance a new cleaner, which is
+        supposed to cleanup recursively in ,,path''
+        """
         pass
 
     def restructure(self): 
+        """
+        Traverse the filetree and restructure
+        it as described above.
+        """
         pass
   
     def cleanup(self):
+        """
+        Remove emtpy files and directories
+        in ,,path'' recursively
+        """
         pass
 \end{lstlisting}
 
@@ -248,6 +287,9 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
     #     filter_input  : A copy of a metadata dictionary object
     #     filter_result : The decision of the filter is stored here
     #                     by default the decision is True.
+    #
+    # Note: filter *.py files cannot be run directly, since 
+    #       filter_input and filter_result will not be defined there
     #
     # Example:
     if filter_input['mimeType'] == 'image/gif':
@@ -305,7 +347,8 @@ class DBGenerator:
 
     def commit(self):
         """
-        Send Query to Database
+        Send Query to Database,
+        this function blocks till finished
 
         Throws: IOError on failure
         """
@@ -329,9 +372,18 @@ Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \begin{lstlisting}[language=python]
 class Rsync:
     def __init__(self, path_src, path_dest):
+        """
+        Instance a new Rsync-Wrapper object,
+        which will sync path_src to path_dest
+        after calling start_sync() 
+        """
         pass
 
     def start_sync(self):
+        """
+        Start the synchronisation process,
+        this function will block until finished
+        """
         pass
 \end{lstlisting}
 
@@ -357,6 +409,10 @@ class Git:
 \end{lstlisting}
 
 \subsection{Logger}
+\paragraph{Beschreibung:}
+\label{par:beschreibung}
+
+
 \label{sub:logger}
 Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert die folgenden Error Level:
 
@@ -364,25 +420,47 @@ Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert 
 \centering
 \begin{tabular}{|l|l|}
     \hline
-    Critical & Schwere unerwartete Fehler \\
+    \texttt{critical} & Schwere unerwartete Fehler \\
     \hline
-    Error & Fehler aufgrund von fehlerhaften Eingaben \\
+    \texttt{error} & Fehler aufgrund von fehlerhaften Eingaben \\
     \hline
-    Warning & Unkritische Fehler \\
+    \texttt{warning} & Unkritische Fehler \\
     \hline
-    Info & Allgemeine Statusinformationen \\
+    \texttt{info} & Allgemeine Statusinformationen \\
     \hline
-    Debug & Debug-Informationen für Entwickler \\
+    \texttt{debug} & Debug-Informationen für Entwickler \\
     \hline
 \end{tabular} 
 \end{table}
+% paragraph beschreibung (end)
 
+
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+
+
+
+% paragraph schnittstelle_ (end)
 Folgende Funktionen werden bereitgestellt:
 \begin{lstlisting}[language=python]
 def print(severity, *messages):
+    """
+    Print an Array of messages with a certain severity
+    """
     pass
 
 def verbosity(severity):
+    """
+    Set the verbosity of the program, 
+
+    Passing a severity of 'debug' for example means
+    that all messages are printed, while passing 'warning'
+    would mean that only Warnings, Errors and Critical Errors 
+    are printed.
+
+    This has only effect on terminal output,
+    all logmessages will be written to file anyway.
+    """
     pass
 \end{lstlisting}
 
