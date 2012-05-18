@@ -31,3 +31,16 @@
 \BOOKMARK [1][-]{section.5.2}{Database Recovery}{chapter.5}% 31
 \BOOKMARK [1][-]{section.5.3}{Util}{chapter.5}% 32
 \BOOKMARK [1][-]{section.5.4}{Javadapter}{chapter.5}% 33
+\BOOKMARK [0][-]{chapter.6}{Frontend}{part.2}% 34
+\BOOKMARK [1][-]{section.6.1}{Use-Cases}{chapter.6}% 35
+\BOOKMARK [1][-]{section.6.2}{Schnittstellen und Api}{chapter.6}% 36
+\BOOKMARK [1][-]{section.6.3}{Programmfluss}{chapter.6}% 37
+\BOOKMARK [2][-]{subsection.6.3.1}{select}{section.6.3}% 38
+\BOOKMARK [2][-]{subsection.6.3.2}{getFileList}{section.6.3}% 39
+\BOOKMARK [2][-]{subsection.6.3.3}{getOutputStream}{section.6.3}% 40
+\BOOKMARK [2][-]{subsection.6.3.4}{getInputStream}{section.6.3}% 41
+\BOOKMARK [2][-]{subsection.6.3.5}{getXMLData}{section.6.3}% 42
+\BOOKMARK [2][-]{subsection.6.3.6}{addXMLData}{section.6.3}% 43
+\BOOKMARK [2][-]{subsection.6.3.7}{add / deleteObserver}{section.6.3}% 44
+\BOOKMARK [2][-]{subsection.6.3.8}{notifyClients}{section.6.3}% 45
+\BOOKMARK [1][-]{section.6.4}{Klassen und Komponenten}{chapter.6}% 46

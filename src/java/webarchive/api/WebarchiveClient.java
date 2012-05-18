@@ -19,18 +19,26 @@ import org.w3c.dom.Element;
 public interface WebarchiveClient {
 
 	/**
-	 * selects metadata object from database by a list of CommitTags
+	 * selects metadata object from database by a join of mimeType, metaData and history-table.
+	 * selects get constrained by a list of CommitTags.
 	 *
+	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table ,
+	 * omitted if null<br /> example: "mimeName LIKE 'text/html'"
+	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
+	 * omitted if null<br /> example: "url LIKE 'www.heise.de%'"
+	 * @param whereHistoryAdditional additional minimal sql-syntax WHERE clauses
+	 * for history-table, append to commits-list with AND, omitted if null<br />
+	 * example: "WHERE title NOT null"
 	 * @param commits list of commit tags to use for WHERE clause
 	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
 	 * @return a list of selected MetaData-objects
 	 * @throws Exception
 	 */
-	public List<MetaData> select(List<CommitTag> commits, String[] orderBy) throws Exception;
+	public List<MetaData> select(List<CommitTag> commits, String whereHistoryAdditional, String whereMimeType, String whereMeta, String[] orderBy) throws Exception;
 
 	/**
-	 * selects metadata objects from database
+	 * selects metadata objects from database by a join of mimeType, metaData, domain, commitTag and history-table
 	 *
 	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table
 	 * , omitted if null<br /> example: "mimeName LIKE 'text/html'"
