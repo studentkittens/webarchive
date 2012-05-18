@@ -39,14 +39,16 @@
 \BOOKMARK [1][-]{section.6.4}{Javadapter}{chapter.6}% 39
 \BOOKMARK [0][-]{chapter.7}{Frontend}{part.2}% 40
 \BOOKMARK [1][-]{section.7.1}{Use-Cases}{chapter.7}% 41
-\BOOKMARK [1][-]{section.7.2}{Schnittstellen und Api}{chapter.7}% 42
-\BOOKMARK [1][-]{section.7.3}{Programmfluss}{chapter.7}% 43
-\BOOKMARK [2][-]{subsection.7.3.1}{select}{section.7.3}% 44
-\BOOKMARK [2][-]{subsection.7.3.2}{getFileList}{section.7.3}% 45
-\BOOKMARK [2][-]{subsection.7.3.3}{getOutputStream}{section.7.3}% 46
-\BOOKMARK [2][-]{subsection.7.3.4}{getInputStream}{section.7.3}% 47
-\BOOKMARK [2][-]{subsection.7.3.5}{getXMLData}{section.7.3}% 48
-\BOOKMARK [2][-]{subsection.7.3.6}{addXMLData}{section.7.3}% 49
-\BOOKMARK [2][-]{subsection.7.3.7}{add / deleteObserver}{section.7.3}% 50
-\BOOKMARK [2][-]{subsection.7.3.8}{notifyClients}{section.7.3}% 51
-\BOOKMARK [1][-]{section.7.4}{Klassen und Komponenten}{chapter.7}% 52
+\BOOKMARK [2][-]{subsection.7.1.1}{Notifier}{section.7.1}% 42
+\BOOKMARK [2][-]{subsection.7.1.2}{Java User}{section.7.1}% 43
+\BOOKMARK [1][-]{section.7.2}{Schnittstellen und Api}{chapter.7}% 44
+\BOOKMARK [1][-]{section.7.3}{Programmfluss}{chapter.7}% 45
+\BOOKMARK [2][-]{subsection.7.3.1}{select}{section.7.3}% 46
+\BOOKMARK [2][-]{subsection.7.3.2}{getFileList}{section.7.3}% 47
+\BOOKMARK [2][-]{subsection.7.3.3}{getOutputStream}{section.7.3}% 48
+\BOOKMARK [2][-]{subsection.7.3.4}{getInputStream}{section.7.3}% 49
+\BOOKMARK [2][-]{subsection.7.3.5}{getXMLData}{section.7.3}% 50
+\BOOKMARK [2][-]{subsection.7.3.6}{addXMLData}{section.7.3}% 51
+\BOOKMARK [2][-]{subsection.7.3.7}{add / deleteObserver}{section.7.3}% 52
+\BOOKMARK [2][-]{subsection.7.3.8}{notifyClients}{section.7.3}% 53
+\BOOKMARK [1][-]{section.7.4}{Klassen und Komponenten}{chapter.7}% 54
