@@ -15,7 +15,6 @@
   <graph edgedefault="directed" id="G">
     <data key="d7"/>
     <node id="n0">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.start1">
           <y:Geometry height="40.0" width="80.0" x="88.80000000000007" y="-188.20000000000002"/>
@@ -32,7 +31,6 @@
       </data>
     </node>
     <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.predefinedProcess">
           <y:Geometry height="40.0" width="126.39999999999998" x="65.60000000000008" y="-103.40000000000003"/>
@@ -50,7 +48,6 @@ Interface<y:LabelModel>
       </data>
     </node>
     <node id="n2">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.predefinedProcess">
           <y:Geometry height="40.0" width="80.0" x="88.80000000000007" y="-18.60000000000005"/>
@@ -68,7 +65,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n3">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="102.39999999999998" x="244.2" y="63.39999999999995"/>
@@ -85,7 +81,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n4">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="86.39999999999998" x="82.40000000000009" y="145.39999999999995"/>
@@ -102,7 +97,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n5">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.predefinedProcess">
           <y:Geometry height="40.0" width="80.0" x="85.60000000000002" y="307.0"/>
@@ -119,7 +113,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n6">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.onPageReference">
           <y:Geometry height="40.0" width="80.0" x="238.39999999999998" y="307.0"/>
@@ -136,7 +129,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n7">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.terminator">
           <y:Geometry height="40.0" width="80.0" x="85.60000000000008" y="387.0"/>
@@ -153,7 +145,6 @@ manager<y:LabelModel>
       </data>
     </node>
     <node id="n8">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.decision">
           <y:Geometry height="68.0" width="102.39999999999998" x="77.60000000000008" y="49.39999999999995"/>
@@ -171,7 +162,6 @@ list path?<y:LabelModel>
       </data>
     </node>
     <node id="n9">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="93.59999999999991" x="78.80000000000007" y="215.39999999999998"/>
@@ -189,7 +179,6 @@ from config<y:LabelModel>
       </data>
     </node>
     <node id="n10">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.onPageReference">
           <y:Geometry height="40.0" width="80.0" x="255.39999999999998" y="-26.200000000000017"/>
@@ -206,7 +195,6 @@ from config<y:LabelModel>
       </data>
     </node>
     <node id="n11">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.onPageReference">
           <y:Geometry height="40.0" width="80.0" x="229.0" y="215.39999999999998"/>
@@ -222,8 +210,28 @@ from config<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+    <node id="n12">
+      <data key="d4"/>
+      <data key="d5"/>
+      <data key="d6">
+        <y:UMLNoteNode>
+          <y:Geometry height="75.0" width="206.0" x="255.39999999999998" y="-131.20000000000002"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="59.875" modelName="custom" textColor="#000000" visible="true" width="180.87109375" x="12.564453125" y="7.5625">A = ConfigHandler procedure
+B = CrawlJob procedure
+C = Cleaner procedure
+D = DB Update procedure<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+        </y:UMLNoteNode>
+      </data>
+    </node>
     <edge id="e0" source="n0" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -233,7 +241,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e1" source="n1" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -243,7 +250,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e2" source="n5" target="n6">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -253,7 +259,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e3" source="n5" target="n7">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -263,7 +268,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e4" source="n2" target="n8">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -273,7 +277,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e5" source="n8" target="n4">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -290,24 +293,22 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e6" source="n8" target="n3">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
-          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="191.845703125" x="21.168801879882835" y="-49.38437652587899">config.get('crawler.urltxt.path')<y:LabelModel>
+          <y:EdgeLabel alignment="center" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="191.845703125" x="128.16880187988284" y="-59.384376525878935">config.get('crawler.urltxt.path')<y:LabelModel>
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
-              <y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="40.40000000000004" distanceToCenter="true" position="left" ratio="52.900000000000034" segment="-1"/>
+              <y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="50.39999999999996" distanceToCenter="true" position="left" ratio="159.90000000000003" segment="-1"/>
             </y:ModelParameter>
           </y:EdgeLabel>
         </y:QuadCurveEdge>
       </data>
     </edge>
     <edge id="e7" source="n4" target="n9">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -317,7 +318,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e8" source="n9" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -334,7 +334,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e9" source="n3" target="n10">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -344,7 +343,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e10" source="n10" target="n3">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="12.666666666666714"/>
@@ -354,7 +352,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e11" source="n9" target="n11">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -364,7 +361,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e12" source="n11" target="n9">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="17.599999999999966" ty="0.0"/>
@@ -374,7 +370,6 @@ from config<y:LabelModel>
       </data>
     </edge>
     <edge id="e13" source="n11" target="n11">
-      <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>

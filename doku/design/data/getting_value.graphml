@@ -15,25 +15,6 @@
   <graph edgedefault="directed" id="G">
     <data key="d7"/>
     <node id="n0">
-      <data key="d5"/>
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.predefinedProcess">
-          <y:Geometry height="40.0" width="80.0" x="90.19999999999987" y="126.2999999999999"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="51.25" x="14.375" y="4.03125">Config-
-Handler<y:LabelModel>
-              <y:SmartNodeLabelModel distance="4.0"/>
-            </y:LabelModel>
-            <y:ModelParameter>
-              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-            </y:ModelParameter>
-          </y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.data">
           <y:Geometry height="40.0" width="80.0" x="244.59999999999968" y="200.19999999999993"/>
@@ -49,11 +30,10 @@ Handler<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
-    <node id="n2">
-      <data key="d5"/>
+    <node id="n1">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.onPageReference">
-          <y:Geometry height="40.0" width="80.0" x="90.19999999999987" y="48.7999999999999"/>
+          <y:Geometry height="40.0" width="80.0" x="90.19999999999987" y="114.7999999999999"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="12.208984375" x="33.8955078125" y="11.015625">A<y:LabelModel>
@@ -66,15 +46,13 @@ Handler<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
-    <node id="n3">
-      <data key="d5"/>
+    <node id="n2">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="36.400000000000034" width="112.0" x="74.19999999999987" y="203.79999999999995"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="78.296875" x="16.8515625" y="2.2312500000000455">open config,
-read value<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="67.87890625" x="22.060546875" y="9.215625000000017">read value<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -84,8 +62,7 @@ read value<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
-    <node id="n4">
-      <data key="d5"/>
+    <node id="n3">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.terminator">
           <y:Geometry height="40.0" width="80.0" x="90.19999999999987" y="347.7"/>
@@ -101,8 +78,7 @@ read value<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
-    <node id="n5">
-      <data key="d5"/>
+    <node id="n4">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.process">
           <y:Geometry height="40.0" width="80.0" x="90.19999999999987" y="277.7"/>
@@ -118,18 +94,26 @@ read value<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
-    <edge id="e0" source="n2" target="n0">
-      <data key="d9"/>
-      <data key="d10">
-        <y:QuadCurveEdge straightness="0.1">
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-        </y:QuadCurveEdge>
+    <node id="n5">
+      <data key="d4"/>
+      <data key="d5"/>
+      <data key="d6">
+        <y:UMLNoteNode>
+          <y:Geometry height="40.0" width="210.0" x="200.19999999999987" y="114.7999999999999"/>
+          <y:Fill color="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="180.87109375" x="14.564453125" y="11.015625">A = ConfigHandler procedure
+<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+        </y:UMLNoteNode>
       </data>
-    </edge>
-    <edge id="e1" source="n1" target="n3">
-      <data key="d9"/>
+    </node>
+    <edge id="e0" source="n0" target="n2">
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -140,20 +124,7 @@ read value<y:LabelModel>
         </y:QuadCurveEdge>
       </data>
     </edge>
-    <edge id="e2" source="n0" target="n3">
-      <data key="d9"/>
-      <data key="d10">
-        <y:QuadCurveEdge straightness="0.1">
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
-            <y:Point x="130.19999999999987" y="202.46666666666664"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-        </y:QuadCurveEdge>
-      </data>
-    </edge>
-    <edge id="e3" source="n3" target="n5">
-      <data key="d9"/>
+    <edge id="e1" source="n2" target="n4">
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -162,8 +133,7 @@ read value<y:LabelModel>
         </y:QuadCurveEdge>
       </data>
     </edge>
-    <edge id="e4" source="n5" target="n5">
-      <data key="d9"/>
+    <edge id="e2" source="n4" target="n4">
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -174,8 +144,7 @@ read value<y:LabelModel>
         </y:QuadCurveEdge>
       </data>
     </edge>
-    <edge id="e5" source="n5" target="n5">
-      <data key="d9"/>
+    <edge id="e3" source="n4" target="n4">
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -186,7 +155,16 @@ read value<y:LabelModel>
         </y:QuadCurveEdge>
       </data>
     </edge>
-    <edge id="e6" source="n5" target="n4">
+    <edge id="e4" source="n4" target="n3">
+      <data key="d10">
+        <y:QuadCurveEdge straightness="0.1">
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:QuadCurveEdge>
+      </data>
+    </edge>
+    <edge id="e5" source="n1" target="n2">
       <data key="d9"/>
       <data key="d10">
         <y:QuadCurveEdge straightness="0.1">
