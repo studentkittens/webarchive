@@ -74,7 +74,7 @@ lässt sich der Wert ,,Serverport'' über eine Punkt-separierte ,,URI'' auslesen
 \\ \\
 Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optional ausgelassen werden.
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung}
 Das relativ einfache URI Prinzip wurde gewählt um stets einen direkten
 Bezug zwischen der XML Struktur und den abgefragten Werten herzustellen.
@@ -116,7 +116,7 @@ submodule kann dabei einer der folgenden Module sein:
 \end{tabular}
 \end{table}
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Es wurde sich für ein einfaches Commandline Interface entschieden, da
 Kenntnisse im Umgang mit der Unix-Shell auf der User Seite vorrausgsetzt
@@ -249,6 +249,13 @@ class CrawlJob():
         """
         pass
 \end{lstlisting}
+\paragraph{Begründung/Hintergrund:}
+\label{par:begr_ndung_hintergrund_}
+Ein ,,Wget-Wrapper'' wird zum Crawlen verwendet, da wget alle vom iisys benötigten Funktionalitäten bietet und
+in der kürze der Zeit kein gleichwertiger Ersatz implementierbar ist. Um das Crawlen global zu 
+beschleunigen wurde dieses ,,parellisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
+Um die Gesamtgeschwindigkeit des Systems zu steigern wird ebenfalls empfohlen die ,,tmp''-Crawlordner auf ein
+ramfs zu legen.
 
 \subsubsection{Wget}
 \label{ssub:wget}
@@ -299,6 +306,8 @@ class Wget():
         pass
 \end{lstlisting}
 
+
+% paragraph begr_ndung_hintergrund_ (end)
 % paragraph schnittstelle_ (end)
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
@@ -360,7 +369,13 @@ class Cleaner():
         pass
 \end{lstlisting}
 
+\paragraph{Begründung/Hintergrund:}
+\label{par:hintergrund_}
+Beim Cleaner wird auf das Unix Tool ,,find'' zugegriffen. Dieses eignet sich aufgrund einer Vielzahl
+von Optionen und der Möglichkeit weitere ,,Kommandos'' zu übergeben, gut dazu eine Ordnerstruktur rekursiv
+zu durchlaufen und leere Dateien und Ordner zu löschen.
 
+% paragraph hintergrund_ (end)
 
 % paragraph schnittstelle_ (end)
 \subsubsection{Filtersystem}
@@ -433,7 +448,14 @@ class XmlGenerator:
         pass
 \end{lstlisting}
 % paragraph schnittstelle_ (end)
+\paragraph{Begründung/Hintergrund:}
+\label{par:begr_ndung_hintergrund_}
+Um Schreibzugriffe auf die Festplatte (höchstwahscheinlich langsamste Komponente im System) zu minimieren
+und nicht doppelt traversieren zu müssen werden die Metadaten nach dem extrahieren im Speicher gehalten und
+erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte geschreieben. 
 
+
+% paragraph begr_ndung_hintergrund_ (end)
 \subsubsection{DB Generator}
 \label{ssub:dbgen}
 \paragraph{Beschreibung:}
@@ -473,9 +495,9 @@ Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
 Rsync wird hier direkt auf Systemebene (subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])) mit den Paramentern
 \begin{itemize}
-    \item \verb+[--archive]+, archive mode
-    \item \verb+--delete]+, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
-    \item \verb+--checksum]+, Dateivergleich basiert auf Checksummen, nicht auf Änderungsdatum
+    \item \texttt{[--archive]}, archive mode
+    \item \texttt{[--delete]}, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
+    \item \texttt{[--checksum]}, Dateivergleich basiert auf Checksummen, nicht auf Änderungsdatum
 \end{itemize}
 aufgerufen um die neu gecrawlten Dateien ins Archiv zu ,,spiegeln''.
 
