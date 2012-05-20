@@ -51,7 +51,17 @@
         / 
 Init -- ---- kraul -> branch '15052012T1232'
 |       \
-|         -- kraul -> branch '24052012T1232' <- master
+|         -- kraul -> branch '24052012T1232' <- branch 'master'
 |
 |
 \-> branch 'empty'
+
+# Zum Vergleich, vorher:
+
+Kraul1 -> Kraul2 -> Kraul3 -> Kraul4 <- branch 'master'
+|         |         |         |
+|         |         |          \
+|         |         \            -- Tag 04
+|         \           -- Tag 03
+\           -- Tag 02
+  -- Tag 01
