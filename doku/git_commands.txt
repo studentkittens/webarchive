@@ -47,11 +47,11 @@
 
 # Neue Struktur 
 
-          -- kraul -> edit -> branch '03052012T1232'
+          -- Kraul1 -> edit <- branch '03052012T1232'
         / 
-Init -- ---- kraul -> branch '15052012T1232'
+Init -- ---- Kraul2 <- branch '15052012T1232'
 |       \
-|         -- kraul -> branch '24052012T1232' <- branch 'master'
+|         -- Kraul3 <- branch '24052012T1232' <- branch 'master'
 |
 |
 \-> branch 'empty'

@@ -1,9 +1,11 @@
 \chapter{Backend}
 \label{cha:backend}
-Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher öffentlich nicht sichtbar ist.
-Im folgenden werden die zentralen Module aufgelistet, welche in eine Beschreibung ihrer Funktion und einer 
-Schnittstellenbeschreibung aufgeteilt sind. Die Schnittstellenbeschreibungen sind dabei in englisch kommentierten
-Python Methoden-Beschreibungen gefasst. 
+Das Backend bezieht sich auf den in Python geschriebenen Teil, welcher
+öffentlich nicht zugreifbar ist.
+Im folgenden werden die zentralen Module aufgelistet, welche in eine
+Beschreibung ihrer Funktion, einer Schnittstellenbeschreibung sowie
+teilweise einer Begründung aufgeteilt sind.
+Die Schnittstellenbeschreibungen sind dabei in englisch kommentierten Python Methoden-Beschreibungen gefasst. 
 
 \section{Testfälle}
 Als Testmethode werden Unit-Tests herangezogen, die mit dem bei Python mitgelieferten Frameworks \texttt{unittest}
@@ -58,19 +60,31 @@ Grundlegender Ablauf beim Lesen von Configwerten:
 	\caption{Werte aus der Konfigurationsdatei holen}
 \end{figure}
 
-
-
 % paragraph ablauf_ (end)
 \paragraph{Beschreibung:}
+\ref{req:conf}
 \label{par:beschreibung_}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
 Xml geschrieben und hat folgenden Aufbau:
     \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
-Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so lässt sich der Wert ,,Serverport'' folgendermaßen auslesen: \\
-\texttt{webarchive.server.port} \\
+Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so
+lässt sich der Wert ,,Serverport'' über eine Punkt-separierte ,,URI'' auslesen: \texttt{webarchive.server.port} 
+\\ \\
 Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optional ausgelassen werden.
+
+\paragraph{Begründung:}
+\label{par:begr_ndung}
+Das relativ einfache URI Prinzip wurde gewählt um stets einen direkten
+Bezug zwischen der XML Struktur und den abgefragten Werten herzustellen.
+\\
+In späteren Versionen ist folgende Erweiterun denkbar: Statt die
+Default-Werte fest in den Programmcode zu legen, wird eine systemweite
+und immer verfügbare config.xml angelegt, auf die zurückgefallen werden
+kann.
+
+% paragraph begr_ndung (end)
 
 
 \subsection{Commandline Interface}
@@ -87,18 +101,28 @@ submodule kann dabei einer der folgenden Module sein:
 \centering
 \begin{tabular}{|l|l|}
     \hline
-init & Initialisiert ein leeres archiv an einem bestimmten Pfad \\
+        init & Initialisiert ein leeres archiv an einem bestimmten Pfad \\
     \hline
-crawler & Zugriff auf Starten und Stoppen des Crawlvorgangs \\
+        crawler & Zugriff auf Starten und Stoppen des Crawlvorgangs \\
     \hline
-javadapter & Starten und Stoppen der Java Schnittstelle \\
+        javadapter & Starten und Stoppen der Java Schnittstelle \\
     \hline
-db & Bietet Funktionen um die Datenbank neu zu generieren \\
+    db & Bietet Funktionen um die Datenbank neu zu generieren
+    (entspricht: \ref{req:cmd:recover}) \\
     \hline
-config & Bietet Zugriff um Werte aus der config zu holen oder zu überschreiben \\
+        config & Bietet Zugriff um Werte aus der config zu holen oder zu überschreiben
+        (entspricht: \ref{req:cmd:overwrite}) \\
     \hline
 \end{tabular}
 \end{table}
+
+\paragraph{Begründung:}
+\label{par:begr_ndung_}
+Es wurde sich für ein einfaches Commandline Interface entschieden, da
+Kenntnisse im Umgang mit der Unix-Shell auf der User Seite vorrausgsetzt
+werden.
+
+% paragraph begr_ndung_ (end)
 
 \subsection{Initialisierung} 
 \label{sub:initialisierung}
@@ -126,6 +150,12 @@ def init_archive(path = '.'):
     """
     pass
 \end{lstlisting}
+
+\paragraph{Begründung:}
+\label{par:begr_ndung_}
+Das Anlegen des Archiv-Ordners wurde nicht dem Nutzer überlassen, da
+Fehler hierbei sich auf die spätere Funktionsweise auswirken können.
+% paragraph begr_ndung_ (end)
 
 
 % paragraph schnittstelle_ (end)
@@ -197,20 +227,20 @@ class CrawlManager:
 \label{par:beschreibung_}
 Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beeinhaltet.
 Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsverzeichnis angelegt.
-Die Lage dieses Verzeichnisses kann in der Confug festgelegt werden.
-\paragraph{API:}
+Die Lage dieses Verzeichnisses kann in der Config festgelegt werden.
+\paragraph{Schnittstelle:}
 \label{par:api_}
 
 \begin{lstlisting}[language=python]
 class CrawlJob():
-    def __init__(self,ident,url):
+    def __init__(self, ident, url):
         """
         Gets Identity and Url that should be crawled,
         Identity is needed to generate tmp folder
         """
         pass
 
-    def shutdown(self,hard=False): 
+    def shutdown(self, hard=False): 
         """
         Shuts down currently running crawljob
         If hard is set to True, currently running job
