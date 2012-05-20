@@ -367,6 +367,9 @@ class Cleaner():
 \label{ssub:filtersystem}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
+Gemäß \ref{req:filter} wird ein Filtersystem für gecrawlte Daten
+implementiert.
+
 \begin{description}
   \item[Initialisierung] Bei jedem Cleanup-Vorgang werden alle .py files
     aus dem konfigurierte Filter-Verzeichnis in eine Liste eingelesen
@@ -402,6 +405,14 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
         filter_result = False
 \end{lstlisting}
 % paragraph schnittstelle_ (end)
+
+\paragraph{Begründung:}
+\label{par:begr_ndung_}
+Die Filter werden in Python kodiert, da dies mit einfachem eingebauten Support für
+Dictionaries und Subinterpreter eine optimale Lösung darstellt.
+darstellt. Java ist in unsere Augen nicht sinnvoll da einzelne Filter
+selten über mehr als 100 Zeilen Quelltext verfügen werden.
+% paragraph begr_ndung_ (end)
 
 
 \subsubsection{Xml Generator}
@@ -616,8 +627,7 @@ Folgende Kommandos sollen dabei implementiert werden:
 Alle Kommandoes nehmen zusätzliche nicht-optionale Argumente die in
 eckigen Klammern angegeben sind.
 \begin{table}[h]
-  \centering
-  \begin{tabular}{|l|l|p{6cm}|}
+  \begin{tabular}{|p{4cm}|p{5cm}|p{7cm}|}
     \hline
     \textbf{Kommando} & \textbf{Returnwerte} & \textbf{Beschreibung} \\
     \hline
@@ -634,6 +644,18 @@ eckigen Klammern angegeben sind.
     \texttt{unlock [domain]} 
     & True/False 
     & Löscht ein durch \texttt{lock} erzeugtes Lockfile 
+    \\
+    \hline
+    \texttt{checkout [domain] [commitTime]} 
+    & Pfad zur ausgecheckten Domain
+    & Holt einen alten Stand hervor
+    \\
+    \hline
+    \texttt{commit [domain] [commitTime]} 
+    & True/False 
+    & Bei Schreibvorgängen müssen die geänderten Dateien
+      der Versionverwaltung bekannt gemacht werden.
+      Vor einem \texttt{commit} muss ein \texttt{checkout} kommen.
     \\
     \hline
   \end{tabular}
