@@ -65,3 +65,13 @@ Kraul1 -> Kraul2 -> Kraul3 -> Kraul4 <- branch 'master'
 |         \           -- Tag 03
 \           -- Tag 02
   -- Tag 01
+
+
+# Vorteile:
+# - Alte Stände editierbar
+# - Überprüfung ob aktuell fällt weg
+# - (Seltsamerweise) weniger Platzverbrauch
+
+# Nachteile:
+# - Alte Stände auschecken (vermutlich) langsamer als normale git tag checkouts
+# - Traversieren über alle Stände (für DB Recover wird etwas schwieriger) - aber ist möglich.
