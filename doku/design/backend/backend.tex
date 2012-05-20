@@ -438,9 +438,16 @@ class DBGenerator:
 \label{ssub:rsync}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Rsync ist eine Managementschicht für das Unix Tool ,,rsync''. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
-Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt. 
-% paragraph beschreibung_ (end)
+Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \url{http://de.wikipedia.org/wiki/Rsync}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
+Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
+\\
+Rsync wird hier direkt auf Systemebene (subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])) mit den Paramentern
+\begin{itemize}
+    \item \verb+[--archive]+, archive mode
+    \item \verb+--delete]+, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
+    \item \verb+--checksum]+, Dateivergleich basiert auf Checksummen, nicht auf Änderungsdatum
+\end{itemize}
+aufgerufen um die neu gecrawlten Dateien ins Archiv zu ,,spiegeln''.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
@@ -461,6 +468,14 @@ class Rsync:
         """
         pass
 \end{lstlisting}
+
+\paragraph{Begründung/Hintergrund:}
+\label{par:begr_ndung_hintergrund_}
+Rsync wurde gewählt da es sich seit Jahren als Synchronisationstool im Unixbereich bewährt hat.
+Da es mit delta files und checksummen arbeitet ist es für den Einsatz eines Archivs optimal.
+Durch die Delta-Kodierung/Checksummen wird das Übertragungsvolumen minimiert.
+
+% paragraph begr_ndung_hintergrund_ (end)
 
 \subsubsection{Git}
 \label{ssub:git}
