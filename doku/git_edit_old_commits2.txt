@@ -1,0 +1,97 @@
+# vorarbeit: git repo erstellen
+
+[ccwelich@ccdesktop git]$ mkdir test
+[ccwelich@ccdesktop git]$ cd test
+[ccwelich@ccdesktop test]$ git init
+Initialisierte leeres Git-Projektarchiv in /home/ccwelich/git/test/.git/
+[ccwelich@ccdesktop test]$ echo '0' > a
+[ccwelich@ccdesktop test]$ echo '0' > b
+[ccwelich@ccdesktop test]$ git add .
+[ccwelich@ccdesktop test]$ git commit -a -m "init"
+[master (Basis-Version) 62e3e35] init
+ 2 Dateien geändert, 2 Zeilen hinzugefügt(+)
+ create mode 100644 a
+ create mode 100644 b
+[ccwelich@ccdesktop test]$ git tag "t0" 
+
+#  version 0 erstellen
+
+[ccwelich@ccdesktop test]$ echo '1'>b
+[ccwelich@ccdesktop test]$ git status
+# Auf Zweig master
+# Änderungen, die nicht zum Eintragen bereitgestellt sind:                                                                                                                                                                                                                     
+#   (benutze "git add <Datei>..." zur Aktualisierung der Eintragung)                                                                                                                                                                                                           
+#   (benutze "git checkout -- <Datei>..." um die Änderungen im Arbeitsverzeichnis zu verwerfen)                                                                                                                                                                                
+#                                                                                                                                                                                                                                                                              
+#       geändert:   b                                                                                                                                                                                                                                                          
+#                                                                                                                                                                                                                                                                              
+keine Änderungen zum Eintragen hinzugefügt (benutze "git add" und/oder "git commit -a")                                                                                                                                                                                        
+[ccwelich@ccdesktop test]$ git commit -a -m "init"                                                                                                                                                                                                                             
+[master 4ec2adf] init                                                                                                                                                                                                                                                          
+ 1 Datei geändert, 1 Zeile hinzugefügt(+), 1 Zeile entfernt(-)          
+[ccwelich@ccdesktop test]$ git tag t1
+
+# version 1 erstellt
+
+[ccwelich@ccdesktop test]$ git tag
+t0                                                                                                                                                                                                                                                                             
+t1                      
+
+
+
+# jetzt kommt die nachträgliche änderung
+# wir wollen analysedaten in v0 einfügen
+
+[ccwelich@ccdesktop test]$ git checkout t0                                                                                                                                                                                                                                     
+Note: checking out 't0'.                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                               
+You are in 'detached HEAD' state. You can look around, make experimental                                                                                                                                                                                                       
+changes and commit them, and you can discard any commits you make in this                                                                                                                                                                                                      
+state without impacting any branches by performing another checkout.                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                               
+If you want to create a new branch to retain commits you create, you may                                                                                                                                                                                                       
+do so (now or later) by using -b with the checkout command again. Example:                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                               
+  git checkout -b new_branch_name                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                               
+Zweigspitze (HEAD) ist jetzt bei 62e3e35... init   
+
+# temporären branch erstellen, änderung einfügen, committen
+
+[ccwelich@ccdesktop test]$ git checkout -b tmp                                                                                                                                                                                                                                 
+Gewechselt zu einem neuen Zweig 'tmp'                                                                                                                                                                                                                                          
+[ccwelich@ccdesktop test]$ echo 'some anal data' > aanal
+[ccwelich@ccdesktop test]$ ls
+a  aanal  b
+[ccwelich@ccdesktop test]$ git add aanal 
+[ccwelich@ccdesktop test]$ git commit -a -m "subsq add"
+[tmp c4e5012] subsq add
+ 1 Datei geändert, 1 Zeile hinzugefügt(+)
+ create mode 100644 aanal
+ 
+# jetzt wieder nach master wechseln und tmp-branch mergen
+# die commits von v0 bis master werden dann rekursiv alle geändert
+# intern werden da irgendwie die tree-pointer auf die blobs herumgeschubbst
+# was bei älteren versionen schon etwas dauern könnte...
+
+[ccwelich@ccdesktop test]$ git checkout master
+Gewechselt zu Zweig 'master'
+[ccwelich@ccdesktop test]$ ls
+a  b
+[ccwelich@ccdesktop test]$ git merge tmp -m "add subsequently added files"
+Merge made by the 'recursive' strategy.    				# <---- rekursion
+ aanal |    1 +
+ 1 Datei geändert, 1 Zeile hinzugefügt(+)
+ create mode 100644 aanal
+[ccwelich@ccdesktop test]$ ls
+a  aanal  b
+
+# aanal ist jetzt in master
+
+[ccwelich@ccdesktop test]$ git status
+# Auf Zweig master
+nichts zum Eintragen (Arbeitsverzeichnis sauber)
+[ccwelich@ccdesktop test]$ 
+
+# den tmp-branch kann man mit git branch -d tmp wieder löschen
+ 
