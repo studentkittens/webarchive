@@ -29,8 +29,6 @@ if __name__ == '__main__'
    unittest.main()
 \end{lstlisting}
 
-\section{Werkzeuge}
-TODO
 
 \newpage
 \section{Programmablauf} 
@@ -562,6 +560,17 @@ class Git:
         pass
 \end{lstlisting}
 
+\paragraph{Begründung/Hintergrund:}
+\label{par:begr_ndung_hintergrund_}
+Da die Implementierung eines nativen Python Interface zu git selbst mit GitPython
+\url{http://gitorious.org/git-python} oder Dulwich \url{http://www.samba.org/~jelmer/dulwich/}
+für die uns zu Verfügung stehenden 6 Wochen zu aufwendig ist, wird die Implementierung über
+Python\'s subprocess.call() Schnittstelle statt finden. Durch den ,,Proof of concept'' können
+erste Erfahrungen mit git als Archivierungssystem gesammelt werden und bei Bedarf eine native Implementierung
+umgesetzt werden.
+
+
+% paragraph begr_ndung_hintergrund_ (end)
 \subsection{Logger}
 \paragraph{Beschreibung:}
 \label{par:beschreibung}
