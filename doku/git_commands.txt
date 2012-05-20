@@ -1,0 +1,57 @@
+# Initialisierung
+    $ git init 
+    $ git checkout -b empty
+    # Mindestens ein commit ist nötig,
+    # für einen validen branch
+    $ echo 'This is Empty' > EMPTY
+    $ git add EMPTY
+    $ git commit -a -m 'Init'
+    # master wird später zum tracken
+    # des neuesten branches gebraucht
+
+# Synchronisationsvorgang
+    ... lock ...
+    # Gehe zum leeren stand zurück, 
+    # da sonst der neue branch die history
+    # des aktuellen erbt
+    $ git checkout empty
+    # Neuer branch mit ehem. Tagnamen
+    $ git checkout -b 24052012T1232
+    ... rsync ins Archiv ...
+    $ git add . 
+    $ git commit -am 'Seite xyz.com wurde gekrault'
+    # Nun ist 'master' mit dem aktuellsten Stand identisch
+    $ git branch -d master
+    $ git checkout -b master
+    ... unlock ...
+
+# Lesen / Schreiben im/aus dem Aktuellen
+    # Soll aus den aus dem Archiv der aktuelle Stand geholt
+    # werden so muss in Sachen git nichts gemacht werden
+    ... lock ...
+    ... lesen ...
+    ... unlock ...
+  
+# Lesen / Editieren von alten Ständen
+    # Hierfür muss das Datum des alten Standes gegeben sein
+    # -f falls jemand unerlaubt änderungen gemacht hat
+    ... lock ...
+    $ git checkout -f old_date
+    ... lesen / schreiben ...
+    # Im Falle von schreiben:
+      $ git add .
+      $ git commit -am 'Edited old Kraul'
+      # Der Kopf des neuen branches zeigt nun auf den neuen commit
+    $ git checkout master
+    ... unlock ...
+
+# Neue Struktur 
+
+          -- kraul -> edit -> branch '03052012T1232'
+        / 
+Init -- ---- kraul -> branch '15052012T1232'
+|       \
+|         -- kraul -> branch '24052012T1232' <- master
+|
+|
+\-> branch 'empty'
