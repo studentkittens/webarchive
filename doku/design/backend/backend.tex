@@ -657,6 +657,8 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 
 \section{Javadapter} 
 \label{sec:javadapter}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
 \begin{description}
   \item [Daemon] Er ist als Daemon implementiert, und ist über einen
@@ -708,3 +710,23 @@ eckigen Klammern angegeben sind.
     \hline
   \end{tabular}
 \end{table}
+
+\paragraph{Schnittstellen:}
+\label{par:schnittstellen_}
+
+\begin{lstlisting}[language=python]
+def init_javadapter(path = '.'):
+    """
+    default way to start javadapter-server,
+    listening on port 42421
+    javadapter.lock (including pid) is written to root directory
+    """
+    pass
+def stop_javadapter():
+    """
+    default way to shutdown javadapter-server,
+    releasing lock
+    """
+    pass
+\end{lstlisting}
+% paragraph schnittstellen_ (end)
