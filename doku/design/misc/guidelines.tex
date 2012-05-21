@@ -3,10 +3,40 @@
 
 \section{Toolauswahl} 
 \label{sec:toolauswahl}
-TODO
+
+\begin{description}
+    \item [git:] wird als SCM Tool verwendet, github wird hier als 
+        Hostingplattform verwendet \url{github.com/studentkitten/webarchive}
+    \item [ant:] Buildsystem für Java-Komponenten
+    \item [javadoc:] automatische Generierung der Java Dokumentation
+    \item [sphinx:] halbautomatische Generierung der Python Dokumentation
+    \item [junit:] Testframework für Java
+    \item [unittest:] Python internes Testframework 
+    \item [latex:] allgemeine Dokumentation
+    
+\end{description}
 
 
-\section{Guidelines} 
+\section{Systemkomponenten} 
+\label{sec:systemkomponenten}
+\begin{description}
+    \item [wget:] Crawler-Kernkomponente
+    \item [git:] Versionierung des Archivs
+    \item [rsync:] Synchronisation von Crawldaten ins Archiv
+\end{description}
+
+
+Die Gruppe hat für die Entwicklung zwei Untergruppen gebildet, 
+eine für das Python Backend (\ciii, \flo, \ci) und eine für den Java Frontend
+(\cii, \sab, \eddy).
+
+\section{Programmierrichtlinien} 
 \label{sec:guidelines}
-TODO
+\begin{description}
+    \item [Python:] \url{http://www.python.org/dev/peps/pep-0008/}, \\alternativ \texttt{echo 'import this' | python}
+    \item [Java:] Spaghetticode Guideline TODO
+    \item [Allgemein:] In den Untergruppen werden die Module gegenseitig getestet um das Risiko von ,,Denkfehlern'' zu minimieren
+\end{description}
 
+
+% section systemkomponenten (end)

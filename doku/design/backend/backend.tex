@@ -34,10 +34,10 @@ if __name__ == '__main__'
 \section{Programmablauf} 
 \label{sec:programmablauf}
 \begin{figure}[h]
-	\centering
-	\label{dia:design:backend:overview}
-	\includegraphics[width=\textwidth]{design/backend/gfx/backend_procedure.eps}
-	\caption{Ablaufprozedur Backend}
+\centering
+\label{dia:design:backend:overview}
+\includegraphics[width=\textwidth]{design/backend/gfx/backend_procedure.eps}
+\caption{Ablaufprozedur Backend}
 \end{figure}
 
 
@@ -60,7 +60,7 @@ Grundlegender Ablauf beim Lesen von Configwerten:
 
 % paragraph ablauf_ (end)
 \paragraph{Beschreibung:}
-\ref{req:conf}
+(Entsprechend: \ref{spec:conf})
 \label{par:beschreibung_}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
 \paragraph{Schnittstelle:}
@@ -380,7 +380,7 @@ zu durchlaufen und leere Dateien und Ordner zu löschen.
 \label{ssub:filtersystem}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Gemäß \ref{req:filter} wird ein Filtersystem für gecrawlte Daten
+Gemäß \ref{req:Fi:interface} wird ein Filtersystem für gecrawlte Daten
 implementiert.
 
 \begin{description}
@@ -434,7 +434,7 @@ selten über mehr als 100 Zeilen Quelltext verfügen werden.
 \label{par:beschreibung_}
 % paragraph beschreibung_ (end)
 Hierbei werden aus der Metadatenliste Xml-Dateien zum jeweiligen Content
-geschrieben (\texttt{data.xml}). 
+geschrieben (\texttt{data.xml}, siehe \ref{spec:xml}) 
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
@@ -550,13 +550,30 @@ und der erzeugte Commit wird mit der ,,commitTime'' getaggt.
 \label{par:schnittstelle_}
 \begin{lstlisting}[language=python]
 class Git:
-    def __init__(self, domain, check_in_date):
+    def __init__(self, domain):
+        """
+        The domain is passed in order to identfiy
+        the git-repository on which to operate on
+        """
         pass
 
-    def checkout(self, tag = None):
+    def checkout(self, branch_name = None):
+        """
+        'git checkout' a certain branch-name, or 
+        'master' when None is given
+        """
         pass
 
-    def commit_and_tag(self):
+    def branch(self, branch_name):
+        """
+        Create a new branch named 'branch_name'
+        """
+        pass
+
+    def commit(self, message = 'edit'):
+        """
+        Does an 'git add .; git commit -am <message>'
+        """
         pass
 \end{lstlisting}
 
