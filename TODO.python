@@ -1,26 +1,31 @@
 Allgemein:
-- Refs nachrüsten?
-  init.. 
-
-Spec:
-- Hinzufügen: branch erstellen ✔
-- Commit: -"-✔
-- Ändern und Löschen: -"-✔
-- Schreiben in veraltete Verzeichnisse: -"-✔
+==========
 
 Entwurf:
 - Verantwortlich?
+- Refs nachrüsten?
+  init.. 
+
+Flo:
+====
+
+Configdiagramm:
+  * get_with_defaults() adden
+
+Logdiagramm:
+  * Serverity -> Severity
+  * CmdInt -> STDOUT
+
+Done:
+=====
 
 Backend:
-- BackendProcedure:
+- BackendProcedure:✔
   * get_with_defaults() statt get() + ??? ✔
-- ConfigHandler Dia -> Schnittstelle Confighandler 
-  * get_with_defaults() adden
-  * UML Kleiner, Leerseite
 - ConfigHandlerProcedure: When config does not exist -> end✔
 - UserAgent bei config adden✔
 - Init: ,,angelegt wird der Ordner über -> : <-"✔
-- CrawlJobProcedure:
+- CrawlJobProcedure:✔
   * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein✔
   * git branch and commit -> git commit✔
   * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein✔
@@ -31,13 +36,8 @@ Backend:
 - 'subprocess.call' als monospace✔
 - GitSection: tag -> branch✔
 - El Pythones✔
-- Logger Section: Dia verkleinern, unter Schnittstelle reinmachen
-  * Serverity -> Severity
-  * CmdInt -> STDOUT
 - Database Recovery -> branches.✔
 - Util,  try_lock, lock Schnittstelle.✔
 - Javadapter: ✔
   * Schnittstelle: path argument wegmachen✔
   * Javadapter port in der config, default 42421✔
-- 
-
