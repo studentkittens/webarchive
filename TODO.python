@@ -13,17 +13,17 @@ Entwurf:
 
 Backend:
 - BackendProcedure:
-  * get_with_defaults() statt get()
+  * get_with_defaults() statt get() + ??? ✔
 - ConfigHandler Dia -> Schnittstelle Confighandler 
   * get_with_defaults() adden
   * UML Kleiner, Leerseite
-- ConfigHandlerProcedure: When config does not exist -> end
+- ConfigHandlerProcedure: When config does not exist -> end✔
 - UserAgent bei config adden✔
 - Init: ,,angelegt wird der Ordner über -> : <-"✔
 - CrawlJobProcedure:
-  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein
-  * git branch and commit -> git commit
-  * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein
+  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein✔
+  * git branch and commit -> git commit✔
+  * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein✔
 - parellisiert. ✔
 - RamFs -> Weblink✔
 - darstellt. darstellt.✔
