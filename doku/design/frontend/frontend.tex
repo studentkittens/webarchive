@@ -86,7 +86,22 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 
 \section{Programmfluss}
 
+Alle Client -> Server Kommunikationen basieren auf dem gleichen Schema.
+Nachdem der Analyzer eine Methode der API aufgerufen hat, wird zunächst ein Message-Datenobjekt mit dem zum Aufruf passenden Header auf Client-Seite angelegt.
+Anschließend wird dieses Objekt an den Server gesendet und geprüft, welche Aktion vom Server ausgeführt werden soll.
+Bei Anfragen, die eine Antwort vom Server erwarten, wird die Message noch mit einer ID-Nummer markiert und in eine Map im Client eingetragen und der aufrufende Thread der API-Methode schlafend gelegt.
+Über diese ID wird bei einer Antwort vom Server der schlafende Thread geweckt und mit der Antwort verknüpft.
+\
+Wenn die auszuführende Aktion einen Schreib- oder Lesezugriff auf das Archiv bedeutet, wird diese mit einer Lock- und Unlock-Sequenz eingeschlossen.
+Sobald der Server die Aufgabe erledigt und eventuelle Locks freigegeben hat, wird ein neues Message-Objekt auf Serverseite erzeugt und an den Client gesendet und ausgwertet.
+Sie kann Daten, Benachrichtigungen über den Erfolg der Aufgabe oder Exceptions enthalten.
+
 \subsection {select}
+
+Das Auslesen von MetaDaten aus der Datenbank ist kein auf das Archiv lesender oder schreibender Ablauf, sodass hier auf ein Locken oder Unlocken verzichtet werden kann.
+select() entspricht der einfachsten Form der Client->Server Kommunikation.
+Hier wird das durch eine eigene Implementierung der select() der API vorgefertigte SQL-Statement nur and die dbSelect-Sequenz durchgereicht, welche eine Liste aus MetaDaten zurückliefert.
+Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer vorgelegt werden.
 
 \begin{figure}[h]
 	\centering
@@ -97,6 +112,7 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 
 \subsection {getFileList}
 \todo{sequence: getFileList}
+
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -105,22 +121,41 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 %\end{figure}
 
 \subsubsection{Lock setzen}
-\begin{figure}[h]
-	\centering
-	\label{dia:design:frontend:sqc:lock}
-	\includegraphics[width=0.5\textwidth]{design/frontend/sequence/lock-sequence.pdf}
-	\caption{Sequenzdiagramm: Lock setzen}
-\end{figure}
+
+Bei Schreib- und Lesezugriffen auf das Archiv wird ein Datei-Mutex gesetzt.
+Die Lock-Sequenz fragt beim Python-Lock-Modul einen Mutex in einem bestimmten Domain-Ordner an.
+Ist dieser Ordner bereits gesperrt, blockiert das Python-Modul solange bis der Lock erfolgreich oder eine Zeitgrenze überschritten wurde.
+Bei letzterem wird eine Exception erzeugt und an den Client weitergegen.
+Wenn keine Probleme aufgetreten sind, kann noch gegebenenfalls eine Checkout-Anfrage durch das selbe Prinzip gestellt werden.
+Die Sequenz muss also über die Fähigkeit verfügen, Textnachrichten an das Python-Modul schicken und empfangen zu können.
+
+%\begin{figure}[h]
+%	\centering
+%	\label{dia:design:frontend:sqc:lock}
+%	\includegraphics[width=0.5\textwidth]{design/frontend/sequence/lock-sequence.pdf}
+%	\caption{Sequenzdiagramm: Lock setzen}
+%\end{figure}
 
 \subsubsection{Unlock}
-\begin{figure}[h]
-	\centering
-	\label{dia:design:frontend:sqc:unlock}
-	\includegraphics[width=0.5\textwidth]{design/frontend/sequence/unlock-sequence.pdf}
-	\caption{Sequenzdiagramm: Unlock}
-\end{figure}
+
+Das Unlocken entspricht bis auf die Textnachrichten selbst dem gleichen Prinzip.
+%\begin{figure}[h]
+%	\centering
+%	\label{dia:design:frontend:sqc:unlock}
+%	\includegraphics[width=0.5\textwidth]{design/frontend/sequence/unlock-sequence.pdf}
+%	\caption{Sequenzdiagramm: Unlock}
+%\end{figure}
+
 
 \subsection {getOutputStream}
+
+Um eine Analyse-Datei in das Archiv schreiben zu können, stellt der Client einen speziellen ByteArrayOutputStream (BAOS) zur Verfügung.
+Dieser kann vom Analyzer wie ein normaler OutputStream genutzt werden.
+Werden Daten in den Stream geschrieben, landen sie in einem internen byte[]-Puffer des BAOS.
+Führt der Analyzer die eigens implementierte close()-Methode aus, setzt er die Leerung des BAOS in das erzeugte Buffer-Objekt und das Senden des Buffers an den Server in Gang.
+Auf der Serverseite wird nach der Verarbeitung der Nachricht, ein Lock gesetzt und versucht die Daten des Buffer-Objekts in das Archiv zu schreiben.
+Anschließend wird der Lock entfernt, eine ,,SUCCESS''-Nachricht an den Client geschickt und die close()-Methode beendet.
+
 \begin{figure}[h]
 	\centering
 	\label{dia:design:frontend:sqc:getOutputStream}
@@ -129,6 +164,12 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 \end{figure}
 
 \subsection {getInputStream}
+
+Um eine beliebige Datei aus dem Archiv zu lesen, wird ein FileDescriptor der zu lesenden Datei an den Server geschickt.
+Nach erfolgreichem Locken erzeugt der Server ein Buffer-Objekt mit der Datei als Inhalt und schickt es an den Client.
+Dieser erstellt einen ByteArrayInputStream(BAIS) mit Hilfe der Daten im Buffer-Objekt und gibt den BAIS nach Unlocken  an den Analyzer zurück.
+Der BAIS kann genau wie jeder andere Stream genutzt werden.
+
 \begin{figure}[!h]
 	\centering
 	\label{dia:design:frontend:sqc:getInputStream}
