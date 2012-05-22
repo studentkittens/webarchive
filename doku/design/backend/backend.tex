@@ -86,7 +86,7 @@ Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optiona
 Das relativ einfache URI Prinzip wurde gewählt um stets einen direkten
 Bezug zwischen der XML Struktur und den abgefragten Werten herzustellen.
 \\
-In späteren Versionen ist folgende Erweiterun denkbar: Statt die
+In späteren Versionen ist folgende Erweiterung denkbar: Statt die
 Default-Werte fest in den Programmcode zu legen, wird eine systemweite
 und immer verfügbare config.xml angelegt, auf die zurückgefallen werden
 kann.
@@ -98,7 +98,7 @@ kann.
 Verantwortlich: \flo, \ciii, \ci
 \paragraph{Beschreibung}
 \label{par:beschreibung}
-Dieses Interface realisiert die zentralle Administrationsschnittstelle zum Webarchiv. 
+Dieses Interface realisiert die zentrale Administrationsschnittstelle zum Webarchiv. 
 Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktionieren:
 \begin{verbatim}
 archive [--general-options] submodule [--arguments-specific-to-submodule]
@@ -129,7 +129,7 @@ Entsprechend \ref{req:Cr:cmd:overwrite} können Werte überschrieben werden.
 \paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Es wurde sich für ein einfaches Commandline Interface entschieden, da
-Kenntnisse im Umgang mit der Unix-Shell auf der User Seite vorrausgsetzt
+Kenntnisse im Umgang mit der Unix-Shell auf der User Seite vorausgesetzt
 werden.
 
 % paragraph begr_ndung_ (end)
@@ -184,7 +184,7 @@ der Config definiert wurde. Die URLs sind in diese Datei zeilenweise einzutragen
 Über einen ThreadPool wird dann für jede URL ein Crawljob gestartet. Die maximale Anzahl der dabei laufenden Crawljobs wird bei
 der Instanzierung des ThreadPools aus der Config gelesen (\ref{req:Cr:conf:maxInst}, \ref{req:Cr:concurrent}). 
 \texttt{Robots.txt} wird entsprechend \ref{req:Cr:conf:robotsTxt} nur berücksichtigt wenn konfiguriert.
-Desweiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen und intervall-artigen Starten der laufenden Crawljobs (siehe: \ref{req:Cr:startInterval})
+Des weiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen und intervall-artigen Starten der laufenden Crawljobs (siehe: \ref{req:Cr:startInterval})
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
@@ -227,7 +227,7 @@ class CrawlManager:
 Verantwortlich: \ciii, \ci 
 
 \paragraph{Ablauf:}
-    Als Programmaublaufplan eine grobe Übersicht:
+    Als Programmablaufplan eine grobe Übersicht:
 \label{par:ablauf_}
 \begin{figure}[H]
 	\centering
@@ -241,7 +241,7 @@ Verantwortlich: \ciii, \ci
 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beeinhaltet.
+Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beinhaltet.
 Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsverzeichnis angelegt.
 Die Lage dieses Verzeichnisses kann in der Config festgelegt werden.
 (\ref{req:Cr:crawl:download}, \ref{req:Cr:crawl:structure})
@@ -271,7 +271,7 @@ class CrawlJob():
 \label{par:begr_ndung_hintergrund_}
 Ein ,,Wget-Wrapper'' wird zum Crawlen verwendet, da wget alle vom iisys benötigten Funktionalitäten bietet und
 in der kürze der Zeit kein gleichwertiger Ersatz implementierbar ist. Um das Crawlen global zu 
-beschleunigen wurde dieses ,,paralellisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
+beschleunigen wurde dieses ,,parallelisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
 Um die Gesamtgeschwindigkeit des Systems zu steigern wird ebenfalls empfohlen die ,,tmp''-Crawlordner auf ein
 ramfs (\footnote{\url{http://wiki.debian.org/ramfs}}) zu legen.
 
@@ -332,8 +332,8 @@ class Wget():
 Verantwortlich: \ci 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Der Cleaner bereingt die Verzeichnisstruktur indem er leere Ordner und Dateien löscht.
-Desweiteren wird folgende Restrukturierung durchgeführt:
+Der Cleaner bereinigt die Verzeichnisstruktur indem er leere Ordner und Dateien löscht.
+Des weiteren wird folgende Restrukturierung durchgeführt:
 \begin{verbatim}
     www.heise.de/ 
         index.html/
@@ -499,9 +499,9 @@ class XmlGenerator:
 % paragraph schnittstelle_ (end)
 \paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_hintergrund_}
-Um Schreibzugriffe auf die Festplatte (höchstwahscheinlich langsamste Komponente im System) zu minimieren
+Um Schreibzugriffe auf die Festplatte (höchstwahrscheinlich langsamste Komponente im System) zu minimieren
 und nicht doppelt traversieren zu müssen werden die Metadaten nach dem extrahieren im Speicher gehalten und
-erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte geschreieben. 
+erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte geschrieben. 
 
 
 % paragraph begr_ndung_hintergrund_ (end)
@@ -555,7 +555,7 @@ Verantwortlich: \ci
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \footnote{\url{http://de.wikipedia.org/wiki/Rsync}}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren (siehe: \ref{req:Cr:sync}).
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
-Rsync wird hier direkt auf Systemebene mit folgenden Paramentern ausgeführt:
+Rsync wird hier direkt auf Systemebene mit folgenden Parametern ausgeführt:
 \begin{figure}[H]
     \centering    
     \texttt{subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])}
@@ -722,7 +722,7 @@ Verantwortlich: \flo, \ci, \ciii
 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Das Util Modul stellt verscheidene Funktionen die von mehreren Modulen genutzt werden bereit.
+Das Util Modul stellt verschiedene Funktionen die von mehreren Modulen genutzt werden bereit.
 Erwähnenswert ist hier der ,,Lockmechanismus''
 auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schützen.
 
@@ -770,7 +770,7 @@ Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
     (Standardmäßig: \texttt{localhost:42421})
   \item [Kommunikation] Jegliche Interaktion erfolgt über ein
     zeilenbasiertes Textprotokoll. Der Client (Hier: Der Java-Server)
-    sendet definerte Kommandos, welche mit mit einer Antwortzeile
+    sendet definierte Kommandos, welche mit mit einer Antwortzeile
     und einem abschließenden ,,OK'' oder ,,ACK [FehlerNachricht]''
     beantwortet werden.
   \item [Instanziierung] Der Adapter ist als eigenes Python Modul
@@ -779,7 +779,7 @@ Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
 \end{description}
  
 Folgende Kommandos sollen dabei implementiert werden:
-Alle Kommandoes nehmen zusätzliche nicht-optionale Argumente die in
+Alle Kommandos nehmen zusätzliche nicht-optionale Argumente die in
 eckigen Klammern angegeben sind.
 \begin{table}[H]
   \begin{tabular}{|p{4cm}|p{5cm}|p{7cm}|}
