@@ -21,8 +21,8 @@ Backend:
 - UserAgent bei config adden
 - Init: ,,angelegt wird der Ordner über -> : <-"
 - CrawlJobProcedure:
-  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein
-  * git branch and commi -> git commit
+  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein ✔
+  * git branch and commi -> git commit ✔
   * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein
 - parellisiert. 
 - RamFs -> Weblink
