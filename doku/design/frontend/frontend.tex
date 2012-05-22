@@ -86,6 +86,8 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 
 \section{Programmfluss}
 
+Verantwortlich: Eduard Schneider
+
 Alle Client$\rightarrow$Server Kommunikationen basieren auf dem gleichen Schema.
 Nachdem der Analyzer eine Methode der API aufgerufen hat, wird zunächst ein Message-Datenobjekt mit dem zum Aufruf passenden Header auf Client-Seite angelegt.
 Anschließend wird dieses Objekt an den Server gesendet und geprüft, welche Aktion vom Server ausgeführt werden soll.
@@ -216,16 +218,12 @@ Wie die bisherigen Methoden der API.
 Es wird auf Serverseite eine Liste von File-Objekten erzeugt und an den Client gesendet.
 Diese kann einfach an den Analyzer zurückgegeben werden.
 
-\subsection {notifyClients}
-%\begin{figure}[h]
-%	\centering
-%	\label{dia:design:frontend:sqc:select}
-%	\includegraphics[width=\textwidth]{design/frontend/sequence/select-sequence.pdf}
-%	\caption{Sequenzdiagramm: Select}
-%\end{figure}
+\section {Client Notifier}
+% SABRINAS PART
 
-\subsection {Exception Handling}
-\ref{req:Sv:comm:exceptions}
+%\subsection {Exception Handling}
+%\ref{req:Sv:comm:exceptions}
+
 \section{Klassen und Komponenten}
 
 \subsection{Server und Client}
