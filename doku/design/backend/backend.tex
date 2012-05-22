@@ -664,7 +664,28 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 \begin{lstlisting}[language=python]
     def lock(domain_path):
         """
+        Create a lockfile in domain, if already
+        being blocked wait till it is unlocked
+
+        Returns: true if lock could be acquired, false on failure
         """
+        pass
+
+    def try_lock(domain_path):
+        """
+        As lock(), but return immediately when locking is not possible,
+
+        Returns: true on success, false on already locked domain
+        """
+        pass
+
+    def unlock(domain_path):
+        """
+        Unlocks previously created Lock, does nothing if not already locked.
+
+        Returns: true if a lock was removed, false if none was found
+        """
+        pass
 \end{lstlisting}
 
 

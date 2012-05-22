@@ -35,7 +35,7 @@ Backend:
   * Serverity -> Severity
   * CmdInt -> STDOUT
 - Database Recovery -> branches.✔
-- Util,  try_lock, lock Schnittstelle.
+- Util,  try_lock, lock Schnittstelle.✔
 - Javadapter: ✔
   * Schnittstelle: path argument wegmachen✔
   * Javadapter port in der config, default 42421✔
