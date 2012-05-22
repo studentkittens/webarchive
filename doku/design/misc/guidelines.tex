@@ -32,10 +32,13 @@ eine für das Python Backend (\ciii, \flo, \ci) und eine für den Java Frontend
 
 \section{Programmierrichtlinien} 
 \label{sec:guidelines}
-\begin{description}
-    \item [Python:] \url{http://www.python.org/dev/peps/pep-0008/}, \\alternativ \texttt{echo 'import this' | python}
-    \item [Java:] Spaghetticode Guideline TODO
-    \item [Allgemein:] In den Untergruppen werden die Module gegenseitig getestet um das Risiko von ,,Denkfehlern'' zu minimieren
+\subsection{Python} 
+	\url{http://www.python.org/dev/peps/pep-0008/}, \\alternativ \texttt{echo 'import this' | python}
+\subsection{Java}
+	\input{design/misc/javaguide.tex}
+
+\subsection{Tests}
+    Innerhalb der Untergruppen werden die Module gegenseitig getestet um das Risiko von ,,Denkfehlern'' zu minimieren
 \end{description}
 
 

@@ -89,6 +89,7 @@ und die Daten in das Archiv schreiben.
 		In diesem Teil werden die heruntergeladenen Ordner bereinigt,
 		also leere Ordner gelöscht.
 	\item [\req{Normalisierung}{normalize}]
+		Durch die Normalisierung werden die Dateien auf eine dem Archiv entsprechende Struktur gebracht.
 		\begin{description}
 			\item [\subreq{Datei umbenennen}{rename}]
 				Das File wird in ''data.<Endung>'' umbenannt. 
@@ -244,10 +245,10 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 	\item [\req{Ändern und Löschen}{update}]
 		Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen getroffen werden.
 		Diese werden von der Versionierung in andere Branches verschoben.
-	\item [\req{Schreiben in veraltete Verzeichnisse}{writeToOldDirs}]
-		Sollte in Ausnahmefällen in veraltete Verzeichnisse geschrieben werden, 
-		zum Beispiel weil die Daten von den Crawlern während einer Analyse geändert wurden,
-		so wird der dazugehörige Branch hervorgeholt, und die Änderungen werden dort regulär committed.
+	\item [\req{Schreiben in veraltete Versionen}{writeToOldDirs}]
+		Sollte in in veraltete Verzeichnisse geschrieben werden,
+		so muss sichergestellt werden, das diese korrekt durch die Versionierung
+		hinzugefügt werden.
 \end{description}
 
 
