@@ -23,7 +23,7 @@ Backend:
 - CrawlJobProcedure:
   * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein✔
   * git branch and commit -> git commit✔
-  * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein
+  * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein✔
 - parellisiert. ✔
 - RamFs -> Weblink✔
 - darstellt. darstellt.✔
