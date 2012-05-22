@@ -345,7 +345,15 @@ ohne dass weitere Filter aufgerufen werden müssen.
 \\
 Die gesammelten Metadaten werden in einem Metadatenobjekt gesammelt. Die gesammelten Daten entsprechen dabei 
 der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim Check-In erhoben wird.
-
+\newpage
+\paragraph{Ablauf:}
+\label{par:ablauf_}
+\hfill
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{design/backend/gfx/cleaner.eps}
+	\caption{Cleaner Prozedur}
+\end{figure}
 \paragraph{Schnittstelle:} 
 \label{par:schnittstelle_}
 \hfill
@@ -479,7 +487,17 @@ erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte ge
 Analog zur Xml-Generierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
 Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
 % paragraph beschreibung_ (end)
+\paragraph{Ablauf:}
+\label{par:ablauf_}
+\hfill
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{design/backend/gfx/dbupdate.eps}
+	\caption{DB Update Prozedur}
+\end{figure}
 
+
+% paragraph ablauf_ (end)
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
 \hfill
