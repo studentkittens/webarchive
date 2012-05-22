@@ -18,16 +18,16 @@ Backend:
   * get_with_defaults() adden
   * UML Kleiner, Leerseite
 - ConfigHandlerProcedure: When config does not exist -> end
-- UserAgent bei config adden
-- Init: ,,angelegt wird der Ordner über -> : <-"
+- UserAgent bei config adden✔
+- Init: ,,angelegt wird der Ordner über -> : <-"✔
 - CrawlJobProcedure:
   * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein
-  * git branch and commi -> git commit
+  * git branch and commit -> git commit
   * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein
-- parellisiert. 
+- parellisiert. ✔
 - RamFs -> Weblink✔
 - darstellt. darstellt.✔
-- URL Links vlt. als footnote
+- URL Links vlt. als footnote✔
 - 'subprocess.call' als monospace✔
 - GitSection: tag -> branch✔
 - El Pythones✔
@@ -36,8 +36,8 @@ Backend:
   * CmdInt -> STDOUT
 - Database Recovery -> branches.✔
 - Util,  try_lock, lock Schnittstelle.
-- Javadapter: 
-  * Schnittstelle: path argument wegmachen
-  * Javadapter port in der config, default 42421
+- Javadapter: ✔
+  * Schnittstelle: path argument wegmachen✔
+  * Javadapter port in der config, default 42421✔
 - 
 
