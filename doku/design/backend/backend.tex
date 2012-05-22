@@ -8,6 +8,8 @@ teilweise einer Begründung aufgeteilt sind.
 Die Schnittstellenbeschreibungen sind dabei in englisch kommentierten Python Methoden-Beschreibungen gefasst. 
 
 \section{Testfälle}
+Verantwortlich: \flo, \ciii, \ci
+    \\
 Als Testmethode werden Unit-Tests herangezogen, die mit dem bei Python mitgelieferten Frameworks \texttt{unittest}
 ausgeführt werden können. Dabei enthält jedes File den dazugehörigen Testcode, welcher durch direktes Aufführen des
 .py files ausgeführt wird:
@@ -46,6 +48,7 @@ if __name__ == '__main__'
 \label{sec:zentrale_module}
 
 \subsection{ConfigHandler}
+Verantwortlich: \flo
 
 \paragraph{Ablauf:}
 \label{par:ablauf_}
@@ -64,6 +67,9 @@ Grundlegender Ablauf beim Lesen von Configwerten:
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
 Xml geschrieben und hat folgenden Aufbau:
     \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
+
+Die angegebenen Werte entsprechen den Werten in \ref{spec:conf}.
+\\
 Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so
 lässt sich der Wert ,,Serverport'' über eine Punkt-separierte ,,URI'' auslesen: \texttt{webarchive.server.port} 
 \\ \\
@@ -89,6 +95,7 @@ kann.
 \newpage
 \subsection{Commandline Interface}
 \label{sub:commandline_interface}
+Verantwortlich: \flo, \ciii, \ci
 \paragraph{Beschreibung}
 \label{par:beschreibung}
 Dieses Interface realisiert die zentralle Administrationsschnittstelle zum Webarchiv. 
@@ -97,6 +104,8 @@ Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktioniere
 archive [--general-options] submodule [--arguments-specific-to-submodule]
 \end{verbatim}
 submodule kann dabei einer der folgenden Module sein:
+\\
+Entsprechend \ref{req:Cr:cmd:overwrite} können Werte überschrieben werden.
 
 \begin{table}[H]
 \centering
@@ -109,7 +118,7 @@ submodule kann dabei einer der folgenden Module sein:
         javadapter & Starten und Stoppen der Java Schnittstelle \\
     \hline
     db & Bietet Funktionen um die Datenbank neu zu generieren
-    (entspricht: \ref{req:Db:recovery}) \\
+(entspricht: \ref{req:Cr:cmd:recover}) \\
     \hline
         config & Bietet Zugriff um Werte aus der config zu holen oder zu überschreiben
         (entspricht: \ref{req:Cr:cmd:overwrite}) \\
@@ -127,6 +136,8 @@ werden.
 
 \subsection{Initialisierung} 
 \label{sub:initialisierung}
+Verantwortlich: \ciii
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung}
 % paragraph beschreibung (end)
@@ -163,15 +174,18 @@ Fehler hierbei sich auf die spätere Funktionsweise auswirken können.
 % paragraph schnittstelle_ (end)
 \subsection{Crawlermanager}
 \label{sub:crawlermanager}
+Verantwortlich: \ci 
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 % paragraph beschreibung (end)
 Der Crawlermanager liest eine Liste mit URLs aus einer Datei, die entweder auf der Kommandozeile oder in
-der Config definiert wurde. Die URLs sind in diese Datei zeilenweise einzutragen und können durch ein \# auskommentiert werden.
+der Config definiert wurde. Die URLs sind in diese Datei zeilenweise einzutragen und können durch ein \# auskommentiert werden (\ref{req:Cr:conf:urllist}). Die jeweiligen Wget-Instanzen schließen die domains anderer Instanzen aus (\ref{req:Cr:instance:domain-intersection})
 Über einen ThreadPool wird dann für jede URL ein Crawljob gestartet. Die maximale Anzahl der dabei laufenden Crawljobs wird bei
-der Instanzierung des ThreadPools aus der Config gelesen.
-\\
-Desweiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen der laufenden Crawljobs.
+der Instanzierung des ThreadPools aus der Config gelesen (\ref{req:Cr:conf:maxInst}, \ref{req:Cr:concurrent}). 
+\texttt{Robots.txt} wird entsprechend \ref{req:Cr:conf:robotsTxt} nur berücksichtigt wenn konfiguriert.
+Desweiteren hat der Crawlermanager nur administrative Funktionen wie dem Stoppen und intervall-artigen Starten der laufenden Crawljobs (siehe: \ref{req:Cr:startInterval})
+
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
 Prinzipieller Aufbau des Crawlmanagers:
@@ -180,8 +194,7 @@ Prinzipieller Aufbau des Crawlmanagers:
 class CrawlManager:
     def __init__(self):
         """
-        Instance a new CrawlerManager,
-        which must be started via start()
+        Instance a new CrawlerManager, which must be started via start()
         """
         pass
 
@@ -194,9 +207,8 @@ class CrawlManager:
     def shutdown(self,hard=False): 
         """
         Shuts down currently running crawljobs
-        If hard is set to True, currently running jobs
-        are canceled immediately, instead of syncing already
-        gathered data to archive.
+        If hard is set to True, currently running jobs are canceled
+        immediately, instead of syncing already gathered data to archive.
         """
         pass
 
@@ -206,13 +218,14 @@ class CrawlManager:
         Leaves running Jobs untouched.
         """
         pass
-
 \end{lstlisting}
 
 \newpage
 % paragraph api_ (end)
 \subsection{Crawljob}
 \label{sub:crawljob}
+Verantwortlich: \ciii, \ci 
+
 \paragraph{Ablauf:}
     Als Programmaublaufplan eine grobe Übersicht:
 \label{par:ablauf_}
@@ -231,6 +244,7 @@ class CrawlManager:
 Der Crawljob ist ein autonomer Thread der die unten aufgelisteten Submodule beeinhaltet.
 Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsverzeichnis angelegt.
 Die Lage dieses Verzeichnisses kann in der Config festgelegt werden.
+(\ref{req:Cr:crawl:download}, \ref{req:Cr:crawl:structure})
 \paragraph{Schnittstelle:}
 \label{par:api_}
 \hfill
@@ -263,6 +277,7 @@ ramfs (\footnote{\url{http://wiki.debian.org/ramfs}}) zu legen.
 
 \subsubsection{Wget}
 \label{ssub:wget}
+Verantwortlich: \ci 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 % paragraph beschreibung_ (end)
@@ -314,6 +329,7 @@ class Wget():
 \newpage
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
+Verantwortlich: \ci 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 Der Cleaner bereingt die Verzeichnisstruktur indem er leere Ordner und Dateien löscht.
@@ -344,7 +360,14 @@ Gibt ein Filter ,,false'' zurück, so wird der jeweilige Dateiordner samt Inhalt
 ohne dass weitere Filter aufgerufen werden müssen.
 \\
 Die gesammelten Metadaten werden in einem Metadatenobjekt gesammelt. Die gesammelten Daten entsprechen dabei 
-der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim Check-In erhoben wird.
+der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim Check-In erhoben wird (\ref{req:Cr:commitTime}).
+\\
+\\
+Entsprechend:
+\ref{req:Cr:clean}
+\ref{req:Cr:normalize}
+\ref{req:Cr:metaextract}
+
 \newpage
 \paragraph{Ablauf:}
 \label{par:ablauf_}
@@ -392,11 +415,12 @@ zu durchlaufen und leere Dateien und Ordner zu löschen.
 % paragraph schnittstelle_ (end)
 \subsubsection{Filtersystem}
 \label{ssub:filtersystem}
+Verantwortlich: \ciii 
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Gemäß \ref{req:Fi:interface} wird ein Filtersystem für gecrawlte Daten
+Gemäß \ref{req:Fi:interface},\ref{req:Cr:filter} wird ein Filtersystem für gecrawlte Daten 
 implementiert.
-
 \begin{description}
   \item[Initialisierung] Bei jedem Cleanup-Vorgang werden alle .py files
     aus dem konfigurierte Filter-Verzeichnis in eine Liste eingelesen
@@ -443,12 +467,13 @@ selten über mehr als 100 Zeilen Quelltext verfügen werden.
 
 
 \subsubsection{Xml Generator}
+Verantwortlich: \ci 
 \label{ssub:xmlgen}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 % paragraph beschreibung_ (end)
 Hierbei werden aus der Metadatenliste Xml-Dateien zum jeweiligen Content
-geschrieben (\texttt{data.xml}, siehe \ref{spec:xml}) 
+geschrieben (\texttt{data.xml}, siehe \ref{spec:xml}, \ref{req:Cr:sync}) 
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
@@ -482,10 +507,11 @@ erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte ge
 % paragraph begr_ndung_hintergrund_ (end)
 \subsubsection{DB Generator}
 \label{ssub:dbgen}
+Verantwortlich: \ciii 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 Analog zur Xml-Generierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
-Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
+Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt (siehe: \ref{req:Cr:dbupdate})
 % paragraph beschreibung_ (end)
 \paragraph{Ablauf:}
 \label{par:ablauf_}
@@ -523,9 +549,10 @@ class DBGenerator:
 
 \subsubsection{Rsync}
 \label{ssub:rsync}
+Verantwortlich: \ci 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \footnote{\url{http://de.wikipedia.org/wiki/Rsync}}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
+Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \footnote{\url{http://de.wikipedia.org/wiki/Rsync}}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren (siehe: \ref{req:Cr:sync}).
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
 Rsync wird hier direkt auf Systemebene mit folgenden Paramentern ausgeführt:
@@ -572,6 +599,7 @@ Durch die Delta-Kodierung/Checksummen wird das Übertragungsvolumen minimiert.
 
 \subsubsection{Git}
 \label{ssub:git}
+Verantwortlich: \ciii 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu wird für jeden Crawlvorgang ein Branch erstellt welcher nach der ,,commitTime'' benannt ist. 
@@ -618,10 +646,11 @@ Python's \texttt{subprocess.call()} Schnittstelle statt finden. Durch den ,,Proo
 erste Erfahrungen mit git als Archivierungssystem gesammelt werden und bei Bedarf eine native Implementierung
 umgesetzt werden.
 
-
+\newpage
 % paragraph begr_ndung_hintergrund_ (end)
 \subsection{Logger}
 \label{sub:logger}
+Verantwortlich: \flo 
 \begin{figure}[H]
     \centering    
     \includegraphics[width=0.6\textwidth]{design/backend/gfx/LogHandler.pdf}
@@ -679,7 +708,9 @@ def verbosity(severity):
 
 \section{Database Recovery} 
 \label{sec:database_recovery}
-\ref{req:Db:recovery}
+Verantwortlich: \ciii 
+\\
+(Entsprechend: \ref{req:Db:recovery}) \\
 Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch alle dort vorhandenen Branches, und traversieren deren 
 jeweilige Git-History von hinten nach vorne.
 Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
@@ -687,6 +718,8 @@ Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
 
 \section{Util} 
 \label{sec:util}
+Verantwortlich: \flo, \ci, \ciii
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 Das Util Modul stellt verscheidene Funktionen die von mehreren Modulen genutzt werden bereit.
@@ -727,6 +760,7 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 
 \section{Javadapter} 
 \label{sec:javadapter}
+Verantwortlich: \ciii 
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
 Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
