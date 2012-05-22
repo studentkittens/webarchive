@@ -228,9 +228,21 @@ Diese kann einfach an den Analyzer zurückgegeben werden.
 
 \section {Client Notifier}
 % SABRINAS PART
+Zum Benachrichtigen über Neuerungen des Webarchivs für die Observer (Clients) wird ein Notifier eingesetzt.
 
+Dieser erhält beim Start ein Intervall, welches beschreibt, innerhalb welchen Zeitraum die Observer  benachrichtigt werden müssen. Ist das der Fall, startet ''Observerble'' die Benachrichtigungsroutine  "NotificationSequence". Sobald diese Beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen.
+
+\begin{figure}[H]
+	\centering
+%	\label{dia:design:frontend:sqc:getOutputStream}
+	\includegraphics[width=\textwidth]{design/frontend/sequence/notifySequence.pdf}
+	\caption{Sequenzdiagramm: Notifier}
+\end{figure}
 %\subsection {Exception Handling}
 %\ref{req:Sv:comm:exceptions}
+
+Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, macht diese eine Anfrage bei der Datenbank. Als Antwort er hält sie Commit-Tags, welche anschließend in einer Liste zwischengespeichert werden. Danach sendet sie diese Liste an alle Clients. 
+
 
 \section{Klassen und Komponenten}
 
