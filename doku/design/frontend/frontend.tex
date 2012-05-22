@@ -86,7 +86,7 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 
 \section{Programmfluss}
 
-Alle Client -> Server Kommunikationen basieren auf dem gleichen Schema.
+Alle Client$\rightarrow$Server Kommunikationen basieren auf dem gleichen Schema.
 Nachdem der Analyzer eine Methode der API aufgerufen hat, wird zunächst ein Message-Datenobjekt mit dem zum Aufruf passenden Header auf Client-Seite angelegt.
 Anschließend wird dieses Objekt an den Server gesendet und geprüft, welche Aktion vom Server ausgeführt werden soll.
 Bei Anfragen, die eine Antwort vom Server erwarten, wird die Message noch mit einer ID-Nummer markiert und in eine Map im Client eingetragen und der aufrufende Thread der API-Methode schlafend gelegt.
@@ -99,8 +99,8 @@ Sie kann Daten, Benachrichtigungen über den Erfolg der Aufgabe oder Exceptions 
 \subsection {select}
 
 Das Auslesen von MetaDaten aus der Datenbank ist kein auf das Archiv lesender oder schreibender Ablauf, sodass hier auf ein Locken oder Unlocken verzichtet werden kann.
-select() entspricht der einfachsten Form der Client->Server Kommunikation.
-Hier wird das durch eine eigene Implementierung der select() der API vorgefertigte SQL-Statement nur and die dbSelect-Sequenz durchgereicht, welche eine Liste aus MetaDaten zurückliefert.
+select() entspricht der einfachsten Form der Client$\rightarrow$Server Kommunikation.
+Hier wird das, durch die eigene Implementierung der select()-Methode vorgefertigte SQL-Statement nur an die dbSelect-Sequenz durchgereicht, welche eine Liste aus MetaDaten zurückliefert.
 Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer vorgelegt werden.
 
 \begin{figure}[H]
@@ -109,15 +109,6 @@ Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer 
 	\includegraphics[width=\textwidth]{design/frontend/sequence/select-sequence.pdf}
 	\caption{Sequenzdiagramm: Select}
 \end{figure}
-
-\subsection {getFileList}
-
-%\begin{figure}[h]
-%	\centering
-%	\label{dia:design:frontend:sqc:select}
-%	\includegraphics[width=\textwidth]{design/frontend/sequence/.pdf}
-%	\caption{Sequenzdiagramm: Select}
-%\end{figure}
 
 \subsubsection{Lock setzen}
 
@@ -137,7 +128,7 @@ Die Sequenz muss also über die Fähigkeit verfügen, Textnachrichten an das Pyt
 
 \subsubsection{Unlock}
 
-Das Unlocken entspricht bis auf die Textnachrichten selbst dem gleichen Prinzip.
+Das Unlocken entspricht bis auf die Textnachrichten dem gleichen Prinzip wie das Locken.
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:unlock}
@@ -176,7 +167,17 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 	\caption{Sequenzdiagramm: getInputStream}
 \end{figure}
 
+
+
+
 \subsection {getXMLData}
+
+
+Analog zu den bisherigen Kommunikationsdiagrammen wird beim Lesen von XML-Dateien zuerst eine Anfrage in Form einer Message an den Server gesendet.
+Nachdem der Server liest die XML-Datei nach dem locken aus und sendet den Inhalt an den Client.
+Dieser gibt die XML-Datei jedoch nicht direkt an den Analyzer zurück, sondern erstellt mit den Daten eine Instanz der Klasse XMLEdit.
+Nachdem XMLEdit an den Analyzer übergeben wurde, kann er beliebige XML-Elemente mit dem XMLEdit ausgeben lassen.
+
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -185,6 +186,15 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 %\end{figure}
 
 \subsection {addXMLData}
+
+XML-Daten lassen sich nicht direkt über die API in das Archiv schreiben, sondern müssen mithilfe der XMLEdit-Klasse erzeugt werden.
+Dazu wird zuerst getXMLData() aufgerufen, um eine Kopie der zu bearbeitenden XML-Datei zu erhalten.
+Anschließend kann mit addNode() ein neues Element hinzugefügt  werden.
+addNode() schickt dann eine Nachricht mit dem neuen Element an den Server.
+Dieser baut das neue Element in die XML-Datei ein.
+Bereits vorhandene Elemente können nicht gelöscht oder überschrieben werden.
+Diese Vorgehensweise bietet dem Analyzer einfache Methoden, um XML-Elemente für Analsyse-Daten zu erzeugen.
+
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -193,12 +203,18 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 %\end{figure}
 
 \subsection {add / deleteObserver}
-%\begin{figure}[h]
-%	\centering
-%	\label{dia:design:frontend:sqc:select}
-%	\includegraphics[width=\textwidth]{design/frontend/sequence/select-sequence.pdf}
-%	\caption{Sequenzdiagramm: Select}
-%\end{figure}
+
+Um vom Server über neue Versionen oder sogar neue Webseiten automatisch informiert zu werden, kann sich der Client am Server als Observer anmelden.
+Gleichzeitig meldet sich der Analyzer über die Java eigene Observer Implementierung am Client als Observer an.
+Beides geschieht über den Aufruf der API-Methode addObserver(Observer).
+Sobald sich der Analyzer anmeldet, wird auch der client im Server in eine spezielle Liste eingetragen.
+Das Abmelden wird analog mit deleteObserver(Observer) realisiert.
+
+\subsection {getFileList}
+
+Wie die bisherigen Methoden der API.
+Es wird auf Serverseite eine Liste von File-Objekten erzeugt und an den Client gesendet.
+Diese kann einfach an den Analyzer zurückgegeben werden.
 
 \subsection {notifyClients}
 %\begin{figure}[h]
