@@ -13,11 +13,11 @@ Entwurf:
 
 Backend:
 - BackendProcedure:
-  * get_with_defaults() statt get()
+  * get_with_defaults() statt get() + 'D' aus Legende gelöscht ✔
 - ConfigHandler Dia -> Schnittstelle Confighandler 
   * get_with_defaults() adden
   * UML Kleiner, Leerseite
-- ConfigHandlerProcedure: When config does not exist -> end
+- ConfigHandlerProcedure: When config does not exist -> end ✔
 - UserAgent bei config adden
 - Init: ,,angelegt wird der Ordner über -> : <-"
 - CrawlJobProcedure:
