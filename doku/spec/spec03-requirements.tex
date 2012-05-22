@@ -233,7 +233,7 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Jeder Domain-Ordner wird über eine dezentrale Versionsverwaltung (git) separat versioniert. 
 		Damit ist auch das Wiederherstellen älterer Versionen möglich.
 	\item [\req{Hinzufügen}{add}]
-		Beim Hinzufügen von neuen Dateien müssen diese der Versionsverwaltung bekanntgemacht werden (git add).
+		Beim Hinzufügen von neuen Dateien muss ein neuer Branch erstellt werden, und die Änderungen der Versionsverwaltung bekanntgemacht werden (git add).
 	\item [\req{Commit}{commit}]
 		Änderungen müssen stets mit einem Commit bestätigt werden.
 		Dabei wird zur Identifikation immer die in Abschnitt \ref{spec:model} 
@@ -248,12 +248,11 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		\end{description}
 	\item [\req{Ändern und Löschen}{update}]
 		Beim Überschreiben und Löschen von Dateien müssen keine besonderen Vorkehrungen getroffen werden.
-		Diese werden von der Versionierung in eine tiefere Versionsebene verschoben.
+		Diese werden von der Versionierung in andere Branches verschoben.
 	\item [\req{Schreiben in veraltete Verzeichnisse}{writeToOldDirs}]
 		Sollte in Ausnahmefällen in veraltete Verzeichnisse geschrieben werden, 
 		zum Beispiel weil die Daten von den Crawlern während einer Analyse geändert wurden,
-		dann werden die Daten verworfen und der Schreiber muss benachrichtigt werden.
-		(z.B. mittels einer Exception)
+		so wird der dazugehörige Branch hervorgeholt, und die Änderungen werden dort regulär committed.
 \end{description}
 
 

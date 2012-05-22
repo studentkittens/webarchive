@@ -254,7 +254,7 @@ Ein ,,Wget-Wrapper'' wird zum Crawlen verwendet, da wget alle vom iisys benötig
 in der kürze der Zeit kein gleichwertiger Ersatz implementierbar ist. Um das Crawlen global zu 
 beschleunigen wurde dieses ,,parellisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
 Um die Gesamtgeschwindigkeit des Systems zu steigern wird ebenfalls empfohlen die ,,tmp''-Crawlordner auf ein
-ramfs zu legen.
+ramfs (\url{http://wiki.debian.org/ramfs}) zu legen.
 
 \subsubsection{Wget}
 \label{ssub:wget}
@@ -424,7 +424,7 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
 \label{par:begr_ndung_}
 Die Filter werden in Python kodiert, da dies mit einfachem eingebauten Support für
 Dictionaries und Subinterpreter eine optimale Lösung darstellt.
-darstellt. Java ist in unsere Augen nicht sinnvoll da einzelne Filter
+Java ist in unsere Augen nicht sinnvoll da einzelne Filter
 selten über mehr als 100 Zeilen Quelltext verfügen werden.
 % paragraph begr_ndung_ (end)
 
@@ -503,7 +503,7 @@ class DBGenerator:
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \url{http://de.wikipedia.org/wiki/Rsync}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
-Rsync wird hier direkt auf Systemebene (subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])) mit den Paramentern
+Rsync wird hier direkt auf Systemebene (\texttt{subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])}) mit den Paramentern
 \begin{itemize}
     \item \texttt{[--archive]}, archive mode
     \item \texttt{[--delete]}, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
@@ -543,9 +543,8 @@ Durch die Delta-Kodierung/Checksummen wird das Übertragungsvolumen minimiert.
 \label{ssub:git}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu werden 
-die Dateien ins Archiv per Git hinzugefügt, der Stand wird ,,commited''
-und der erzeugte Commit wird mit der ,,commitTime'' getaggt.
+Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu wird für jeden Crawlvorgang ein Branch erstellt welcher nach der ,,commitTime'' benannt ist. 
+Dateien werden in diesen Branch synchronisiert und über ein ,,commit'' bestätigt.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
@@ -583,7 +582,7 @@ class Git:
 Da die Implementierung eines nativen Python Interface zu git selbst mit GitPython
 \url{http://gitorious.org/git-python} oder Dulwich \url{http://www.samba.org/~jelmer/dulwich/}
 für die uns zu Verfügung stehenden 6 Wochen zu aufwendig ist, wird die Implementierung über
-Python\'s subprocess.call() Schnittstelle statt finden. Durch den ,,Proof of concept'' können
+Python's \texttt{subprocess.call()} Schnittstelle statt finden. Durch den ,,Proof of concept'' können
 erste Erfahrungen mit git als Archivierungssystem gesammelt werden und bei Bedarf eine native Implementierung
 umgesetzt werden.
 
@@ -647,8 +646,9 @@ def verbosity(severity):
 \section{Database Recovery} 
 \label{sec:database_recovery}
 \ref{req:Db:recovery}
-Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch die
-jeweilige Git-History von hinten nach vorne. Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
+Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch alle dort vorhandenen Branches, und traversieren deren 
+jeweilige Git-History von hinten nach vorne.
+Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
 % section database_recovery (end)
 
 \section{Util} 
