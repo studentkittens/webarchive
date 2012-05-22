@@ -1,13 +1,7 @@
 package webarchive.dbaccess;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import webarchive.api.CommitTag;
 
 /**
  * Generic class for database access services for model classes.
@@ -21,7 +15,7 @@ public abstract class SelectJoin<Type> extends Select {
 	private String sqlTemplate;
 	private int maxWhere;
 
-	public SelectJoin(DBAccess dbAccess, String[] tables, String[] keys) {
+	public SelectJoin(DbAccess dbAccess, String[] tables, String[] keys) {
 		super(dbAccess);
 		this.sqlTemplate = buildSqlTemplate(tables, keys);
 		this.maxWhere = keys.length;

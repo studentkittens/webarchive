@@ -78,7 +78,7 @@ public class SelectMetaData extends SelectJoin<MetaData> {
 		return super.select(new String[]{whereMimeType, whereMeta, whereDomain, whereCommitTagJoinHistory}, orderBy);
 	}
 
-	public SelectMetaData(DBAccess dbAccess) {
+	public SelectMetaData(DbAccess dbAccess) {
 		super(dbAccess, new String[]{
 			"mimeType",	"metaData", "domain", "commitTag", "history"
 		}, new String[]{

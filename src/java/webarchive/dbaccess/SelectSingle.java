@@ -14,7 +14,7 @@ public abstract class SelectSingle<Type> extends Select {
 
 	private String sqlTemplate;
 
-	public SelectSingle(DBAccess dbAccess, String table) {
+	public SelectSingle(DbAccess dbAccess, String table) {
 		super(dbAccess);
 		buildSqlTemplate(table);
 	}

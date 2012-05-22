@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SqliteAccess implements DBAccess {
+public class SqliteAccess implements DbAccess {
 	
 	private String driver = "org.sqlite.JDBC";
 	private File databasePath;
@@ -52,7 +52,7 @@ public class SqliteAccess implements DBAccess {
 		}
 	}
 	/* (non-Javadoc)
-	 * @see main.persistence.DBAccess#getConnection()
+	 * @see main.persistence.DbAccess#getConnection()
 	 */
 	@Override
 	public Connection getConnection() throws SQLException {

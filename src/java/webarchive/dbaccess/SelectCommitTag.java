@@ -16,7 +16,7 @@ import webarchive.api.TimeStamp;
  */
 public class SelectCommitTag extends SelectJoin<CommitTag> {
 
-	public SelectCommitTag(DBAccess dbAccess) {
+	public SelectCommitTag(DbAccess dbAccess) {
 		super(dbAccess,new String[]{"commitTag","domain"}, new String[]{"domainId"});
 	}
 
