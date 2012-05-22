@@ -227,22 +227,27 @@ Es wird auf Serverseite eine Liste von File-Objekten erzeugt und an den Client g
 Diese kann einfach an den Analyzer zurückgegeben werden.
 
 \section {Client Notifier}
-% SABRINAS PART
+\liable{\sab}
 Zum Benachrichtigen über Neuerungen des Webarchivs für die Observer (Clients) wird ein Notifier eingesetzt.
 
-Dieser erhält beim Start ein Intervall, welches beschreibt, innerhalb welchen Zeitraum die Observer  benachrichtigt werden müssen. Ist das der Fall, startet ''Observerble'' die Benachrichtigungsroutine  "NotificationSequence". Sobald diese Beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen.
+Dieser erhält beim Start ein Intervall, welches beschreibt, 
+innerhalb welchen Zeitraums die Observer  benachrichtigt werden müssen. 
+Ist das der Fall, startet Observerble die Benachrichtigungsroutine NotificationSequence. 
+Sobald diese Beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen.
 
 \begin{figure}[H]
 	\centering
-%	\label{dia:design:frontend:sqc:getOutputStream}
+	\label{dia:design:frontend:sqc:notifier}
 	\includegraphics[width=\textwidth]{design/frontend/sequence/notifySequence.pdf}
 	\caption{Sequenzdiagramm: Notifier}
 \end{figure}
 %\subsection {Exception Handling}
 %\ref{req:Sv:comm:exceptions}
 
-Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, macht diese eine Anfrage bei der Datenbank. Als Antwort er hält sie Commit-Tags, welche anschließend in einer Liste zwischengespeichert werden. Danach sendet sie diese Liste an alle Clients. 
-
+Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, 
+macht diese eine Anfrage bei der Datenbank. 
+Als Antwort erhält sie Commit-Tags, welche anschließend in einer Liste zwischengespeichert werden. 
+Danach sendet sie diese Liste an alle Clients. 
 
 \section{Klassen und Komponenten}
 
@@ -275,9 +280,19 @@ Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, 
 	\caption{Klassendiagramm: Datenklassen}
 \end{figure}
 
-\subsection{XML-access}
+\subsection{Notifier-Klassen}
+\liable{\sab}
+
+\begin{figure}[H]
+	\centering
+	\label{dia:design:frontend:classes:notifier}
+	\includegraphics[width=0.5\textwidth]{design/frontend/classes/NotifyClass.pdf}
+	\caption{Klassendiagramm: Datenklassen}
+\end{figure}
+
+\subsection{xmlaccess-Klassen}
 \liable{\cii}
-\subsection{Database-access}
+\subsection{dbaccess-Klassen}
 \liable{\cii}
 
 \begin{figure}[H]
@@ -308,7 +323,7 @@ Die dbaccess-Klassen gliedern sich in die folgenden Teile:
 
 \ref{req:Sv:comm}
 \section{Test Analysetool} 
-\liable{\sab} \\
+\liable{\sab} 
 \ref{req:Cl:testanalyzer} \\
 	Das Analysetool wird als einfach Klasse mit main()-funktion implementiert.
 	Die Funktion hat den folgenden Ablauf.
