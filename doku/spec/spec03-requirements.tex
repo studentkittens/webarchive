@@ -23,7 +23,7 @@ und die Daten in das Archiv schreiben.
 		\begin{description}
 			\item [\subreq{Suchtiefe}{depth}]
 				Suchtiefe bis zu der Links gefolgt werden soll.
-			\item [\subreq{Crawlintervall}{tinterval}]
+			\item [\subreq{Crawlintervall}{interval}]
 				Zeitintervalle zwischen den Crawlvorgängen.
 			\item [\subreq{Maximale Instanzen}{maxInst}]
 				maximale Anzahl der gleichzeitig gestarteten Crawlerinstanzen.
@@ -33,6 +33,8 @@ und die Daten in das Archiv schreiben.
 				Man kann einstellen, ob robots.txt berücksichtigen werden soll.
 			\item [\subreq{User Agent}{userAgent}]
 				Man kann einen User Agent festlegen.
+			\item [\subreq{URL Liste}{urllist}]
+                Ein Pfad zu einer Liste mit zu crawlenden URLs ist definiert.
 			\item [\subreq{Archiv root Pfad}{root}]
 				Es wird der Wurzelpfad für die Archivordner festgelegt.
 		\end{description}
@@ -41,10 +43,6 @@ und die Daten in das Archiv schreiben.
 		\begin{description}
 			\item [\subreq{Überschreiben}{overwrite}]
 				Werte aus dem Config-file werden damit überschrieben.
-			\item [\subreq{URL-Liste}{urllist}]
-				Es kann eine Liste von URLs übergeben werden, 
-				die als Startpunkte für die Crawler verwendet werden sollen.
-				Die Übergabe von mindestens einem Element ist aber immer notwendig.
 			\item [\subreq{DB-Recovery erzwingen}{recover}]
 				Es kann ein Datenbank-Recovery erzwungen werden. Siehe auch \ref{req:Db:recovery}
 		\end{description}
@@ -53,12 +51,12 @@ und die Daten in das Archiv schreiben.
 \subsection{Ausführung des Crawlvorgangs} \label{spec:crawler:exec}
 \begin{description}
 	\item [\req{Start in Intervallen}{startInterval}]
-		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:conf:tinterval} festgelegtem
+		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:conf:interval} festgelegtem
 		Interval neu in Gang gesetzt. 
 	\item [\req{Parallelität}{concurrent}]
 		Die Ausführung der Crawlvorgänge soll parallel durchgeführt werden.
 	\item [\req{URL-Queue}{urlqueue}]
-		Alle aus \ref{req:Cr:cmd:urllist} werden in eine Warteschlange geschrieben.
+		Alle aus \ref{req:Cr:conf:urllist} werden in eine Warteschlange geschrieben.
 	\item [\req{Instanziierung}{instance}]
 				Für die Crawlerinstanzen wird ein externes Tool verwendet: WGET
 		\begin{description}
@@ -137,10 +135,7 @@ und die Daten in das Archiv schreiben.
 		\begin{description}
 			\item [\subreq{Update}{update}]
 				Veraltete \arc s werden komplett durch die neuen ersetzt
-				(und dadurch von der Versionierung in einen älteren Versionstand verschoben).
-			\item [\subreq{Nicht vorhandene Ordner}{del}]
-				\arc s, welche im TMP-Ordner aber nicht im Webarchiv vorhanden sind, werden
-				komplett aus dem Archiv gelöscht (und landen ebenfalls in der Versionierung)
+				(und dadurch von der Versionierung in einen älteren Branch verschoben).
 		\end{description}
 	\item [\req{Datenbankaktualisierung}{dbupdate}]
 		Die Datenbank wird nun mithilfe der zwischengespeicherten Metadaten aktualisiert.
@@ -184,7 +179,7 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		innerhalb der Domain nachgebildet.
 	\item Die einzelnen Dateien werden durch \arc-Ordner ersetzt, bzw. in diese verschoben.
 	\item Jedes \arc\ enthält die Quell-Datei, 
-		die aber in data.<Endung> unbenannt wurde.
+		die aber in ,,data'' unbenannt wurde.
 		sowie die dazugehörige XML-Datei (data.xml). 
 		Ein \arc\ kann aber auch weitere Dateien enthalten, welche nach dem
 		Crawlen hinzugefügt werden können.
