@@ -4,40 +4,40 @@ Allgemein:
 
 Spec:
 - Hinzufügen: branch erstellen ✔
-- Commit: -"-
-- Ändern und Löschen: -"-
-- Schreiben in veraltete Verzeichnisse: -"-
+- Commit: -"-✔
+- Ändern und Löschen: -"-✔
+- Schreiben in veraltete Verzeichnisse: -"-✔
 
 Entwurf:
 - Verantwortlich?
 
 Backend:
 - BackendProcedure:
-  * get_with_defaults() statt get() + 'D' aus Legende gelöscht ✔
+  * get_with_defaults() statt get() + ??? ✔
 - ConfigHandler Dia -> Schnittstelle Confighandler 
   * get_with_defaults() adden
   * UML Kleiner, Leerseite
-- ConfigHandlerProcedure: When config does not exist -> end ✔
-- UserAgent bei config adden
-- Init: ,,angelegt wird der Ordner über -> : <-"
+- ConfigHandlerProcedure: When config does not exist -> end✔
+- UserAgent bei config adden✔
+- Init: ,,angelegt wird der Ordner über -> : <-"✔
 - CrawlJobProcedure:
-  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein ✔
-  * git branch and commi -> git commit ✔
+  * Cleaner - Subdiagramm machen, mit Filteraufruf in Cleaner Section rein✔
+  * git branch and commit -> git commit✔
   * Punkt ,,D'' in Subdiagramm unwandeln, in DB Generator Section rein
-- parellisiert. 
-- RamFs -> Weblink
-- darstellt. darstellt.
-- URL Links vlt. als footnote
-- 'subprocess.call' als monospace
-- GitSection: tag -> branch
-- El Pythones
+- parellisiert. ✔
+- RamFs -> Weblink✔
+- darstellt. darstellt.✔
+- URL Links vlt. als footnote✔
+- 'subprocess.call' als monospace✔
+- GitSection: tag -> branch✔
+- El Pythones✔
 - Logger Section: Dia verkleinern, unter Schnittstelle reinmachen
   * Serverity -> Severity
   * CmdInt -> STDOUT
-- Database Recovery -> branches.
+- Database Recovery -> branches.✔
 - Util,  try_lock, lock Schnittstelle.
-- Javadapter: 
-  * Schnittstelle: path argument wegmachen
-  * Javadapter port in der config, default 42421
+- Javadapter: ✔
+  * Schnittstelle: path argument wegmachen✔
+  * Javadapter port in der config, default 42421✔
 - 
 
