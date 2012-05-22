@@ -29,33 +29,31 @@ if __name__ == '__main__'
    unittest.main()
 \end{lstlisting}
 
-
 \newpage
 \section{Programmablauf} 
 \label{sec:programmablauf}
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \label{dia:design:backend:overview}
 \includegraphics[width=\textwidth]{design/backend/gfx/backend_procedure.eps}
 \caption{Ablaufprozedur Backend}
 \end{figure}
 
-
 % section programmablauf (end)
 
+\newpage
 \section{Zentrale Module} 
 \label{sec:zentrale_module}
 
 \subsection{ConfigHandler}
-\includegraphics[width=\textwidth]{design/backend/gfx/ConfigHandler.pdf}
-\label{sub:confighandler}
+
 \paragraph{Ablauf:}
 \label{par:ablauf_}
 Grundlegender Ablauf beim Lesen von Configwerten:
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\label{dia:design:backend:overview}
-	\includegraphics[width=\textwidth]{design/backend/gfx/getting_value.eps}F
+	\includegraphics[width=\textwidth]{design/backend/gfx/getting_value.eps}
 	\caption{Werte aus der Konfigurationsdatei holen}
 \end{figure}
 
@@ -64,14 +62,18 @@ Grundlegender Ablauf beim Lesen von Configwerten:
 (Entsprechend: \ref{spec:conf})
 \label{par:beschreibung_}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
-\paragraph{Schnittstelle:}
-\label{par:schnittstelle_}
 Xml geschrieben und hat folgenden Aufbau:
     \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
 Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so
 lässt sich der Wert ,,Serverport'' über eine Punkt-separierte ,,URI'' auslesen: \texttt{webarchive.server.port} 
 \\ \\
 Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optional ausgelassen werden.
+
+\begin{figure}[h]
+\includegraphics[width=0.6\textwidth]{design/backend/gfx/ConfigHandler.pdf}
+\label{sub:confighandler}
+\caption{Grobe Übersicht über den ConfigHandler}
+\end{figure}
 
 \paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung}
@@ -84,8 +86,7 @@ und immer verfügbare config.xml angelegt, auf die zurückgefallen werden
 kann.
 
 % paragraph begr_ndung (end)
-
-
+\newpage
 \subsection{Commandline Interface}
 \label{sub:commandline_interface}
 \paragraph{Beschreibung}
@@ -96,7 +97,8 @@ Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktioniere
 archive [--general-options] submodule [--arguments-specific-to-submodule]
 \end{verbatim}
 submodule kann dabei einer der folgenden Module sein:
-\begin{table}[h]
+
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|l|}
     \hline
@@ -136,6 +138,7 @@ Weitere Einstellung müssen händisch in der Config nachgetragen werden.
 Angelegt wird der Ordner über \texttt{archive init /pfad/zum/archive}.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle}
+\hfill
 \begin{lstlisting}[language=python]
 def init_archive(path = '.'):
     """
@@ -150,7 +153,7 @@ def init_archive(path = '.'):
     pass
 \end{lstlisting}
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Das Anlegen des Archiv-Ordners wurde nicht dem Nutzer überlassen, da
 Fehler hierbei sich auf die spätere Funktionsweise auswirken können.
@@ -211,8 +214,9 @@ class CrawlManager:
 \subsection{Crawljob}
 \label{sub:crawljob}
 \paragraph{Ablauf:}
+    Als Programmaublaufplan eine grobe Übersicht:
 \label{par:ablauf_}
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:backend:overview}
 	\includegraphics[width=\textwidth]{design/backend/gfx/crawljob.eps}
@@ -229,6 +233,7 @@ Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsv
 Die Lage dieses Verzeichnisses kann in der Config festgelegt werden.
 \paragraph{Schnittstelle:}
 \label{par:api_}
+\hfill
 
 \begin{lstlisting}[language=python]
 class CrawlJob():
@@ -276,7 +281,7 @@ Die allgemeine Webseitenstruktur wird dabei intakt gelassen:
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
-
+\hfill
 \begin{lstlisting}[language=python]
 class Wget():
     def __init__(self, tmpfolder, url):
@@ -306,8 +311,7 @@ class Wget():
 \end{lstlisting}
 
 
-% paragraph begr_ndung_hintergrund_ (end)
-% paragraph schnittstelle_ (end)
+\newpage
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
 \paragraph{Beschreibung:}
@@ -344,6 +348,7 @@ der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim
 
 \paragraph{Schnittstelle:} 
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Cleaner():
     def __init__(self, path):
@@ -420,7 +425,7 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
 \end{lstlisting}
 % paragraph schnittstelle_ (end)
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Die Filter werden in Python kodiert, da dies mit einfachem eingebauten Support für
 Dictionaries und Subinterpreter eine optimale Lösung darstellt.
@@ -439,6 +444,7 @@ geschrieben (\texttt{data.xml}, siehe \ref{spec:xml})
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 
 \begin{lstlisting}[language=python]
 class XmlGenerator:
@@ -476,6 +482,7 @@ Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class DBGenerator:
     def __init__(self, meta_obj_list):
@@ -503,7 +510,12 @@ class DBGenerator:
 Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \footnote{\url{http://de.wikipedia.org/wiki/Rsync}}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
-Rsync wird hier direkt auf Systemebene (\texttt{subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])}) mit den Paramentern
+Rsync wird hier direkt auf Systemebene mit folgenden Paramentern ausgeführt:
+\begin{figure}[H]
+    \centering    
+    \texttt{subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])}
+\end{figure}
+
 \begin{itemize}
     \item \texttt{[--archive]}, archive mode
     \item \texttt{[--delete]}, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
@@ -513,6 +525,7 @@ aufgerufen um die neu gecrawlten Dateien ins Archiv zu ,,spiegeln''.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Rsync:
     def __init__(self, path_src, path_dest):
@@ -548,6 +561,7 @@ Dateien werden in diesen Branch synchronisiert und über ein ,,commit'' bestäti
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Git:
     def __init__(self, domain):
@@ -589,12 +603,16 @@ umgesetzt werden.
 
 % paragraph begr_ndung_hintergrund_ (end)
 \subsection{Logger}
-\includegraphics[width=\textwidth]{design/backend/gfx/LogHandler.pdf}
+\label{sub:logger}
+\begin{figure}[H]
+    \centering    
+    \includegraphics[width=0.6\textwidth]{design/backend/gfx/LogHandler.pdf}
+    \caption{Grobe Übersicht über die Logfunktionalität}
+\end{figure}
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung}
 
-
-\label{sub:logger}
 Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert die folgenden Error Level:
 
 \begin{table}[h]
@@ -618,8 +636,6 @@ Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert 
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
-
-% paragraph schnittstelle_ (end)
 Folgende Funktionen werden bereitgestellt:
 \begin{lstlisting}[language=python]
 def print(severity, *messages):
@@ -661,6 +677,7 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
     def lock(domain_path):
         """
@@ -712,7 +729,7 @@ Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
 Folgende Kommandos sollen dabei implementiert werden:
 Alle Kommandoes nehmen zusätzliche nicht-optionale Argumente die in
 eckigen Klammern angegeben sind.
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabular}{|p{4cm}|p{5cm}|p{7cm}|}
     \hline
     \textbf{Kommando} & \textbf{Returnwerte} & \textbf{Beschreibung} \\
@@ -747,9 +764,9 @@ eckigen Klammern angegeben sind.
   \end{tabular}
 \end{table}
 
-\paragraph{Schnittstellen:}
-\label{par:schnittstellen_}
-
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 def init_javadapter():
     """
