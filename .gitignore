@@ -12,3 +12,8 @@ javadoc/*
 #-- LaTeX
 doku/texout/*
 doku/dokumentation.pdf
+
+#-- backups
+*~
+
+

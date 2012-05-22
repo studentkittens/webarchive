@@ -103,7 +103,7 @@ select() entspricht der einfachsten Form der Client->Server Kommunikation.
 Hier wird das durch eine eigene Implementierung der select() der API vorgefertigte SQL-Statement nur and die dbSelect-Sequenz durchgereicht, welche eine Liste aus MetaDaten zurückliefert.
 Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer vorgelegt werden.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:sqc:select}
 	\includegraphics[width=\textwidth]{design/frontend/sequence/select-sequence.pdf}
@@ -111,7 +111,6 @@ Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer 
 \end{figure}
 
 \subsection {getFileList}
-\todo{sequence: getFileList}
 
 %\begin{figure}[h]
 %	\centering
@@ -156,7 +155,7 @@ Führt der Analyzer die eigens implementierte close()-Methode aus, setzt er die 
 Auf der Serverseite wird nach der Verarbeitung der Nachricht, ein Lock gesetzt und versucht die Daten des Buffer-Objekts in das Archiv zu schreiben.
 Anschließend wird der Lock entfernt, eine ,,SUCCESS''-Nachricht an den Client geschickt und die close()-Methode beendet.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:sqc:getOutputStream}
 	\includegraphics[width=\textwidth]{design/frontend/sequence/get-output-stream-sequence.pdf}
@@ -170,15 +169,14 @@ Nach erfolgreichem Locken erzeugt der Server ein Buffer-Objekt mit der Datei als
 Dieser erstellt einen ByteArrayInputStream(BAIS) mit Hilfe der Daten im Buffer-Objekt und gibt den BAIS nach Unlocken  an den Analyzer zurück.
 Der BAIS kann genau wie jeder andere Stream genutzt werden.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:sqc:getInputStream}
-	\includegraphics[width=0.5\textwidth]{design/frontend/sequence/get-input-stream-sequence.pdf}
+	\includegraphics[width=\textwidth]{design/frontend/sequence/get-input-stream-sequence.pdf}
 	\caption{Sequenzdiagramm: getInputStream}
 \end{figure}
 
 \subsection {getXMLData}
-\todo{sequence: getXMLData}
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -187,7 +185,6 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 %\end{figure}
 
 \subsection {addXMLData}
-\todo{sequence: addXMLData}
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -196,7 +193,6 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 %\end{figure}
 
 \subsection {add / deleteObserver}
-\todo{sequence: addObserver}
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
@@ -205,7 +201,6 @@ Der BAIS kann genau wie jeder andere Stream genutzt werden.
 %\end{figure}
 
 \subsection {notifyClients}
-\todo{sequence: notifyClients}
 %\begin{figure}[h]
 %	\centering
 %	\label{dia:design:frontend:sqc:select}
