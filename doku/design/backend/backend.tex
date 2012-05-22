@@ -29,29 +29,28 @@ if __name__ == '__main__'
    unittest.main()
 \end{lstlisting}
 
-
 \newpage
 \section{Programmablauf} 
 \label{sec:programmablauf}
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \label{dia:design:backend:overview}
 \includegraphics[width=\textwidth]{design/backend/gfx/backend_procedure.eps}
 \caption{Ablaufprozedur Backend}
 \end{figure}
 
-
 % section programmablauf (end)
 
+\newpage
 \section{Zentrale Module} 
 \label{sec:zentrale_module}
 
 \subsection{ConfigHandler}
-\label{sub:confighandler}
+
 \paragraph{Ablauf:}
 \label{par:ablauf_}
 Grundlegender Ablauf beim Lesen von Configwerten:
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\label{dia:design:backend:overview}
 	\includegraphics[width=\textwidth]{design/backend/gfx/getting_value.eps}
@@ -63,14 +62,18 @@ Grundlegender Ablauf beim Lesen von Configwerten:
 (Entsprechend: \ref{spec:conf})
 \label{par:beschreibung_}
 Dieser wird zum Lesen und Setzen der Konfigurationswerte verwendet. Die Konfigurationsdatei ist in 
-\paragraph{Schnittstelle:}
-\label{par:schnittstelle_}
 Xml geschrieben und hat folgenden Aufbau:
     \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../../conf/webarchive.conf.xml}
 Der Zugriff auf bestimmte Werte ist nach Domainprinzip aufgebaut, so
 lässt sich der Wert ,,Serverport'' über eine Punkt-separierte ,,URI'' auslesen: \texttt{webarchive.server.port} 
 \\ \\
 Der erste Knoten \texttt{webarchive} ist stets vorhanden, und kann daher optional ausgelassen werden.
+
+\begin{figure}[h]
+\includegraphics[width=0.6\textwidth]{design/backend/gfx/ConfigHandler.pdf}
+\label{sub:confighandler}
+\caption{Grobe Übersicht über den ConfigHandler}
+\end{figure}
 
 \paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung}
@@ -83,8 +86,7 @@ und immer verfügbare config.xml angelegt, auf die zurückgefallen werden
 kann.
 
 % paragraph begr_ndung (end)
-
-
+\newpage
 \subsection{Commandline Interface}
 \label{sub:commandline_interface}
 \paragraph{Beschreibung}
@@ -95,7 +97,8 @@ Das Interface soll dabei ähnlich wie git nach dem folgenden Schema funktioniere
 archive [--general-options] submodule [--arguments-specific-to-submodule]
 \end{verbatim}
 submodule kann dabei einer der folgenden Module sein:
-\begin{table}[h]
+
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|l|}
     \hline
@@ -132,9 +135,10 @@ ein Default-Configtemplate mit dem Pfad zum Archiv enthält, sowie einen leeren 
 in dem später die Crawldaten abgelegt werden.
 Weitere Einstellung müssen händisch in der Config nachgetragen werden.
 \\
-Angelegt wird der Ordner über %\verbatim{archive init /pfad/zum/archive}
+Angelegt wird der Ordner über \texttt{archive init /pfad/zum/archive}.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle}
+\hfill
 \begin{lstlisting}[language=python]
 def init_archive(path = '.'):
     """
@@ -149,7 +153,7 @@ def init_archive(path = '.'):
     pass
 \end{lstlisting}
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Das Anlegen des Archiv-Ordners wurde nicht dem Nutzer überlassen, da
 Fehler hierbei sich auf die spätere Funktionsweise auswirken können.
@@ -210,8 +214,9 @@ class CrawlManager:
 \subsection{Crawljob}
 \label{sub:crawljob}
 \paragraph{Ablauf:}
+    Als Programmaublaufplan eine grobe Übersicht:
 \label{par:ablauf_}
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:backend:overview}
 	\includegraphics[width=\textwidth]{design/backend/gfx/crawljob.eps}
@@ -228,6 +233,7 @@ Bevor die einzelnen Submodule abgearbeitet werden, wird ein temporäres Arbeitsv
 Die Lage dieses Verzeichnisses kann in der Config festgelegt werden.
 \paragraph{Schnittstelle:}
 \label{par:api_}
+\hfill
 
 \begin{lstlisting}[language=python]
 class CrawlJob():
@@ -251,9 +257,9 @@ class CrawlJob():
 \label{par:begr_ndung_hintergrund_}
 Ein ,,Wget-Wrapper'' wird zum Crawlen verwendet, da wget alle vom iisys benötigten Funktionalitäten bietet und
 in der kürze der Zeit kein gleichwertiger Ersatz implementierbar ist. Um das Crawlen global zu 
-beschleunigen wurde dieses ,,parellisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
+beschleunigen wurde dieses ,,paralellisiert'', es werden hier einfach mehrere Wget-Wrapper Instantzen gestartet.
 Um die Gesamtgeschwindigkeit des Systems zu steigern wird ebenfalls empfohlen die ,,tmp''-Crawlordner auf ein
-ramfs zu legen.
+ramfs (\footnote{\url{http://wiki.debian.org/ramfs}}) zu legen.
 
 \subsubsection{Wget}
 \label{ssub:wget}
@@ -275,7 +281,7 @@ Die allgemeine Webseitenstruktur wird dabei intakt gelassen:
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
-
+\hfill
 \begin{lstlisting}[language=python]
 class Wget():
     def __init__(self, tmpfolder, url):
@@ -305,8 +311,7 @@ class Wget():
 \end{lstlisting}
 
 
-% paragraph begr_ndung_hintergrund_ (end)
-% paragraph schnittstelle_ (end)
+\newpage
 \subsubsection{Cleaner}
 \label{ssub:cleaner}
 \paragraph{Beschreibung:}
@@ -340,9 +345,18 @@ ohne dass weitere Filter aufgerufen werden müssen.
 \\
 Die gesammelten Metadaten werden in einem Metadatenobjekt gesammelt. Die gesammelten Daten entsprechen dabei 
 der Liste aus \ref{spec:model} abzüglich der ,,commitTime'', da diese erst beim Check-In erhoben wird.
-
+\newpage
+\paragraph{Ablauf:}
+\label{par:ablauf_}
+\hfill
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{design/backend/gfx/cleaner.eps}
+	\caption{Cleaner Prozedur}
+\end{figure}
 \paragraph{Schnittstelle:} 
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Cleaner():
     def __init__(self, path):
@@ -419,11 +433,11 @@ Filter werden während des ,,Cleaner'' Vorgangs ausgeführt.
 \end{lstlisting}
 % paragraph schnittstelle_ (end)
 
-\paragraph{Begründung:}
+\paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_}
 Die Filter werden in Python kodiert, da dies mit einfachem eingebauten Support für
 Dictionaries und Subinterpreter eine optimale Lösung darstellt.
-darstellt. Java ist in unsere Augen nicht sinnvoll da einzelne Filter
+Java ist in unsere Augen nicht sinnvoll da einzelne Filter
 selten über mehr als 100 Zeilen Quelltext verfügen werden.
 % paragraph begr_ndung_ (end)
 
@@ -438,6 +452,7 @@ geschrieben (\texttt{data.xml}, siehe \ref{spec:xml})
 Beim Xml generieren werden die Metadaten mit dem aktuellen Systemdatum versehen.
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 
 \begin{lstlisting}[language=python]
 class XmlGenerator:
@@ -472,9 +487,20 @@ erst kurz vor dem Synchronisieren ins Archiv generiert und auf die Festplatte ge
 Analog zur Xml-Generierung wird ein SQL-Statement erstellt, dass Daten aktualisiert oder neu hinzufügt.
 Ist die Datenbank noch nicht vorhanden so wird sie neu erstellt.
 % paragraph beschreibung_ (end)
+\paragraph{Ablauf:}
+\label{par:ablauf_}
+\hfill
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{design/backend/gfx/dbupdate.eps}
+	\caption{DB Update Prozedur}
+\end{figure}
 
+
+% paragraph ablauf_ (end)
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class DBGenerator:
     def __init__(self, meta_obj_list):
@@ -499,10 +525,15 @@ class DBGenerator:
 \label{ssub:rsync}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \url{http://de.wikipedia.org/wiki/Rsync}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
+Rsync ist eine Managementschicht für das Unix Tool ,,rsync'' \footnote{\url{http://de.wikipedia.org/wiki/Rsync}}. Rsync wird verwendet um die gecrawlten Daten sauber ins Archiv zu synchronisieren.
 Hierbei wird der aktuelle gecrawlte Inhalt ins Archiv gespiegelt.
 \\
-Rsync wird hier direkt auf Systemebene (subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])) mit den Paramentern
+Rsync wird hier direkt auf Systemebene mit folgenden Paramentern ausgeführt:
+\begin{figure}[H]
+    \centering    
+    \texttt{subprocess.call(['rsync','--archive','--checksum','--delete','src','dest'])}
+\end{figure}
+
 \begin{itemize}
     \item \texttt{[--archive]}, archive mode
     \item \texttt{[--delete]}, nicht mehr vorhandene Dateien werden im Zielverzeichnis gelöscht
@@ -512,6 +543,7 @@ aufgerufen um die neu gecrawlten Dateien ins Archiv zu ,,spiegeln''.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Rsync:
     def __init__(self, path_src, path_dest):
@@ -542,12 +574,12 @@ Durch die Delta-Kodierung/Checksummen wird das Übertragungsvolumen minimiert.
 \label{ssub:git}
 \paragraph{Beschreibung:}
 \label{par:beschreibung_}
-Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu werden 
-die Dateien ins Archiv per Git hinzugefügt, der Stand wird ,,commited''
-und der erzeugte Commit wird mit der ,,commitTime'' getaggt.
+Das Git Modul ist ein Wrapper für das SCM ,,git''. Es wird verwendet um das Archiv mit einer Versionierung auszustatten. Hierzu wird für jeden Crawlvorgang ein Branch erstellt welcher nach der ,,commitTime'' benannt ist. 
+Dateien werden in diesen Branch synchronisiert und über ein ,,commit'' bestätigt.
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
 class Git:
     def __init__(self, domain):
@@ -580,20 +612,25 @@ class Git:
 \paragraph{Begründung/Hintergrund:}
 \label{par:begr_ndung_hintergrund_}
 Da die Implementierung eines nativen Python Interface zu git selbst mit GitPython
-\url{http://gitorious.org/git-python} oder Dulwich \url{http://www.samba.org/~jelmer/dulwich/}
+\footnote{\url{http://gitorious.org/git-python}} oder Dulwich \footnote{\url{http://www.samba.org/~jelmer/dulwich/}}
 für die uns zu Verfügung stehenden 6 Wochen zu aufwendig ist, wird die Implementierung über
-Python\'s subprocess.call() Schnittstelle statt finden. Durch den ,,Proof of concept'' können
+Python's \texttt{subprocess.call()} Schnittstelle statt finden. Durch den ,,Proof of concept'' können
 erste Erfahrungen mit git als Archivierungssystem gesammelt werden und bei Bedarf eine native Implementierung
 umgesetzt werden.
 
 
 % paragraph begr_ndung_hintergrund_ (end)
 \subsection{Logger}
+\label{sub:logger}
+\begin{figure}[H]
+    \centering    
+    \includegraphics[width=0.6\textwidth]{design/backend/gfx/LogHandler.pdf}
+    \caption{Grobe Übersicht über die Logfunktionalität}
+\end{figure}
+
 \paragraph{Beschreibung:}
 \label{par:beschreibung}
 
-
-\label{sub:logger}
 Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert die folgenden Error Level:
 
 \begin{table}[h]
@@ -617,8 +654,6 @@ Der Logger wird für das zentrale Loggen im Backend verwendet. Er implementiert 
 
 \paragraph{Schnittstelle:}
 \label{par:schnittstelle_}
-
-% paragraph schnittstelle_ (end)
 Folgende Funktionen werden bereitgestellt:
 \begin{lstlisting}[language=python]
 def print(severity, *messages):
@@ -645,15 +680,50 @@ def verbosity(severity):
 \section{Database Recovery} 
 \label{sec:database_recovery}
 \ref{req:Db:recovery}
-Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch die
-jeweilige Git-History von hinten nach vorne. Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
+Das Recovery-Werkzeug traversiert über alle momentan vorhandenen Domains, und laufen durch alle dort vorhandenen Branches, und traversieren deren 
+jeweilige Git-History von hinten nach vorne.
+Dabei wird aus den XML Metadaten eine neue Datenbank gebildet.
 % section database_recovery (end)
 
 \section{Util} 
 \label{sec:util}
+\paragraph{Beschreibung:}
+\label{par:beschreibung_}
 Das Util Modul stellt verscheidene Funktionen die von mehreren Modulen genutzt werden bereit.
 Erwähnenswert ist hier der ,,Lockmechanismus''
 auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schützen.
+
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\hfill
+\begin{lstlisting}[language=python]
+    def lock(domain_path):
+        """
+        Create a lockfile in domain, if already
+        being blocked wait till it is unlocked
+
+        Returns: true if lock could be acquired, false on failure
+        """
+        pass
+
+    def try_lock(domain_path):
+        """
+        As lock(), but return immediately when locking is not possible,
+
+        Returns: true on success, false on already locked domain
+        """
+        pass
+
+    def unlock(domain_path):
+        """
+        Unlocks previously created Lock, does nothing if not already locked.
+
+        Returns: true if a lock was removed, false if none was found
+        """
+        pass
+\end{lstlisting}
+
+
 
 \section{Javadapter} 
 \label{sec:javadapter}
@@ -662,7 +732,8 @@ auf Dateisystemebene um Daten beim Zugriff auf gemeinsame  Ressourcen zu schütz
 Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
 \begin{description}
   \item [Daemon] Er ist als Daemon implementiert, und ist über einen
-    definierten Hostname und Port erreichbar (Hier: \texttt{localhost:42421})
+    definierten Hostname und konfigurierbaren Port erreichbar 
+    (Standardmäßig: \texttt{localhost:42421})
   \item [Kommunikation] Jegliche Interaktion erfolgt über ein
     zeilenbasiertes Textprotokoll. Der Client (Hier: Der Java-Server)
     sendet definerte Kommandos, welche mit mit einer Antwortzeile
@@ -676,7 +747,7 @@ Der ,,Javadapter'' stellt eine Schnittstelle zwischen Python und Java dar.
 Folgende Kommandos sollen dabei implementiert werden:
 Alle Kommandoes nehmen zusätzliche nicht-optionale Argumente die in
 eckigen Klammern angegeben sind.
-\begin{table}[h]
+\begin{table}[H]
   \begin{tabular}{|p{4cm}|p{5cm}|p{7cm}|}
     \hline
     \textbf{Kommando} & \textbf{Returnwerte} & \textbf{Beschreibung} \\
@@ -711,14 +782,14 @@ eckigen Klammern angegeben sind.
   \end{tabular}
 \end{table}
 
-\paragraph{Schnittstellen:}
-\label{par:schnittstellen_}
-
+\paragraph{Schnittstelle:}
+\label{par:schnittstelle_}
+\hfill
 \begin{lstlisting}[language=python]
-def init_javadapter(path = '.'):
+def init_javadapter():
     """
     default way to start javadapter-server,
-    listening on port 42421
+    listening on a configured port (42421 by default)
     javadapter.lock (including pid) is written to root directory
     """
     pass
