@@ -107,9 +107,14 @@ und die Daten in das Archiv schreiben.
 		\begin{description}
 			\item [\subreq{url}{url}]
 				Die Original-URL wird aus dem aktuellen Ordnerpfad abgeleitet.
-			\item [\subreq{title}{title}]
-				Falls die Datei ein HTML ist, 
-				muss der Titel aus dem Inhalt geparst werden.
+			\item [\subreq]{title}{title}
+				Da das title-feld generisch gehalten ist, 
+				muss die Extraktionsschnittstelle so erweiterbar sein,
+				dass verschiedene Formate unabhängig behandelt werden können. 
+			\item [\subreq{HTML-title}{htmltitle}]
+				Es wird eine Titelextraktionsmethode
+				für HTML-Dateien implementiert, die
+				nach dem Titel-Tag sucht.
 			\item [\subreq{mimeType}{mimeType}]
 				Der MIME-Typ der Datei wird mit einer geeigneten Maßnahme ermittelt.
 			\item [\subreq{path}{path}]

@@ -8,8 +8,9 @@ Abbildung vonnöten.
 \section{Datenbank}
 Bei der Umsetzung des Datenmodells in ein Datenbankschema wird besonders auf kompakte Datenhaltung geachtet. 
 Die Typenbezeichnungen sind leicht SQLITE-affin, könnten aber bei der Änderung des DBMS relativ einfach umgewandelt werden.
-\paragraph{Normalisierung:} Um die angesprochene kompakte Speicherung der Daten zu erreichen,
-wird die Struktur stark normalisiert \ref{req:Db:normalize}. Zusammengefasst:
+\subsection{Normalisierung} Um die angesprochene kompakte Speicherung der Daten zu erreichen,
+wird die Struktur stark normalisiert \ref{req:Db:normalize}. \\ 
+paragraph{Beschreibung:}
 \begin{description}
 	\item [metaData]
 		In dieser Tabelle liegen alle statischen Teile einer Datei, die sich nicht mehr
@@ -45,7 +46,7 @@ verwendet. Damit ist eine einfache Portierbarkeit zwischen XML, Java, Python und
 \end{figure}
 
 \section{XML-Schema}
-Folgendes Skripting des XML-Schemas \ref{req:Xm:schema} zeigt den Aufbau der XML-Datei:
+Folgendes Skripting des XML-Schemas (\ref{req:Xm:schema}) zeigt den Aufbau der XML-Datei:
 \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../xml/file.xsd}
 \subsection{Metadaten}
 \ref{req:Xm:content:meta}
@@ -57,12 +58,12 @@ als Attribute enthalten.
 Damit ist der commitTag auch leichter auslesbar.
 
 
-Die Metadaten erfassen immer den gesamten Zustand innerhalb der Version (bzw. zu einem CommitTag)
+Im Gegensatz zum DB-Schema erfassen die XML-Metadaten immer den gesamten Zustand innerhalb der zugehörigen Version (bzw. zu einem CommitTag), also redundant. 
 \subsection{Daten}
-\ref{req:Xm:content:data}
+\ref{req:Xm:content:data} \\
 Das ,,data''-Element ist anfangs immer leer, kann aber durch Benutzer mittels der API-Schnittstellen 
 um weitere Elemente erweitert.
-Dabei ist auch das XSD-Schema entsprechend dem auskommentierten template zu erweitern.
+Dabei ist auch das XSD-Schema entsprechend dem auskommentierten Template zu erweitern.
 Der Name des umschließenden Elements muss dabei einmalig sein.
 
 Folgendes Listing zeigt ein Beispiel XML mit leerem data-Knoten:
@@ -71,13 +72,13 @@ Folgendes Listing zeigt ein Beispiel XML mit leerem data-Knoten:
 \section{Klassen} \label{design:data:classes}
 Diagramm \ref{dia:design:frontend:data:classes} zeigt die Umsetzung des Modells in Klassen.
 Aufgrund der 1:n-Beziehung (siehe oben) von Metadaten und CommitTags sind die entsprechenden
-Klassen auch getrennt. 
+Klassen auch getrennt.
 
 Damit ist es auch möglich speicherintern CommitTags in Metadaten wiederzuverwenden.
-Außerdem werden die CommitTags zur Benachrichtigung der Clients durch den Notifier benötigt.
+Außerdem werden die CommitTags zur Benachrichtigung der Clients durch den Notifier benötigt
+und ermöglichen ein effizienteres Auslesen aus der Datenbank.
 
-
-Die TimeStamp-klasse dient zur Vermittlung zwischen der textbasierten Speicherung von Datumswerten und der
+Die TimeStamp-Klasse dient zur Vermittlung zwischen der textbasierten Speicherung von Datumswerten und der
 programmierspracheninternen Darstellung z.B. java.util.Date.
 
 Analog zu den XML-Daten enthält ein Metadatenobjekt immer den gesamten Zustand einer Datei zu einem CommitTag.
