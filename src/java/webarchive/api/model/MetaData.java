@@ -1,11 +1,13 @@
-package webarchive.api;
+package webarchive.api.model;
 
 import java.io.File;
 import java.net.URL;
+//TODO tests
 
 /**
  * Basic MetaData class in use with webarchive. It contains metadata of an
- * associated file, regarding its origin an position in the archive. It is also
+ * associated file, regarding its origin in the web and position in the archive.
+ * The inner state is related to certain version by the commitTag. It is also
  * used as a key-object to read or extend the archives data.
  *
  * @author ccwelich
@@ -21,23 +23,24 @@ public class MetaData {
 	private CommitTag commitTag;
 
 	/**
-	 * get the version commitTag. The commitTag is useful to get older versions
-	 * from the archives underlying versioning. The commitTag has following
-	 * syntax: "&lt;domain-url&gt;@&lt;timestamp&gt;" <br /> &lt;timestamp&gt; =
-	 * "yyyy-mm-dd hh:mm:ss" <br /> example: "www.heise.de@2012-04-23 21:04:42"
+	 * main constructor
 	 *
-	 * @return version commit tag
+	 * @param url origin url, asserted as not null
+	 * @param mimeType the mimeType of the file, asserted as not null
+	 * @param title generic title, depending on the mimeType of the file and
+	 * whether the origin file has a title. Asserted as either null or not
+	 * empty.
+	 * @param path the relative path inside the archive.
+	 * @param createTime the create time in archive.
+	 * @param commitTag the relating commitTag.
 	 */
-	public CommitTag getCommitTag() {
-		return commitTag;
-	}
-
 	public MetaData(URL url, String mimeType, String title, File path, TimeStamp createTime, CommitTag commitTag) {
-		assert url!=null;
-		assert mimeType!=null;
-		assert path!=null;
-		assert createTime!=null;
-		assert commitTag!=null;
+		assert url != null;
+		assert mimeType != null;
+		assert path != null;
+		assert createTime != null;
+		assert commitTag != null;
+		assert title == null || !title.isEmpty();
 		this.url = url;
 		this.mimeType = mimeType;
 		this.title = title;
@@ -47,16 +50,17 @@ public class MetaData {
 	}
 
 	/**
-	 * get the time of the last commit as a {@link java.util.TimeStamp}
+	 * Get the version commitTag. Each file is has a certain version, referenced
+	 * by the commitTag.
 	 *
-	 * @return commit time
+	 * @return the version commit tag
 	 */
-	public TimeStamp getCrawlTime() {
-		return commitTag.getCommitTime();
+	public CommitTag getCommitTag() {
+		return commitTag;
 	}
 
 	/**
-	 * get the time when the file has been created as a {@link java.util.TimeStamp}
+	 * get the time when the file has been created as a java.util.TimeStamp
 	 *
 	 * @return commit time
 	 */
@@ -74,7 +78,7 @@ public class MetaData {
 	}
 
 	/**
-	 * get the origin url
+	 * get the origin url in the web.
 	 *
 	 * @return origin url
 	 */
@@ -83,16 +87,7 @@ public class MetaData {
 	}
 
 	/**
-	 * get the domain of the file
-	 *
-	 * @return domain-name
-	 */
-	public String getDomain() {
-		return commitTag.getDomain();
-	}
-
-	/**
-	 * the MIME-type of the file
+	 * the MIME-type of the file.
 	 *
 	 * @return the MIME-type
 	 */

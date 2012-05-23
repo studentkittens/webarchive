@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.*;
-import webarchive.api.CommitTag;
+import webarchive.api.model.CommitTag;
 
 /**
  *

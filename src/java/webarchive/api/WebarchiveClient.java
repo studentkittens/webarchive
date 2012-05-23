@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import org.w3c.dom.Element;
+import webarchive.api.model.MetaData;
+import webarchive.api.select.Select;
+//TODO implementation by Eddy
 
 /**
- * Interface to webarchive. provides functions to select metadata from the
- * database, getting and adding files to html-archive-folder or reading or
- * extending XML-Metadata. Each html-file has its own html-archive-folder, which
- * contains at minimum the html itself, XML-Metadata. The folder is extendable
- * by arbitrary files.
+ * Interface to webarchive. provides functions to select data from the database,
+ * getting and adding files to html-archive-folder or reading or extending
+ * XML-Metadata. Each html-file has its own html-archive-folder, which contains
+ * at minimum the html itself, XML-Metadata. The folder is extendable by
+ * arbitrary files.
  *
  * @author ccwelich
  * @version 1
@@ -19,44 +21,14 @@ import org.w3c.dom.Element;
 public interface WebarchiveClient {
 
 	/**
-	 * selects metadata object from database by a join of mimeType, metaData and history-table.
-	 * selects get constrained by a list of CommitTags.
+	 * triggers select-statements with given Select-objects.
 	 *
-	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table ,
-	 * omitted if null<br /> example: "mimeName LIKE 'text/html'"
-	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
-	 * omitted if null<br /> example: "url LIKE 'www.heise.de%'"
-	 * @param whereHistoryAdditional additional minimal sql-syntax WHERE clauses
-	 * for history-table, append to commits-list with AND, omitted if null<br />
-	 * example: "WHERE title NOT null"
-	 * @param commits list of commit tags to use for WHERE clause
-	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
-	 * null<br /> examble: "lastCommitTime ASC"
-	 * @return a list of selected MetaData-objects
-	 * @throws Exception
+	 * @param select a select-object
+	 * @return a List of selected objects, type is relating to Select-object.
+	 * E.g. the result of SelectMetaData is castable to List<lt/>MetaData<gt/>.
+	 * @throws Exception if syntax of Selects were wrong or connection failed.
 	 */
-	public List<MetaData> select(List<CommitTag> commits, String whereHistoryAdditional, String whereMimeType, String whereMeta, String[] orderBy) throws Exception;
-
-	/**
-	 * selects metadata objects from database by a join of mimeType, metaData, domain, commitTag and history-table
-	 *
-	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table
-	 * , omitted if null<br /> example: "mimeName LIKE 'text/html'"
-	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
-	 * omitted if null<br /> example: "url LIKE 'www.heise.de%'"
-	 * @param whereDomain minimal sql-syntax WHERE clauses for domain-table ,
-	 * omitted if null<br />
-	 * @param whereCommitTagJoinHistory minimal sql-syntax WHERE clauses for
-	 * JOIN of commitTag and history-table , omitted if null<br /> example:
-	 * "WHERE title NOT null AND commitTime > '2012-05-15T17:30:00';"
-	 * @param where array of minimal sql-syntax WHERE clauses in , omitted if
-	 * null<br /> example: "url LIKE 'www.heise.de'"
-	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
-	 * null<br /> examble: "lastCommitTime ASC"
-	 * @return a list of selected MetaData-objects
-	 * @throws Exception
-	 */
-	public List<MetaData> select(String whereMimeType, String whereMeta, String whereDomain, String whereCommitTagJoinHistory, String[] orderBy) throws Exception;
+	public List select(Select select) throws Exception;
 
 	/**
 	 * get a file list of all files of a html-archive-folder
@@ -69,34 +41,34 @@ public interface WebarchiveClient {
 	public List<File> getFileList(MetaData meta) throws Exception;
 
 	/**
-	 * get a input stream of a file of a html-archive-folder
+	 * get an input stream of a file of a html-archive-folder in order to read
+	 * the files content.
 	 *
 	 * @param meta key to archive-folder
-	 * @param relativePath relative path of file inside archive-folder
+	 * @param file relative path and name of file inside archive-folder
 	 * @return inputstream of byte data
 	 * @throws Exception
 	 */
-	public InputStream getInputStream(MetaData meta, File relativePath) throws Exception;
+	public InputStream getInputStream(MetaData meta, File file) throws Exception;
 
 	/**
 	 * add new files to a buffer, which will be send when closing the stream.
 	 * Existing files cannot be overwritten with this method.
 	 *
 	 * @param meta key to archive-folder
-	 * @param relativePath relative path and name of file inside archive-folder
+	 * @param file relative path and name of file inside archive-folder
 	 * @return output stream to write data into archive file if request was
 	 * successful, otherwise null
 	 * @throws Exception
 	 */
-	public OutputStream getOutputStream(MetaData meta, File relativePath) throws Exception;
+	public OutputStream getOutputStream(MetaData meta, File file) throws Exception;
 
 	/**
-	 * fetches a XML-file from the server and returns an XMLEdit object, which can
-	 * read or add an element from or to the XML-file
+	 * fetches a XML-file from the server and returns an XMLEdit object, which
+	 * can read or add an element from or to the XML-file
 	 *
 	 * @param meta key to XML-Metadata
-	 * @param tagName tagname of an element
-	 * @return XMLEdit
+	 * @return XMLEdit XML-editor for further operations.
 	 * @throws Exception
 	 */
 	public XmlEdit getXMLEdit(MetaData meta) throws Exception;

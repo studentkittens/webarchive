@@ -2,10 +2,12 @@
 package webarchive.api;
 
 import java.net.InetAddress;
-
+//TODO implementation by Eddy
+//TODO tests
 /**
- *
- * @author ccwelich
+ * Factory class to create WebarchiveClient-instances.
+ * Has also methods to set WebarchiveClient-properties.
+ * @author eschneider
  */
 public class WebarchiveClientFactory {
 	private InetAddress server;
