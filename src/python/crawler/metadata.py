@@ -2,6 +2,9 @@
 # encoding: utf-8
 # metadata module
 #
+import mimetypes as mime
+import time
+import os
 
 class MetaData(dict):
     def __init__(self,**kwargs):
@@ -25,15 +28,20 @@ class MetaData(dict):
         m['url'] = cls.get_url()
         m['domain'] = cls.get_domain()
         m['abspath'] = file_path
+        m['title'] = "not set"
+        m['createtime'] = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(os.path.getctime(file_path))) 
+        m['committime'] = "not set" 
+        m['mime'] = mime.guess_type(file_path)[0]
         return m
 
+    #overwrite 'tostring' method
     #def __repr__(self):
     #    return 'MetaData'
     
         
 
 if __name__ == '__main__':
-    m = MetaData(hello = 'world')
-    print(m,m['hello'])
-
-
+    m = MetaData.build_metadata_from_file('/home/christoph/','/home/christoph/quickndirty/xml/meta.xml')
+    liste = ['url','domain','abspath','title','createtime','committime','mime']
+    for item in liste:
+        print(item + ': ' + m[item])
