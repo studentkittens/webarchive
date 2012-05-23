@@ -14,16 +14,16 @@ import webarchive.api.model.TimeStamp;
 //TODO Tests
 
 /**
- * Backend of {@link webarchive.api.select.SelectMetaData}
+ * Backend of {@link webarchive.api.select.SelectMetaByCommit}
  * @author ccwelich
  */
-public class SelectMetaData extends SelectJoin<MetaData> {
+public class SelectMetaByCommit extends SelectJoin<MetaData> {
 
-	public SelectMetaData(DbAccess dbAccess) {
+	public SelectMetaByCommit(DbAccess dbAccess) {
 		super(dbAccess, new String[]{
-				"mimeType", "metaData", "domain", "history", "commitTag"
+				"mimeType", "metaData", "history"
 			}, new String[]{
-				"mimeId", "metaId", "domainId", "commitId"
+				"mimeId", "metaId"
 			});
 	}
 
@@ -31,24 +31,19 @@ public class SelectMetaData extends SelectJoin<MetaData> {
 	protected MetaData fromResultSet(ResultSet rs, Object arg) throws
 		SQLException {
 		MetaData meta = null;
+		webarchive.api.select.SelectMetaByCommit map = (webarchive.api.select.SelectMetaByCommit) arg;
 		try {
-			URL url = new URL("http://" + rs.getString("url"));
+			URL url = new URL("http://"+rs.getString("url"));
 			String mimeType = rs.getString("mimeName");
 			String title = rs.getString("title");
 			File path = new File(rs.getString("path"));
 			TimeStamp createTime = new TimeStamp(rs.getString("createTime"));
-			CommitTag commitTag = new CommitTag(
-				rs.getInt("commitId"),
-				new TimeStamp(rs.getString("commitTime")),
-				rs.getString("domainName"));
+			CommitTag commitTag = map.getCommit(rs.getInt("commitId"));
 			meta = new MetaData(url, mimeType, title, path, createTime,
 				commitTag);
-		} catch (MalformedURLException ex) {
-			Logger.getLogger(SelectMetaData.class.getName()).
+		} catch (MalformedURLException | ParseException ex) {
+			Logger.getLogger(SelectMetaByCommit.class.getName()).
 				log(Level.SEVERE, null, ex);
-		} catch (ParseException ex) {
-			Logger.getLogger(SelectMetaData.class.getName()).log(Level.SEVERE,
-				null, ex);
 		}
 		return meta;
 	}

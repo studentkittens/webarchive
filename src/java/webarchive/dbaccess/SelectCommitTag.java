@@ -4,28 +4,24 @@ package webarchive.dbaccess;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.TimeStamp;
+//TODO Tests
 
 /**
- *
+ * Backend of {@link webarchive.api.select.SelectCommitTag}
  * @author ccwelich
  */
 public class SelectCommitTag extends SelectJoin<CommitTag> {
 
 	public SelectCommitTag(DbAccess dbAccess) {
-		super(dbAccess,new String[]{"commitTag","domain"}, new String[]{"domainId"});
+		super(dbAccess,new String[]{"domain","commitTag"}, new String[]{"domainId"});
 	}
 
-	public List<CommitTag> select(String where, String[] orderBy) throws SQLException {
-		return super.select(new String[]{where}, orderBy);
-	}
-	
 	@Override
-	protected CommitTag fromResultSet(ResultSet rs) throws SQLException {
+	protected CommitTag fromResultSet(ResultSet rs, Object arg) throws SQLException {
 		int id = rs.getInt("commitId");
 		String domain = rs.getString("domainName");
 		TimeStamp date = null;

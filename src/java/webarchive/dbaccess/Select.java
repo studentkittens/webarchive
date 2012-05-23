@@ -6,13 +6,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+//TODO Tests
 
 /**
- * Generic class for database access services for model classes.
+ * Generic class to select data from db and map it java data-objects.
  *
  * @author ccwelich
  *
- * @param <Type> type to save in database. Type is usually a model-class
+ * @param <Type> Type is is the classtype of results of selects.
  */
 public abstract class Select<Type> {
 
@@ -25,19 +26,23 @@ public abstract class Select<Type> {
 
 	/**
 	 * @param rs current row of resultset
-	 * @return one Object of this type
+	 * @param arg optional parameter, provided by executeSelect
+	 * @return one Object of this
 	 * @throws SQLException
 	 */
-	protected abstract Type fromResultSet(ResultSet rs) throws SQLException;
+	protected abstract Type fromResultSet(ResultSet rs, Object arg) throws
+		SQLException;
 
 	/**
-	 * return LinkedList of type t
+	 * return List of type
 	 *
-	 * @param sql
-	 * @return
+	 * @param selectStatement complete selectStatement
+	 * @param arg optional parameter, delegated to fromResultSet()
+	 * @return a list of type
 	 * @throws SQLException
 	 */
-	protected List<Type> executeSelect(String selectStatement) throws SQLException {
+	protected List<Type> executeSelect(String selectStatement, Object arg) throws
+		SQLException {
 		Connection connection = null;
 		List<Type> list = new LinkedList<>();
 		try {
@@ -45,7 +50,7 @@ public abstract class Select<Type> {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(selectStatement);
 			while (rs.next()) {
-				list.add(fromResultSet(rs));
+				list.add(fromResultSet(rs, arg));
 			}
 		} finally {
 			if (connection != null) {
@@ -55,10 +60,17 @@ public abstract class Select<Type> {
 		return list;
 	}
 
+	/**
+	 * appends the orderBy clauses at the end of the SQL-statement
+	 *
+	 * @param orderBy
+	 * @param sql
+	 */
 	protected void appendOrderBy(String[] orderBy, StringBuilder sql) {
 		if (orderBy != null && orderBy.length > 0) {
 			sql.append(" ORDER BY ");
 			for (String val : orderBy) {
+				assert val != null;
 				sql.append(val);
 				sql.append(", ");
 			}

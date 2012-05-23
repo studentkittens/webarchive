@@ -1,18 +1,22 @@
 package webarchive.api.select;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import webarchive.api.model.CommitTag;
 //TODO tests
 
 /**
- * Select-statement for MetaData-objects constrained by a given list of commitTags.
- * All MetaData are selected where the related commitTag is in the given list.
- * Use in favor for general SelectMetaData-class, if commits are already available.
+ * Select-statement for MetaData-objects constrained by a given list of
+ * commitTags. All MetaData are selected where the related commitTag is in the
+ * given list. Use in favor for general SelectMetaData-class, if commits are
+ * already available.
+ *
  * @author ccwelich
  */
-public class SelectMetaDataByCommitTags extends Select {
+public class SelectMetaByCommit extends Select {
 
-	private List<CommitTag> commits;
+	private Map<Integer, CommitTag> commits;
 
 	/**
 	 * selects MetaData-object from database by a join of mimeType, metaData and
@@ -29,22 +33,42 @@ public class SelectMetaDataByCommitTags extends Select {
 	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
 	 */
-	public SelectMetaDataByCommitTags(
+	public SelectMetaByCommit(
 		List<CommitTag> commits,
 		String whereHistoryAdditional,
 		String whereMimeType,
 		String whereMeta,
 		String... orderBy) {
+
 		super(new String[]{
-				whereHistoryAdditional,
 				whereMimeType,
-				whereMeta
+				whereMeta,
+				null
 			},
 			orderBy);
-		this.commits = commits;
+		this.commits = new HashMap<>();
+		super.getWhere()[2] = buildWhereHistory(commits, whereHistoryAdditional);
 	}
 
-	public List<CommitTag> getCommits() {
-		return commits;
+	public CommitTag getCommit(int id) {
+		return commits.get(id);
+	}
+
+	private String buildWhereHistory(List<CommitTag> commits, String add) {
+		StringBuilder where = new StringBuilder("commitId IN (");
+		for (CommitTag tag : commits) {
+			final int id = tag.getId();
+			this.commits.put(id, tag);
+			where.append(id);
+			where.append(", ");
+		}
+		where.setLength(where.length() - 2);
+		where.append(')');
+		if (add != null) {
+			where.append(" AND (");
+			where.append(add);
+			where.append(')');
+		}
+		return where.toString();
 	}
 }

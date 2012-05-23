@@ -52,8 +52,10 @@ public class TimeStamp {
 
 	@Override
 	public String toString() {
-		return date.toString();
+		return "TimeStamp{" + date + '}';
 	}
+
+	
 
 	/**
 	 * the date-time as

@@ -13,14 +13,17 @@ public class SelectMetaData extends Select {
 	 * domain, commitTag and history-table
 	 *
 	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table
-	 * , omitted if null<br /> example: "mimeName LIKE 'text/html'"
+	 * , omitted if null<br /> 
+	 * example: "mimeName LIKE 'text/html'"
 	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
-	 * omitted if null<br /> example: "url LIKE 'www.heise.de%'"
+	 * omitted if null<br /> 
+	 * example: "url LIKE 'www.heise.de%'"
 	 * @param whereDomain minimal sql-syntax WHERE clauses for domain-table ,
 	 * omitted if null<br />
-	 * @param whereCommitTagJoinHistory minimal sql-syntax WHERE clauses for
-	 * JOIN of commitTag and history-table , omitted if null<br /> example:
-	 * "WHERE title NOT null AND commitTime > '2012-05-15T17:30:00';"
+	 * @param whereCommitTag minimal sql-syntax WHERE clauses for commitTag-table, omitted if null<br /> example:
+	 * "commitTime > '2012-05-15T17:30:00';"
+	 * @param whereHistory minimal sql-syntax WHERE clauses for history-table , omitted if null<br /> example:
+	 * "title NOT null AND commitTime > '2012-05-15T17:30:00';"
 	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
 	 */
@@ -28,7 +31,9 @@ public class SelectMetaData extends Select {
 		String whereMimeType,
 		String whereMeta,
 		String whereDomain,
-		String whereCommitTagJoinHistory,
+		String whereHistory,
+				String whereCommitTag,
+
 		String... orderBy) {
 
 		super(
@@ -36,7 +41,8 @@ public class SelectMetaData extends Select {
 				whereMimeType,
 				whereMeta,
 				whereDomain,
-				whereCommitTagJoinHistory},
+				whereHistory,
+				whereCommitTag},
 			orderBy);
 	}
 }
