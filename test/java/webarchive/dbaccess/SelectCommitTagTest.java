@@ -45,16 +45,15 @@ public class SelectCommitTagTest {
 	@Test
 	public void testSelect() throws Exception {
 		System.out.println("select");
-		String[] where = {"domainName='www.heise.de'"};
+		String[] where = {"domainName='www.heise.de'",null};
 		String[] orderBy = {"commitTime DESC","domainName ASC"};
 		
 		List<CommitTag> expResult = null;
-		List<CommitTag> result = instance.select(where, orderBy);
+		List<CommitTag> result = instance.select(where, orderBy, null);
 		for(CommitTag tag : result) {
 			System.out.println("  "+tag.getId() + ", " +tag);
 		}	
 		
-		assertEquals(expResult, result);
 		fail("The test case is a prototype.");
 	}
 

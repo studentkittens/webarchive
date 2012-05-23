@@ -5,7 +5,7 @@ insert into mimeType(mimeName) values('application/pdf');
 insert into domain(domainName) values('www.heise.de');
 insert into domain(domainName) values('www.wikipedia.de');
 
-insert into commitTag(commitTime, domainId) values('2012-05-15T17:30:00', 1 );
+insert into commitTag(commitTime, domainId) values('2012-05-15T17:30:00', 1 ); 
 insert into commitTag(commitTime, domainId) values('2012-05-15T17:35:00', 2);
 insert into commitTag(commitTime, domainId) values('2012-05-15T18:30:00', 1);
 
@@ -38,7 +38,9 @@ select * from history;
 select * from mimeType join (
 	select * from metaData join (
 		select * from domain join (
-			select * from commitTag join history using (commitId)
+			select * from commitTag join (
+				select * from history 
+			) using (commitId)
 		) using (domainId)
 	) using (metaId)
 ) using (mimeId);

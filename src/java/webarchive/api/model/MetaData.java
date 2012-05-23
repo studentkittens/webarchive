@@ -68,6 +68,12 @@ public class MetaData {
 		return createTime;
 	}
 
+	@Override
+	public String toString() {
+		return "MetaData{" + "url=" + url + ", mimeType=" + mimeType + ", title=" + title + ", path=" + path + ", createTime=" + createTime + ", commitTag=" + commitTag + '}';
+	}
+	
+
 	/**
 	 * get the relative path of the archive-folder in the archive
 	 *

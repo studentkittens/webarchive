@@ -15,8 +15,27 @@ public class SelectCommitTag extends Select {
 	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
 	 * null<br /> examble: "lastCommitTime ASC"
 	 */
-	public SelectCommitTag(String where, String... orderBy) {
-		super(new String[]{where}, orderBy);
+	public SelectCommitTag(String whereCommitTag, String whereDomain, String... orderBy) {
+		super(new String[]{whereDomain, whereCommitTag}, orderBy);
 	}
 
 }
+/**
+	 * selects metadata objects from database by a join of mimeType, metaData,
+	 * domain, commitTag and history-table
+	 *
+	 * @param whereMimeType minimal sql-syntax WHERE clauses for mimeType-table
+	 * , omitted if null<br /> 
+	 * example: "mimeName LIKE 'text/html'"
+	 * @param whereMeta minimal sql-syntax WHERE clauses for metaData-table ,
+	 * omitted if null<br /> 
+	 * example: "url LIKE 'www.heise.de%'"
+	 * @param whereDomain minimal sql-syntax WHERE clauses for domain-table ,
+	 * omitted if null<br />
+	 * @param whereCommitTag minimal sql-syntax WHERE clauses for commitTag-table, omitted if null<br /> example:
+	 * "commitTime > '2012-05-15T17:30:00';"
+	 * @param whereHistory minimal sql-syntax WHERE clauses for history-table , omitted if null<br /> example:
+	 * "title NOT null AND commitTime > '2012-05-15T17:30:00';"
+	 * @param orderBy array of minimal sql-syntax ORDER BY clauses, ommitted if
+	 * null<br /> examble: "lastCommitTime ASC"
+	 */

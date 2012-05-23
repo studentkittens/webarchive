@@ -4,16 +4,23 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+//TODO Tests
+/**
+ * Implements DbAccess for sqlite dataBase.
+ * The database-file is accessed by a given path.
+ * @author ccwelich
+ */
 public class SqliteAccess implements DbAccess {
 	
 	private String driver = "org.sqlite.JDBC";
 	private File databasePath;
 	private String url;
-	
+	/**
+	 * 
+	 * @param dbPath the path to the database-file
+	 */
 	public SqliteAccess(File dbPath) {
 		setDatabasePath(dbPath);
 		try {
@@ -22,13 +29,12 @@ public class SqliteAccess implements DbAccess {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Driver class not found", ex);
 		}
 	}
-	
+	/**
+	 * get the database path
+	 * @return the database path
+	 */
 	public File getDatabasePath() {
 		return databasePath;
-	}
-
-	public String getUrl() {
-		return url;
 	}
 
 	private void setDatabasePath(File dbPath) {
@@ -36,24 +42,6 @@ public class SqliteAccess implements DbAccess {
 		url = "jdbc:sqlite:"+dbPath.getAbsolutePath();
 	}
 
-	public void createTables(String[] createTableStatements) throws SQLException {
-		Connection connection = null;
-		try {
-			connection = DriverManager.getConnection(url);
-			Statement statement = connection.createStatement();
-			for(String createTable : createTableStatements) {
-//				System.out.println("SqliteAccess::createTables "+createTable);
-				statement.execute(createTable);
-			}
-		}
-
-		finally {
-			if(connection != null)connection.close();
-		}
-	}
-	/* (non-Javadoc)
-	 * @see main.persistence.DbAccess#getConnection()
-	 */
 	@Override
 	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url);
