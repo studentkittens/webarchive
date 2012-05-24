@@ -6,89 +6,171 @@
 #                               Javadapter                                #
 ###########################################################################
 
-A simple Server with a textprotocoll, representing the API to Java.
-
-TODO: Turn into a Object
+A simple Server with a textprotocol, representing the API to Java.
 
 Usage: Start with python server.py <port>,
-       test with telnet localhost <port>
+       test with telnet localhost <port>, or
+       python test_client <port>
+
+TODO: Make it stopable
 """
 
-import socket
+import socketserver
 import sys
 
-class UnknownCommand(Exception):
+def lock_handler(*args):
     """
-    A sendable Exception :-P
+    Returns 'true' or 'false'
+    """
+    return 'true\n'
+def try_lock_handler(*args):
+    """
+    Returns path to domain
+    """
+    return 'false\n'
+def unlock_handler(*args):
+    """
+    Returns 'true' or 'false'
+    """
+    return 'maybe\n' 
+def checkout_handler(*args):
+    """
+    Returns 'true' or 'false'
+    """
+    return 'heise.de\n'
+def commit_handler(*args):
+    """
+    Returns 'true' or 'false'
+    """
+    return 'sure\n'
+
+# Simple dictionary based description of the protocol
+# command
+#     => takes: how many arguments to take
+#     => func: a handler that does something with the args
+#              and return some bytebuffer
+PROTOCOL = {
+        'lock': {
+            'takes': 1,
+            'func': lock_handler
+            },
+        'try_lock': {
+            'takes': 1,
+            'func': try_lock_handler
+            },
+        'unlock': {
+            'takes': 1,
+            'func': unlock_handler
+            },
+        'checkout': {
+            'takes': 2,
+            'func': checkout_handler
+            },
+        'commit': {
+            'takes': 2,
+            'func': commit_handler
+            }
+        }
+
+class ProtocolError(Exception):
+    """
+    Simple Exception that offers
+    a sendable bytebuffer for errors 
+    via self.failure
     """
     def __init__(self, msg):
-        super(UnknownCommand, self).__init__(msg)
-        self.failure = b'ACK ' + msg 
+        super(ProtocolError, self).__init__(msg)
+        self.failure = b'ACK ' + bytes(msg, 'UTF-8')
 
-def build_error(*message):
+class AdapterHandler(socketserver.StreamRequestHandler):
     """
-    Take an array of errors and turn it into
-    a valid error message suitable for sending back
+    The RequestHandler class for the Javadapter
+
+    It is instantiated once per connection to the server, and must
+    override the handle() method to implement communication to the
+    client.
     """
-    return bytes('ACK ' + str(message), 'UTF-8')
+    def serve_request(self):
+        """
+        Try to see a meaning in a command,
+        raise an ProtocolError or return a 
+        bytebuffer with a suitable reponse,
+        which is ended with a linefeed
+        """
+        response = b''
+        try:
+            # Try to get a handler for this command,
+            # if not part of the protocol raise a ProtocolError
+            # and send an 'ACK ...' back to the caller
+            handler = PROTOCOL[self.__cmd]
+            if len(self.__arg) != handler['takes']:
+                # More error checking might be done here,
+                # but currently only the number of args is checked
+                raise ProtocolError(
+                        '"{cmd}" takes exactly {arg} argument(s)'.format(
+                        cmd = self.__cmd,
+                        arg = handler['takes']))
 
-def handle_command(command, *args):
-    """
-    Take a command and it's arguments,
-    and try to see a meaning in them.
+            # the handlers simply return strings, but for send()
+            # we need bytes. If func() returns a False value, 
+            # an empty string is used as response instead
+            response = bytes(handler['func']() or '', 'UTF-8')
+        except KeyError:
+            raise ProtocolError('Unknown command: ' + self.__cmd)
+        else:
+            return response 
 
-    Returns: A 2 element tuple with a retcode string ('OK' / 'ACK ...'),
-             and response message that may be empty
-    """
-    print('Command received: ', command, '#', args)
+    def handle(self):
+        """
+        Implemented from RequestHandler
+        """
 
-    response = b''
-
-    if command == b'checkout':
-        response = 'Doing a checkout, Sir.'
-    else:
-        raise UnknownCommand(b'Unknown command: ' + command)
-    return bytes(response, 'UTF-8')
-
-def send(conn, send_bytes):
-    """
-    Send a command to the clients
-    """
-    print('Sending:', send_bytes)
-    conn.sendall(send_bytes)
-
-def main():
-    """
-    Needs to be turned into a Javadapter object
-    """
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(('localhost', int(sys.argv[1])))
-        sock.listen(1)
-
-        print("Server started on: {addr}".format(addr = sock.getsockname()))
-
-        # Warte auf eine Verbindung zum Server
-        conn, (remotehost, remoteport) = sock.accept()
-        print('Verbunden mit %s:%s' % (remotehost, remoteport))
-
+        # Loop until an empty request is send,
+        # not sure if we should introduce a quit command
         while True:
-            cmdlist = [x.strip() 
-                      for x in conn.recv(4096).split() 
-                      if len(x) > 0]
+            # Convert input to a list of trimmed strings
+            line = [str(x.strip(), 'UTF-8') 
+                    for x in self.rfile.readline().split()]
 
-            if not cmdlist:
-                print('Got EOF')
+            # Got EOF, so we better quit
+            if len(line) == 0:
+                print('Quitting Server')
                 break
 
-            try:
-                message = handle_command(cmdlist[0], *cmdlist[1:]) 
-            except UnknownCommand as exc:
-                send(conn, exc.failure + b'\n')
-            except Exception as exc:
-                print('Internal Error:', exc)
-                raise exc
-            else:
-                send(conn, message + b'\nOK\n')
+            self.__cmd = line[0]
+            self.__arg = line[1:]
 
-if __name__ == '__main__':
+            # No matter what, something is send always,
+            # even it's a ProtocolError
+            try:
+                response = self.serve_request()
+                send_data = response + b'OK'
+            except ProtocolError as err:
+                send_data = err.failure
+            finally:
+                self.wfile.write(send_data + b'\n')
+
+
+def start(host, port):
+    """
+    Start the Javadapter server (unstoppable currently)
+    """
+    # Loop till death. This should be moved to an seperate thread
+    server = socketserver.TCPServer((host, port), AdapterHandler)
+    server.serve_forever()
+
+if __name__ == "__main__":
+    def main():
+        """
+        main() for cmd use, pass a port as only arg
+        """
+        if len(sys.argv) < 2:
+            print('usage: {prog} port'.format(prog = sys.argv[0]))
+            sys.exit(-1)
+        try:
+            start('localhost', int(sys.argv[1]) )
+        except KeyboardInterrupt:
+            print('Quitting Server because of Ctrl-C')
+            sys.exit(0)
+
     main()
