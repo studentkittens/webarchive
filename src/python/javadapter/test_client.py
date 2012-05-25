@@ -1,26 +1,37 @@
+import unittest
 import socket
-import sys
 
-HOST, PORT = "localhost", int(sys.argv[1])
+class TestJavadapter(unittest.TestCase):
+    def setUp(self):
+        host, port = "localhost", 42424 
+        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__sock.connect((host,port))
 
-# Create a socket (SOCK_STREAM means a TCP socket)
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    def tearDown(self):
+        self.__sock.close()
 
-try:
-    sock.connect((HOST, PORT))
-    while True:
-        data = bytes(input('>>> '), 'UTF-8')
+    def dialog(self, message):
+        sent = bytes(message, 'UTF-8') + b'\n'
+        self.__sock.sendall(sent)
+        recv = self.__sock.recv(1024)
+        print('Sent:', sent)
+        print('Recv:', recv)
+        print('-----------')
 
-        # Connect to server and send data
-        sock.sendall(data + b"\n")
+        return recv
 
-        # Receive data from the server and shut down
-        received = sock.recv(1024)
+    def test_wrong_command(self):
+        self.assertEqual(self.dialog('bad'),
+                b'ACK Unknown command: bad\n')
+    
+    def test_bad_argnum(self):
+        self.assertEqual(self.dialog('lock'), 
+                b'ACK "lock" takes exactly 1 argument(s)\n')
+        self.assertEqual(self.dialog('lock a b'), 
+                b'ACK "lock" takes exactly 1 argument(s)\n')
 
-        print("Sent:     {}".format(data))
-        print("Received: {}".format(received))
-except EOFError as err:
-    print('Quitting')
-finally:
-    sock.close()
+def main():
+    unittest.main()
 
+if __name__ == '__main__':
+    main()

@@ -125,28 +125,30 @@ class AdapterHandler(socketserver.StreamRequestHandler):
         """
         Implemented from RequestHandler
         """
-        # Convert input to a list of trimmed strings
-        line = [str(x, 'UTF-8') 
-                for x in self.rfile.readline().split()]
+        while True:
+            # Convert input to a list of trimmed strings
+            line = [str(x, 'UTF-8') 
+                    for x in self.rfile.readline().split()]
 
-        # Got EOF, so we better quit
-        #if len(line) == 0:
-        #    print('Quitting Server')
-        #    return
+            # Got EOF, so we better quit
+            if len(line) == 0:
+                print('Quitting connection "%s" to client' %
+                        threading.current_thread().name)
+                return
 
-        if len(line) > 0:
-            self.__cmd = line[0]
-            self.__arg = line[1:]
+            if len(line) > 0:
+                self.__cmd = line[0]
+                self.__arg = line[1:]
 
-            # No matter what, something is send always,
-            # even it's a ProtocolError
-            try:
-                response = self.serve_request()
-                send_data = response + b'OK'
-            except ProtocolError as err:
-                send_data = err.failure
-            finally:
-                self.wfile.write(send_data + b'\n')
+                # No matter what, something is send always,
+                # even it's a ProtocolError
+                try:
+                    response = self.serve_request()
+                    send_data = response + b'OK'
+                except ProtocolError as err:
+                    send_data = err.failure
+                finally:
+                    self.wfile.write(send_data + b'\n')
 
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -194,5 +196,4 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print('Quitting Server because of Ctrl-C')
             sys.exit(0)
-
     main()
