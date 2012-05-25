@@ -15,6 +15,8 @@ Usage: Start with python server.py <port>,
        Type 'quit' on the server-cmd to exit
 """
 
+__author__ = 'Christopher Pahl'
+
 import socketserver
 import threading
 import sys
@@ -26,7 +28,7 @@ def lock_handler(*args):
     return 'true\n'
 def try_lock_handler(*args):
     """
-    Returns path to domain
+    Returns 'true' or 'false'
     """
     return 'false\n'
 def unlock_handler(*args):
@@ -36,9 +38,9 @@ def unlock_handler(*args):
     return 'maybe\n' 
 def checkout_handler(*args):
     """
-    Returns 'true' or 'false'
+    Returns path to domain
     """
-    return 'heise.de\n'
+    return '\n'.join(*args) + '\n'
 def commit_handler(*args):
     """
     Returns 'true' or 'false'
@@ -74,29 +76,33 @@ PROTOCOL = {
         }
 
 class ProtocolError(Exception):
-    """
+    """raise a 'ACK cause'
+
     Simple Exception that offers
     a sendable bytebuffer for errors 
     via self.failure
     """
     def __init__(self, msg):
+        """
+        :param msg: a string message, describing the error
+        """
         super(ProtocolError, self).__init__(msg)
         self.failure = b'ACK ' + bytes(msg, 'UTF-8')
 
 class AdapterHandler(socketserver.StreamRequestHandler):
-    """
-    The RequestHandler class for the Javadapter
+    """The RequestHandler class for the Javadapter
 
     It is instantiated once per connection to the server, and must
     override the handle() method to implement communication to the
-    client.
+    client. It is never instantiated explicitely.
     """
     def serve_request(self):
-        """
+        """Handle a certain command
+
         Try to see a meaning in a command,
         raise an ProtocolError or return a 
         bytebuffer with a suitable reponse,
-        which is ended with a linefeed
+        which is ended with a linefeed in any case
         """
         response = b''
         try:
@@ -115,7 +121,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
             # the handlers simply return strings, but for send()
             # we need bytes. If func() returns a False value, 
             # an empty string is used as response instead
-            response = bytes(handler['func']() or '', 'UTF-8')
+            response = bytes(handler['func'](self.__arg) or '', 'UTF-8')
         except KeyError:
             raise ProtocolError('Unknown command: ' + self.__cmd)
         else:
@@ -154,25 +160,24 @@ class AdapterHandler(socketserver.StreamRequestHandler):
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
     A 'own' socketserver, with ThreadingMixIn
+
     Reference: http://docs.python.org/py3k/library/socketserver.html 
     """
     pass
 
-def start(host, port):
+def start(host = 'localhost', port = 42421):
     """
     Start the Javadapter server, and exit once done
 
+    :param host: the host to start the server on (does anythinh but localhost work?)
+    :param port: the port on which the server listens on
     :returns: a server, on which shutdown() can be called
     """
+    # Spawn a new thread for each connection
     server = ThreadedTCPServer((host, port), AdapterHandler)
-
-    # Start a thread with the server -- that thread will then start one
-    # more thread for each request
     server_thread = threading.Thread(target=server.serve_forever)
-    # Exit the server thread when the main thread terminates
     server_thread.daemon = True
     server_thread.start()
-    print("Server loop running in thread:", server_thread.name)
 
     return server   
 

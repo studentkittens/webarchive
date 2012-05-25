@@ -17,7 +17,7 @@ try:
         # Receive data from the server and shut down
         received = sock.recv(1024)
         
-        print("Sent: {}".format(data))
+        print("Sent:     {}".format(data))
         print("Received: {}".format(received))
 except EOFError as err:
     print('Quitting')

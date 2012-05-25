@@ -14,9 +14,9 @@ class TestJavadapter(unittest.TestCase):
         sent = bytes(message, 'UTF-8') + b'\n'
         self.__sock.sendall(sent)
         recv = self.__sock.recv(1024)
+        print('-----------')
         print('Sent:', sent)
         print('Recv:', recv)
-        print('-----------')
 
         return recv
 
@@ -27,11 +27,12 @@ class TestJavadapter(unittest.TestCase):
     def test_bad_argnum(self):
         self.assertEqual(self.dialog('lock'), 
                 b'ACK "lock" takes exactly 1 argument(s)\n')
-        self.assertEqual(self.dialog('lock a b'), 
-                b'ACK "lock" takes exactly 1 argument(s)\n')
+        self.assertEqual(self.dialog('checkout a b c'), 
+                b'ACK "checkout" takes exactly 2 argument(s)\n')
 
-def main():
-    unittest.main()
+    def test_multiline(self):
+        self.assertEqual(self.dialog('checkout heise.de now'),
+                b'heise.de\nnow\nOK\n')
 
 if __name__ == '__main__':
-    main()
+    unittest.main()
