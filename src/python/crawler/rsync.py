@@ -9,6 +9,10 @@ class Rsync(object):
     source to destination
     """
     def __init__(self, src_path, dest_path):
+        """
+        expects source and destination path for 
+        synchronisation
+        """
         self.__src = src_path
         self.__dest = dest_path
        
@@ -19,9 +23,22 @@ class Rsync(object):
         
         :returns: returns commandline exit code
         """
-        retv = subprocess.call(['rsync','-a','-c',
-                                self.__src, self.__dest])
-        return retv
+
+        process = subprocess.Popen(["rsync -avc " + self.__src + " " + self.__dest],
+                                    shell=True,
+                                    stderr=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stdin=subprocess.PIPE)
+        process.communicate()
+        return process.returncode
+
+
+    def __del__(self):
+        """
+        dies silently
+        """
+        print("rsync module exit.")
+
 
 if __name__ == '__main__':
     r = Rsync('/home/christoph/xsd/','/home/christoph/temp/')
