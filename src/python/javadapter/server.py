@@ -12,10 +12,11 @@ Usage: Start with python server.py <port>,
        test with telnet localhost <port>, or
        python test_client <port>
 
-TODO: Make it stopable
+       Type 'quit' on the server-cmd to exit
 """
 
 import socketserver
+import threading
 import sys
 
 def lock_handler(*args):
@@ -124,19 +125,16 @@ class AdapterHandler(socketserver.StreamRequestHandler):
         """
         Implemented from RequestHandler
         """
+        # Convert input to a list of trimmed strings
+        line = [str(x, 'UTF-8') 
+                for x in self.rfile.readline().split()]
 
-        # Loop until an empty request is send,
-        # not sure if we should introduce a quit command
-        while True:
-            # Convert input to a list of trimmed strings
-            line = [str(x, 'UTF-8') 
-                    for x in self.rfile.readline().split()]
+        # Got EOF, so we better quit
+        #if len(line) == 0:
+        #    print('Quitting Server')
+        #    return
 
-            # Got EOF, so we better quit
-            if len(line) == 0:
-                print('Quitting Server')
-                break
-
+        if len(line) > 0:
             self.__cmd = line[0]
             self.__arg = line[1:]
 
@@ -151,13 +149,30 @@ class AdapterHandler(socketserver.StreamRequestHandler):
                 self.wfile.write(send_data + b'\n')
 
 
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    """
+    A 'own' socketserver, with ThreadingMixIn
+    Reference: http://docs.python.org/py3k/library/socketserver.html 
+    """
+    pass
+
 def start(host, port):
     """
-    Start the Javadapter server (unstoppable currently)
+    Start the Javadapter server, and exit once done
+
+    :returns: a server, on which shutdown() can be called
     """
-    # Loop till death. This should be moved to an seperate thread
-    server = socketserver.TCPServer((host, port), AdapterHandler)
-    server.serve_forever()
+    server = ThreadedTCPServer((host, port), AdapterHandler)
+
+    # Start a thread with the server -- that thread will then start one
+    # more thread for each request
+    server_thread = threading.Thread(target=server.serve_forever)
+    # Exit the server thread when the main thread terminates
+    server_thread.daemon = True
+    server_thread.start()
+    print("Server loop running in thread:", server_thread.name)
+
+    return server   
 
 if __name__ == "__main__":
     def main():
@@ -168,7 +183,14 @@ if __name__ == "__main__":
             print('usage: {prog} port'.format(prog = sys.argv[0]))
             sys.exit(-1)
         try:
-            start('localhost', int(sys.argv[1]) )
+            server = start('localhost', int(sys.argv[1]))
+            while True:
+                server_cmd = input('>>> ').strip()
+                if server_cmd == 'quit':
+                    break
+                else:
+                    print('Unknown command')
+            server.shutdown()
         except KeyboardInterrupt:
             print('Quitting Server because of Ctrl-C')
             sys.exit(0)
