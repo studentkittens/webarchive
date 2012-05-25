@@ -3,8 +3,7 @@
 # metadata module
 #
 import mimetypes as mime
-import time
-import os
+import util.times as utl
 
 class MetaData(dict):
     def __init__(self,**kwargs):
@@ -29,7 +28,7 @@ class MetaData(dict):
         m['domain'] = cls.get_domain()
         m['abspath'] = file_path
         m['title'] = "not set"
-        m['createtime'] = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(os.path.getctime(file_path))) 
+        m['createtime'] = utl.get_ctime(file_path) 
         m['committime'] = "not set" 
         m['mime'] = mime.guess_type(file_path)[0]
         return m
