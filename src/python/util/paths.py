@@ -16,4 +16,4 @@ def get_domain_path(domain):
 
 
 if __name__ == '__main__':
-    print(get_domain_path('heise.de)'))
+    print(get_domain_path('www.heise.de'))

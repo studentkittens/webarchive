@@ -17,3 +17,4 @@ class CrawlJob():
 
 if __name__ == '__main__':
     c = CrawlJob(3,'www.nullcat.de')
+

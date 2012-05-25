@@ -6,8 +6,7 @@
 def get(value):
     if value == 'crawl.tmplocation':
         return '/tmp/archive_sync/'
-    elif:
-        value == 'crawl.archivepath':
+    elif value == 'crawl.archivepath':
             return '/tmp/archive/'
     else:
         return ''
