@@ -129,7 +129,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
         # not sure if we should introduce a quit command
         while True:
             # Convert input to a list of trimmed strings
-            line = [str(x.strip(), 'UTF-8') 
+            line = [str(x, 'UTF-8') 
                     for x in self.rfile.readline().split()]
 
             # Got EOF, so we better quit
