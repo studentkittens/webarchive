@@ -2,7 +2,6 @@ package webarchive.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -39,7 +38,8 @@ public class XmlEditor {
 	public DataElement getDataElement(String tagName) {
 		tagName = conf.prefix(tagName);
 		NodeList list = data.getChildNodes();
-		for (int i = 0; i < list.getLength(); i++) {
+		final int length = list.getLength();
+		for (int i = 0; i < length; i++) {
 			if (list.item(i).getNodeName().equals(tagName)) {
 				return new DataElement((Element) list.item(i), false);
 			}

@@ -51,14 +51,17 @@ public class TestXml {
 		// get data element and add some content
 		DataElement de = edit.createDataElement("data1");
 		Element sub = edit.createElement("subdata");
-		sub.setTextContent(edit.prefix("bla"));
+		sub.setTextContent("bla");
 		de.appendChild(sub);
 		// add the DataElement to the XML File
+		System.out.println("write data:");
+		System.out.println("-----------");
 		h.addDataElement(de); // if autovalidating is on throws exception, since schema is not fitted to added elements
+	
 		
 		// result will be printed in console...
 		
-//		XmlPrinter.printNodes("", h.getDocument());
+//		XmlPrinter.printNodes("", h.getEditor().getDataElement("data1").getDataElement());
 //		h.addDataElement(de); // throws exception, since de element is already in XML
 		//		XmlPrinter.printNodes("", h.getDocument());
 

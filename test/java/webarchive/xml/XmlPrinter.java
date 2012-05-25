@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
  */
 public class XmlPrinter {
 	public static void printNodes(String indent, Node n) {
+		if(n==null) return;
 		System.out.println(indent+n+" type = "+getType(n)+ ", ns="+ n.getNamespaceURI());
 		NamedNodeMap attributes = n.getAttributes();
 		if(attributes!=null)
