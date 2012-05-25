@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<wa:file
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xmlns:wa='http://www.hof-university.de/webarchive'
+	xsi:schemaLocation='http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'>
+	<wa:meta
+		wa:url="www.heise.de/index.html"
+		wa:mimeType="text/html"
+		wa:path="www.heise.de/index.html"
+		wa:createTime="2012-05-15T17:28:42"
+		wa:title="heise online"
+	>
+		<wa:commitTag
+			wa:commitTime="2012-05-15T17:30:00"
+			wa:domain="www.heise.de"
+		/>
+	</wa:meta>
+	<wa:data>
+
+	</wa:data>
+</wa:file>

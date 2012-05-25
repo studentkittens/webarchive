@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
+
 -->
 
 <xs:schema version="1.0"
 		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		   xmlns="http://www.hof-university.de/webarchive"
 		   targetNamespace="http://www.hof-university.de/webarchive"
-		   elementFormDefault="qualified"
-		   attributeFormDefault="qualified"
+  elementFormDefault="qualified"
+  		   attributeFormDefault="qualified"
+
+		
 >
 	<xs:element name="file">
 		<xs:complexType>
