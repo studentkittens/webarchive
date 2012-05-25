@@ -2,6 +2,7 @@ package webarchive.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -37,9 +38,13 @@ public class XmlEditor {
 
 	public DataElement getDataElement(String tagName) {
 		tagName = conf.prefix(tagName);
-		NodeList l = data.getElementsByTagName(tagName);
-		assert l.getLength() == 0;
-		return new DataElement((Element) l.item(0), false);
+		NodeList list = data.getChildNodes();
+		for (int i = 0; i < list.getLength(); i++) {
+			if (list.item(i).getNodeName().equals(tagName)) {
+				return new DataElement((Element) list.item(i), false);
+			}
+		}
+		return null;
 	}
 
 	public void addDataElement(DataElement e) throws NullPointerException,
