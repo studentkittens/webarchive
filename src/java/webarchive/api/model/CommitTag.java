@@ -20,10 +20,23 @@ public class CommitTag {
 	 * @param commitTime = commitTag.commitTime
 	 * @param domain = domain.domainName
 	 */
-	public CommitTag(int id, TimeStamp commitTime, String domain) {
+
+	public CommitTag(int id, TimeStamp commitTime, String domain) throws IllegalArgumentException {
+		//		 * @throws IllegalArgumentException if one parameter has an illegal value.
+
+//		if (id < 1) {
+//			throw new IllegalArgumentException("id must be > 0, was " + id);
+//		}
+//		if (commitTime == null) {
+//			throw new IllegalArgumentException("commitTime is null");
+//		}
+//		if (domain == null || domain.isEmpty()) {
+//			throw new IllegalArgumentException(
+//				"domain has an illegal value: " + domain);
+//		}
 		assert id > 0;
 		assert commitTime != null;
-		assert domain != null && !domain.isEmpty();
+		assert domain == null && !domain.isEmpty();
 		this.id = id;
 		this.commitTime = commitTime;
 		this.domain = domain;
