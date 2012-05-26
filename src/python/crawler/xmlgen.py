@@ -17,19 +17,19 @@ and open the template in the editor.
 
 
 <wa:file
-    xmlns:xsi='{0}'
-    xmlns:wa='{1}'
-    xsi:schemaLocation='{2}'>
+    xmlns:xsi='{xsi}'
+    xmlns:wa='{wa}'
+    xsi:schemaLocation='{schema}'>
     <wa:meta
-        wa:url="{3[url]}"
-        wa:mimeType="{3[mimeType]}"
-        wa:path="{3[path]}"
-        wa:createTime="{3[createTime]}"
-        wa:title="{3[title]}"
+        wa:url="{meta[url]}"
+        wa:mimeType="{meta[mimeType]}"
+        wa:path="{meta[path]}"
+        wa:createTime="{meta[createTime]}"
+        wa:title="{meta[title]}"
     >
         <wa:commitTag
-            wa:commitTime="{3[commitTime]}"
-            wa:domain="{3[domain]}"
+            wa:commitTime="{meta[commitTime]}"
+            wa:domain="{meta[domain]}"
         />
     </wa:meta>
     <wa:data>
@@ -48,22 +48,32 @@ class XmlGenerator:
     WA = 'http://www.hof-university.de/webarchive'
     SCHEMA = 'http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'
     
-    def __init__(self, meta_obj=None, xsi=XSI, wa=WA, schema=SCHEMA):
-        self.__meta = meta_obj
+    def __init__(self, meta_obj_list=None, xsi=XSI, wa=WA, schema=SCHEMA):
+        self.__meta_list = meta_obj_list
         self.__xsi = xsi
         self.__wa = wa
         self.__schema = schema
+        self.__xml_list = [] 
         self.__xmlfile = self.__gen_xml()
+
          
 
-    def write(self,path='.'):
-        with open(os.path.join('','dataaaa.xml'),'w') as f:
-           f.write(str(self.__xmlfile))
-    
     def __gen_xml(self):
-        for item in self.__meta:
-            print(XML_TEMPLATE.format(self.__xsi, self.__wa, self.__schema, item))
+        for item in self.__meta_list:
+            xml_node = (XML_TEMPLATE.format(xsi = self.__xsi,
+                                            wa = self.__wa,
+                                            schema = self.__schema,
+                                            meta = item), item['path'])
+            self.__xml_list.append(xml_node)
         
+    
+    def dump_all(self):
+        if len(self.__xml_list) > 0:
+            for item in self.__xml_list:
+                with open(os.path.join(item[1],'data.xml'),'w') as f:
+                    f.write(str(item[0]))
+
+    
         
 if __name__ == '__main__':
     testdata = [{
@@ -77,7 +87,7 @@ if __name__ == '__main__':
     }]
 
     x = XmlGenerator(testdata) 
-
+    x.dump_xml()
 
 
 
