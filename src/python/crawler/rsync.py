@@ -16,6 +16,7 @@ class Rsync(object):
         self.__src = src_path
         self.__dest = dest_path
         self.__process = None
+        self.__pid = None
        
     def start_sync(self):
         """
@@ -27,17 +28,22 @@ class Rsync(object):
 
         self.__process = subprocess.Popen(["rsync -avc " + self.__src + " " + self.__dest],
                                     shell=True)
-        self.__process.communicate()
-        return self.__process.returncode
+        
+        self.__pid = self.__process.pid
+        print("rsync process with pid {0} started.".format(self.__pid))
 
 
     def __del__(self):
         """
-        rsync module exit 
+        Exits rsync wrapper and returns
+        rsync returncode
         """
-        print("rsync module exit.")
-
+        retc = self.__process.returncode
+        print("rsync process with pid {0} stopped.".format(self.__pid))
+        print('rsync module exit.')
+        return retc
 
 if __name__ == '__main__':
-    r = Rsync('/home/christoph/xsd/*','/home/christoph/temp/')
+    r = Rsync('/home/christoph/music/*','/home/christoph/temp/')
     print(r.start_sync())
+
