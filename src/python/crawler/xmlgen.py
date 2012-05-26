@@ -3,39 +3,88 @@
 
 __author__ = 'Christoph Piechula'
 
-import xml.dom.minidom as node
-import xml.dom.minidom
 import os
 
-template = ("""<?xml version="1.0" encoding="UTF-8"?>
-<wa:file xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:wa='http://www.hof-university.de/webarchive'
-    xsi:schemaLocation='http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'>
-    <wa:meta wa:s="xxxasdfasdfasdfasdfs">
-        <wa:commitTag/>
+"""
+ugly xml template.
+"""
+
+XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<wa:file
+    xmlns:xsi='{0}'
+    xmlns:wa='{1}'
+    xsi:schemaLocation='{2}'>
+    <wa:meta
+        wa:url="{3[url]}"
+        wa:mimeType="{3[mimeType]}"
+        wa:path="{3[path]}"
+        wa:createTime="{3[createTime]}"
+        wa:title="{3[title]}"
+    >
+        <wa:commitTag
+            wa:commitTime="{3[commitTime]}"
+            wa:domain="{3[domain]}"
+        />
     </wa:meta>
     <wa:data>
-    </wa:data>
-</wa:file>""")
 
+    </wa:data>
+</wa:file>
+
+"""
 
 class XmlGenerator:
-    def __init__(self, meta_obj=None):
+    """
+    XmlGenerator, generates xml file from meta nodelist
+    some ugly needed? code
+    """
+    XSI = 'http://www.w3.org/2001/XMLSchema-instance'
+    WA = 'http://www.hof-university.de/webarchive'
+    SCHEMA = 'http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'
+    
+    def __init__(self, meta_obj=None, xsi=XSI, wa=WA, schema=SCHEMA):
+        self.__meta = meta_obj
+        self.__xsi = xsi
+        self.__wa = wa
+        self.__schema = schema
         self.__xmlfile = self.__gen_xml()
-
+         
 
     def write(self,path='.'):
-        with open(os.path.join('','data.xml'),'w') as f:
+        with open(os.path.join('','dataaaa.xml'),'w') as f:
            f.write(str(self.__xmlfile))
     
     def __gen_xml(self):
-        doc = xml.dom.minidom.parseString(template)
-        node = doc.getElementsByTagName("wa:meta")[0]
-        node.setAttribute("wa:katzenbaunm","miku")
-        node.setAttribute("wa:kka","asd")
-        node.setAttribute("wa:s","xxx")
-        node.setAttribute("wa:xxx","miku")
-        return doc.toprettyxml(newl='')
-
+        for item in self.__meta:
+            print(XML_TEMPLATE.format(self.__xsi, self.__wa, self.__schema, item))
+        
+        
 if __name__ == '__main__':
-    x = XmlGenerator() 
-    x.write()
+    testdata = [{
+            'url' : "www.heise.de/index.html",
+            'mimeType' : "text/html",
+            'path' : "www.heise.de/index.html",
+            'createTime' : "2012-05-15T17:28:42",
+            'title' : "heise online",
+            'commitTime' : "2012-05-15T17:30:00",
+            'domain' : "www.heise.de"
+    }]
+
+    x = XmlGenerator(testdata) 
+
+
+
+
+
+
+
+
+
+
+
