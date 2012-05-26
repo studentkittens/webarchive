@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+__author__ = 'Christoph Piechula'
+
 import xml.dom.minidom as node
 import xml.dom.minidom
 import os

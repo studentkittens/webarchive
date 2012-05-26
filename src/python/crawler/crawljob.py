@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# crawljob  module
-#
+
+__author__ = 'Christoph Piechula'
+
 import os
 import config.reader as kampfer
 import cjob.wget as wget

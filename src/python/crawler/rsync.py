@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+__author__ = 'Christoph Piechula'
+
 import subprocess
 
 class Rsync(object):

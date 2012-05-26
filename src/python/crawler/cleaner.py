@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# cleaner module
-#
+
+__author__ = 'Christoph Piechula'
+
 import subprocess
 import os, sys,shutil
 import util.files as ufile

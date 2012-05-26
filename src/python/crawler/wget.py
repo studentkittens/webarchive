@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# wget module
-#
+
+__author__ = 'Christoph Piechula'
+
 import subprocess 
 import time
 class Wget(object):

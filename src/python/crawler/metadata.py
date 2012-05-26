@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# metadata module
-#
+
+__author__ = 'Christoph Piechula'
+
 import mimetypes as mime
 import util.times as utl
 
