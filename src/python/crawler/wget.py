@@ -25,12 +25,8 @@ class Wget(object):
 
         """
         self.__process = subprocess.Popen(
-                                    ["wget -e robots=off -rH -l 1 --directory-prefix= " +
-                                    self.__tmp_folder + " " + self.__url],
-                                    shell=True,
-                                    stderr=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,
-                                    stdin=subprocess.PIPE)
+                                    ['wget', '-e robots=off', '-rH', '-l 1', '--directory-prefix=', self.__tmp_folder, self.__url],
+                                    shell=False)
 
     def stop(self):
         """
@@ -38,13 +34,17 @@ class Wget(object):
         :returns: wget process exit code
 
         """
-        try:
-            #XXX dosn't work yet
-            self.__process.communicate(timeout=15)
-        except TimeoutExpired:
-            self.__process.kill()
-            out, err = proc.communicate()
-            print(out + err) 
+        if self.__process != None:
+            try:
+                self.__process.terminate()
+            except:
+                out, err = __self.__process.communicate()
+                print(out + err)
+            finally:
+                out, err = self.__process.communicate()
+                print(out + err)
+        else:
+            print("no process running.")
 
 
     def __del__(self):
@@ -53,7 +53,4 @@ class Wget(object):
         """
         print('wget module exit.')
 
-
-if __name__ == '__main__':
-    a = Wget('www.heise.de','.')
 

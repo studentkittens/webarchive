@@ -15,6 +15,7 @@ class Rsync(object):
         """
         self.__src = src_path
         self.__dest = dest_path
+        self.__process = None
        
     def start_sync(self):
         """
@@ -24,22 +25,19 @@ class Rsync(object):
         :returns: returns commandline exit code
         """
 
-        process = subprocess.Popen(["rsync -avc " + self.__src + " " + self.__dest],
-                                    shell=True,
-                                    stderr=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,
-                                    stdin=subprocess.PIPE)
-        process.communicate()
-        return process.returncode
+        self.__process = subprocess.Popen(["rsync -avc " + self.__src + " " + self.__dest],
+                                    shell=True)
+        self.__process.communicate()
+        return self.__process.returncode
 
 
     def __del__(self):
         """
-        dies silently
+        rsync module exit 
         """
         print("rsync module exit.")
 
 
 if __name__ == '__main__':
-    r = Rsync('/home/christoph/xsd/','/home/christoph/temp/')
+    r = Rsync('/home/christoph/xsd/*','/home/christoph/temp/')
     print(r.start_sync())
