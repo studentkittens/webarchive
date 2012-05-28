@@ -28,8 +28,61 @@ public class ClientConnectionHandler extends ConnectionHandler {
 				}
 			}
 			break;
+		case EXCEPTION:
+		{
+			
+		}
+			break;
+		case SUCCESS:
+		{
+			
+		}
+			break;
+		case SQL:
+		{
+			
+		}
+			break;
+		case WRITEFILE:
+		{
+			
+		}
+			break;
+		case READFILE:
+		{
+			
+		}
+			break;
+		case XMLEDIT:
+		{
+			
+		}
+			break;
+		case LS:
+		{
+			
+		}
+			break;
 		default: break;
 		}
+	}
+
+	@Override
+	public void disconnect() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void connect() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void send(Message msg) throws Exception {
+		c.send(msg);		
+		
 	}
 
 }
