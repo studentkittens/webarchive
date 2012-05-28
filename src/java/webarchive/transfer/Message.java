@@ -9,11 +9,14 @@ public class Message implements Serializable {
 
 	private Header h;
 	private Object data;
-
-	public Message(Header h, Object data)
-	{
+	
+	private Integer id = null;
+	private static int mId=0;
+	
+	public Message(Header h, Object data) {
 		this.h = h;
 		this.data = data;
+		this.markAsQuery();
 	}
 
 	public Message(Header h) {
@@ -36,4 +39,20 @@ public class Message implements Serializable {
 		this.h=h;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	private void markAsQuery() {
+		id = incId();
+	}
+	
+	public void noAnswerExpected() {
+		id = null;
+	}
+	
+	private synchronized  int incId() {
+		mId = (mId+2) % Integer.MAX_VALUE;
+		return mId;
+	}
 }

@@ -14,6 +14,10 @@ public class Client  {
 	private int port;
 	private Connection c;
 	
+	public Connection getConnection() {
+		return c;
+	}
+
 	public Client()
 	{
 		this.port = DEFAULT_PORT;
@@ -66,11 +70,11 @@ public class Client  {
 	}
 //###############################################################################
 	
-	public static void main(String args[])
-	{
-		Client cl = new Client();
-		cl.setIp("localhost");
-		cl.connectToServer();
-	}
+//	public static void main(String args[])
+//	{
+//		Client cl = new Client();
+//		cl.setIp("localhost");
+//		cl.connectToServer();
+//	}
 	
 }
