@@ -12,14 +12,23 @@ class MetaData(dict):
     
     @classmethod
     def get_domain(cls):
+        """
+        splits path to reterive domain
+        """
         return cls.__post_path.split('/',1)[0]
 
     @classmethod
     def get_url(cls):
-        return cls.__post_path[:-len('__data')]
+        """
+        cuts path to reterive content url
+        """
+        return cls.__post_path[:-len('data')]
 
     @classmethod
     def build_metadata_from_file(cls, tmp_folder, file_path):
+        """
+        reterives metadata and return object
+        """
         m = MetaData()
         cls.__post_path = file_path[len(tmp_folder):]
         if cls.__post_path[0] == '/':

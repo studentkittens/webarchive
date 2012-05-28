@@ -59,6 +59,9 @@ class XmlGenerator:
          
 
     def __gen_xml(self):
+        """
+        generates xml list from metadata list
+        """
         for item in self.__meta_list:
             xml_node = (XML_TEMPLATE.format(xsi = self.__xsi,
                                             wa = self.__wa,
@@ -68,6 +71,9 @@ class XmlGenerator:
         
     
     def dump_all(self):
+        """
+        dumps all previously generated metadata to disk
+        """
         if len(self.__xml_list) > 0 and self.__meta_list != None:
             for item in self.__xml_list:
                 with open(os.path.join(item[1],'data.xml'),'w') as f:
