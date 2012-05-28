@@ -68,10 +68,12 @@ class XmlGenerator:
         
     
     def dump_all(self):
-        if len(self.__xml_list) > 0:
+        if len(self.__xml_list) > 0 and self.__meta_list != None:
             for item in self.__xml_list:
                 with open(os.path.join(item[1],'data.xml'),'w') as f:
                     f.write(str(item[0]))
+        else:
+            print("nothing to dump.")
 
     
         
