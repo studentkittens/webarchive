@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Server  {
 
-    public static final int DEFAULT_PORT = 21000;
+    private static final int DEFAULT_PORT = 21000;
 
     private int listenPort;
     private ServerSocket svSock;
@@ -58,6 +58,9 @@ public class Server  {
             System.out.println("trying to safe connection");
             Connection c = new Connection(sock,oos,ois);
             c.setConHandler(new ServerConnectionHandler(c));
+            
+            new Thread(c).start();
+            
             if(doHandShake(c))
             {
                 addNewConnection(c);
@@ -75,7 +78,7 @@ public class Server  {
                 continue;
             }
 
-            new Thread(c).start();
+            
 
         }
     }
@@ -87,15 +90,17 @@ public class Server  {
 
     private boolean doHandShake(Connection c)
     {
-        // Nur ein Beispiel, ginge natÃ¼rlich viel effizienter ohne die ganzen Objekte, aber OOP wills halt so extrem
         Message h = null;
         try {
             System.out.println("try sending handshake");
 
-            c.send(new Message(Header.HANDSHAKE));
+            Message m = new Message(Header.HANDSHAKE);
+            
+            c.send(m);
             System.out.println("handshake sent, try receiving handshake");
 
-            h = (Message) c.receive();
+            h = c.waitForAnswer(m);
+            //Go to sleep
             System.out.println("handshake received");
 
         } catch (Exception e) {
@@ -116,6 +121,7 @@ public class Server  {
         return false;
     }
 
+    
     //##################################################################
     public static void main(String args[])
     {

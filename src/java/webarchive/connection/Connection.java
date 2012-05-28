@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
+
 import webarchive.transfer.Message;
 
 public class Connection implements Runnable {
@@ -56,8 +58,13 @@ public class Connection implements Runnable {
 		oos.writeObject(msg);
 	}
 
-	public Message receive() throws Exception {
+	private Message receive() throws Exception {
 		return (Message) ois.readObject();
+	}
+	
+	public Message waitForAnswer(Message m) {
+		
+		return conHandler.waitForAnswer(m);
 	}
 
 	// YOU HAVE TO SET conHandler FIRST! OTHERWISE NULLPOINTEREXCEPTION :D
@@ -68,6 +75,10 @@ public class Connection implements Runnable {
 			Message msg = null;
 			try {
 				msg = this.receive();
+			} catch (SocketException sockExc) {
+				System.out.println("lost connection");
+				//do something, like delete connection from cList
+				break;
 			} catch (EOFException end) {
 				System.out.println("lost connection");
 				//do something, like delete connection from cList

@@ -5,6 +5,11 @@ public enum Header {
 
 	HANDSHAKE,
 	EXCEPTION,
-	SUCCESS
-
+	SUCCESS,
+	SQL,
+	WRITEFILE,
+	READFILE,
+	XMLEDIT,
+	LS,
+	
 }
