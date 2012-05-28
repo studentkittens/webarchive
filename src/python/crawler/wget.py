@@ -19,7 +19,8 @@ class Wget(object):
         self.__tmp_folder = tmp_folder
         self.__process = None
         self.__pid = None
-        
+
+
     def start(self):
         """
         starts the wget crawl process
@@ -32,6 +33,7 @@ class Wget(object):
 
         self.__pid = self.__process.pid
         print("wget process with pid {0} started.".format(self.__pid))
+
 
     def stop(self):
         """
