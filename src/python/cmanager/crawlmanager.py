@@ -7,6 +7,14 @@ import multiprocessing.pool as mpool
 import util.files as utl
 import crawler.crawljob as job
 
+def crawljob(ident,url):
+    try:
+        print("ich bin crawler " + str(ident) + " und crawle "+ url)
+        j = job.CrawlJob(ident,url)
+    except Exception as e:
+        print(e)
+    return ident
+
 
 class CrawlerManager(object):
     """
