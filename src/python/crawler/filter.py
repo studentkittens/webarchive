@@ -23,7 +23,7 @@ class FilterSystem(object):
                             or None to read the value from the cfg
         :returns: None
         """
-        # If not path is given,
+        # If no path is given,
         # we'll try to read it from the cfg
         if plugin_path is None:
             # TODO: load from cfg
