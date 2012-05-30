@@ -3,6 +3,7 @@ package webarchive.api.model;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 //TODO tests
 
 /**
@@ -25,6 +26,24 @@ public class TimeStamp {
 	public static final DateFormat XML_FORMATTER = new SimpleDateFormat(XML_FORMAT);
 	private java.util.Date date;
 	private String xmlFormat;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if(this==obj) return true;
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final TimeStamp other = (TimeStamp) obj;
+		return date.equals(other.date);
+	}
+
+	@Override
+	public int hashCode() {
+		return date.hashCode();
+	}
 
 	/**
 	 * create TimeStamp by a given Date.
