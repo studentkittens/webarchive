@@ -7,13 +7,13 @@ package webarchive.notifier;
 
 import java.util.Date;
 
-public class observerble extends Thread {
+public class Observerble extends Thread { // <-- next time uppercase
 
 	private long mIntervall;
 	private Date lastSearch;
 	
 	
-	public observerble(long intervall){
+	public Observerble(long intervall){
 		
 		mIntervall = intervall;	
 		lastSearch=new Date(0);
@@ -24,7 +24,7 @@ public void run() {
 			
 			//#############//
 			// start routine
-			new notifier(lastSearch);
+			new Notifier(lastSearch);
 			
 			//#############//
 			// set Date

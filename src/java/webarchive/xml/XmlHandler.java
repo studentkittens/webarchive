@@ -38,7 +38,7 @@ public class XmlHandler {
 	}
 
 	public XmlHandler(File xmlPath, XmlErrorHandler err, XmlConf conf,
-		XmlValidator validator, XmlDomWriter writer, AutoValidatingMode mode) throws
+		XmlValidator validator, XmlDomWriter writer) throws
 		ParserConfigurationException, SAXException, IOException {
 		// TODO FileHandler access
 		// preconditions
@@ -56,7 +56,7 @@ public class XmlHandler {
 		buildDocument();
 
 		// other members
-		this.mode = (mode == null) ? AutoValidatingMode.AFTER_UPDATE : mode;
+		this.mode = conf.getAutoValidatingMode();
 		this.writer = writer;
 		this.validator = validator;
 		this.data = (Element) (document.getElementsByTagName(conf.getDataTag()).

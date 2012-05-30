@@ -2,6 +2,7 @@ package webarchive.xml;
 
 import java.io.File;
 import java.net.URL;
+import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
  *
@@ -15,21 +16,51 @@ public class XmlConf {
 	private String prefix = "wa:";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
-	//private String schemaDef = "http://www.w3.org/2001/XMLSchema";
+	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
 
-//	public String getSchemaDef() {
-//		return schemaDef;
-//	}
+	public XmlConf() {
+	}
+
+	public void setAutoValidatingMode(AutoValidatingMode autoValidatingMode) {
+		assert autoValidatingMode != null;
+		this.autoValidatingMode = autoValidatingMode;
+	}
+
+	public AutoValidatingMode getAutoValidatingMode() {
+		return autoValidatingMode;
+	}
 
 	public File getSchemaPath() {
 		return schemaPath;
 	}
-//TODO constructor: overwrite all values != null
-	public XmlConf() {
+
+	public void setSchemaPath(File schemaPath) {
+		assert schemaPath != null;
+		this.schemaPath = schemaPath;
+	}
+
+	public void setDataTag(String dataTag) {
+		assert dataTag != null;
+		this.dataTag = dataTag;
+	}
+
+	String getDataTag() {
+		return prefix(dataTag);
 	}
 
 	public String getNamespace() {
 		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		assert namespace != null;
+		this.namespace = namespace;
+	}
+
+	public void setPrefix(String prefix) {
+		assert prefix != null;
+		assert !prefix.equals("");
+		this.prefix = prefix;
 	}
 
 	public String getPrefix() {
@@ -39,9 +70,5 @@ public class XmlConf {
 	public String prefix(String name) {
 		int i = name.indexOf(':');
 		return prefix + ((i != -1) ? name : name.substring(i + 1));
-	}
-
-	String getDataTag() {
-		return prefix(dataTag);
 	}
 }
