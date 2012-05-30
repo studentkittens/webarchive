@@ -12,7 +12,7 @@ def get_domain_path(domain):
     :returns: domain path as string
 
     """
-    return os.path.join(config.get('crawl.archivepath'),'content',domain)
+    return os.path.join(config.get('general.root'),'content',domain)
 
 
 if __name__ == '__main__':

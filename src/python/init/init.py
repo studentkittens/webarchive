@@ -3,12 +3,12 @@
 
 import os
 import os.path
-import default_cfg
+import init.default_cfg as default_cfg
 
 __author__ = 'Christopher Pahl'
 
-def init_archive(path):
-    base_path = os.path.join(path, 'archive')
+def init_archive(init_path):
+    base_path = os.path.join(init_path, 'archive')
     if not os.path.exists(base_path):
         try:
             os.mkdir(base_path)
@@ -30,5 +30,5 @@ if __name__ == '__main__':
 
     def main():
         init_archive(sys.argv[1])
-
+         
     main()

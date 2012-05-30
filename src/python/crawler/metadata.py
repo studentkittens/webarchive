@@ -7,6 +7,9 @@ import mimetypes as mime
 import util.times as utl
 
 class MetaData(dict):
+    """
+    Metadata Builder
+    """
     def __init__(self,**kwargs):
         super().__init__(kwargs)
     
@@ -25,29 +28,27 @@ class MetaData(dict):
         return cls.__post_path[:-len('data')]
 
     @classmethod
-    def build_metadata_from_file(cls, tmp_folder, file_path):
+    def build_metadata_from_file(cls, tmp_crawler_folder, abs_data_path, commitTime):
         """
         reterives metadata and return object
+        :tmp_crawler_folder: expects wget temp folder
         """
         m = MetaData()
-        cls.__post_path = file_path[len(tmp_folder):]
+
+        cls.__post_path = abs_data_path[len(tmp_crawler_folder):]
         if cls.__post_path[0] == '/':
             cls.__post_path = cls.__post_path[1:]
 
+        m['mimeType'] = mime.guess_type(abs_data_path)[0] or 'application/octet-stream'
         m['url'] = cls.get_url()
         m['domain'] = cls.get_domain()
-        m['abspath'] = file_path
-        m['title'] = "not set"
-        m['createtime'] = utl.get_ctime(file_path) 
-        m['committime'] = "not set" 
-        m['mime'] = mime.guess_type(file_path)[0]
+        m['abspath'] = abs_data_path
+        m['createTime'] = utl.get_ctime(abs_data_path) 
+        m['commitTime'] = commitTime
+        m['title'] = ""
+        #TODO Title extractor
         return m
 
-    #overwrite 'tostring' method
-    #def __repr__(self):
-    #    return 'MetaData'
-    
-        
 
 if __name__ == '__main__':
     m = MetaData.build_metadata_from_file('/home/christoph/','/home/christoph/quickndirty/xml/meta.xml')

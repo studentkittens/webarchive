@@ -3,10 +3,16 @@
 # config module
 #
 # Hardcoded fake values 
+#
+options = {
+        'crawler.tempRoot': '/tmp/archive/tmp/',
+        'general.root': '/tmp/archive/',
+        'general.filterpath':'/tmp/archive/filter/',
+        'crawler.maxInst' : 10
+        }
+
 def get(value):
-    if value == 'crawl.tmplocation':
-        return '/tmp/archive_sync/'
-    elif value == 'crawl.archivepath':
-            return '/tmp/archive/'
-    else:
+    try:
+        return options[value]
+    except KeyError:
         return ''

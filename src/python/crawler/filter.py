@@ -7,6 +7,7 @@ import glob
 import copy
 import os.path
 import traceback
+import config.reader as config
 
 class FilterSystem(object):
     def __init__(self, plugin_path = None):
@@ -26,8 +27,7 @@ class FilterSystem(object):
         # If no path is given,
         # we'll try to read it from the cfg
         if plugin_path is None:
-            # TODO: load from cfg
-            actual_path = '/tmp/filter'
+            actual_path = config.get('general.filterpath')
         else:
             actual_path = plugin_path
         

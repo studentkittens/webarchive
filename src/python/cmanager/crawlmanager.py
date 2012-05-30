@@ -5,12 +5,20 @@
 import time
 import multiprocessing.pool as mpool
 import util.files as utl
+import config.reader as config
 import crawler.crawljob as job
+import threading
+
+running = []
+running_mtx = threading.Lock()
 
 def crawljob(ident,url):
     try:
         print("ich bin crawler " + str(ident) + " und crawle "+ url)
-        j = job.CrawlJob(ident,url)
+        j = job.CrawlJob(ident, url)
+        running_mtx.acquire()
+        running.append(j)
+        running_mtx.release()
     except Exception as e:
         print(e)
     return ident
@@ -20,15 +28,13 @@ class CrawlerManager(object):
     """
     Simple crawljob manager
     """
-    MAX_INSTANCES = 2
-    CRAWL_DEPTH = 2
-    CRAWL_INTERVAL = 36000
-
+    #TODO interval manager
     def __init__(self,urls):
         if len(urls) > 0:
+            self.__done = False
             self.__urls = list(urls)
-            self.__pool = mpool.ThreadPool(MAX_INSTANCES)
-           
+            print(config.get('crawler.maxInst'))
+            self.__pool = mpool.ThreadPool(config.get('crawler.maxInst'))
 
 
     def start(self):
@@ -38,11 +44,18 @@ class CrawlerManager(object):
         :returns: @todo
 
         """
-        for item in enumerate(self.__urls):
-            self.__pool.map_async(crawljob, item)
+#        for item in enumerate(self.__urls):
+ #           print(item)
+  #          self.__pool.map_async(crawljob, item)
+        results = [self.__pool.apply_async(crawljob, i)
+                for i in enumerate(self.__urls)]
         self.__pool.close()
         self.__pool.join()
+        self.__done = True
 
+    @property
+    def done(self):
+        return self.__done
 
     def shutdown(self, hard=False):
         """@todo: Docstring for shutdown

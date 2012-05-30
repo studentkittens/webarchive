@@ -27,14 +27,15 @@ class Rsync(object):
         
         :returns: returns commandline exit code
         """
-
-        self.__process = subprocess.Popen(["rsync -avc " + self.__src + " " + self.__dest],
+        print("src" + self.__src + " dest " + self.__dest)
+        self.__process = subprocess.Popen(["rsync -avcP " + self.__src + " " + self.__dest],
                                     shell=True)
         
         self.__pid = self.__process.pid
+        self.__process.wait()
         print("rsync process with pid {0} started.".format(self.__pid))
 
-
+    
     def __del__(self):
         """
         Exits rsync wrapper and returns

@@ -28,12 +28,19 @@ class Wget(object):
         """
         self.__process = subprocess.Popen(
                                     ['wget', '-e robots=off', '-rH', '-l 1',
-                                    '--directory-prefix=', self.__tmp_folder,
+                                    '--directory-prefix=' + self.__tmp_folder,
                                     self.__url], shell=False)
 
         self.__pid = self.__process.pid
         print("wget process with pid {0} started.".format(self.__pid))
 
+    def wait(self):
+        """@todo: Docstring for wait
+        :returns: @todo
+
+        """
+        
+        self.__process.wait()
 
     def stop(self):
         """

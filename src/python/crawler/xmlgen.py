@@ -23,7 +23,7 @@ and open the template in the editor.
     <wa:meta
         wa:url="{meta[url]}"
         wa:mimeType="{meta[mimeType]}"
-        wa:path="{meta[path]}"
+        wa:path="{meta[abspath]}"
         wa:createTime="{meta[createTime]}"
         wa:title="{meta[title]}"
     >
@@ -44,6 +44,7 @@ class XmlGenerator:
     XmlGenerator, generates xml file from meta nodelist
     some ugly needed? code
     """
+    #TODO Schema only
     XSI = 'http://www.w3.org/2001/XMLSchema-instance'
     WA = 'http://www.hof-university.de/webarchive'
     SCHEMA = 'http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'
@@ -54,7 +55,7 @@ class XmlGenerator:
         self.__wa = wa
         self.__schema = schema
         self.__xml_list = [] 
-        self.__xmlfile = self.__gen_xml()
+        self.__gen_xml()
 
          
 
@@ -66,7 +67,8 @@ class XmlGenerator:
             xml_node = (XML_TEMPLATE.format(xsi = self.__xsi,
                                             wa = self.__wa,
                                             schema = self.__schema,
-                                            meta = item), item['path'])
+                                            meta = item), item['abspath'][:-4])
+            print(item['abspath'])
             self.__xml_list.append(xml_node)
         
     
@@ -74,7 +76,9 @@ class XmlGenerator:
         """
         dumps all previously generated metadata to disk
         """
-        if len(self.__xml_list) > 0 and self.__meta_list != None:
+        print("before dumpe")
+        if len(self.__xml_list) > 0 and self.__meta_list is not None:
+            print("dumpe xml files")
             for item in self.__xml_list:
                 with open(os.path.join(item[1],'data.xml'),'w') as f:
                     f.write(str(item[0]))
@@ -87,7 +91,7 @@ if __name__ == '__main__':
     testdata = [{
             'url' : "www.heise.de/index.html",
             'mimeType' : "text/html",
-            'path' : "www.heise.de/index.html",
+            'abspath' : "www.heise.de/index.html",
             'createTime' : "2012-05-15T17:28:42",
             'title' : "heise online",
             'commitTime' : "2012-05-15T17:30:00",
@@ -95,7 +99,7 @@ if __name__ == '__main__':
     }]
 
     x = XmlGenerator(testdata) 
-    x.dump_xml()
+    x.dump_all()
 
 
 
