@@ -20,8 +20,8 @@ public class CommitTag {
 	 * @param commitTime = commitTag.commitTime
 	 * @param domain = domain.domainName
 	 */
-
-	public CommitTag(int id, TimeStamp commitTime, String domain) throws IllegalArgumentException {
+	public CommitTag(int id, TimeStamp commitTime, String domain) throws
+		IllegalArgumentException {
 		//		 * @throws IllegalArgumentException if one parameter has an illegal value.
 
 //		if (id < 1) {
@@ -48,6 +48,26 @@ public class CommitTag {
 	 * @return database-Id (commitId)
 	 */
 	public int getId() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final CommitTag other = (CommitTag) obj;
+		return this.id == other.id;
+	}
+
+	@Override
+	public int hashCode() {
 		return id;
 	}
 

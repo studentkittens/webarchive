@@ -6,31 +6,33 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
+ * java representation of data-element in xml. New org.w3c.dom.Elements may be
+ * added as children, but DataElement can only be stored if is not
+ * write-protected, which is if canWrite() returns true. 
+ * @see XmlEditor
  *
  * @author ccwelich
  */
 //TODO tests
-//TODO finish javadoc
 public class DataElement {
 
 	private Element dataElement;
 	private boolean canWrite;
 
 	DataElement(Element dataElement, boolean canWriteInto) {// package protected use only
+		assert dataElement != null;
 		this.dataElement = dataElement;
 		this.canWrite = canWriteInto;
 	}
 
+	/**
+	 * @see org.w3c.dom.Node#appendChild(org.w3c.dom.Node) 
+	 */
 	public Node appendChild(Node node) throws DOMException {
-		if (canWrite) {
-			return dataElement.appendChild(node);
-		} else {
-			return null;
-	
-		}
+		return dataElement.appendChild(node);
 	}
 
-	boolean canWrite() {
+	public boolean canWrite() {
 		return canWrite;
 	}
 
@@ -38,14 +40,16 @@ public class DataElement {
 		return dataElement;
 	}
 
-	public String getTextContent() throws DOMException {
-		return dataElement.getTextContent();
-	}
-
+	/**
+	 * @see org.w3c.dom.Node#getChildNodes() 
+	 */
 	public NodeList getChildNodes() {
 		return dataElement.getChildNodes();
 	}
 
+	/**
+	 * @see org.w3c.dom.Element#getElementsByTagName(java.lang.String) 
+	 */
 	public NodeList getElementsByTagName(String string) {
 		return dataElement.getElementsByTagName(string);
 	}

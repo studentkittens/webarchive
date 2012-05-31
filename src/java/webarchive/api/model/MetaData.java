@@ -2,6 +2,7 @@ package webarchive.api.model;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
 //TODO tests
 
 /**
@@ -57,6 +58,24 @@ public class MetaData {
 	 */
 	public CommitTag getCommitTag() {
 		return commitTag;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if(this==obj)return true;
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final MetaData other = (MetaData) obj;
+		return this.url.equals(other.url) && this.commitTag.equals(other.commitTag);
+	}
+
+	@Override
+	public int hashCode() {
+		return 41 * Objects.hashCode(this.url) + Objects.hashCode(this.commitTag);
 	}
 
 	/**

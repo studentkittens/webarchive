@@ -70,11 +70,11 @@ public class Client  {
 	}
 //###############################################################################
 	
-//	public static void main(String args[])
-//	{
-//		Client cl = new Client();
-//		cl.setIp("localhost");
-//		cl.connectToServer();
-//	}
+	public static void main(String args[])
+	{
+		Client cl = new Client();
+		cl.setIp("localhost");
+		cl.connectToServer();
+	}
 	
 }

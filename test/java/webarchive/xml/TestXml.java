@@ -36,13 +36,13 @@ public class TestXml {
 		// init xml helper classes
 		final XmlErrorHandler err = new XmlErrorHandler();
 		final XmlConf conf = new XmlConf();
+		conf.setAutoValidatingMode(XmlHandler.AutoValidatingMode.AFTER_BUILT_DOM);
 		XmlValidator validator = new XmlValidator(conf, err);
 		XmlDomWriter writer = new XmlDomWriter(System.out);
 
 		// init XmlHandler
 		System.out.println("start XmlHandler");
-		XmlHandler h = new XmlHandler(f, err, conf, validator, writer,
-		XmlHandler.AutoValidatingMode.AFTER_BUILT_DOM);
+		XmlHandler h = new XmlHandler(f, err, conf, validator, writer);
 		// xml will be validated, since file is not manipulated
 		System.out.println("validate");
 		

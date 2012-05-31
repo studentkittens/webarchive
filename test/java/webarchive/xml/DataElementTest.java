@@ -79,19 +79,7 @@ public class DataElementTest {
 		fail("The test case is a prototype.");
 	}
 
-	/**
-	 * Test of getTextContent method, of class DataElement.
-	 */
-	@Test
-	public void testGetTextContent() {
-		System.out.println("getTextContent");
-		DataElement instance = null;
-		String expResult = "";
-		String result = instance.getTextContent();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
+	
 
 	/**
 	 * Test of getChildNodes method, of class DataElement.
