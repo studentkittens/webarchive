@@ -19,7 +19,6 @@ import crawler.git as git
 class CrawlJob():
     def __init__(self, ident, url):
         self.__path = os.path.join(config.get('crawler.tempRoot'), url)
-        print("*******************************************************************", self.__path)
         self.__metalist = None
         self.__url = url
         self.run()
@@ -79,12 +78,18 @@ class CrawlJob():
         for domain in itemlist:
             fsmutex = lock.FileLock(domain, folder = content_path)
             fsmutex.acquire()
+            
+            try:
+                os.mkdir(paths.get_domain_path(domain))
+            except OSError:
+                pass
+
             git_proc = git.Git(domain)
             git_proc.init()
             git_proc.checkout('empty')
             git_proc.branch(self.__metalist[0]['commitTime'])
             
-            rsync.Rsync(os.path.join(self.__path,domain), content_path).start_sync()
+            rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
 
             git_proc.commit('Site {domain_name} was crawled.'.format(domain_name = domain))
             git_proc.recreate_master()

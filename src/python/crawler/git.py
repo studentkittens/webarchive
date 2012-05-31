@@ -15,11 +15,16 @@ class Git(object):
         """
         self.__domain = paths.get_domain_path(domain)
         self.__gitdir = os.path.join(self.__domain, '.git')
+        self.__empty  = os.path.join(self.__domain, 'empty_file')
         self.__basecmd = 'git --git-dir {git_dir} --work-tree {git_cwd} '.format(
                 git_dir = self.__gitdir,
                 git_cwd = self.__domain)
 
-    def __call(self, command):
+    @classmethod
+    def convert_branch_name(cls, date_string):
+        return date_string.translate(str.maketrans({':': '', '-': ''}))
+
+    def __call(self, script):
         """
         Execute a git script
 
@@ -30,9 +35,11 @@ class Git(object):
         :param forkShell: call subprocess.call with shell=True
         :returns: the returncode of the last command in line
         """
-        command = '\n'.join([self.__basecmd + line.strip()
-                            for line in command.splitlines()
-                            if len(line) > 0]) 
+        command = ''
+        for line in script.splitlines():
+            line = line.strip()
+            if len(line) > 0:
+                command += ''.join([self.__basecmd, line, '\n'])
 
         print('\n//////////////////\n')
         print(command)
@@ -46,20 +53,23 @@ class Git(object):
 
         :returns: 0 on success, another rc on failure
         """
-        # TODO: Check if already exists
-        self.__call("""
-            init {domain_path}
+        # TODO: make this nicer.
+        if os.path.exists(self.__gitdir):
+            return -1
+
+        self.__call("""')
+            init . 
             checkout -fb 'empty'
-            """.format(domain_path = self.__domain))
+            """)
 
         # Create a dummy empty file (needed to add a commit)
-        with open(os.path.join(self.__domain, 'empty_file'), 'w') as dummy:
-            dummy.write('Dummy File on default empty branch')
+        with open(self.__empty, 'w') as dummy:
+            dummy.write('Dummy File on default empty branch - do not delete!')
 
         self.__call("""
             add empty_file
             commit -am 'Initialiazed'
-            git checkout -b master
+            checkout -b master
             """)
 
     def checkout(self, target = 'master'):
@@ -78,7 +88,14 @@ class Git(object):
         :branch_name: the name of the new branch, may not exist yet
         :returns: 0 on success, another rc on failure
         """
-        return self.__call('checkout -fb {}'.format(branch_name))
+        rc = self.__call('checkout -fb {}'.format(
+            Git.convert_branch_name(branch_name)))
+
+        # remove old emptyfile
+        if rc == 0:
+            os.remove(self.__empty)
+
+        return rc
 
     def commit(self, message = 'edit'):
         """
@@ -97,7 +114,7 @@ class Git(object):
 
     def recreate_master(self):
         return self.__call("""
-                branch -d master
+                branch -D master
                 checkout -b master
                 """)
 
