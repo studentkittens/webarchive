@@ -29,7 +29,7 @@ class Wget(object):
         self.__process = subprocess.Popen(
                                     ['wget', '-e robots=off', '-rH', '-l 1',
                                     '--directory-prefix=' + self.__tmp_folder,
-                                    self.__url], shell=False)
+                                    self.__url])
 
         self.__pid = self.__process.pid
         print("wget process with pid {0} started.".format(self.__pid))

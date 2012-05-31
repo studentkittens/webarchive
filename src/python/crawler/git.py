@@ -2,6 +2,7 @@
 # encoding: utf-8
 import subprocess
 import os
+import util.paths as paths
 
 __author__ = 'Christopher Pahl'
 
@@ -12,8 +13,7 @@ class Git(object):
 
         :param domain: A domain found in the archive
         """
-        # TODO: get the path to the domain
-        self.__domain = domain
+        self.__domain = paths.get_domain_path(domain)
         self.__gitdir = os.path.join(self.__domain, '.git')
         self.__basecmd = 'git --git-dir {git_dir} --work-tree {git_cwd} '.format(
                 git_dir = self.__gitdir,
@@ -46,7 +46,21 @@ class Git(object):
 
         :returns: 0 on success, another rc on failure
         """
-        return self.__call('init ' + self.__domain)
+        # TODO: Check if already exists
+        self.__call("""
+            init {domain_path}
+            checkout -fb 'empty'
+            """.format(domain_path = self.__domain))
+
+        # Create a dummy empty file (needed to add a commit)
+        with open(os.path.join(self.__domain, 'empty_file'), 'w') as dummy:
+            dummy.write('Dummy File on default empty branch')
+
+        self.__call("""
+            add empty_file
+            commit -am 'Initialiazed'
+            git checkout -b master
+            """)
 
     def checkout(self, target = 'master'):
         """
@@ -81,6 +95,11 @@ class Git(object):
                        path = self.__domain,
                        msg  = message))
 
+    def recreate_master(self):
+        return self.__call("""
+                branch -d master
+                checkout -b master
+                """)
 
 if __name__ == '__main__':
     import unittest
