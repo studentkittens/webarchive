@@ -47,7 +47,7 @@ public class Message implements Serializable {
 		id = incId();
 	}
 	
-	public void noAnswerExpected() {
+	public void setBroadCast() {
 		id = null;
 	}
 	

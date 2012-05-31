@@ -9,36 +9,125 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Server  {
+public class Server implements Runnable {
 
     private static final int DEFAULT_PORT = 21000;
 
     private int listenPort;
     private ServerSocket svSock;
-    private ArrayList<Connection> cList;
+    private List<Connection> cList;
 
-    public Server(int listenPort) throws IOException
-    {
-        this.listenPort = listenPort;
-        this.svSock = new ServerSocket(this.listenPort);
+    private Boolean running = false;
+    
+    private Thread thread;
+    
+    private static Server sv=null;
+
+    private Server() {
+    	this.listenPort = DEFAULT_PORT;
+        
         this.cList = new ArrayList<Connection>();
-
+        sv = this;
     }
-
-    public Server() throws IOException
-    {
-        this(DEFAULT_PORT);
+    
+    public static Server getInstance() {
+    	if (sv != null) {
+    		return sv;
+    	} else {
+    		new Server();
+    		return sv;
+    	}
     }
-    //-----------------------------------------------------------------------------------------------------------------------
-    public void start() {
+    
+    public boolean start() {
+    	synchronized (running) {
+    	if(isRunning())
+			return false;
+    		thread = new Thread(sv);
+    		thread.start();
+    	}
+    	return isRunning();
+    }
+    
+    public boolean stop() {
+    	synchronized (running) {
+	    	if(!isRunning())
+	    		return false;
+	    	try {
+	    		System.out.println("closing svSock");
+				svSock.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+
+			}
+    	}
+    	thread = null;
+    	return true;
+    }
+    
+    @Override
+	public void run() {
+    	
+		
+		synchronized (running) {
+			if(isRunning())
+				return;
+			setRunning(true);
+			accept();
+			setRunning(false);
+		}
+	}
+    
+    
+    private void setRunning(boolean running) {
+    	this.running=running;
+    }
+    
+    private boolean isRunning() {
+    	return running;
+    }
+    
+    private void disconnectClients() {
+    	System.out.println("disconnecting Clients");
+    	for(Connection c : cList) {
+    		
+			try {
+				c.getSocket().close();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+    	}
+    	cList.clear();
+    	System.out.println("Clients disconnected");
+    }
+    
+    private void accept() {
+    	try {
+			this.svSock = new ServerSocket(this.listenPort);
+			System.out.println("creating svSocket");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         while(true)
         {
             Socket sock=null;
 
             try {
+            	System.out.println("awaiting incomming connection");
                 sock = svSock.accept();
+            } catch (SocketException e) {
+            	//TODO
+            	disconnectClients();
+            	break;
+                
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -82,7 +171,7 @@ public class Server  {
 
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
+
     private void addNewConnection(Connection c)
     {
         cList.add(c);
@@ -120,20 +209,5 @@ public class Server  {
 
         return false;
     }
-
     
-    //##################################################################
-    public static void main(String args[])
-    {
-
-        try {
-            Server sv = new Server();
-            sv.start();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-    }
 }

@@ -11,5 +11,6 @@ public enum Header {
 	READFILE,
 	XMLEDIT,
 	LS,
+	NOTIFY,
 	
 }
