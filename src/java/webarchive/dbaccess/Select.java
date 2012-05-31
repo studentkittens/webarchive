@@ -77,4 +77,6 @@ public abstract class Select<Type> {
 			sql.setLength(sql.length() - 2);
 		}
 	}
+
+	abstract List<Type> select(webarchive.api.select.Select<Type> select) throws SQLException;
 }

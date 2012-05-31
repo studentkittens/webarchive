@@ -36,7 +36,7 @@ public class CommitTag {
 //		}
 		assert id > 0;
 		assert commitTime != null;
-		assert domain == null && !domain.isEmpty();
+		assert domain != null && !domain.isEmpty();
 		this.id = id;
 		this.commitTime = commitTime;
 		this.domain = domain;
