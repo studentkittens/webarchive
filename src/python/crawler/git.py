@@ -22,9 +22,18 @@ class Git(object):
 
     @classmethod
     def convert_branch_name(cls, date_string):
+        """
+        Convert a datestring suitably to a branch name
+
+        Git does not allow special characters such as : or - 
+        in branchnames for whatever reason
+
+        :param date_string: the string to convert
+        :returns: the new, converted string
+        """
         return date_string.translate(str.maketrans({':': '', '-': ''}))
 
-    def __call(self, script):
+    def __call_script(self, script):
         """
         Execute a git script
 
@@ -57,7 +66,7 @@ class Git(object):
         if os.path.exists(self.__gitdir):
             return -1
 
-        self.__call("""')
+        self.__call_script("""')
             init . 
             checkout -fb 'empty'
             """)
@@ -66,7 +75,7 @@ class Git(object):
         with open(self.__empty, 'w') as dummy:
             dummy.write('Dummy File on default empty branch - do not delete!')
 
-        self.__call("""
+        self.__call_script("""
             add empty_file
             commit -am 'Initialiazed'
             checkout -b master
@@ -79,7 +88,7 @@ class Git(object):
         :target: the target to visit
         :returns: 0 on success, another rc on failure
         """
-        return self.__call('checkout {}'.format(target))
+        return self.__call_script('checkout {}'.format(target))
 
     def branch(self, branch_name = 'empty'):
         """
@@ -88,7 +97,7 @@ class Git(object):
         :branch_name: the name of the new branch, may not exist yet
         :returns: 0 on success, another rc on failure
         """
-        rc = self.__call('checkout -fb {}'.format(
+        rc = self.__call_script('checkout -fb {}'.format(
             Git.convert_branch_name(branch_name)))
 
         # remove old emptyfile
@@ -106,14 +115,14 @@ class Git(object):
         :message: The commit message
         :returns: 0 on success, another rc on failure
         """
-        return self.__call("""
+        return self.__call_script("""
                    add {path} &&
                    commit -am '{msg}'""".format(
                        path = self.__domain,
                        msg  = message))
 
     def recreate_master(self):
-        return self.__call("""
+        return self.__call_script("""
                 branch -D master
                 checkout -b master
                 """)
