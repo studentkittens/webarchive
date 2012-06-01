@@ -66,7 +66,7 @@ class Git(object):
         if os.path.exists(self.__gitdir):
             return -1
 
-        self.__call_script("""')
+        self.__call_script("""
             init . 
             checkout -fb 'empty'
             """)

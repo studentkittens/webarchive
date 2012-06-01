@@ -74,14 +74,17 @@ class CrawlJob():
         """
         content_path = os.path.join(config.get('general.root'),'content') 
         itemlist = os.listdir(self.__path)
-
+        
         for domain in itemlist:
+            domain_path  = paths.get_domain_path(domain)
             fsmutex = lock.FileLock(domain, folder = content_path)
             fsmutex.acquire()
             
             try:
-                os.mkdir(paths.get_domain_path(domain))
-            except OSError:
+                print('Creating directory:', domain_path)
+                os.mkdir(domain_path)
+            except OSError as err:
+                print(err)
                 pass
 
             git_proc = git.Git(domain)
