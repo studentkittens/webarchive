@@ -50,7 +50,6 @@ class Git(object):
             if len(line) > 0:
                 command += ''.join([self.__basecmd, line, '\n'])
 
-        print('\n//////////////////\n')
         print(command)
         return subprocess.call(command, shell=True)
 
@@ -62,24 +61,28 @@ class Git(object):
 
         :returns: 0 on success, another rc on failure
         """
-        # TODO: make this nicer.
-        if os.path.exists(self.__gitdir):
-            return -1
+        rc = 0
 
-        self.__call_script("""
-            init . 
-            checkout -fb 'empty'
-            """)
+        if not os.path.exists(self.__gitdir):
+            rc = self.__call_script("""
+                init . 
+                checkout -fb 'empty'
+                """)
 
-        # Create a dummy empty file (needed to add a commit)
-        with open(self.__empty, 'w') as dummy:
-            dummy.write('Dummy File on default empty branch - do not delete!')
+            if rc == 0:
+                # Create a dummy empty file (needed to add a commit)
+                with open(self.__empty, 'w') as dummy:
+                    dummy.write('Dummy File on default empty branch - do not delete!')
 
-        self.__call_script("""
-            add empty_file
-            commit -am 'Initialiazed'
-            checkout -b master
-            """)
+                rc = self.__call_script("""
+                    add empty_file
+                    commit -am 'Initialiazed'
+                    checkout -b master
+                    """)
+        else:
+            rc = -1
+
+        return rc
 
     def checkout(self, target = 'master'):
         """
@@ -102,7 +105,11 @@ class Git(object):
 
         # remove old emptyfile
         if rc == 0:
-            os.remove(self.__empty)
+            try:
+                os.remove(self.__empty)
+            except OSError as err:
+                # TODO: Log err
+                print('Cannot delete empty_file:', err)
 
         return rc
 
