@@ -3,8 +3,9 @@
 
 __author__ = 'Christoph Piechula'
 
-import mimetypes as mime
 import util.times as utl
+import crawler.extractor as extractor
+import util.mimextractor as mime 
 
 class MetaData(dict):
     """
@@ -38,14 +39,14 @@ class MetaData(dict):
         cls.__post_path = abs_data_path[len(tmp_crawler_folder):]
         if cls.__post_path[0] == '/':
             cls.__post_path = cls.__post_path[1:]
-
-        m['mimeType'] = mime.guess_type(abs_data_path)[0] or 'application/octet-stream'
+        
+        m['mimeType'] = mime.get_mime(abs_data_path)
         m['url'] = cls.get_url()
         m['domain'] = cls.get_domain()
         m['abspath'] = abs_data_path
         m['createTime'] = utl.get_ctime(abs_data_path) 
         m['commitTime'] = commitTime
-        m['title'] = ""
+        m['title'] = " "
         #TODO Title extractor
         return m
 
