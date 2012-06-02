@@ -1,5 +1,5 @@
-www.0pointer.de
+#www.0pointer.de
 www.hack.org
 #blog.fefe.de
 #www.youporn.com
-www.heise.de
+#www.heise.de

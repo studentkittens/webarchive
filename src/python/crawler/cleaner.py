@@ -5,10 +5,12 @@ __author__ = 'Christoph Piechula'
 
 import subprocess
 import os, sys,shutil
-import util.files as ufile
+import logging
+
 import util.times as times
 import crawler.filter as filter
 from crawler.metadata import MetaData
+
 class Cleaner:
     """
     Cleaner, walk dir tree, cleans and restructures
@@ -37,7 +39,7 @@ class Cleaner:
             final_data_path= os.path.join(src_file, 'data')
             shutil.move(dest_file,final_data_path)
         
-        except OSError as e:
+        except OSError as err:
             pass # TODO: Log Error
         else:
             meta_obj = MetaData.build_metadata_from_file(self.__path,
@@ -62,7 +64,7 @@ class Cleaner:
         walks through tmp_crawler_folder hierarchy calling internal
         restructure method.
         """
-        print("starting restructure.")
+        logging.debug("starting restructure.")
         tree = os.walk(os.path.abspath(self.__path))
         for leaf in tree:
             for data_file in leaf[2]:
@@ -71,7 +73,7 @@ class Cleaner:
     
     def clean_empty(self):
         # TODO: (Hopefully) Replace by pure python code
-        print("removing empty files and folders.")
+        logging.debug("removing empty files and folders.")
         subprocess.call(['find',self.__path,'-empty','-delete'])
 
 

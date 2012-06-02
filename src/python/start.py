@@ -5,7 +5,7 @@ import init.init as init
 import logging
 import cmanager.intervalmanager as interval
 
-logging.basicConfig(filename='/tmp/archive/archive.log',level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 init.init_archive('/tmp')
 

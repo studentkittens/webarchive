@@ -27,13 +27,11 @@ class Wget(object):
         self.__process = None
         self.__pid = None
 
-
     def start(self):
         """
         starts the wget crawl process
         :returns: wget process exit code
         """
-
         cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
                                  folder=self.__tmp_folder, url=self.__url) 
         cmd = shlex.split(cmd)
@@ -45,13 +43,11 @@ class Wget(object):
         #TODO, Logger? 
         cprint("[WGET PROCESS] with pid {0} started.".format(self.__pid), "green")
 
-    def wait(self):
-        """@todo: Docstring for wait
-        :returns: @todo
-
-        """
-        
-        self.__process.wait()
+    def poll(self):
+        if self.__process is not None:
+            return self.__process.poll()
+        else:
+            return True
 
     def stop(self):
         """
@@ -59,29 +55,17 @@ class Wget(object):
         """
         if self.__process != None:
             try:
+                print('[WGET] Stopping process with pid', self.__pid)
                 self.__process.terminate()
-                
             finally:
-                out, err = self.__process.communicate()
-                print(out, err)
+                self.__process = None
         else:
             #TODO, Logger?
             cprint("no process running.","red")
 
-
-    def __del__(self):
-        """
-        Exits wget wrapper and returns
-        wget returncode
-        """
-        retc = self.__process.returncode
-        cprint("[WGET PROCESS] with pid {0} stopped, returncode was {1}."
-               .format(self.__pid, retc), "blue")
-        
 
 if __name__ == '__main__':
     a = Wget('www.heise.de','.')
     a.start()
     time.sleep(1)
     a.stop()
-    #XXX process cannot be killed twice yet, does it matter?

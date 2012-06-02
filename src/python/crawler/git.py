@@ -2,6 +2,7 @@
 # encoding: utf-8
 import subprocess
 import os
+import shlex
 import logging
 import util.paths as paths
 
@@ -51,7 +52,7 @@ class Git(object):
             if len(line) > 0:
                 command += ''.join([self.__basecmd, line, '\n'])
 
-        logging.debug('Executing: %s' % command)
+        logging.info('Executing:\n%s' % command)
 
         proc = subprocess.Popen(command, shell=True,
                 stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -61,11 +62,8 @@ class Git(object):
 
         if rc is not 0:
             logging.warn('Previous git command returned nonzero-returncode! {}'.format(err))
-        else:
-            return
 
         return rc 
-
 
     def init(self):
         """
@@ -80,7 +78,7 @@ class Git(object):
         if not os.path.exists(self.__gitdir):
             rc = self.__call_script("""
                 init . 
-                checkout -fb 'empty'
+                checkout -b 'empty'
                 """)
 
             if rc == 0:
@@ -93,6 +91,8 @@ class Git(object):
                     commit -am 'Initialiazed'
                     checkout -b master
                     """)
+            else:
+                rc = -2
         else:
             rc = -1
 

@@ -4,6 +4,7 @@
 __author__ = 'Christoph Piechula'
 
 import os
+import logging
 
 """
 ugly xml template.
@@ -57,8 +58,6 @@ class XmlGenerator:
         self.__xml_list = [] 
         self.__gen_xml()
 
-         
-
     def __gen_xml(self):
         """
         generates xml list from metadata list
@@ -68,7 +67,7 @@ class XmlGenerator:
                                             wa = self.__wa,
                                             schema = self.__schema,
                                             meta = item), item['abspath'][:-4])
-            print(item['abspath'])
+
             self.__xml_list.append(xml_node)
         
     
@@ -76,14 +75,12 @@ class XmlGenerator:
         """
         dumps all previously generated metadata to disk
         """
-        print("before dumpe")
         if len(self.__xml_list) > 0 and self.__meta_list is not None:
-            print("dumpe xml files")
             for item in self.__xml_list:
                 with open(os.path.join(item[1],'data.xml'),'w') as f:
                     f.write(str(item[0]))
         else:
-            print("nothing to dump.")
+            logging.warn("nothing to dump.")
 
     
         
