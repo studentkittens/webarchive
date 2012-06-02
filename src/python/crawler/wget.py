@@ -7,6 +7,7 @@ import subprocess
 import time
 import shlex
 import config.reader as config
+import shutil
 from termcolor import cprint, colored 
 
 class Wget(object):
@@ -60,7 +61,7 @@ class Wget(object):
         if self.__process != None:
             try:
                 self.__process.terminate()
-                
+                shutil.rmtree(os.path.join(self.__tmp_folder, url),ignore_errors=True)   
             finally:
                 out, err = self.__process.communicate()
                 print(out, err)

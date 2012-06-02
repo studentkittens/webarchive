@@ -14,14 +14,12 @@ running_mtx = threading.Lock()
 
 def crawljob(ident,url):
     try:
-        print("ich bin crawler " + str(ident) + " und crawle "+ url)
         j = job.CrawlJob(ident, url)
         running_mtx.acquire()
         running.append(j)
         running_mtx.release()
     except Exception as e:
         print(e)
-    return ident
 
 
 class CrawlerManager(object):
@@ -44,12 +42,15 @@ class CrawlerManager(object):
         :returns: @todo
 
         """
-        results = [self.__pool.apply_async(crawljob, i)
-                for i in enumerate(self.__urls)]
-        self.__pool.close()
-        self.__pool.join()
-        self.__done_callback()
-        self.__done_callback = None
+        try:
+            results = [self.__pool.apply_async(crawljob, i)
+                    for i in enumerate(self.__urls)]
+            self.__pool.close()
+            self.__pool.join()
+            self.__done_callback()
+            self.__done_callback = None
+        except KeyboardInterrupt as kerr:
+            self.__pool_shutdown()
 
     def register_done(self, func):
         """@todo: Docstring for register_done
@@ -60,6 +61,13 @@ class CrawlerManager(object):
         """
         self.__done_callback = func
 
+    def __pool_shutdown(self):
+        """@todo: Docstring for __pool_shutdown
+        :returns: @todo
+
+        """
+        for job in running:
+            job.shutdown()
 
     def shutdown(self, hard=False):
         """@todo: Docstring for shutdown
