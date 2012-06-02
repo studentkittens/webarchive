@@ -2,6 +2,7 @@
 # encoding: utf-8
 import subprocess
 import os
+import logging
 import util.paths as paths
 
 __author__ = 'Christopher Pahl'
@@ -50,8 +51,21 @@ class Git(object):
             if len(line) > 0:
                 command += ''.join([self.__basecmd, line, '\n'])
 
-        print(command)
-        return subprocess.call(command, shell=True)
+        logging.debug('Executing: %s' % command)
+
+        proc = subprocess.Popen(command, shell=True,
+                stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+
+        out, err = proc.communicate()
+        rc = proc.poll()
+
+        if rc is not 0:
+            logging.warn('Previous git command returned nonzero-returncode!', err)
+        else:
+            return
+
+        return rc 
+
 
     def init(self):
         """

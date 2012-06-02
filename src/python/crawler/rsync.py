@@ -4,6 +4,7 @@
 __author__ = 'Christoph Piechula'
 
 import subprocess
+import logging
 
 class Rsync(object):
     """
@@ -27,25 +28,21 @@ class Rsync(object):
         
         :returns: returns commandline exit code
         """
-        print("src" + self.__src + " dest " + self.__dest)
-        self.__process = subprocess.Popen(["rsync -avcP " + self.__src + " " + self.__dest],
-                                    shell=True)
+        self.__process = subprocess.Popen(['rsync', '-avcP', self.__src, self.__dest],
+                stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         
         self.__pid = self.__process.pid
-        self.__process.wait()
-        print("rsync process with pid {0} started.".format(self.__pid))
+        logging.info('rsync process with pid {0} started'.format(self.__pid))
+        logging.info('Syncing from "" to ""'.format(self.__src, self.__dest))
+        out,err = self.__process.communicate()
+        self.__pid = self.__process.poll()
+
+        if self.__pid == 0:
+            logging.info("rsync process with pid {0} finished.".format(self.__pid))
+        else:
+            logging.warning('rsync failed with exit-code {0}: {1}'.format(self.__pid, err))
 
     
-    def __del__(self):
-        """
-        Exits rsync wrapper and returns
-        rsync returncode
-        """
-        retc = self.__process.returncode
-        print("rsync process with pid {0} stopped.".format(self.__pid))
-        print('rsync module exit.')
-        return retc
-
 if __name__ == '__main__':
     r = Rsync('/home/christoph/music/*','/home/christoph/temp/')
     print(r.start_sync())
