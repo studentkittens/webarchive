@@ -32,7 +32,6 @@ class Wget(object):
         starts the wget crawl process
         :returns: wget process exit code
         """
-
         cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
                                  folder=self.__tmp_folder, url=self.__url) 
         
