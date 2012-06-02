@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # encoding: utf-8
+
 import cmanager.crawlmanager as c
 import util.files as utl
-import util.times as times
+import util.times 
 import time 
 import config.reader as config
 
 class IntervalManager(object):
     """
-    Simple IntervalManager that manages interval of crawl times
+    Simple IntervalManager that manages interval of crawl util.times
     """
 
     def __init__(self):
@@ -27,13 +28,15 @@ class IntervalManager(object):
 
         """
 
+        #fetch interval from config
         self.__interval = float(config.get('crawler.interval'))*60
         
         #a bit ugly, fix it
+        #only to display some information
         cur_time = time.strftime("%a, %d %b %Y %H:%M:%S",
-                                 time.gmtime(times.get_localtime_sec()))
+                                 time.gmtime(util.times.get_localtime_sec()))
         next_time = time.strftime("%a, %d %b %Y %H:%M:%S",
-                                 time.gmtime(times.get_localtime_sec() + delay_in_sec))
+                                 time.gmtime(util.times.get_localtime_sec() + delay_in_sec))
 
         #delay before next crawl 
         if delay_in_sec != 0:
@@ -42,7 +45,7 @@ class IntervalManager(object):
             time.sleep(float(delay_in_sec))
 
         self.__cmanager = c.CrawlerManager(utl.unique_items_from_file('url.txt'))
-        self.__start_time = times.get_localtime_sec()
+        self.__start_time = util.times.get_localtime_sec()
         self.__cmanager.register_done(self.end_time)
         self.__cmanager.start()
          
@@ -54,13 +57,14 @@ class IntervalManager(object):
         :returns: @todo
 
         """
-        self.__end_time = times.get_localtime_sec()
+        self.__end_time = util.times.get_localtime_sec()
         next_crawl_time = self.__start_time + self.__interval
         
         while next_crawl_time < self.__end_time:
             next_crawl_time = next_crawl_time + self.__interval
         
         delay = next_crawl_time - self.__end_time
+        #delay = next_crawl_time + self.__interval * (int((self.__end_time - next_crawl_time)  / self.__interval) + 1) - self.__end_time
         self.start(delay)
    
 
