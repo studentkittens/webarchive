@@ -60,7 +60,7 @@ class Git(object):
         rc = proc.poll()
 
         if rc is not 0:
-            logging.warn('Previous git command returned nonzero-returncode!', err)
+            logging.warn('Previous git command returned nonzero-returncode! {}'.format(err))
         else:
             return
 
