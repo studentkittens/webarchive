@@ -5,6 +5,9 @@ __author__ = 'Christoph Piechula'
 
 import subprocess 
 import time
+import config.reader as config
+from termcolor import cprint, colored 
+
 class Wget(object):
     """
     Simple wget wrapper class
@@ -17,6 +20,9 @@ class Wget(object):
         """
         self.__url = url
         self.__tmp_folder = tmp_folder
+        self.__depth = config.get('crawler.depth')
+        self.__robots = "off"
+        self.__base = 'wget -e robots={rob} -rH -l {depth} -P {folder} {url}'
         self.__process = None
         self.__pid = None
 
@@ -26,21 +32,18 @@ class Wget(object):
         starts the wget crawl process
         :returns: wget process exit code
         """
-        self.__process = subprocess.Popen(
-                                    ['wget', '-e robots=off', '-rH', '-l 1',
-                                    '--directory-prefix=' + self.__tmp_folder,
-                                    self.__url])
+
+        cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
+                                 folder=self.__tmp_folder, url=self.__url) 
+        
+        self.__process = subprocess.Popen(cmd, shell=True,
+                                               stdout = subprocess.PIPE,
+                                               stderr = subprocess.PIPE)
 
         self.__pid = self.__process.pid
-        print("wget process with pid {0} started.".format(self.__pid))
+        #TODO, Logger? 
+        cprint("[WGET PROCESS] with pid {0} started.".format(self.__pid), "green")
 
-    def wait(self):
-        """@todo: Docstring for wait
-        :returns: @todo
-
-        """
-        
-        self.__process.wait()
 
     def stop(self):
         """
@@ -53,6 +56,7 @@ class Wget(object):
                 out, err = self.__process.communicate()
                 print(out, err)
         else:
+            #TODO, Logger?
             print("no process running.")
 
 
@@ -62,9 +66,9 @@ class Wget(object):
         wget returncode
         """
         retc = self.__process.returncode
-        print("wget process with pid {0} stopped.".format(self.__pid))
-        print('wget module exit.')
-        return retc
+        #TODO, Logger? Logging returncode this way?
+        cprint("[WGET PROCESS] with pid {0} stopped, returncode was {1}."
+               .format(self.__pid, retc), "blue")
         
 
 if __name__ == '__main__':
@@ -72,4 +76,3 @@ if __name__ == '__main__':
     a.start()
     time.sleep(1)
     a.stop()
-    #XXX process cannot be killed twice yet, does it matter?
