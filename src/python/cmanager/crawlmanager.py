@@ -31,7 +31,7 @@ class CrawlerManager(object):
     #TODO interval manager
     def __init__(self,urls):
         if len(urls) > 0:
-            self.__done = False
+            self.__done_callback = None
             self.__urls = list(urls)
             print(config.get('crawler.maxInst'))
             self.__pool = mpool.ThreadPool(config.get('crawler.maxInst'))
@@ -44,18 +44,22 @@ class CrawlerManager(object):
         :returns: @todo
 
         """
-#        for item in enumerate(self.__urls):
- #           print(item)
-  #          self.__pool.map_async(crawljob, item)
         results = [self.__pool.apply_async(crawljob, i)
                 for i in enumerate(self.__urls)]
         self.__pool.close()
         self.__pool.join()
-        self.__done = True
+        self.__done_callback()
+        self.__done_callback = None
 
-    @property
-    def done(self):
-        return self.__done
+    def register_done(self, func):
+        """@todo: Docstring for register_done
+
+        :func: @todo
+        :returns: @todo
+
+        """
+        self.__done_callback = func
+
 
     def shutdown(self, hard=False):
         """@todo: Docstring for shutdown

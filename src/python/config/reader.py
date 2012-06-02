@@ -8,7 +8,9 @@ options = {
         'crawler.tempRoot': '/tmp/archive/tmp/',
         'general.root': '/tmp/archive/',
         'general.filterpath':'/tmp/archive/filter/',
-        'crawler.maxInst' : 10
+        'crawler.maxInst' : 10,
+        'crawler.interval' : 0.5
+    
         }
 
 def get(value):
