@@ -23,7 +23,6 @@ def crawljob(ident,url):
         print(err)
     return ident
 
-
 class CrawlerManager(object):
     """
     Simple crawljob manager

@@ -7,6 +7,7 @@ import subprocess
 import time
 import shlex
 import config.reader as config
+import shutil
 from termcolor import cprint, colored 
 
 class Wget(object):
