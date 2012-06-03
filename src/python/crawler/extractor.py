@@ -5,27 +5,22 @@ from bs4 import BeautifulSoup
 
 #poor man's implementation of a title extractor module
 
-#globale path exchange variable
-__file_path = " "
-
-
 ###########################################################################
 #                        concrete implementations                         #
 ###########################################################################
 
-def html():
+def html(file_path):
     """@todo: Docstring for get_title
 
-    :file_path: @todo
-    :mime: @todo
-    :returns: @todo
+    :file_path: path to content
+    :returns: extracted title or empty string
 
     """
     doc = None
-    title = None
-    global __file_path
+    title = " "
+    
     try:
-        with open(__file_path,'r') as f:
+        with open(file_path,'r') as f:
             doc = f.read()
         soup = BeautifulSoup(doc)
         title = soup.title.string
@@ -35,28 +30,22 @@ def html():
 ###########################################################################
 #                             extractors list                             #
 ###########################################################################
-
 extractors = {
         "text/html" : html
 }
 
-
-
-
 def get_title(file_path, mime):
-    """@todo: Docstring for get_title
-
-    :file_path: @todo
-    :mime: @todo
-    :returns: @todo
+    """
+    returns 'title' for a given file with
+    a specific mime type if an extractor isavaiable
+    :file_path: path to content file
+    :mime: mime type of that file to determinate extractor
+    :returns: extracted title as string
 
     """
-    global __file_path
-    __file_path = file_path
-
     title = " "
     try:
-        title = extractors[mime]()
+        title = extractors[mime](file_path)
     finally:
         return str(title)
 
