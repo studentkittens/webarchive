@@ -21,10 +21,15 @@ import socketserver
 import threading
 import sys
 
+import util.filelock as lock
+
+global_lock = None
+
 def lock_handler(*args):
     """
     Returns 'true' or 'false'
     """
+
     return 'true\n'
 def try_lock_handler(*args):
     """
