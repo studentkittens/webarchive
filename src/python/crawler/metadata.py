@@ -6,6 +6,7 @@ __author__ = 'Christoph Piechula'
 import util.times as utl
 import crawler.extractor as extractor
 import util.mimextractor as mime 
+import crawler.extractor as extractor
 
 class MetaData(dict):
     """
@@ -46,7 +47,7 @@ class MetaData(dict):
         m['abspath'] = abs_data_path
         m['createTime'] = utl.get_ctime(abs_data_path) 
         m['commitTime'] = commitTime
-        m['title'] = " "
+        m['title'] =  extractor.get_title(abs_data_path, m['mimeType'])
         #TODO Title extractor
         return m
 
