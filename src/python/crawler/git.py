@@ -2,7 +2,6 @@
 # encoding: utf-8
 import subprocess
 import os
-import shlex
 import logging
 import util.paths as paths
 
