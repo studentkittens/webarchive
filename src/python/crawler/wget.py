@@ -15,7 +15,7 @@ class Wget(object):
     A simple wget wrapper class.
     """
 
-    def __init__(self, url, tmp_folder):
+    def __init__(self, url, tmp_folder, customparm=None):
         """
         :url: url that will be fetched
         :tmp_folder: folder to save website content
@@ -25,6 +25,7 @@ class Wget(object):
         self.__depth = config.get('crawler.depth')
         self.__robots = "off"
         self.__base = 'wget -e robots={rob} -rH -l {depth} -P {folder} {url}'
+        self.__custom_cmd = customparm
         self.__process = None
         self.__pid = None
 
@@ -33,8 +34,13 @@ class Wget(object):
         starts the wget crawl process
         :returns: wget process exit code
         """
-        cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
-                                 folder=self.__tmp_folder, url=self.__url) 
+        cmd = " "
+
+        if self.__custom_cmd is not None:
+            cmd = self.__custom_cmd
+        else:
+            cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
+                                     folder=self.__tmp_folder, url=self.__url) 
         cmd = shlex.split(cmd)
         self.__process = subprocess.Popen(cmd, shell=False,
                                                stdout = subprocess.PIPE,
