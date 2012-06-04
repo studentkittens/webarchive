@@ -6,21 +6,11 @@ __author__ = 'Christoph Piechula'
 import os
 import logging
 
-"""
-ugly xml template.
-"""
-
 XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-
-
 <wa:file
-    xmlns:xsi='{xsi}'
-    xmlns:wa='{wa}'
-    xsi:schemaLocation='{schema}'>
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns:wa='http://www.hof-university.de/webarchive'
+    xsi:schemaLocation='http://www.hof-university.de/webarchive {schema_path}'>
     <wa:meta
         wa:url="{meta[url]}"
         wa:mimeType="{meta[mimeType]}"
@@ -40,32 +30,31 @@ and open the template in the editor.
 
 """
 
-class XmlGenerator:
+class XmlGenerator(object):
     """
     XmlGenerator, generates xml file from meta nodelist
-    some ugly needed? code
-    """
-    #TODO Schema only
-    XSI = 'http://www.w3.org/2001/XMLSchema-instance'
-    WA = 'http://www.hof-university.de/webarchive'
-    SCHEMA = 'http://www.hof-university.de/webarchive file:/home/ccwelich/git/webarchive/xml/file.xsd'
     
-    def __init__(self, meta_obj_list=None, xsi=XSI, wa=WA, schema=SCHEMA):
+    """
+    SCHEMA = 'file:/home/ccwelich/git/webarchive/xml/file.xsd'
+    
+    def __init__(self, meta_obj_list=None, schema_path=SCHEMA):
+        """
+        Generates xml meta files and dumps them to disk
+
+        :meta_obj_list: list with meta objects to dump
+        :schema_path: path of schema file
+        """
         self.__meta_list = meta_obj_list
-        self.__xsi = xsi
-        self.__wa = wa
-        self.__schema = schema
+        self.__schema_path = schema_path
         self.__xml_list = [] 
         self.__gen_xml()
 
     def __gen_xml(self):
         """
-        generates xml list from metadata list
+        Generates xml list from metadata list
         """
         for item in self.__meta_list:
-            xml_node = (XML_TEMPLATE.format(xsi = self.__xsi,
-                                            wa = self.__wa,
-                                            schema = self.__schema,
+            xml_node = (XML_TEMPLATE.format(schema_path = self.__schema_path,
                                             meta = item), item['abspath'][:-4])
 
             self.__xml_list.append(xml_node)
@@ -73,7 +62,7 @@ class XmlGenerator:
     
     def dump_all(self):
         """
-        dumps all previously generated metadata to disk
+        Dumps all previously generated metadata to disk
         """
         if len(self.__xml_list) > 0 and self.__meta_list is not None:
             for item in self.__xml_list:
@@ -83,7 +72,11 @@ class XmlGenerator:
             logging.warn("nothing to dump.")
 
     
-        
+
+###########################################################################
+#                                unittest                                 #
+###########################################################################
+
 if __name__ == '__main__':
     testdata = [{
             'url' : "www.heise.de/index.html",

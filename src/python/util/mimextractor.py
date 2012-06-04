@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
+
+__author__ = 'Christoph Piechula'
+
 import magic
 
 def get_mime(filepath):
-    """@todo: Docstring for get_mime
+    """
+    Determinates the mime type of a given file
 
-    :filepath: @todo
-    :returns: @todo
+    :filepath: path to file
+    :returns: mime type as string
 
     """
     result = "application/octet-stream"
@@ -14,4 +18,7 @@ def get_mime(filepath):
         result = m.id_filename(filepath)
     return result
 
+###########################################################################
+#                                unittest                                 #
+###########################################################################
     

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-__author__ = 'Christoph Piechula'
+__author__ = 'Christoph Piechula, Christopher Pahl'
 
 import os
 import logging
@@ -21,36 +21,55 @@ import crawler.git as git
 import crawler.exceptions
 
 class CrawlJob(object):
+    """
+    A CrawlJob Process that starts with crawling
+    and ends with db commit.
+
+    """
     def __init__(self, ident, url):
-        self.__path = os.path.join(config.get('crawler.tempRoot'), url)
+        self.__path = os.path.join(paths.get_temp_root(), url)
         self.__metalist = None
         self.__url = url
         self.__ident = ident
         self.__shutdown = False
 
     def shutdown(self):
+        """
+        Shutdown flag for 'hard'-way shutdown
+        """
         self.__shutdown = True
 
     def run(self):
-        ufile.mkdir_noerror(self.__path)
+        """
+        Starts the Crawljob procedure
+        """
         try:
-            print('--> Crawling')
+            ufile.os.mkdir(self.__path)
+        except OSError:
+            pass
+        
+        try:
+            logging.info('--> Crawling')
             self.start_crawl() 
-            print('--> Cleaning')
+            logging.info('--> Cleaning')
             self.start_clean()
-            print('--> Gen XML')
+            logging.info('--> Gen XML')
             self.start_xml_gen()
-            print('--> Rsyncing')
+            logging.info('--> Rsyncing')
             self.start_sync()
-            print('--> Done')
+            logging.info('--> Done')
         except crawler.exceptions.ShutdownException:
-            print('Job #{cid} ({curl}) stopped.'.format(cid = self.__ident, curl = self.__url))
+            logging.info('Job #{cid} ({curl}) stopped.'
+                  .format(cid = self.__ident, curl = self.__url))
         except:
             traceback.print_exc()
         finally:
             shutil.rmtree(self.__path, ignore_errors=True)
     
     def start_crawl(self):
+        """
+        Starts the wget module to download specific website
+        """
         wget_proc = wget.Wget(self.__url,os.path.abspath(self.__path))
         wget_proc.start()
 
@@ -66,9 +85,9 @@ class CrawlJob(object):
                 raise crawler.exceptions.ShutdownException() 
     
     def start_clean(self):
-        """@todo: Docstring for start_clean
-        :returns: @todo
-
+        """
+        Starts the cleaning procedure which kills 
+        empty files and dirs and restructures dir hierarchy
         """
         cleaner_proc = cleaner.Cleaner(self.__path)
         cleaner_proc.clean_empty()
@@ -77,17 +96,16 @@ class CrawlJob(object):
         self.__metalist = cleaner_proc.meta_list
 
     def start_xml_gen(self):
-        """@todo: Docstring for start_xml_gen
-        :returns: @todo
-
+        """
+        Dumps in-memory metadata list to xml files on disk
         """
         xml_proc = xmlgen.XmlGenerator(self.__metalist)
         xml_proc.dump_all()
     
-    def start_sync(self):
-        """@todo: Docstring for start_sync
-        :returns: @todo
 
+    def start_sync(self):
+        """
+        Starts rsync procedure -> mirroring src to dest
         """
         content_path = os.path.join(config.get('general.root'),'content') 
         itemlist = os.listdir(self.__path)
@@ -111,9 +129,15 @@ class CrawlJob(object):
             
             rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
 
-            git_proc.commit('Site {domain_name} was crawled.'.format(domain_name = domain))
+            git_proc.commit('Site {domain_name} was crawled.'
+                            .format(domain_name = domain))
             git_proc.recreate_master()
             fsmutex.release()
+
+
+###########################################################################
+#                                unittest                                 #
+###########################################################################
 
 if __name__ == '__main__':
     c = CrawlJob(3,'www.nullcat.de')
