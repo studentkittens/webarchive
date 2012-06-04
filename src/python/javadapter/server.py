@@ -57,7 +57,7 @@ class ProtocolError(Exception):
 # It is global for sake of simplicity - there may not be more than one
 global_lock = None
 
-def lock_domain(domain, lock_timeout = 100, wait = True):
+def lock_domain(domain, lock_timeout = 300, wait = True):
     """
     Implementation for lock/try_lock, very common 
     and therefore in an own function
@@ -65,15 +65,20 @@ def lock_domain(domain, lock_timeout = 100, wait = True):
     global global_lock
     try:
         if global_lock is None:
+            # Create a new lock
             global_lock = lock.FileLock(
                     file_name = domain,
                     folder = paths.get_content_root(),
                     timeout = lock_timeout)
         else:
+            # We do not want to wait, so raise a ProtocolError immediately
             if global_lock.is_locked and wait is False:
                 raise ProtocolError('Already locked.')
 
+        # Wait.
         global_lock.acquire()
+
+    # Convert other exceptions to a ProtocolError
     except lock.FileLockException as err:
         raise ProtocolError(str(err))
     except OSError as err:
@@ -140,7 +145,6 @@ def checkout_handler(args):
     domain = args[0]
 
     try: 
-        # May raise IndexError
         branch = args[1]
     except IndexError:
         branch = None
