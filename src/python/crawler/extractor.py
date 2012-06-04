@@ -3,17 +3,14 @@
 
 from bs4 import BeautifulSoup
 
-#poor man's implementation of a title extractor module
-
-###########################################################################
-#                        concrete implementations                         #
-###########################################################################
 
 def html(file_path):
-    """@todo: Docstring for get_title
+    """
+    Title extractor for text/html files. 
 
-    :file_path: path to content
+    :file_path: path to html file
     :returns: extracted title or empty string
+    if no title is found
 
     """
     doc = None
@@ -27,20 +24,26 @@ def html(file_path):
     finally:
         return title
 
-###########################################################################
-#                             extractors list                             #
-###########################################################################
+
+
+# extractor list, please add new extractor 'plugins' to this list
 extractors = {
         "text/html" : html
 }
 
+
+
+
+# ----------------------------------------------------------------------------|
 def get_title(file_path, mime):
     """
-    returns 'title' for a given file with
-    a specific mime type if an extractor isavaiable
+    Extractor 'interface' to delegate file by
+    mime type
+    
     :file_path: path to content file
     :mime: mime type of that file to determinate extractor
-    :returns: extracted title as string
+    :returns: extracted title as string if extraction is
+    successful else an empty string will be returned
 
     """
     title = " "

@@ -12,7 +12,7 @@ from termcolor import cprint, colored
 
 class Wget(object):
     """
-    Simple wget wrapper class
+    A simple wget wrapper class.
     """
 
     def __init__(self, url, tmp_folder):
@@ -42,7 +42,8 @@ class Wget(object):
 
         self.__pid = self.__process.pid
         #TODO, Logger? 
-        cprint("[WGET PROCESS] with pid {0} started.".format(self.__pid), "green")
+        cprint("[WGET PROCESS] with pid {0} started."
+                .format(self.__pid), "green")
 
     def poll(self):
         if self.__process is not None:
@@ -56,7 +57,9 @@ class Wget(object):
         """
         if self.__process != None:
             try:
-                print('[WGET] Stopping process with pid', self.__pid)
+                cprint('[WGET] Stopping process with pid {0}'
+                        .format(self.__pid),"red")
+
                 self.__process.terminate()
             finally:
                 self.__process = None
@@ -65,6 +68,7 @@ class Wget(object):
             cprint("no process running.","red")
 
 
+#------------------------------------------------------------------------------
 if __name__ == '__main__':
     a = Wget('www.heise.de','.')
     a.start()

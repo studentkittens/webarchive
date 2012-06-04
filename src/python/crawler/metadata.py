@@ -48,7 +48,6 @@ class MetaData(dict):
         m['createTime'] = utl.get_ctime(abs_data_path) 
         m['commitTime'] = commitTime
         m['title'] =  extractor.get_title(abs_data_path, m['mimeType'])
-        #TODO Title extractor
         return m
 
 

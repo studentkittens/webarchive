@@ -44,7 +44,8 @@ class CrawlJob(object):
             self.start_sync()
             print('--> Done')
         except crawler.exceptions.ShutdownException:
-            print('Job #{cid} ({curl}) stopped.'.format(cid = self.__ident, curl = self.__url))
+            print('Job #{cid} ({curl}) stopped.'
+                  .format(cid = self.__ident, curl = self.__url))
         except:
             traceback.print_exc()
         finally:
@@ -111,7 +112,8 @@ class CrawlJob(object):
             
             rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
 
-            git_proc.commit('Site {domain_name} was crawled.'.format(domain_name = domain))
+            git_proc.commit('Site {domain_name} was crawled.'
+                            .format(domain_name = domain))
             git_proc.recreate_master()
             fsmutex.release()
 
