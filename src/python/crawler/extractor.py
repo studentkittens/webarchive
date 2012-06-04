@@ -2,9 +2,9 @@
 # encoding: utf-8
 
 from bs4 import BeautifulSoup
+import logging
 
-
-def html(file_path):
+def extract_html(file_path):
     """
     Title extractor for text/html files. 
 
@@ -14,27 +14,17 @@ def html(file_path):
 
     """
     doc = None
-    title = " "
     
-    try:
-        with open(file_path,'r') as f:
-            doc = f.read()
-        soup = BeautifulSoup(doc)
-        title = soup.title.string
-    finally:
-        return title
-
-
+    with open(file_path,'r') as f:
+        doc = f.read()
+    soup = BeautifulSoup(doc)
+    return soup.title.string
 
 # extractor list, please add new extractor 'plugins' to this list
 extractors = {
-        "text/html" : html
+        "text/html" : extract_html 
 }
 
-
-
-
-# ----------------------------------------------------------------------------|
 def get_title(file_path, mime):
     """
     Extractor 'interface' to delegate file by
@@ -46,9 +36,11 @@ def get_title(file_path, mime):
     successful else an empty string will be returned
 
     """
-    title = " "
+    title = ""
     try:
         title = extractors[mime](file_path)
+    except IOError:
+        logging.exception('cannot read file.')
     finally:
         return str(title)
 

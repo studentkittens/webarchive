@@ -84,8 +84,9 @@ class FileLock(object):
         if self.destroy is True:
             self.release()
 
+
 ###########################################################################
-#                     Original code modified from now                     #
+#                     unittest - Original code modified from now          #
 ###########################################################################
 
 if __name__ == '__main__':

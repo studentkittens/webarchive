@@ -8,6 +8,7 @@ import copy
 import os.path
 import traceback
 import config.reader as config
+import logging 
 
 class FilterSystem(object):
     def __init__(self, plugin_path = None):
@@ -20,9 +21,8 @@ class FilterSystem(object):
 
         The .py files are read in and stored in-memory
         
-        :param plugin_path: A path to a directory with .py files 
-                            or None to read the value from the cfg
-        :returns: None
+        :plugin_path: A path to a directory with .py files 
+                      or None to read the value from the cfg
         """
         # If no path is given,
         # we'll try to read it from the cfg
@@ -39,9 +39,8 @@ class FilterSystem(object):
 
     def clear(self):
         """
-        Clear loaded filters
+        Clears loaded filters
         
-        :returns: None
         """
         # Clear list by unreferencing old items
         self.__source_list = []
@@ -52,8 +51,8 @@ class FilterSystem(object):
 
         Iterate over all loaded filters, and exec() them
 
-        :param meta_dict: the dictionary that will be passed to the filter
-                          as a 'filter_input' global var
+        :meta_dict: the dictionary that will be passed to the filter
+                    as a 'filter_input' global var
         :returns: True if file should be kept, or False if it should be deleted
         """
         decision = True
@@ -75,8 +74,8 @@ class FilterSystem(object):
                 # an error inside the filter happened,
                 # this is probably one of the few reasons where
                 # a catchall is fine. :)
-                print('Got Exception while executing the filter from:')
-                print('>>>', source[0], '<<<')
+                logging.warn('Got Exception while executing the filter from:')
+                logging.warn(source[0])
                 traceback.print_exc()
 
             try: 
@@ -84,10 +83,13 @@ class FilterSystem(object):
                     decision = False
                     break
             except KeyError:
-                print('You deleted filter_result, filthy Bastard!')
+                logging.warn('You deleted filter_result, filthy Bastard!')
 
         return decision
 
+###########################################################################
+#                                unittest                                 #
+###########################################################################
 
 def main():
     """

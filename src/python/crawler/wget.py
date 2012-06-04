@@ -7,49 +7,58 @@ import subprocess
 import time
 import shlex
 import config.reader as config
+import util.files as files
 import shutil
-from termcolor import cprint, colored 
+import logging
 
 class Wget(object):
     """
     A simple wget wrapper class.
     """
 
-    def __init__(self, url, tmp_folder, customparm=None):
+    def __init__(self, url, tmp_folder):
         """
         :url: url that will be fetched
         :tmp_folder: folder to save website content
         """
-        self.__url = url
+        self.__url = url.strip()
         self.__tmp_folder = tmp_folder
         self.__depth = config.get('crawler.depth')
-        self.__robots = "off"
-        self.__base = 'wget -e robots={rob} -rH -l {depth} -P {folder} {url}'
-        self.__custom_cmd = customparm
+        self.__robots = "off" #TODO
+        self.__user_agent = config.get('crawler.userAgent')
+        self.__custom_cmd = config.get('crawler.customWgetParms')
+        self.__base = 'wget "{user_agent}" -e robots={rob} -r -l {depth} \
+                      --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
         self.__process = None
         self.__pid = None
+        
+        urlset = files.unique_items_from_file(config.get('crawler.urllistpath'))
+        self.__exclude_urls = ', '.join(list(urlset.difference({self.__url})))
 
     def start(self):
         """
         starts the wget crawl process
         :returns: wget process exit code
         """
-        cmd = " "
-
-        if self.__custom_cmd is not None:
-            cmd = self.__custom_cmd
-        else:
-            cmd = self.__base.format(rob=self.__robots, depth=self.__depth,
-                                     folder=self.__tmp_folder, url=self.__url) 
+        
+        cmd = self.__base.format(user_agent=self.__user_agent,
+                                 rob=self.__robots,
+                                 depth=self.__depth,
+                                 ex_domains = self.__exclude_urls,
+                                 custom_parms=self.__custom_cmd,
+                                 folder=self.__tmp_folder,
+                                 url=self.__url) 
+        print(cmd)
         cmd = shlex.split(cmd)
+        devnull = open('/dev/null', 'w')
+        
         self.__process = subprocess.Popen(cmd, shell=False,
-                                               stdout = subprocess.PIPE,
-                                               stderr = subprocess.PIPE)
+                                          bufsize=-1,
+                                          stdout = devnull,
+                                          stderr = devnull)
 
         self.__pid = self.__process.pid
-        #TODO, Logger? 
-        cprint("[WGET PROCESS] with pid {0} started."
-                .format(self.__pid), "green")
+        logging.info("[WGET] with pid {0} started.".format(self.__pid))
 
     def poll(self):
         if self.__process is not None:
@@ -63,18 +72,19 @@ class Wget(object):
         """
         if self.__process != None:
             try:
-                cprint('[WGET] Stopping process with pid {0}'
-                        .format(self.__pid),"red")
+                logging.info('[WGET] Stopping process with pid {0}'.format(self.__pid))
 
                 self.__process.terminate()
             finally:
                 self.__process = None
         else:
-            #TODO, Logger?
-            cprint("no process running.","red")
+            logging.warn("no process running.")
 
 
-#------------------------------------------------------------------------------
+###########################################################################
+#                                unittest                                 #
+###########################################################################
+
 if __name__ == '__main__':
     a = Wget('www.heise.de','.')
     a.start()

@@ -51,7 +51,7 @@ class Git(object):
             if len(line) > 0:
                 command += ''.join([self.__basecmd, line, '\n'])
 
-        logging.info('Executing:\n%s' % command)
+        logging.debug('Executing:\n%s' % command)
 
         proc = subprocess.Popen(command, shell=True,
                 stdout = subprocess.PIPE, stderr = subprocess.PIPE)

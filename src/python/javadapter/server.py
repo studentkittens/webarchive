@@ -44,7 +44,7 @@ class ProtocolError(Exception):
     """
     def __init__(self, msg):
         """
-        :param msg: a string message, describing the error
+        :msg: a string message, describing the error
         """
         super(ProtocolError, self).__init__(msg)
         self.failure = b'ACK ' + bytes(msg, 'UTF-8')
@@ -131,7 +131,7 @@ def checkout_handler(args):
        * domain is e.g. www.heise.de
        * branch_name the entity to checkout,
                      if omitted only the path is returned
-                     and not git work is done
+                     and no git work is done
 
        * Returns: The Path to the checkout'd domain
 
@@ -294,8 +294,8 @@ def start(host = 'localhost', port = 42421):
     """
     Start the Javadapter server, and exit once done
 
-    :param host: the host to start the server on (does anythinh but localhost work?)
-    :param port: the port on which the server listens on
+    :host: the host to start the server on (does anythinh but localhost work?)
+    :port: the port on which the server listens on
     :returns: a server, on which shutdown() can be called
     """
     # Spawn a new thread for each connection

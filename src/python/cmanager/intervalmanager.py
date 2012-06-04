@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+__author__ = 'Christoph Piechula'
+
 import time 
 import logging
 
@@ -11,39 +13,45 @@ import config.reader as config
 
 class IntervalManager(object):
     """
-    Simple IntervalManager that manages interval of crawl util.times
+    IntervalManager, manages crawling intervals
     """
 
     def __init__(self):
-        """@todo: to be defined """
         self.__interval = None 
         self.__cmanager = None
         self.__start_time = None
         self.__crawling_done_callback = None
 
     def format_time(self, time_in_secs):
+        """
+        :time_in_secs: time in seconds since the epoch
+        :returns: Beautifully formatted time string
+        """
         return time.strftime("%a, %d %b %Y %H:%M:%S", time_in_secs)
 
     def start(self, delay_in_sec=0):
         """
-        starts the intervalmanager, which starts
-        the crawlmanager procedure with a given 
-        delay
+        Starts the intervalmanager, which starts
+        the crawlmanager procedure with a given delay
+        
+        :delay_in_sec: delay time in seconds
         """
         #fetch interval from config
         self.__interval = float(config.get('crawler.interval'))*60
         
-        #only to display some information
-        cur_time = self.format_time(time.gmtime(util.times.get_localtime_sec()))
-        next_time = self.format_time(time.gmtime(util.times.get_localtime_sec() + delay_in_sec))
 
         #delay before next crawl 
         if delay_in_sec != 0:
-            print('\nCurrent time: {0},\nnext crawl will start in {1} seconds @ {2}.'
+            #only to display some information
+            cur_time = self.format_time(time.localtime(util.times.get_localtime_sec()))
+            next_time = self.format_time(time.localtime(util.times.get_localtime_sec() + delay_in_sec))
+            logging.info("""
+                  Current time: {0},
+                  next crawl will start in {1} seconds @ {2}."""
                   .format(cur_time, delay_in_sec, next_time))
             time.sleep(delay_in_sec)
 
-        self.__cmanager = c.CrawlerManager(utl.unique_items_from_file('url.txt'))
+        self.__cmanager = c.CrawlerManager(utl.unique_items_from_file(config.get('crawler.urllistpath')))
         self.__start_time = util.times.get_localtime_sec()
         self.__cmanager.register_done(self.crawling_done_callback)
 
@@ -55,9 +63,8 @@ class IntervalManager(object):
 
     def crawling_done_callback(self):
         """
-        registers end time of last crawl and calculates
+        Registers end time of last crawl and calculates
         delay and starts next run
-        :returns: @todo
 
         """
         self.__crawling_done_callback = util.times.get_localtime_sec()
@@ -68,3 +75,8 @@ class IntervalManager(object):
         
         delay = next_crawl_time - self.__crawling_done_callback
         self.start(delay)
+
+###########################################################################
+#                                unittest                                 #
+###########################################################################
+

@@ -1,5 +1,8 @@
 www.0pointer.de
 www.hack.org
 blog.fefe.de
+www.stackoverflow.com
+www.blendpolis.de
+www.golem.de
 #www.youporn.com
-#www.heise.de
+www.heise.de

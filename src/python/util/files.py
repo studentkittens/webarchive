@@ -1,46 +1,33 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# filereader module
-#
+
+__author__ = 'Christopher Pahl'
+
 import os
-import fcntl
-from termcolor import cprint
+import logging
 
 def unique_items_from_file(path):
+    """
+    Creates a unique set with urls from a given file
+    commented urls '#' are ignored
+
+    :path: path to url list file
+    """
     urls = set()
     try:
         with open(path,'r') as urlfile:
             for line in urlfile:
                 if line[0] != '#':
-                    urls.add(line.rstrip())
-    except IOError as oemar:
-        error = ('!!!!!',type(oemar),str(oemar))
-        cprint(error,'red')
+                    urls.add(line.strip())
+    except IOError:
+        logging.exception("cannot read url list from disk.")
     return urls
 
-def mkdir_noerror(path):
-    """@todo: Docstring for mkdir_noerror
 
-    :path: @todo
-    :returns: @todo
 
-    """
-    try:
-        os.mkdir(path)
-    except OSError as oserr:
-        print(type(oserr), str(oserr))
-    
-#http://amix.dk/blog/post/19531     
-    """
-def lockFile(lockfile):
-    try:
-        fp = open(lockfile, 'w')
-        fcntl.flock(fp, fcntl.LOCK_EX)
-    except:
-        return False
-    return True
-"""
-
+###########################################################################
+#                                unittest                                 #
+###########################################################################
 
 if __name__ == '__main__':
-    print(unique_items_from_file('../url.txt'))
+    print(unique_items_from_file('../url<F3>.txt'))
