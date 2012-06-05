@@ -7,16 +7,20 @@ import init.default_cfg as default_cfg
 
 __author__ = 'Christopher Pahl'
 
-def init_archive(init_path):
+def init_archive(init_path = os.getcwd()):
     base_path = os.path.join(init_path, 'archive')
     if not os.path.exists(base_path):
         try:
             os.mkdir(base_path)
+
             os.mkdir(os.path.join(base_path, 'content'))
-            with open(os.path.join(base_path, 'archive.cfg'), 'w') as cfg_handle:
-                cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
-                    archive_path = base_path
-                    ))
+            os.mkdir(os.path.join(base_path, 'tmp'))
+            os.mkdir(os.path.join(base_path, 'filter'))
+
+#            with open(os.path.join(base_path, 'archive.cfg'), 'w') as cfg_handle:
+#                cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
+#                    archive_path = base_path
+#                    ))
 
             print('Initialized new archive at', base_path)
         except OSError as err:
@@ -31,4 +35,4 @@ if __name__ == '__main__':
     def main():
         init_archive(sys.argv[1])
          
-    main()
+    main()<F3>

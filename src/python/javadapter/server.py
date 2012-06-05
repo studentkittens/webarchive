@@ -30,6 +30,7 @@ import util.paths as paths
 
 # Git Interaction
 from crawler.git import Git
+import config.reader as config 
 
 ###########################################################################
 #                             Error Handling                              #
@@ -294,7 +295,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
     pass
 
-def start(host = 'localhost', port = 42421):
+def start(host = 'localhost', port = config.get('javadapter.port')):
     """
     Start the Javadapter server, and exit once done
 
@@ -309,22 +310,23 @@ def start(host = 'localhost', port = 42421):
     server_thread.start()
 
     return server   
+    
+class ServerShell(cmd.Cmd):
+    intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
+    prompt = '>>> '
+
+    def do_quit(self, arg):
+        'Quits the server'
+        return True
+
+    def do_EOF(self, arg):
+        return True
 
 ###########################################################################
 #                           Testing / Starting                            #
 ###########################################################################
 
 if __name__ == "__main__":
-    class ServerShell(cmd.Cmd):
-        intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
-        prompt = '>>> '
-
-        def do_quit(self, arg):
-            'Quits the server'
-            return True
-
-        def do_EOF(self, arg):
-            return True
 
     def main():
         """
