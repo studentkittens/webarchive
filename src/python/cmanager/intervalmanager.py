@@ -5,6 +5,7 @@ __author__ = 'Christoph Piechula'
 
 import time 
 import logging
+import cmd
 
 import cmanager.crawlmanager as c
 import util.files as utl
@@ -75,6 +76,21 @@ class IntervalManager(object):
         
         delay = next_crawl_time - self.__crawling_done_callback
         self.start(delay)
+
+    def shutdown(self):
+        # TODO
+        pass
+
+class CrawlerShell(cmd.Cmd):
+    intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
+    prompt = '>>> '
+
+    def do_quit(self, arg):
+        'Quits the server'
+        return True
+
+    def do_EOF(self, arg):
+        return True
 
 ###########################################################################
 #                                unittest                                 #

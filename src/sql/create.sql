@@ -1,26 +1,27 @@
 PRAGMA foreign_keys = ON;
-CREATE TABLE mimeType (
+BEGIN IMMEDIATE;
+CREATE TABLE IF NOT EXISTS mimeType (
 	mimeId INTEGER PRIMARY KEY AUTOINCREMENT,
 	mimeName TEXT UNIQUE NOT NULL
 );
-CREATE TABLE domain (
+CREATE TABLE IF NOT EXISTS domain (
 	domainId INTEGER PRIMARY KEY AUTOINCREMENT,
 	domainName TEXT UNIQUE NOT NULL
 );
-CREATE TABLE metaData ( -- static meta data part
+CREATE TABLE IF NOT EXISTS metaData ( -- static meta data part
 	metaId INTEGER PRIMARY KEY AUTOINCREMENT,
 	url TEXT UNIQUE NOT NULL,
 	mimeId INTEGER NOT NULL,
 	path TEXT UNIQUE NOT NULL,
 	FOREIGN KEY (mimeId) REFERENCES mimeType(mimeId)
 );
-CREATE TABLE commitTag ( -- commit tag on domain scale
+CREATE TABLE IF NOT EXISTS commitTag ( -- commit tag on domain scale
 	commitId INTEGER PRIMARY KEY AUTOINCREMENT,
 	commitTime TEXT NOT NULL, -- date time as "%yyyy-%MM-%ddT%hh:%mm:%ss"
 	domainId INTEGER NOT NULL,
 	FOREIGN KEY (domainId) REFERENCES domain(domainId)
 );
-CREATE TABLE history ( -- dynamic meta data changes
+CREATE TABLE IF NOT EXISTS history ( -- dynamic meta data changes
 	metaId INTEGER NOT NULL,
 	commitId INTEGER NOT NULL,
 	createTime TEXT NOT NULL, -- date time as "%yyyy-%MM-%ddT%hh:%mm:%ss"
@@ -29,4 +30,4 @@ CREATE TABLE history ( -- dynamic meta data changes
 	FOREIGN KEY (commitId) REFERENCES commitTag(commitId)
 	PRIMARY KEY (commitId, metaId)
 );
-
+COMMIT;
