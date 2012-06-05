@@ -11,7 +11,7 @@ class DBGenerator(object):
         self.__connection = sqlite3.connect('metadata.db')
         self.__cursor = self.__connection.cursor()
         self.__statements = self.load_statements()
-        #self.__cursor.executescript(self.__statements['create'])
+        self.__cursor.executescript(self.__statements['create'])
         self.__metalist = meta_list
 
     def load_statements(self):
@@ -31,11 +31,9 @@ class DBGenerator(object):
             domains.add(item['domain'])
 
         for mime in mimes:
-            print(mime)
             self.__cursor.execute(self.__statements['insert_mimetype'],(mime,))
 
         for domain in domains:
-            print(domain)
             self.__cursor.execute(self.__statements['insert_domain'],(domain,))
         
         self.__connection.commit()
