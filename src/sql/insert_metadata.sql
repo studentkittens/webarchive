@@ -1,1 +1,1 @@
-INSERT OR REPLACE INTO metaData VALUES (?,?,?,?);
+INSERT OR IGNORE INTO metaData (url, mimeId, path) VALUES (?,?,?);

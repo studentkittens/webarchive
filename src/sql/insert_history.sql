@@ -1,1 +1,1 @@
-INSERT OR REPLACE INTO history VALUES (?,?,?,?,?,?);
+INSERT OR IGNORE INTO history (metaId, commitId, createTime, title) VALUES (?,?,?,?);

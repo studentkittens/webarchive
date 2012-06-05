@@ -1,1 +1,1 @@
-INSERT OR REPLACE INTO commitTag VALUES (?,?,?);
+INSERT OR IGNORE INTO commitTag (commitTime, domainId) VALUES (?,?);
