@@ -19,6 +19,7 @@ import crawler.rsync as rsync
 import util.filelock as lock
 import crawler.git as git
 import crawler.exceptions
+import dbgen
 
 class CrawlJob(object):
     """
@@ -57,6 +58,8 @@ class CrawlJob(object):
             self.start_xml_gen()
             logging.info('--> Rsyncing')
             self.start_sync()
+            logging.info('--> Gen DB')
+            self.start_dbgen()
             logging.info('--> Done')
         except crawler.exceptions.ShutdownException:
             logging.info('Job #{cid} ({curl}) stopped.'
@@ -133,6 +136,11 @@ class CrawlJob(object):
                             .format(domain_name = domain))
             git_proc.recreate_master()
             fsmutex.release()
+
+    def start_db_gen(self):
+        db = dbgen.DBGenerator(self.__metalist)
+        db.batch()
+        
 
 
 ###########################################################################
