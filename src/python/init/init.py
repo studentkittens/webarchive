@@ -35,4 +35,4 @@ if __name__ == '__main__':
     def main():
         init_archive(sys.argv[1])
          
-    main()<F3>
+    main()

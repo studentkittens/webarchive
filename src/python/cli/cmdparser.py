@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-
+__author__ 'Christopher Pahl, Christoph Piechula'
 
 """Archive interface.
 
@@ -69,19 +69,22 @@ class Cli(object):
     def server_start(self, interval_manager):
         print('[INTERVAL] Started')
         interval_manager.start()
-        
-    def handle_crawler(self):
 
+
+    def cmd_loop(self, IntervalManager,  i):
+        imgur.CrawlerShell().cmdloop() 
+        i.shutdown()
+
+    def handle_crawler(self):
         if self.__arguments['--start']:
             i = imgur.IntervalManager()
-            self.server_start(i)       
-#thread = threading.Thread(target = self.server_start, args = (i,))
- #           thread.start()
-  #          imgur.CrawlerShell().cmdloop()
-   #         i.shutdown()
-    #        thread.join()
+            threading.Thread(target = self.cmd_loop, args = (self,i,)).start()
+            print("\n")
+            i.start()
+            print('Goodbye')
         elif self.__arguments['--stop']:
             self.not_implemented()
+
 
     def handle_javadapter(self):
         if self.__arguments['--start']:

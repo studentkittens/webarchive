@@ -78,8 +78,9 @@ class IntervalManager(object):
         self.start(delay)
 
     def shutdown(self):
-        # TODO
-        pass
+        #TODO soft and hard shutdown.
+        print("shuting system down.")
+
 
 class CrawlerShell(cmd.Cmd):
     intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
