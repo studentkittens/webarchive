@@ -21,6 +21,7 @@ class IntervalManager(object):
         self.__interval = None 
         self.__cmanager = None
         self.__start_time = None
+        self.__keep_running = True
         self.__crawling_done_callback = None
 
     def format_time(self, time_in_secs):
@@ -75,11 +76,12 @@ class IntervalManager(object):
             next_crawl_time = next_crawl_time + self.__interval
         
         delay = next_crawl_time - self.__crawling_done_callback
-        self.start(delay)
+        if self.__keep_running:
+            self.start(delay)
 
     def shutdown(self):
-        #TODO soft and hard shutdown.
-        print("shuting system down.")
+        self.__keep_running = False
+        print("System will shutdown after current crawl procedure is finished.")
 
 
 class CrawlerShell(cmd.Cmd):

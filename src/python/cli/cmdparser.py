@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-__author__ 'Christopher Pahl, Christoph Piechula'
 
 """Archive interface.
 
@@ -21,6 +20,7 @@ Options:
   --stop        Stopping a service.
 
 """
+__author__ = 'Christopher Pahl, Christoph Piechula'
 import threading
 import logging
 
@@ -39,7 +39,7 @@ class Cli(object):
         """
         Collected arguments
         """
-        logging.basicConfig(level=logging.INFO)
+        #logging.basicConfig(level=logging.INFO)
 
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
