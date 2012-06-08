@@ -18,10 +18,13 @@ class DBGenerator(object):
 
     def load_statements(self):
         statements = dict()
-        for source in glob.glob('../sql/*.sql'):
+        for source in glob.glob(os.path.join(config.get('db.sqlSource'),'*.sql'):
             with open(source,'r') as f:
                 source_base = os.path.basename(source)
-                statements[source_base[:-4]] = f.read()
+                if source_base.endswith('.sql'):
+                    source_base = source_base[:-4]
+
+                statements[source_base] = f.read()
         return statements
 
     def execute_statement(self, source_name, arglist=None):
