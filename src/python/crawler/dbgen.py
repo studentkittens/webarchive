@@ -6,6 +6,7 @@ __author__ = 'Christopher Pahl'
 import sqlite3
 import glob
 import os 
+import config.reader as config 
 
 class DBGenerator(object):
 
@@ -18,7 +19,7 @@ class DBGenerator(object):
 
     def load_statements(self):
         statements = dict()
-        for source in glob.glob(os.path.join(config.get('db.sqlSource'),'*.sql'):
+        for source in glob.glob(os.path.join(config.get('db.sqlSource'),'*.sql')):
             with open(source,'r') as f:
                 source_base = os.path.basename(source)
                 if source_base.endswith('.sql'):

@@ -58,7 +58,8 @@ class IntervalManager(object):
         self.__cmanager.register_done(self.crawling_done_callback)
 
         try:
-            self.__cmanager.start()
+            if self.__keep_running:
+                self.__cmanager.start()
         except KeyboardInterrupt:
             logging.warn('Got Ctrl-C => Will shutdown() now')
             self.__cmanager.shutdown()
@@ -76,20 +77,40 @@ class IntervalManager(object):
             next_crawl_time = next_crawl_time + self.__interval
         
         delay = next_crawl_time - self.__crawling_done_callback
-        if self.__keep_running:
-            self.start(delay)
+        self.start(delay)
 
-    def shutdown(self):
+    def stop(self):
         self.__keep_running = False
-        print("System will shutdown after current crawl procedure is finished.")
+        print("Intervalmanager stopped, crawljobs may be still running.")
+
+
+    def kill(self):
+        self.__cmanager.test()
+        print("Killing an cleaning crawljobs...")
+
 
 
 class CrawlerShell(cmd.Cmd):
     intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
+    def do_kill(self, arg):
+        'Kills crawljobs immediatelly + cleanup'
+        IntervalManager.kill(IntervalManager)
+        return False 
+
+    def do_start(self, arg):
+        'Starts crawljobs if stopped previously.'
+        IntervalManager.start(IntervalManager)
+        return False
+    
+    def do_stop(self, arg):
+        'Stopps Intervalmanager.'
+        IntervalManager.stop(IntervalManager)
+        return False
+
     def do_quit(self, arg):
-        'Quits the server'
+        'Quits Intervalmanager, Crawljobs will still run until finished.'
         return True
 
     def do_EOF(self, arg):
