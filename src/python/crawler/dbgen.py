@@ -5,12 +5,13 @@ __author__ = 'Christopher Pahl'
 
 import sqlite3
 import glob
-import os 
-import config.reader as config 
+import os
+import config.reader as config
+
 
 class DBGenerator(object):
 
-    def __init__(self, meta_list = None):
+    def __init__(self, meta_list=None):
         self.__connection = sqlite3.connect('metadata.db')
         self.__cursor = self.__connection.cursor()
         self.__statements = self.load_statements()
@@ -50,7 +51,7 @@ class DBGenerator(object):
 
         self.execute_statement('insert_mimetype', mimes)
         self.execute_statement('insert_domain', domains)
-        
+
         self.__mimedict = self.select('mimeType', 'mimeID', 'mimeName')
         self.__domaindict = self.select('domain', 'domainID', 'domainName')
 
@@ -69,8 +70,8 @@ class DBGenerator(object):
                     self.__domaindict[item['domain']]
                 ))
 
-        self.execute_statement('insert_metadata', mdata) 
-        self.execute_statement('insert_committag', ctags) 
+        self.execute_statement('insert_metadata', mdata)
+        self.execute_statement('insert_committag', ctags)
 
         self.__mdidlist = self.select('metaData', 'metaId', 'url')
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')
@@ -87,7 +88,7 @@ class DBGenerator(object):
                 item['title']
                 ))
 
-        self.execute_statement('insert_history', history) 
+        self.execute_statement('insert_history', history)
 
     def select(self, table, *columns):
         row_dict = dict()

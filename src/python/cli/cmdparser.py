@@ -8,7 +8,7 @@ Usage:
   archive.py init [<path>]
   archive.py crawler (--start|--stop)
   archive.py javadapter (--start|--stop)
-  archive.py db 
+  archive.py db
   archive.py config
   archive.py -h | --help
   archive.py --version
@@ -30,6 +30,7 @@ from init.init import init_archive
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
 
+
 class Cli(object):
     """
     Archive commandline intepreter
@@ -47,7 +48,7 @@ class Cli(object):
                 'crawler': self.handle_crawler,
                 'javadapter': self.handle_javadapter,
                 'db': self.handle_db,
-                'config': self.handle_config 
+                'config': self.handle_config
                 }
 
         #iterating through arguments
@@ -65,7 +66,7 @@ class Cli(object):
             init_archive(path)
         except KeyError:
             init_archive()
-        
+
     def cmd_loop(self, IntervalManager,  i):
         shell = imgur.CrawlerShell()
         shell.set_imanager(i)
@@ -75,13 +76,12 @@ class Cli(object):
     def handle_crawler(self):
         if self.__arguments['--start']:
             i = imgur.IntervalManager()
-            threading.Thread(target = self.cmd_loop, args = (self,i,)).start()
+            threading.Thread(target=self.cmd_loop, args=(self, i, )).start()
             print("\n")
         #    i.start()
             print('Goodbye')
         elif self.__arguments['--stop']:
             self.not_implemented()
-
 
     def handle_javadapter(self):
         if self.__arguments['--start']:

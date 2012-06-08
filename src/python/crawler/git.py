@@ -7,6 +7,7 @@ import util.paths as paths
 
 __author__ = 'Christopher Pahl'
 
+
 class Git(object):
     """A (overly-simple) Wrapper for the git binary"""
     def __init__(self, domain):
@@ -16,17 +17,17 @@ class Git(object):
         """
         self.__domain = paths.get_domain_path(domain)
         self.__gitdir = os.path.join(self.__domain, '.git')
-        self.__empty  = os.path.join(self.__domain, 'empty_file')
+        self.__empty = os.path.join(self.__domain, 'empty_file')
         self.__basecmd = 'git --git-dir {git_dir} --work-tree {git_cwd} '.format(
-                git_dir = self.__gitdir,
-                git_cwd = self.__domain)
+                git_dir=self.__gitdir,
+                git_cwd=self.__domain)
 
     @classmethod
     def convert_branch_name(cls, date_string):
         """
         Convert a datestring suitably to a branch name
 
-        Git does not allow special characters such as : or - 
+        Git does not allow special characters such as : or -
         in branchnames for whatever reason
 
         :param date_string: the string to convert
@@ -62,13 +63,13 @@ class Git(object):
         if rc is not 0:
             logging.warn('Previous git command returned nonzero-returncode! {}'.format(err))
 
-        return rc 
+        return rc
 
     def init(self):
         """
         Create a new archive at specified domain path
-        
-        The target directory does not need to exit yet 
+
+        The target directory does not need to exit yet
 
         :returns: 0 on success, another rc on failure
         """
@@ -76,7 +77,7 @@ class Git(object):
 
         if not os.path.exists(self.__gitdir):
             rc = self.__call_script("""
-                init . 
+                init .
                 checkout -b 'empty'
                 """)
 
@@ -128,7 +129,7 @@ class Git(object):
 
     def commit(self, message = 'edit'):
         """
-        commit any changes made 
+        commit any changes made
 
         git add . and git commit -am <message> is done
 
@@ -178,9 +179,9 @@ if __name__ == '__main__':
             self.assertEqual(self.__repo.checkout(), 0)
             self.add_file('file_new', 'w')
             self.assertEqual(self.__repo.commit(), 0)
-            
+
         def tearDown(self):
             subprocess.call(['rm', '-rf', TEST_DIR])
             pass
-            
+
     unittest.main()
