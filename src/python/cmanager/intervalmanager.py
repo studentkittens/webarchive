@@ -83,30 +83,33 @@ class IntervalManager(object):
         self.__keep_running = False
         print("Intervalmanager stopped, crawljobs may be still running.")
 
-
     def kill(self):
-        self.__cmanager.test()
+        self.__cmanager.shutdown()
         print("Killing an cleaning crawljobs...")
-
 
 
 class CrawlerShell(cmd.Cmd):
     intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
+    def set_imanager(self, imanager):
+        self.__imanager = imanager
+
     def do_kill(self, arg):
         'Kills crawljobs immediatelly + cleanup'
         IntervalManager.kill(self)
+        print('KILL KILL KILL')
+        self.__imanager.kill()
         return False 
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
-        IntervalManager.start(IntervalManager)
+        self.__imanager.start()
         return False
     
     def do_stop(self, arg):
-        'Stopps Intervalmanager.'
-        IntervalManager.stop(IntervalManager)
+        'Stopps self.__imanager.'
+        self.__imanager.stop()
         return False
 
     def do_quit(self, arg):

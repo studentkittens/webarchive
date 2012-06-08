@@ -66,14 +66,11 @@ class Cli(object):
         except KeyError:
             init_archive()
         
-    def server_start(self, interval_manager):
-        print('[INTERVAL] Started')
-        interval_manager.start()
-
-
     def cmd_loop(self, IntervalManager,  i):
-        imgur.CrawlerShell().cmdloop() 
-        i.shutdown()
+        shell = imgur.CrawlerShell()
+        shell.set_imanager(i)
+        shell.cmdloop()
+        i.stop()
 
     def handle_crawler(self):
         if self.__arguments['--start']:

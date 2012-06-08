@@ -8,7 +8,6 @@ import time
 import shlex
 import config.reader as config
 import util.files as files
-import shutil
 import logging
 
 class Wget(object):
@@ -48,7 +47,7 @@ class Wget(object):
                                  custom_parms=self.__custom_cmd,
                                  folder=self.__tmp_folder,
                                  url=self.__url) 
-        print(cmd)
+
         cmd = shlex.split(cmd)
         devnull = open('/dev/null', 'w')
         
