@@ -96,7 +96,7 @@ class CrawlerShell(cmd.Cmd):
 
     def do_kill(self, arg):
         'Kills crawljobs immediatelly + cleanup'
-        IntervalManager.kill(IntervalManager)
+        IntervalManager.kill(self)
         return False 
 
     def do_start(self, arg):
