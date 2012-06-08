@@ -58,6 +58,8 @@ class CrawlJob(object):
             self.start_xml_gen()
             logging.info('--> Rsyncing')
             self.start_sync()
+            logging.info('--> Gen DB')
+            self.start_dbgen()
             logging.info('--> Done')
             self.start_dbgen()
             logging.info('--> DB gen')

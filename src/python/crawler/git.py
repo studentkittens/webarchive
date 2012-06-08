@@ -32,7 +32,7 @@ class Git(object):
         :param date_string: the string to convert
         :returns: the new, converted string
         """
-        return date_string.translate(str.maketrans({':': '', '-': ''}))
+        return date_string.translate(str.maketrans({':': 'C', '-': 'H'}))
 
     def __call_script(self, script):
         """
