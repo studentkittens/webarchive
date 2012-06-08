@@ -70,15 +70,6 @@ class CrawlerManager(object):
         """
         self.__done_callback = func
 
-    def test(self, arg1):
-        """@todo: Docstring for test
-
-        :arg1: @todo
-        :returns: @todo
-
-        """
-
-
     def shutdown(self):
         """
         Shuts down all currently running crawljobs

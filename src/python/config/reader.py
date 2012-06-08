@@ -14,7 +14,7 @@ default_options = {
         'crawler.urllistpath' : 'url.txt',
         'crawler.customWgetParms' : '',
         'db.path' : 'metadata.db',
-        'db.sqlSource' : '/home/christoph/devf/webarchive/src/sql/',
+        'db.sqlSource' : '/home/chris/dev/webarchive/src/sql/',
         'xml.schemaPath' : 'xml/',
         'server.port' : 42420,
         'server.notify.interval' : 15,
