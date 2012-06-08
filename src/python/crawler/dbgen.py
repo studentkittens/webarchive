@@ -36,6 +36,13 @@ class DBGenerator(object):
         self.insert_mdata_ctag()
         self.insert_history()
 
+    def insert_yieldable(self):
+        for item in self.__metalist():
+            yield item
+
+
+
+
     def insert_mime_domain(self):
         mimes = []
         domains = []
