@@ -8,6 +8,10 @@ import unittest
 import config.reader as config
 
 
+def get_dbpath():
+    return os.path.join(config.get('general.root'), config.get('db.path'))
+
+
 def get_content_root():
     """
     Return {archive_root}/content/
@@ -24,6 +28,7 @@ def get_domain_path(domain):
     """
     return os.path.join(get_content_root(), domain)
 
+
 def get_temp_root():
     return os.path.join(config.get('general.root'), config.get('crawler.tempRoot'))
 
@@ -38,7 +43,7 @@ if __name__ == '__main__':
                 os.path.join(config.get('general.root'), 'content', 'hello'))
 
         def test_content_root(self):
-            self.assertEqual(get_content_root(), 
+            self.assertEqual(get_content_root(),
                 os.path.join(config.get('general.root'), 'content'))
 
     unittest.main()

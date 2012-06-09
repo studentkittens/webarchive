@@ -30,17 +30,18 @@ import util.paths as paths
 
 # Git Interaction
 from crawler.git import Git
-import config.reader as config 
+import config.reader as config
 
 ###########################################################################
 #                             Error Handling                              #
 ###########################################################################
 
+
 class ProtocolError(Exception):
     """raise a 'ACK cause'
 
     Simple Exception that offers
-    a sendable bytebuffer for errors 
+    a sendable bytebuffer for errors
     via self.failure
     """
     def __init__(self, msg):
@@ -56,35 +57,37 @@ class ProtocolError(Exception):
 
 # The Lock that can be set via lock and unlock
 # It is global for sake of simplicity - there may not be more than one
-global_lock = None
+GLOBAL_LOCK = None
 
-def lock_domain(domain, lock_timeout = 300, wait = True):
+
+def lock_domain(domain, lock_timeout=300, wait=True):
     """
-    Implementation for lock/try_lock, very common 
+    Implementation for lock/try_lock, very common
     and therefore in an own function
     """
-    global global_lock
+    global GLOBAL_LOCK
     try:
-        if global_lock is None:
+        if GLOBAL_LOCK is None:
             # Create a new lock
-            global_lock = lock.FileLock(
-                    file_name = domain,
-                    folder = paths.get_content_root(),
-                    timeout = lock_timeout)
+            GLOBAL_LOCK = lock.FileLock(
+                    file_name=domain,
+                    folder=paths.get_content_root(),
+                    timeout=lock_timeout)
         else:
             # We do not want to wait, so raise a ProtocolError immediately
-            if global_lock.is_locked and wait is False:
+            if GLOBAL_LOCK.is_locked and wait is False:
                 raise ProtocolError('Already locked.')
 
         # Wait.
-        global_lock.acquire()
+        GLOBAL_LOCK.acquire()
 
     # Convert other exceptions to a ProtocolError
     except lock.FileLockException as err:
         raise ProtocolError(str(err))
     except OSError as err:
-        global_lock = None
+        GLOBAL_LOCK = None
         raise ProtocolError(str(err))
+
 
 def lock_handler(args):
     """
@@ -98,16 +101,18 @@ def lock_handler(args):
     """
     return lock_domain(args[0])
 
+
 def try_lock_handler(args):
     """
-    Lock a domain, but do not wait 
+    Lock a domain, but do not wait
 
        try_lock [domain]
 
        * domain is e.g. www.heise.de
        * Returns nothing (but OK or ACK ...)
     """
-    return lock_domain(args[0], wait = False)
+    return lock_domain(args[0], wait=False)
+
 
 def unlock_handler(args):
     """
@@ -118,15 +123,16 @@ def unlock_handler(args):
        * domain is e.g. www.heise.de
        * Returns nothing (but OK or ACK ...)
     """
-    global global_lock
+    global GLOBAL_LOCK
 
-    if global_lock is None:
+    if GLOBAL_LOCK is None:
         raise ProtocolError('No previous lock.')
     else:
-        global_lock.release()
-        if global_lock.is_locked:
+        GLOBAL_LOCK.release()
+        if GLOBAL_LOCK.is_locked:
             raise ProtocolError('Unlocking failed.')
-        global_lock = None
+        GLOBAL_LOCK = None
+
 
 def checkout_handler(args):
     """
@@ -145,7 +151,7 @@ def checkout_handler(args):
     """
     domain = args[0]
 
-    try: 
+    try:
         branch = args[1]
     except IndexError:
         branch = None
@@ -154,14 +160,15 @@ def checkout_handler(args):
         wrapper = Git(domain)
         rcode = wrapper.checkout(branch)
         if rcode is not 0:
-            raise ProtocolError('checkout returned {rc}'.format(rc = rcode))
+            raise ProtocolError('checkout returned {rc}'.format(rc=rcode))
 
     return paths.get_domain_path(domain) + '\n'
+
 
 def commit_handler(args):
     """
     Make a commit on a certain domain:
-      
+
        commit [domain] {message}
 
        * domain is e.g. www.heise.de
@@ -178,7 +185,7 @@ def commit_handler(args):
     wrapper = Git(domain)
     rcode = wrapper.commit(message)
     if rcode is not 0:
-        raise ProtocolError('commit returned {rc}'.format(rc = rcode))
+        raise ProtocolError('commit returned {rc}'.format(rc=rcode))
 
 ###########################################################################
 #                              Protocolspec                               #
@@ -216,6 +223,7 @@ PROTOCOL = {
 #                              Actual Server                              #
 ###########################################################################
 
+
 class AdapterHandler(socketserver.StreamRequestHandler):
     """The RequestHandler class for the Javadapter
 
@@ -227,7 +235,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
         """Handle a certain command
 
         Try to see a meaning in a command,
-        raise an ProtocolError or return a 
+        raise an ProtocolError or return a
         bytebuffer with a suitable reponse,
         which is ended with a linefeed in any case
         """
@@ -242,18 +250,18 @@ class AdapterHandler(socketserver.StreamRequestHandler):
                 # but currently only the number of args is checked
                 raise ProtocolError(
                         '"{cmd}" takes exactly {arg} argument(s)'.format(
-                        cmd = self.__cmd,
-                        arg = handler['takes']))
+                        cmd=self.__cmd,
+                        arg=handler['takes']))
 
             # the handlers simply return strings, but for send()
-            # we need bytes. If func() returns a False value, 
+            # we need bytes. If func() returns a False value,
             # an empty string is used as response instead
             response = bytes(handler['func'](self.__arg) or '', 'UTF-8')
 
         except KeyError:
             raise ProtocolError('Unknown command: ' + self.__cmd)
         else:
-            return response 
+            return response
 
     def handle(self):
         """
@@ -262,7 +270,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
         while True:
             try:
                 # Convert input to a list of trimmed strings
-                line = [str(x, 'UTF-8') 
+                line = [str(x, 'UTF-8')
                         for x in self.rfile.readline().split()]
             except UnicodeDecodeError:
                 line = ['<invalid_utf8>']
@@ -287,15 +295,17 @@ class AdapterHandler(socketserver.StreamRequestHandler):
                 finally:
                     self.wfile.write(send_data + b'\n')
 
+
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     """
     A 'own' socketserver, with ThreadingMixIn
 
-    Reference: http://docs.python.org/py3k/library/socketserver.html 
+    Reference: http://docs.python.org/py3k/library/socketserver.html
     """
     pass
 
-def start(host = 'localhost', port = config.get('javadapter.port')):
+
+def start(host='localhost', port=config.get('javadapter.port')):
     """
     Start the Javadapter server, and exit once done
 
@@ -309,8 +319,9 @@ def start(host = 'localhost', port = config.get('javadapter.port')):
     server_thread.daemon = True
     server_thread.start()
 
-    return server   
-    
+    return server
+
+
 class ServerShell(cmd.Cmd):
     intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
@@ -333,7 +344,7 @@ if __name__ == "__main__":
         main() for cmd use, pass a port as only arg
         """
         if len(sys.argv) < 2:
-            print('usage: {prog} port'.format(prog = sys.argv[0]))
+            print('usage: {prog} port'.format(prog=sys.argv[0]))
             sys.exit(-1)
         try:
             server = start('localhost', int(sys.argv[1]))
