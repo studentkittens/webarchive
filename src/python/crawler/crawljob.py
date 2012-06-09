@@ -13,13 +13,14 @@ import config.reader as config
 import crawler.wget as wget
 import util.paths as paths
 import util.files as ufile
-import crawler.cleaner as cleaner 
+import crawler.cleaner as cleaner
 import crawler.xmlgen as xmlgen
 import crawler.rsync as rsync
 import util.filelock as lock
 import crawler.git as git
 import crawler.exceptions
 import crawler.dbgen
+
 
 class CrawlJob(object):
     """
@@ -48,10 +49,10 @@ class CrawlJob(object):
             ufile.os.mkdir(self.__path)
         except OSError:
             pass
-        
+
         try:
             logging.info('--> Crawling')
-            self.start_crawl() 
+            self.start_crawl()
             logging.info('--> Cleaning')
             self.start_clean()
             logging.info('--> Gen XML')
@@ -65,17 +66,17 @@ class CrawlJob(object):
             logging.info('--> DB gen')
         except crawler.exceptions.ShutdownException:
             logging.info('Job #{cid} ({curl}) stopped.'
-                  .format(cid = self.__ident, curl = self.__url))
+                  .format(cid=self.__ident, curl=self.__url))
         except:
             traceback.print_exc()
         finally:
             shutil.rmtree(self.__path, ignore_errors=True)
-    
+
     def start_crawl(self):
         """
         Starts the wget module to download specific website
         """
-        wget_proc = wget.Wget(self.__url,os.path.abspath(self.__path))
+        wget_proc = wget.Wget(self.__url, os.path.abspath(self.__path))
         wget_proc.start()
 
         # Check in a polling loop for the termination
@@ -87,11 +88,11 @@ class CrawlJob(object):
             if self.__shutdown is True:
                 logging.info('Stopping wget')
                 wget_proc.stop()
-                raise crawler.exceptions.ShutdownException() 
-    
+                raise crawler.exceptions.ShutdownException()
+
     def start_clean(self):
         """
-        Starts the cleaning procedure which kills 
+        Starts the cleaning procedure which kills
         empty files and dirs and restructures dir hierarchy
         """
         cleaner_proc = cleaner.Cleaner(self.__path)
@@ -106,20 +107,19 @@ class CrawlJob(object):
         """
         xml_proc = xmlgen.XmlGenerator(self.__metalist)
         xml_proc.dump_all()
-    
 
     def start_sync(self):
         """
         Starts rsync procedure -> mirroring src to dest
         """
-        content_path = os.path.join(config.get('general.root'),'content') 
+        content_path = os.path.join(config.get('general.root'), 'content')
         itemlist = os.listdir(self.__path)
-        
+
         for domain in itemlist:
-            domain_path  = paths.get_domain_path(domain)
-            fsmutex = lock.FileLock(domain, folder = content_path)
+            domain_path = paths.get_domain_path(domain)
+            fsmutex = lock.FileLock(domain, folder=content_path)
             fsmutex.acquire()
-            
+
             try:
                 logging.debug('Creating directory:', domain_path)
                 os.mkdir(domain_path)
@@ -131,11 +131,11 @@ class CrawlJob(object):
             git_proc.init()
             git_proc.checkout('empty')
             git_proc.branch(self.__metalist[0]['commitTime'])
-            
+
             rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
 
             git_proc.commit('Site {domain_name} was crawled.'
-                            .format(domain_name = domain))
+                            .format(domain_name=domain))
             git_proc.recreate_master()
             fsmutex.release()
 
@@ -149,5 +149,4 @@ class CrawlJob(object):
 ###########################################################################
 
 if __name__ == '__main__':
-    c = CrawlJob(3,'www.nullcat.de')
-
+    c = CrawlJob(3, 'www.nullcat.de')

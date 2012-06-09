@@ -21,7 +21,8 @@ class IntervalManager(object):
         self.__interval = None 
         self.__cmanager = None
         self.__start_time = None
-        self.__keep_running = True
+        self.__keep_running = True 
+        self.__crawler_running = False
         self.__crawling_done_callback = None
 
     def format_time(self, time_in_secs):
@@ -59,6 +60,7 @@ class IntervalManager(object):
 
         try:
             if self.__keep_running:
+                self.__crawler_running = True
                 self.__cmanager.start()
         except KeyboardInterrupt:
             logging.warn('Got Ctrl-C => Will shutdown() now')
@@ -70,6 +72,7 @@ class IntervalManager(object):
         delay and starts next run
 
         """
+        self.__crawler_running = False
         self.__crawling_done_callback = util.times.get_localtime_sec()
         next_crawl_time = self.__start_time + self.__interval
         
@@ -77,7 +80,16 @@ class IntervalManager(object):
             next_crawl_time = next_crawl_time + self.__interval
         
         delay = next_crawl_time - self.__crawling_done_callback
-        self.start(delay)
+        if self.__keep_running:
+            self.start(delay)
+
+    def nextx(self):
+        self.start()
+
+    def status(self):
+        print('Cmanager is {0}, IntervalManager is {1}'.format(
+               'is running' if self.__crawler_running else 'is not running',
+               'is running' if self.__keep_running else 'is not running'))
 
     def stop(self):
         self.__keep_running = False
@@ -96,16 +108,20 @@ class CrawlerShell(cmd.Cmd):
         self.__imanager = imanager
 
     def do_kill(self, arg):
-        'Kills crawljobs immediatelly + cleanup'
         print('KILL KILL KILL')
         self.__imanager.kill()
         return False 
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
-        self.__imanager.start()
+        self.__imanager.nextx()
         return False
-    
+
+    def do_status(self, arg):
+        'Status of crawler an intervalmanager.'
+        self.__imanager.status()
+        return False
+
     def do_stop(self, arg):
         'Stopps self.__imanager.'
         self.__imanager.stop()
