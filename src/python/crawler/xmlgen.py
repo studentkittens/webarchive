@@ -14,7 +14,7 @@ XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
     <wa:meta
         wa:url="{meta[url]}"
         wa:mimeType="{meta[mimeType]}"
-        wa:path="{meta[abspath]}"
+        wa:path="{meta[path]}"
         wa:createTime="{meta[createTime]}"
         wa:title="{meta[title]}"
     >
@@ -30,13 +30,14 @@ XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 
 """
 
+
 class XmlGenerator(object):
     """
     XmlGenerator, generates xml file from meta nodelist
-    
+
     """
     SCHEMA = 'file:/home/ccwelich/git/webarchive/xml/file.xsd'
-    
+
     def __init__(self, meta_obj_list=None, schema_path=SCHEMA):
         """
         Generates xml meta files and dumps them to disk
@@ -46,7 +47,7 @@ class XmlGenerator(object):
         """
         self.__meta_list = meta_obj_list
         self.__schema_path = schema_path
-        self.__xml_list = [] 
+        self.__xml_list = []
         self.__gen_xml()
 
     def __gen_xml(self):
@@ -54,24 +55,28 @@ class XmlGenerator(object):
         Generates xml list from metadata list
         """
         for item in self.__meta_list:
-            xml_node = (XML_TEMPLATE.format(schema_path = self.__schema_path,
-                                            meta = item), item['abspath'][:-4])
+            metadict = dict()
+            for key, value in item.items():
+                metadict[key.replace('"', "'")] = value
+
+            xml_node = (XML_TEMPLATE.format(schema_path=self.__schema_path,
+                                            meta=metadict),
+                                            item['path'][:-4])
 
             self.__xml_list.append(xml_node)
-        
-    
+
     def dump_all(self):
         """
         Dumps all previously generated metadata to disk
         """
         if len(self.__xml_list) > 0 and self.__meta_list is not None:
             for item in self.__xml_list:
-                with open(os.path.join(item[1],'data.xml'),'w') as f:
+                with open(os.path.join(item[1], 'data.xml'), 'w') as f:
                     f.write(str(item[0]))
         else:
             logging.warn("nothing to dump.")
 
-    
+
 
 ###########################################################################
 #                                unittest                                 #
@@ -79,24 +84,14 @@ class XmlGenerator(object):
 
 if __name__ == '__main__':
     testdata = [{
-            'url' : "www.heise.de/index.html",
-            'mimeType' : "text/html",
-            'abspath' : "www.heise.de/index.html",
-            'createTime' : "2012-05-15T17:28:42",
-            'title' : "heise online",
-            'commitTime' : "2012-05-15T17:30:00",
-            'domain' : "www.heise.de"
+            'url': "www.heise.de/index.html",
+            'mimeType': "text/html",
+            'path': "www.heise.de/index.html",
+            'createTime': "2012-05-15T17:28:42",
+            'title': "heise online",
+            'commitTime': "2012-05-15T17:30:00",
+            'domain': "www.heise.de"
     }]
 
-    x = XmlGenerator(testdata) 
+    x = XmlGenerator(testdata)
     x.dump_all()
-
-
-
-
-
-
-
-
-
-

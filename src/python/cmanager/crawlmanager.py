@@ -70,7 +70,6 @@ class CrawlerManager(object):
         """
         self.__done_callback = func
 
-
     def shutdown(self):
         """
         Shuts down all currently running crawljobs

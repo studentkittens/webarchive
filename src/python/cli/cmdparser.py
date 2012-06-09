@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-__author__ 'Christopher Pahl, Christoph Piechula'
 
 """Archive interface.
 
@@ -9,7 +8,7 @@ Usage:
   archive.py init [<path>]
   archive.py crawler (--start|--stop)
   archive.py javadapter (--start|--stop)
-  archive.py db 
+  archive.py db
   archive.py config
   archive.py -h | --help
   archive.py --version
@@ -21,6 +20,7 @@ Options:
   --stop        Stopping a service.
 
 """
+__author__ = 'Christopher Pahl, Christoph Piechula'
 import threading
 import logging
 
@@ -29,6 +29,7 @@ from init.init import init_archive
 
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
+
 
 class Cli(object):
     """
@@ -39,7 +40,7 @@ class Cli(object):
         """
         Collected arguments
         """
-        logging.basicConfig(level=logging.INFO)
+        #logging.basicConfig(level=logging.INFO)
 
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
@@ -47,7 +48,7 @@ class Cli(object):
                 'crawler': self.handle_crawler,
                 'javadapter': self.handle_javadapter,
                 'db': self.handle_db,
-                'config': self.handle_config 
+                'config': self.handle_config
                 }
 
         #iterating through arguments
@@ -65,26 +66,22 @@ class Cli(object):
             init_archive(path)
         except KeyError:
             init_archive()
-        
-    def server_start(self, interval_manager):
-        print('[INTERVAL] Started')
-        interval_manager.start()
-
 
     def cmd_loop(self, IntervalManager,  i):
-        imgur.CrawlerShell().cmdloop() 
-        i.shutdown()
+        shell = imgur.CrawlerShell()
+        shell.set_imanager(i)
+        shell.cmdloop()
+        i.stop()
 
     def handle_crawler(self):
         if self.__arguments['--start']:
             i = imgur.IntervalManager()
-            threading.Thread(target = self.cmd_loop, args = (self,i,)).start()
+            threading.Thread(target=self.cmd_loop, args=(self, i, )).start()
             print("\n")
-            i.start()
+        #    i.start()
             print('Goodbye')
         elif self.__arguments['--stop']:
             self.not_implemented()
-
 
     def handle_javadapter(self):
         if self.__arguments['--start']:

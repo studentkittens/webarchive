@@ -3,13 +3,13 @@
 
 __author__ = 'Christoph Piechula'
 
-import subprocess 
+import subprocess
 import time
 import shlex
 import config.reader as config
 import util.files as files
-import shutil
 import logging
+
 
 class Wget(object):
     """
@@ -24,14 +24,14 @@ class Wget(object):
         self.__url = url.strip()
         self.__tmp_folder = tmp_folder
         self.__depth = config.get('crawler.depth')
-        self.__robots = "off" #TODO
+        self.__robots = "off"  # TODO
         self.__user_agent = config.get('crawler.userAgent')
         self.__custom_cmd = config.get('crawler.customWgetParms')
         self.__base = 'wget "{user_agent}" -e robots={rob} -r -l {depth} \
                       --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
         self.__process = None
         self.__pid = None
-        
+
         urlset = files.unique_items_from_file(config.get('crawler.urllistpath'))
         self.__exclude_urls = ', '.join(list(urlset.difference({self.__url})))
 
@@ -40,22 +40,22 @@ class Wget(object):
         starts the wget crawl process
         :returns: wget process exit code
         """
-        
+
         cmd = self.__base.format(user_agent=self.__user_agent,
                                  rob=self.__robots,
                                  depth=self.__depth,
-                                 ex_domains = self.__exclude_urls,
+                                 ex_domains=self.__exclude_urls,
                                  custom_parms=self.__custom_cmd,
                                  folder=self.__tmp_folder,
-                                 url=self.__url) 
-        print(cmd)
+                                 url=self.__url)
+
         cmd = shlex.split(cmd)
         devnull = open('/dev/null', 'w')
-        
+
         self.__process = subprocess.Popen(cmd, shell=False,
                                           bufsize=-1,
-                                          stdout = devnull,
-                                          stderr = devnull)
+                                          stdout=devnull,
+                                          stderr=devnull)
 
         self.__pid = self.__process.pid
         logging.info("[WGET] with pid {0} started.".format(self.__pid))
@@ -86,7 +86,7 @@ class Wget(object):
 ###########################################################################
 
 if __name__ == '__main__':
-    a = Wget('www.heise.de','.')
+    a = Wget('www.heise.de', '.')
     a.start()
     time.sleep(1)
     a.stop()

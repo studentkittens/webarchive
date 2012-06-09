@@ -4,22 +4,25 @@
 __author__ = 'Christoph Piechula'
 
 import subprocess
-import os, sys,shutil
+import os
+import sys
+import shutil
 import logging
 
 import util.times as times
 import crawler.filter as filter
 from crawler.metadata import MetaData
 
+
 class Cleaner:
     """
     Cleaner, walk dir tree, cleans and restructures
     tmp_crawler_folder hierarchy, calls filter subsystem
     """
-    def __init__(self,path):
+    def __init__(self, path):
         self.__mdlist = []
         self.__path = path
-        self.__commitTime = times.get_sys_time() #TODO, Doku 
+        self.__commitTime = times.get_sys_time()  # TODO, Doku
         self.__filtersys = filter.FilterSystem()
 
     def __restructure_file(self, tmp_crawler_folder, file_name):
@@ -27,12 +30,12 @@ class Cleaner:
         Restructures tmp_crawler_folder, collects meta_object list
         for interesting files
 
-        :tmp_crawler_folder: tmp_crawler_folder path of content file 
-        :file_name: name to content file itself 
+        :tmp_crawler_folder: tmp_crawler_folder path of content file
+        :file_name: name to content file itself
         """
         src_file = os.path.join(tmp_crawler_folder, file_name)
         dest_file = os.path.join(tmp_crawler_folder, '____data')
-        
+
         try:
             os.rename(src_file,dest_file)
             os.mkdir(src_file)
@@ -77,7 +80,7 @@ class Cleaner:
                     self.__restructure_file(leaf[0],data_file)
         except OSError:
             logging.exception("cannot walk through dir structure.")
-    
+
     def clean_empty(self):
         logging.debug("removing empty files and folders.")
         subprocess.call(['find',self.__path,'-empty','-delete'])

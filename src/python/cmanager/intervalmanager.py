@@ -21,6 +21,8 @@ class IntervalManager(object):
         self.__interval = None 
         self.__cmanager = None
         self.__start_time = None
+        self.__keep_running = True 
+        self.__crawler_running = False
         self.__crawling_done_callback = None
 
     def format_time(self, time_in_secs):
@@ -57,7 +59,9 @@ class IntervalManager(object):
         self.__cmanager.register_done(self.crawling_done_callback)
 
         try:
-            self.__cmanager.start()
+            if self.__keep_running:
+                self.__crawler_running = True
+                self.__cmanager.start()
         except KeyboardInterrupt:
             logging.warn('Got Ctrl-C => Will shutdown() now')
             self.__cmanager.shutdown()
@@ -68,6 +72,7 @@ class IntervalManager(object):
         delay and starts next run
 
         """
+        self.__crawler_running = False
         self.__crawling_done_callback = util.times.get_localtime_sec()
         next_crawl_time = self.__start_time + self.__interval
         
@@ -75,19 +80,55 @@ class IntervalManager(object):
             next_crawl_time = next_crawl_time + self.__interval
         
         delay = next_crawl_time - self.__crawling_done_callback
-        self.start(delay)
+        if self.__keep_running:
+            self.start(delay)
 
-    def shutdown(self):
-        #TODO soft and hard shutdown.
-        print("shuting system down.")
+    def nextx(self):
+        self.start()
+
+    def status(self):
+        print('Cmanager is {0}, IntervalManager is {1}'.format(
+               'is running' if self.__crawler_running else 'is not running',
+               'is running' if self.__keep_running else 'is not running'))
+
+    def stop(self):
+        self.__keep_running = False
+        print("Intervalmanager stopped, crawljobs may be still running.")
+
+    def kill(self):
+        self.__cmanager.shutdown()
+        print("Killing an cleaning crawljobs...")
 
 
 class CrawlerShell(cmd.Cmd):
     intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
+    def set_imanager(self, imanager):
+        self.__imanager = imanager
+
+    def do_kill(self, arg):
+        print('KILL KILL KILL')
+        self.__imanager.kill()
+        return False 
+
+    def do_start(self, arg):
+        'Starts crawljobs if stopped previously.'
+        self.__imanager.nextx()
+        return False
+
+    def do_status(self, arg):
+        'Status of crawler an intervalmanager.'
+        self.__imanager.status()
+        return False
+
+    def do_stop(self, arg):
+        'Stopps self.__imanager.'
+        self.__imanager.stop()
+        return False
+
     def do_quit(self, arg):
-        'Quits the server'
+        'Quits Intervalmanager, Crawljobs will still run until finished.'
         return True
 
     def do_EOF(self, arg):
