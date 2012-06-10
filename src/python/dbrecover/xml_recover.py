@@ -13,8 +13,9 @@ import os
 import fnmatch
 import crawler.git as git
 import util.paths as paths
+import logging
 from crawler.xmlreader import XMLReader
-from pprint import pprint
+from multiprocessing.pool import ThreadPool
 
 
 class XMLDBRecover(object):
@@ -28,7 +29,6 @@ class XMLDBRecover(object):
         for root, dirnames, filenames in os.walk(wrapper.domain):
             xmlfiles = fnmatch.filter(filenames, '*.xml')
             if len(xmlfiles) > 0:
-                print('     -', xmlfiles)
                 for xml in xmlfiles:
                     xml_path = os.path.join(root, xml)
                     try:
@@ -42,7 +42,6 @@ class XMLDBRecover(object):
         # Last commit is not used, since it's the
         # ,,Initialized'' commit from the empty base branch
         commit_list = wrapper.list_commits()[:-1]
-        print('   *', commit_list)
         if len(commit_list) == 1:
             # Only one commit there, no checkout needed
             # (assuming it's the most recent)
@@ -53,18 +52,22 @@ class XMLDBRecover(object):
 
     def __iterate_branches(self, wrapper):
         for branch in wrapper.list_branches():
-            print('=>', branch, '(', wrapper.domain, ')')
+            logging.warning('=>' + branch + '(' + wrapper.domain + ')')
             wrapper.checkout(branch)
             self.__iterate_commits(wrapper)
 
+    def recover(self, domain):
+        wrapper = git.Git(domain)
+        self.__iterate_branches(wrapper)
+        wrapper.checkout('master')
+
     def load(self):
         domain_patt = os.path.join(paths.get_content_root(), '*')
-        for domain in glob.glob(domain_patt):
-            wrapper = git.Git(domain)
-            self.__iterate_branches(wrapper)
-            wrapper.checkout('master')
+        threadPool = ThreadPool(8)
+        threadPool.map(self.recover, glob.glob(domain_patt))
+        threadPool.close()
+        threadPool.join()
 
-        pprint(self.__metalist)
         return self.__metalist
 
     def save(self, metalist):

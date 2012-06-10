@@ -21,11 +21,6 @@ class XMLReader(object):
     """Docstring for XMLReader """
 
     def __init__(self, xmlpath):
-        """@todo: to be defined
-
-        :xmlpath: @todo
-
-        """
         self.__xmlpath = xmlpath
         self.__tree = ElementTree()
         self.__tree.parse(xmlpath)

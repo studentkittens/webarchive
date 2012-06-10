@@ -5,6 +5,8 @@ __author__ = 'Christoph Piechula'
 
 import os
 import logging
+from xml.sax.saxutils import quoteattr
+
 
 XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 <wa:file
@@ -12,15 +14,15 @@ XML_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
     xmlns:wa='http://www.hof-university.de/webarchive'
     xsi:schemaLocation='http://www.hof-university.de/webarchive {schema_path}'>
     <wa:meta
-        wa:url="{meta[url]}"
-        wa:mimeType="{meta[mimeType]}"
-        wa:path="{meta[path]}"
-        wa:createTime="{meta[createTime]}"
-        wa:title="{meta[title]}"
+        wa:url={meta[url]}
+        wa:mimeType={meta[mimeType]}
+        wa:path={meta[path]}
+        wa:createTime={meta[createTime]}
+        wa:title={meta[title]}
     >
         <wa:commitTag
-            wa:commitTime="{meta[commitTime]}"
-            wa:domain="{meta[domain]}"
+            wa:commitTime={meta[commitTime]}
+            wa:domain={meta[domain]}
         />
     </wa:meta>
     <wa:data>
@@ -57,7 +59,7 @@ class XmlGenerator(object):
         for item in self.__meta_list:
             metadict = dict()
             for key, value in item.items():
-                metadict[key.replace('"', "'")] = value
+                metadict[key] = quoteattr(value)
 
             xml_node = (XML_TEMPLATE.format(schema_path=self.__schema_path,
                                             meta=metadict),
@@ -76,8 +78,6 @@ class XmlGenerator(object):
         else:
             logging.warn("nothing to dump.")
 
-
-
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
@@ -88,7 +88,7 @@ if __name__ == '__main__':
             'mimeType': "text/html",
             'path': "www.heise.de/index.html",
             'createTime': "2012-05-15T17:28:42",
-            'title': "heise online",
+            'title': "heise \"online\"",
             'commitTime': "2012-05-15T17:30:00",
             'domain': "www.heise.de"
     }]

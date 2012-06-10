@@ -8,8 +8,8 @@ Usage:
   archive.py init [<path>]
   archive.py crawler (--start|--stop)
   archive.py javadapter (--start|--stop)
-  archive.py db
-  archive.py config
+  archive.py db --rebuild
+  archive.py config (--get|--set) <confurl> [<arg>]
   archive.py -h | --help
   archive.py --version
 
@@ -18,17 +18,21 @@ Options:
   --version     Show version.
   --start       Starting a service.
   --stop        Stopping a service.
+  --rebuild     Rebuild Databse completely from XML Data.
+  --set         Set a Value in the config permanently.
+  --get         Acquire a Value in the config by it's url.
 
 """
 __author__ = 'Christopher Pahl, Christoph Piechula'
 import threading
-import logging
 
 from docopt import docopt
 from init.init import init_archive
 
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
+
+import config.reader as config
 
 
 class Cli(object):
@@ -95,7 +99,10 @@ class Cli(object):
         pass
 
     def handle_config(self):
-        pass
+        if self.__arguments['--get']:
+            print(config.get(self.__arguments['<confurl>']))
+        elif self.__arguments['--set']:
+            pass  # TODO: Wait for config implementation.
 
 
 if __name__ == '__main__':
