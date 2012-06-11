@@ -2,13 +2,18 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
+import webarchive.connection.NetworkModule;
+import webarchive.headers.Header;
+import webarchive.transfer.FileBuffer;
+import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Message;
 
 public class ServerConnectionHandler extends ConnectionHandler {
 
-	public ServerConnectionHandler(Connection c) {
-		super(c);
-		// TODO Auto-generated constructor stub
+	private IOHandler io;
+	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
+		super(c, netMod);
+		this.io = new FileHandler();
 	}
 
 	@Override
@@ -17,10 +22,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		switch (msg.getHeader()) {
 			case HANDSHAKE: 
 			{
-				if(msg.getId()!=null)
-				{
-					wakeUp(msg);
-				}
+				wakeUp(msg);
 			}
 				break;
 			case EXCEPTION:
@@ -40,12 +42,34 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				break;
 			case WRITEFILE:
 			{
+				FileBuffer buf = (FileBuffer)msg.getData();
+				io.lock(buf.getFd());
+				io.write(buf);
+				io.unlock(buf.getFd());
+				Message answer = new Message(msg,null);
+				answer.setHeader(Header.SUCCESS);
+				try {
+					c.send(answer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 			}
 				break;
 			case READFILE:
 			{
-				
+				FileDescriptor fd = (FileDescriptor)msg.getData();
+				io.lock(fd);
+				FileBuffer buf = io.read(fd);
+				io.unlock(fd);
+				Message answer = new Message(msg,buf);
+				try {
+					c.send(answer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 				break;
 			case XMLEDIT:
@@ -64,28 +88,9 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	}
 
 	@Override
-	public void disconnect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void send(Message msg) throws Exception {
 		c.send(msg);		
 	}
 	
-	private void wakeUp(Message msg)
-	{
-		synchronized (getMap())
-		{
-			getMap().put(msg.getId(), msg);
-			getMap().notifyAll();
-		}
-	}
+	
 }

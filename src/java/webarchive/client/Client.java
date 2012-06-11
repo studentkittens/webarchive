@@ -6,8 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import webarchive.connection.Connection;
+import webarchive.connection.NetworkModule;
 
-public class Client  {
+public class Client implements NetworkModule  {
 	public static final int DEFAULT_PORT = 21000;
 
 	private String ip;
@@ -57,7 +58,7 @@ public class Client  {
 			Socket sock = new Socket(InetAddress.getByName(ip),port);
 			System.out.println("connected");
 			c = new Connection(sock, new ObjectOutputStream(sock.getOutputStream()) , new ObjectInputStream(sock.getInputStream()));
-			c.setConHandler(new ClientConnectionHandler(c));
+			c.setConHandler(new ClientConnectionHandler(c, this));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,13 +69,11 @@ public class Client  {
 		new Thread(c).start();
 		
 	}
-//###############################################################################
-	
-	public static void main(String args[])
-	{
-		Client cl = new Client();
-		cl.setIp("localhost");
-		cl.connectToServer();
+
+	@Override
+	public void removeConnection(Connection c) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -8,9 +8,9 @@ import webarchive.headers.Header;
 
 public class MyBAOS extends ByteArrayOutputStream {
 	
-	private Buffer buf;
+	private FileBuffer buf;
 	private ClientConnectionHandler cH;
-	public MyBAOS (Buffer buf, ClientConnectionHandler cH) {
+	public MyBAOS (FileBuffer buf, ClientConnectionHandler cH) {
 		this.buf=buf;
 		this.cH=cH;
 	}

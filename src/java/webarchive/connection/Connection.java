@@ -75,17 +75,13 @@ public class Connection implements Runnable {
 			Message msg = null;
 			try {
 				msg = this.receive();
-			} catch (SocketException sockExc) {
+			} catch (SocketException | EOFException end) {
 				System.out.println("lost connection");
 				//do something, like delete connection from cList
-				break;
-			} catch (EOFException end) {
-				System.out.println("lost connection");
-				//do something, like delete connection from cList
+				conHandler.removeConnection(this);
 				break;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//TODO
 				continue;
 			}
 
