@@ -5,24 +5,24 @@
 """Archive interface.
 
 Usage:
-  archive.py --loglevel <severity> init [<path>]
-  archive.py --loglevel <severity> crawler (--start|--stop)
-  archive.py --loglevel <severity> javadapter (--start|--stop)
-  archive.py --loglevel <severity> db (--rebuild|--remove)
-  archive.py config (--get|--set) <confurl> [<arg>]
+  archive.py [--loglevel=<severity>] init [<path>]
+  archive.py [--loglevel=<severity>] crawler (--start|--stop)
+  archive.py [--loglevel=<severity>] javadapter (--start|--stop)
+  archive.py [--loglevel=<severity>] db (--rebuild|--remove)
+  archive.py config (--get=<confurl>|--set=<confurl><arg>)
   archive.py -h | --help
   archive.py --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
-  --loglevel    Set the loglevel to any of debug, info, warning, error, critical
-  --start       Starting a service.
-  --stop        Stopping a service.
-  --rebuild     Rebuild Databse completely from XML Data.
-  --remove      Remove the Database completely.
-  --set         Set a Value in the config permanently.
-  --get         Acquire a Value in the config by it's url.
+  -h --help                Show this screen.
+  --version                Show version.
+  --loglevel=<loglevel>    Set the loglevel to any of debug, info, warning, error, critical.
+  --start                  Starting a service.
+  --stop                   Stopping a service.
+  --rebuild                Rebuild Databse completely from XML Data.
+  --remove                 Remove the Database completely.
+  --set=<confurl><value>   Set a Value in the config permanently.
+  --get=<confurl>          Acquire a Value in the config by it's url.
 
 """
 
