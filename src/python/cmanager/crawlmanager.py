@@ -14,16 +14,17 @@ import logging
 running = []
 running_mtx = threading.Lock()
 
+
 def crawljob(ident, url):
     """
     Crawljob callback method runs an own thread
     starts actual crawljob
-    
+
     :ident: identifier given by threadpool
     :url: url to crawl
     """
     try:
-        logging.info('Job #{cid} ({curl}) started.'.format(cid = ident, curl = url))
+        logging.info('Job #{cid} ({curl}) started.'.format(cid=ident, curl=url))
         j = job.CrawlJob(ident, url)
         running_mtx.acquire()
         running.append(j)
@@ -36,7 +37,7 @@ def crawljob(ident, url):
 
 class CrawlerManager(object):
     """
-    Crawljob manager, threadpool which launches a pool of 
+    Crawljob manager, threadpool which launches a pool of
     threads
     """
     def __init__(self, urls):
@@ -56,7 +57,7 @@ class CrawlerManager(object):
         results = [self.__pool.apply_async(crawljob, i)
                 for i in enumerate(self.__urls)]
 
-        # Now wait till all jobs finished 
+        # Now wait till all jobs finished
         self.__pool.close()
         self.__pool.join()
 

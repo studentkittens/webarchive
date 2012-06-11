@@ -6,6 +6,7 @@ __author__ = 'Christoph Piechula'
 import time
 import os
 
+
 def get_ctime(file_path):
     """
     gets ISO 8601 formated timestamp (create time) of a given file
@@ -18,6 +19,7 @@ def get_ctime(file_path):
                         time.localtime(
                         os.path.getctime(file_path)))
 
+
 def get_sys_time():
     """
     localtime as ISO 8601 timestamp
@@ -26,11 +28,12 @@ def get_sys_time():
     return time.strftime("%Y-%m-%dT%H:%M:%S",
                           time.localtime())
 
+
 def get_localtime_sec():
     """
     :returns: localtime in sec from the epoch
     """
-    return int(time.strftime("%s",time.localtime()))
+    return int(time.strftime("%s", time.localtime()))
 
 
 def sec_to_timestamp(form, seconds):

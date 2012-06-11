@@ -4,6 +4,7 @@
 __author__ = 'Christoph Piechula'
 
 import subprocess
+import os
 import time
 import shlex
 import config.reader as config
@@ -24,7 +25,7 @@ class Wget(object):
         self.__url = url.strip()
         self.__tmp_folder = tmp_folder
         self.__depth = config.get('crawler.depth')
-        self.__robots = "off"  # TODO
+        self.__robots = "off" if config.get('crawler.ignoreRobots') == "true" else "on"
         self.__user_agent = config.get('crawler.userAgent')
         self.__custom_cmd = config.get('crawler.customWgetParms')
         self.__base = 'wget "{user_agent}" -e robots={rob} -r -l {depth} \
@@ -50,12 +51,14 @@ class Wget(object):
                                  url=self.__url)
 
         cmd = shlex.split(cmd)
-        devnull = open('/dev/null', 'w')
+        wget_path = os.path.join(config.get('general.root'),
+                                           'wget_' + self.__url + '.log')
+        wget_log = open(wget_path, 'w')
 
         self.__process = subprocess.Popen(cmd, shell=False,
                                           bufsize=-1,
-                                          stdout=devnull,
-                                          stderr=devnull)
+                                          stdout=wget_log,
+                                          stderr=wget_log)
 
         self.__pid = self.__process.pid
         logging.info("[WGET] with pid {0} started.".format(self.__pid))

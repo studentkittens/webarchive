@@ -85,7 +85,6 @@ class Git(object):
 
         if rc is not 0:
             logging.warn('Previous git command returned nonzero-returncode! {}'.format(err))
-
         return rc
 
     def init(self):

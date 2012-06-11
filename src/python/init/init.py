@@ -7,7 +7,8 @@ import init.default_cfg as default_cfg
 
 __author__ = 'Christopher Pahl'
 
-def init_archive(init_path = os.getcwd()):
+
+def init_archive(init_path=os.getcwd()):
     base_path = os.path.join(init_path, 'archive')
     if not os.path.exists(base_path):
         try:
@@ -34,5 +35,5 @@ if __name__ == '__main__':
 
     def main():
         init_archive(sys.argv[1])
-         
+
     main()
