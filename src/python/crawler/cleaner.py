@@ -37,11 +37,11 @@ class Cleaner:
         dest_file = os.path.join(tmp_crawler_folder, '____data')
 
         try:
-            os.rename(src_file,dest_file)
+            os.rename(src_file, dest_file)
             os.mkdir(src_file)
             # moving an renaming to 'data'
-            final_data_path= os.path.join(src_file, 'data')
-            shutil.move(dest_file,final_data_path)
+            final_data_path = os.path.join(src_file, 'data')
+            shutil.move(dest_file, final_data_path)
         except OSError as err:
             logging.exception('error during cleaning procedure')
         else:
@@ -52,7 +52,7 @@ class Cleaner:
             if keep:
                 self.__mdlist.append(meta_obj)
             else:
-                os.remove(os.path.join(src_file,'data'))
+                os.remove(os.path.join(src_file, 'data'))
                 os.removedirs(src_file)
         finally:
             # if something goes wrong
@@ -66,7 +66,6 @@ class Cleaner:
         """
         return self.__mdlist
 
-
     def restructure(self):
         """
         Walks through tmp_crawler_folder hierarchy calling internal
@@ -77,13 +76,13 @@ class Cleaner:
             tree = os.walk(os.path.abspath(self.__path))
             for leaf in tree:
                 for data_file in leaf[2]:
-                    self.__restructure_file(leaf[0],data_file)
+                    self.__restructure_file(leaf[0], data_file)
         except OSError:
             logging.exception("cannot walk through dir structure.")
 
     def clean_empty(self):
         logging.debug("removing empty files and folders.")
-        subprocess.call(['find',self.__path,'-empty','-delete'])
+        subprocess.call(['find', self.__path, '-empty', '-delete'])
 
 ###########################################################################
 #                                 content                                 #

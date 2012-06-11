@@ -3,14 +3,15 @@
 
 __author__ = 'Christoph Piechula'
 
-import time 
+import time
 import logging
 import cmd
 
 import cmanager.crawlmanager as c
 import util.files as utl
-import util.times 
+import util.times
 import config.reader as config
+
 
 class IntervalManager(object):
     """
@@ -18,10 +19,10 @@ class IntervalManager(object):
     """
 
     def __init__(self):
-        self.__interval = None 
+        self.__interval = None
         self.__cmanager = None
         self.__start_time = None
-        self.__keep_running = True 
+        self.__keep_running = True
         self.__crawler_running = False
         self.__crawling_done_callback = None
 
@@ -36,14 +37,13 @@ class IntervalManager(object):
         """
         Starts the intervalmanager, which starts
         the crawlmanager procedure with a given delay
-        
+
         :delay_in_sec: delay time in seconds
         """
         #fetch interval from config
-        self.__interval = float(config.get('crawler.interval'))*60
-        
+        self.__interval = float(config.get('crawler.interval')) * 60
 
-        #delay before next crawl 
+        #delay before next crawl
         if delay_in_sec != 0:
             #only to display some information
             cur_time = self.format_time(time.localtime(util.times.get_localtime_sec()))
@@ -75,10 +75,10 @@ class IntervalManager(object):
         self.__crawler_running = False
         self.__crawling_done_callback = util.times.get_localtime_sec()
         next_crawl_time = self.__start_time + self.__interval
-        
+
         while next_crawl_time < self.__crawling_done_callback:
             next_crawl_time = next_crawl_time + self.__interval
-        
+
         delay = next_crawl_time - self.__crawling_done_callback
         if self.__keep_running:
             self.start(delay)
@@ -110,7 +110,7 @@ class CrawlerShell(cmd.Cmd):
     def do_kill(self, arg):
         print('KILL KILL KILL')
         self.__imanager.kill()
-        return False 
+        return False
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
@@ -137,4 +137,3 @@ class CrawlerShell(cmd.Cmd):
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-

@@ -6,6 +6,7 @@ __author__ = 'Christopher Pahl'
 import os
 import logging
 
+
 def unique_items_from_file(path):
     """
     Creates a unique set with urls from a given file
@@ -15,7 +16,7 @@ def unique_items_from_file(path):
     """
     urls = set()
     try:
-        with open(path,'r') as urlfile:
+        with open(path, 'r') as urlfile:
             for line in urlfile:
                 if line[0] != '#':
                     urls.add(line.strip())
@@ -24,10 +25,8 @@ def unique_items_from_file(path):
     return urls
 
 
-
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-
 if __name__ == '__main__':
-    print(unique_items_from_file('../url<F3>.txt'))
+    print(unique_items_from_file('../url.txt'))

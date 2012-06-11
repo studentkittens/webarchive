@@ -5,6 +5,7 @@ __author__ = 'Christoph Piechula'
 
 import magic
 
+
 def get_mime(filepath):
     """
     Determinates the mime type of a given file
@@ -21,4 +22,3 @@ def get_mime(filepath):
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-    

@@ -3,6 +3,7 @@
 
 __author__ = 'Christopher Pahl'
 
+
 class ShutdownException(Exception):
     """
     Is thrown on shutdown on the crawljob

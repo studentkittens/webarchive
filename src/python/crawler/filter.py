@@ -8,20 +8,21 @@ import copy
 import os.path
 import traceback
 import config.reader as config
-import logging 
+import logging
+
 
 class FilterSystem(object):
-    def __init__(self, plugin_path = None):
+    def __init__(self, plugin_path=None):
         self.__source_list = []
         self.load(plugin_path)
 
-    def load(self, plugin_path = None):
+    def load(self, plugin_path=None):
         """
         Load a list of *.py files from a directory
 
         The .py files are read in and stored in-memory
-        
-        :plugin_path: A path to a directory with .py files 
+
+        :plugin_path: A path to a directory with .py files
                       or None to read the value from the cfg
         """
         # If no path is given,
@@ -30,9 +31,9 @@ class FilterSystem(object):
             actual_path = config.get('general.filterpath')
         else:
             actual_path = plugin_path
-        
+
         # Built a list of (path_to_filter, filter_source)
-        for source in sorted(glob.glob(os.path.join(actual_path,'*.py'))):
+        for source in sorted(glob.glob(os.path.join(actual_path, '*.py'))):
             with open(source, 'r') as handle:
                 self.__source_list.append(
                     (source, handle.read() + '\n'))
@@ -40,7 +41,7 @@ class FilterSystem(object):
     def clear(self):
         """
         Clears loaded filters
-        
+
         """
         # Clear list by unreferencing old items
         self.__source_list = []
@@ -70,7 +71,7 @@ class FilterSystem(object):
         for source in self.__source_list:
             try:
                 exec(source[1], input_dict)
-            except: 
+            except:
                 # an error inside the filter happened,
                 # this is probably one of the few reasons where
                 # a catchall is fine. :)
@@ -78,7 +79,7 @@ class FilterSystem(object):
                 logging.warn(source[0])
                 traceback.print_exc()
 
-            try: 
+            try:
                 if input_dict['filter_result'] == False:
                     decision = False
                     break
@@ -90,6 +91,7 @@ class FilterSystem(object):
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
+
 
 def main():
     """
