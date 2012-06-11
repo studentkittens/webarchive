@@ -3,6 +3,8 @@
 
 __author__ = 'Christopher Pahl'
 
+import logging
+import traceback
 import sqlite3
 import glob
 import os
@@ -44,9 +46,13 @@ class DBGenerator(object):
             self.__cursor.executemany(source)
 
     def batch(self):
-        self.insert_mime_domain()
-        self.insert_mdata_ctag()
-        self.insert_history()
+        try:
+            self.insert_mime_domain()
+            self.insert_mdata_ctag()
+            self.insert_history()
+        except:
+            logging.critical('Unexcpected error while generating DB')
+            logging.critical(traceback.format_exc())
 
     def insert_mime_domain(self):
         mimes = []
@@ -88,12 +94,19 @@ class DBGenerator(object):
 
         for item in self.__metalist:
             ctag_tuple_key = (item['commitTime'], self.__domaindict[item['domain']])
-            history.append((
-                self.__mdidlist[item['url']],
-                self.__ctaglist[ctag_tuple_key],
-                item['createTime'],
-                item['title']
-                ))
+
+            try:
+                metadata_id = self.__mdidlist[item['url']]
+                commitag_id = self.__ctaglist[ctag_tuple_key]
+
+                history.append((
+                    metadata_id,
+                    commitag_id,
+                    item['createTime'],
+                    item['title']
+                    ))
+            except KeyError:
+                logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
 
         self.execute_statement('insert_history', history)
 

@@ -121,7 +121,7 @@ class CrawlJob(object):
             fsmutex.acquire()
 
             try:
-                logging.debug('Creating directory:', domain_path)
+                logging.debug('Creating directory: ' + domain_path)
                 os.mkdir(domain_path)
             except OSError:
                 # This is expected
