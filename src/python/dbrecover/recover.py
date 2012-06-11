@@ -7,12 +7,16 @@ Recover.
 
 __author__ = 'Christopher Pahl'
 
-from pickle_recover import PickleDBRecover
-from xml_recover import XMLDBRecover
+
+import os
+
+from dbrecover.pickle_recover import PickleDBRecover
+from dbrecover.xml_recover import XMLDBRecover
 from crawler.dbgen import DBGenerator
+from util.paths import get_dbpath
 
 
-def recover():
+def rebuild():
     strategies = [PickleDBRecover(), XMLDBRecover()]
     for strategy in strategies:
         metalist = strategy.load()
@@ -22,8 +26,13 @@ def recover():
             d.close()
 
 
+def remove():
+    dbpath = get_dbpath()
+    os.remove(dbpath)
+
+
 def main():
-    recover()
+    rebuild()
 
 if __name__ == '__main__':
     main()
