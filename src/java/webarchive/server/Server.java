@@ -1,6 +1,7 @@
 package webarchive.server;
 
 import webarchive.connection.Connection;
+import webarchive.connection.NetworkModule;
 import webarchive.headers.Header;
 import webarchive.transfer.Message;
 
@@ -13,7 +14,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server implements Runnable {
+public class Server implements Runnable,NetworkModule {
 
     private static final int DEFAULT_PORT = 21000;
 
@@ -93,18 +94,20 @@ public class Server implements Runnable {
     
     private void disconnectClients() {
     	System.out.println("disconnecting Clients");
-    	for(Connection c : cList) {
-    		
-			try {
-				c.getSocket().close();
+    	synchronized (cList) {
+	    	for(Connection c : cList) {
+	    		
+				try {
+					c.getSocket().close();
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
+	    	}
+	    	cList.clear();
     	}
-    	cList.clear();
     	System.out.println("Clients disconnected");
     }
     
@@ -146,7 +149,7 @@ public class Server implements Runnable {
             }
             System.out.println("trying to safe connection");
             Connection c = new Connection(sock,oos,ois);
-            c.setConHandler(new ServerConnectionHandler(c));
+            c.setConHandler(new ServerConnectionHandler(c,this));
             
             new Thread(c).start();
             
@@ -174,7 +177,9 @@ public class Server implements Runnable {
 
     private void addNewConnection(Connection c)
     {
-        cList.add(c);
+    	synchronized (cList) {
+    		cList.add(c);
+    	}
     }
 
     private boolean doHandShake(Connection c)
@@ -188,8 +193,8 @@ public class Server implements Runnable {
             c.send(m);
             System.out.println("handshake sent, try receiving handshake");
 
-            h = c.waitForAnswer(m);
-            //Go to sleep
+            h = c.waitForAnswer(m);//Go to sleep
+            
             System.out.println("handshake received");
 
         } catch (Exception e) {
@@ -198,16 +203,18 @@ public class Server implements Runnable {
             return false;
         }
 
-        if( 
-                (h != null) 
-                && 
-                (h.getHeader() == Header.HANDSHAKE) 
-          )
-        {
+        if( (h != null) && (h.getHeader() == Header.HANDSHAKE) ) {
             return true;
         }
 
         return false;
     }
+
+	@Override
+	public void removeConnection(Connection c) {
+		synchronized (cList) {
+			cList.remove(c);
+		}
+	}
     
 }

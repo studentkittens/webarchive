@@ -18,6 +18,12 @@ public class Message implements Serializable {
 		this.data = data;
 		this.markAsQuery();
 	}
+	
+	public Message(Message query, Object data) {
+		this.h = query.getHeader();
+		this.data = data;
+		this.id = query.id;
+	}
 
 	public Message(Header h) {
 		this(h,null);

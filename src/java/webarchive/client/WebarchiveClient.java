@@ -1,5 +1,6 @@
 package webarchive.client;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,7 +11,7 @@ import webarchive.api.XmlEdit;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
 import webarchive.headers.Header;
-import webarchive.transfer.Buffer;
+import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Message;
 import webarchive.transfer.MyBAOS;
@@ -44,15 +45,16 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 	@Override
 	public InputStream getInputStream(MetaData meta, File file)
 			throws Exception {
-		//TODO
-		return null;
+		
+		Object answer = queryServer(Header.READFILE,new FileDescriptor(meta,file));
+		assert answer instanceof FileBuffer; 
+		return new ByteArrayInputStream(((FileBuffer) answer).getData());
 	}
 
 	@Override
 	public OutputStream getOutputStream(MetaData meta, File file)
 			throws Exception {
-		
-		return new MyBAOS(new Buffer(new FileDescriptor(meta,file)),cH);
+		return new MyBAOS(new FileBuffer(new FileDescriptor(meta,file)),cH);
 	}
 
 	@Override

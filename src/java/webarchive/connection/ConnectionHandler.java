@@ -10,14 +10,15 @@ public abstract class ConnectionHandler {
 	protected final Connection c;
 	private final HashMap<Integer,Message> map = new HashMap<Integer,Message>();
 
-	public ConnectionHandler(Connection c) {
+	private NetworkModule netMod;
+	
+	public ConnectionHandler(Connection c, NetworkModule netMod) {
 		this.c = c;
+		this.netMod = netMod;
 	}
 
 	public abstract void handle(Message msg);
 	
-	public abstract void disconnect();
-	public abstract void connect();
 	public abstract void send(Message msg) throws Exception;
 	
 	public Connection getConnection() {
@@ -60,6 +61,22 @@ public abstract class ConnectionHandler {
 		} while (answer == null);
 		
 		return null;
+	}
+	
+	protected void removeConnection(Connection c) {
+		netMod.removeConnection(c);
+	}
+	
+	protected void wakeUp(Message msg)
+	{
+		if(msg.getId()!=null)
+		{
+			synchronized (getMap())
+			{
+				getMap().put(msg.getId(), msg);
+				getMap().notifyAll();
+			}
+		}
 	}
 	
 	

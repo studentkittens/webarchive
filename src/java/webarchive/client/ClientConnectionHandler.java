@@ -2,12 +2,14 @@ package webarchive.client;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
+import webarchive.connection.NetworkModule;
 import webarchive.transfer.Message;
 
 public class ClientConnectionHandler extends ConnectionHandler {
 
-	public ClientConnectionHandler(Connection c) {
-		super(c);
+
+	public ClientConnectionHandler(Connection c, NetworkModule netMod) {
+		super(c, netMod);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -15,7 +17,8 @@ public class ClientConnectionHandler extends ConnectionHandler {
 	public void handle(Message msg) {
 		// TODO Auto-generated method stub
 
-
+		
+		
 		switch(msg.getHeader())
 		{
 		case HANDSHAKE:
@@ -28,55 +31,26 @@ public class ClientConnectionHandler extends ConnectionHandler {
 				}
 			}
 			break;
+		case NOTIFY:
+		{
+			//TODO
+			break;
+		}
 		case EXCEPTION:
 		{
-			
-		}
+			//TODO
 			break;
+		}
 		case SUCCESS:
-		{
-			
-		}
-			break;
 		case SQL:
-		{
-			
-		}
-			break;
 		case WRITEFILE:
-		{
-			
-		}
-			break;
 		case READFILE:
-		{
-			
-		}
-			break;
 		case XMLEDIT:
-		{
-			
-		}
-			break;
 		case LS:
-		{
-			
-		}
+		default:
+			wakeUp(msg);
 			break;
-		default: break;
 		}
-	}
-
-	@Override
-	public void disconnect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

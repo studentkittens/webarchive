@@ -15,13 +15,17 @@ public class FileDescriptor {
 		this.file = file;
 	}
 	
-	public MetaData getMeta() {
+	public FileDescriptor(File file) {
+		this(null,file);
+	}
+	
+	public MetaData getMetaData() {
 		return meta;
 	}
 	public void setMeta(MetaData meta) {
 		this.meta = meta;
 	}
-	public File getFile() {
+	public File getAbsolutePath() {
 		return file;
 	}
 	public void setFile(File file) {
