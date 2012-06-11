@@ -28,6 +28,7 @@ Options:
 __author__ = 'Christopher Pahl, Christoph Piechula'
 
 import threading
+import logging
 
 # External dep.
 # pip install docopt
@@ -50,7 +51,8 @@ class Cli(object):
         """
         Collected arguments
         """
-        #logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO,
+                            format='%(asctime)s - %(name)s - %(message)s')
 
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
@@ -79,6 +81,7 @@ class Cli(object):
     def cmd_loop(self,  i):
         shell = imgur.CrawlerShell()
         shell.set_imanager(i)
+        print('')
         shell.cmdloop()
         i.stop()
 
@@ -86,7 +89,7 @@ class Cli(object):
         if self.__arguments['--start']:
             i = imgur.IntervalManager()
             threading.Thread(target=self.cmd_loop, args=(i, )).start()
-            #i.start()
+            i.start()
         elif self.__arguments['--stop']:
             self.not_implemented()
 

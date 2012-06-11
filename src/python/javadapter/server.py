@@ -326,12 +326,24 @@ class ServerShell(cmd.Cmd):
     intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
+    def __init__(self, host='localhost', port='42421'):
+        super(ServerShell, self).__init__()
+        self.host = host
+        self.port = port
+
+    def do_status(self, arg):
+        'Print current status of the Server'
+        print('Server listening on', self.host, ':', self.port)
+        return False
+
     def do_quit(self, arg):
         'Quits the server'
+        print('')
         return True
 
     def do_EOF(self, arg):
-        return True
+        'Shortcut for quit (Press CTRL+D)'
+        return self.do_quit(arg)
 
 ###########################################################################
 #                           Testing / Starting                            #
@@ -347,8 +359,9 @@ if __name__ == "__main__":
             print('usage: {prog} port'.format(prog=sys.argv[0]))
             sys.exit(-1)
         try:
-            server = start('localhost', int(sys.argv[1]))
-            ServerShell().cmdloop()
+            host, port = 'localhost', int(sys.argv[1])
+            server = start(host, port)
+            ServerShell(host, port).cmdloop()
             server.shutdown()
         except lock.FileLockException:
             print('Server seems to be running already!')
