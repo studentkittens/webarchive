@@ -5,10 +5,10 @@
 """Archive interface.
 
 Usage:
-  archive.py init [<path>]
-  archive.py crawler (--start|--stop)
-  archive.py javadapter (--start|--stop)
-  archive.py db (--rebuild|--remove)
+  archive.py --loglevel <severity> init [<path>]
+  archive.py --loglevel <severity> crawler (--start|--stop)
+  archive.py --loglevel <severity> javadapter (--start|--stop)
+  archive.py --loglevel <severity> db (--rebuild|--remove)
   archive.py config (--get|--set) <confurl> [<arg>]
   archive.py -h | --help
   archive.py --version
@@ -16,6 +16,7 @@ Usage:
 Options:
   -h --help     Show this screen.
   --version     Show version.
+  --loglevel    Set the loglevel to any of debug, info, warning, error, critical
   --start       Starting a service.
   --stop        Stopping a service.
   --rebuild     Rebuild Databse completely from XML Data.
@@ -29,6 +30,7 @@ __author__ = 'Christopher Pahl, Christoph Piechula'
 
 import threading
 import logging
+import sys
 
 # External dep.
 # pip install docopt
@@ -51,9 +53,6 @@ class Cli(object):
         """
         Collected arguments
         """
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s - %(name)s - %(message)s')
-
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
                 'init': self.handle_init,
@@ -62,6 +61,19 @@ class Cli(object):
                 'db': self.handle_db,
                 'config': self.handle_config
                 }
+
+        try:
+            loglevel = self.__arguments['<severity>'].upper()
+            severity = getattr(logging, loglevel)
+        except KeyError:
+            severity = logging.INFO
+        except AttributeError:
+            print('Error: \"loglevel\" is not a valid severity level')
+            print(__doc__)
+            sys.exit(-1)
+
+        logging.basicConfig(level=severity,
+                            format='%(asctime)s - %(name)s - %(message)s')
 
         #iterating through arguments
         for module, handler in submodules.items():
