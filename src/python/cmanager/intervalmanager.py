@@ -6,7 +6,7 @@ __author__ = 'Christoph Piechula'
 import time
 import logging
 import cmd
-
+import ctypes
 import cmanager.crawlmanager as c
 import util.files as utl
 import util.times
