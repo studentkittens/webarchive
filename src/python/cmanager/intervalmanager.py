@@ -83,13 +83,14 @@ class IntervalManager(object):
         if self.__keep_running:
             self.start(delay)
 
-    def nextx(self):
-        self.start()
-
     def status(self):
         print('Cmanager is {0}, IntervalManager is {1}'.format(
                'is running' if self.__crawler_running else 'is not running',
                'is running' if self.__keep_running else 'is not running'))
+
+    def start_again(self):
+        self.start()
+        self.__keep_running = True
 
     def stop(self):
         self.__keep_running = False
@@ -108,13 +109,13 @@ class CrawlerShell(cmd.Cmd):
         self.__imanager = imanager
 
     def do_kill(self, arg):
-        print('KILL KILL KILL')
+        'kill all crawljobs immediately and cleans up tmp folder.'
         self.__imanager.kill()
         return False
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
-        self.__imanager.nextx()
+        self.__imanager.start_again()
         return False
 
     def do_status(self, arg):

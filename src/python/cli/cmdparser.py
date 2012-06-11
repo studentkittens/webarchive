@@ -82,7 +82,7 @@ class Cli(object):
             i = imgur.IntervalManager()
             threading.Thread(target=self.cmd_loop, args=(self, i, )).start()
             print("\n")
-        #    i.start()
+            i.start()
             print('Goodbye')
         elif self.__arguments['--stop']:
             self.not_implemented()
