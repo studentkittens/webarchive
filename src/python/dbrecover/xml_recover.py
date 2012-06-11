@@ -14,6 +14,8 @@ import fnmatch
 import crawler.git as git
 import util.paths as paths
 import logging
+import threading
+
 from crawler.xmlreader import XMLReader
 from multiprocessing.pool import ThreadPool
 
@@ -24,9 +26,13 @@ class XMLDBRecover(object):
     def __init__(self):
         """@todo: to be defined """
         self.__metalist = []
+        self.__shutdown = False
 
     def __iterate_filetree(self, wrapper):
         for root, dirnames, filenames in os.walk(wrapper.domain):
+            if self.__shutdown:
+                raise KeyboardInterrupt
+
             xmlfiles = fnmatch.filter(filenames, '*.xml')
             if len(xmlfiles) > 0:
                 for xml in xmlfiles:
@@ -56,17 +62,37 @@ class XMLDBRecover(object):
             wrapper.checkout(branch)
             self.__iterate_commits(wrapper)
 
-    def recover(self, domain):
+    def recover_domain(self, domain):
+        try:
+            wrapper = git.Git(domain)
+            self.__iterate_branches(wrapper)
+        except KeyboardInterrupt:
+            logging.warn(threading.current_thread().name + ': Interrupted while traversing Archive')
+        finally:
+            wrapper.checkout('master')
+
+    def sanitize_domain(self, domain):
         wrapper = git.Git(domain)
-        self.__iterate_branches(wrapper)
         wrapper.checkout('master')
 
     def load(self):
-        domain_patt = os.path.join(paths.get_content_root(), '*')
-        threadPool = ThreadPool(8)
-        threadPool.map(self.recover, glob.glob(domain_patt))
-        threadPool.close()
-        threadPool.join()
+        try:
+            self.__init__()
+            domain_patt = os.path.join(paths.get_content_root(), '*')
+            domain_list = glob.glob(domain_patt)
+            threadPool = ThreadPool(8)
+            threadPool.map(self.recover_domain, domain_list)
+            threadPool.close()
+            threadPool.join()
+        except KeyboardInterrupt:
+            print('Got interrupted')
+        finally:
+            self.__shutdown = True
+            threadPool.close()
+            threadPool.join()
+            logging.info('Making sure everything is clean on master..')
+            for domain in domain_list:
+                self.sanitize_domain(domain)
 
         return self.__metalist
 

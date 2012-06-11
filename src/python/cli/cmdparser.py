@@ -73,7 +73,7 @@ class Cli(object):
             sys.exit(-1)
 
         logging.basicConfig(level=severity,
-                            format='%(asctime)s - %(name)s - %(message)s')
+                            format='%(asctime)s - %(levelname)s - %(message)s')
 
         #iterating through arguments
         for module, handler in submodules.items():
