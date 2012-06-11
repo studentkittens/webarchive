@@ -6,14 +6,16 @@ __author__ = 'Christopher Pahl'
 import sqlite3
 import glob
 import os
+
 import config.reader as config
 from dbrecover.pickle_recover import PickleDBRecover
+from util.paths import get_dbpath
 
 
 class DBGenerator(object):
 
     def __init__(self, meta_list=None):
-        self.__connection = sqlite3.connect('metadata.db')
+        self.__connection = sqlite3.connect(get_dbpath())
         self.__cursor = self.__connection.cursor()
         self.__statements = self.load_statements()
         self.__cursor.executescript(self.__statements['create'])

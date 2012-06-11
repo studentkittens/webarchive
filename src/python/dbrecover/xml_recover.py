@@ -52,7 +52,7 @@ class XMLDBRecover(object):
 
     def __iterate_branches(self, wrapper):
         for branch in wrapper.list_branches():
-            logging.warning('=>' + branch + '(' + wrapper.domain + ')')
+            logging.info('Processing branch ' + branch + ' (' + wrapper.domain + ')')
             wrapper.checkout(branch)
             self.__iterate_commits(wrapper)
 
