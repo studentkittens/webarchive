@@ -20,6 +20,10 @@ class PickleDBRecover(object):
     def __init__(self):
         self.__pickle_path = os.path.join(config.get('general.root'), 'db.pickle')
 
+    @property
+    def description(self):
+        return 'Unpickling cached metalists in pickle_cache/'
+
     def load(self):
         with open(self.__pickle_path, 'rb') as fd:
             return pickle.load(fd)
