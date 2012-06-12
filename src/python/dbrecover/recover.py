@@ -24,6 +24,7 @@ def rebuild():
             d = DBGenerator(metalist)
             d.batch()
             d.close()
+            break
 
 
 def remove():

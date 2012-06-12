@@ -28,15 +28,19 @@ class FilterSystem(object):
         # If no path is given,
         # we'll try to read it from the cfg
         if plugin_path is None:
-            actual_path = config.get('general.filterpath')
+            actual_path = os.path.join(config.get('general.root'), config.get('general.filterpath'))
         else:
             actual_path = plugin_path
+
+        print(actual_path)
 
         # Built a list of (path_to_filter, filter_source)
         for source in sorted(glob.glob(os.path.join(actual_path, '*.py'))):
             with open(source, 'r') as handle:
                 self.__source_list.append(
                     (source, handle.read() + '\n'))
+
+        print('LOADED: ', self.__source_list)
 
     def clear(self):
         """

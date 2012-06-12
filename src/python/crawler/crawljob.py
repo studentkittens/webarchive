@@ -21,6 +21,8 @@ import crawler.git as git
 import crawler.exceptions
 import crawler.dbgen
 
+from dbrecover.pickle_recover import PickleDBRecover
+
 
 class CrawlJob(object):
     """
@@ -61,9 +63,10 @@ class CrawlJob(object):
             self.start_sync()
             logging.info('--> Gen DB')
             self.start_dbgen()
+            logging.info('--> Caching metalist')
+            rec = PickleDBRecover()
+            rec.save(self.__metalist)
             logging.info('--> Done')
-            self.start_dbgen()
-            logging.info('--> DB gen')
         except crawler.exceptions.ShutdownException:
             logging.info('Job #{cid} ({curl}) stopped.'
                   .format(cid=self.__ident, curl=self.__url))

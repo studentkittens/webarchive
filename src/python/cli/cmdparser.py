@@ -78,18 +78,29 @@ class Cli(object):
         except KeyError:
             init_archive()
 
-    def cmd_loop(self,  i):
+    def cmd_loop(self,  i, cv):
         shell = imgur.CrawlerShell()
-        shell.set_imanager(i)
+        shell.set_imanager(i, cv)
         print('')
         shell.cmdloop()
         i.stop()
 
     def handle_crawler(self):
         if self.__arguments['--start']:
+            cv = threading.Condition()
             i = imgur.IntervalManager()
-            threading.Thread(target=self.cmd_loop, args=(i, )).start()
-            i.start()
+            cmd_thread = threading.Thread(target=self.cmd_loop, args=(i, cv))
+            cmd_thread.start()
+
+            while i.status != 'quit':
+                cv.acquire()
+                cv.wait()
+                if i.status == 'nocrawl':
+                    print('=========== START ==============')
+                    i.start()
+                cv.release()
+            cmd_thread.join()
+
         elif self.__arguments['--stop']:
             self.not_implemented()
 

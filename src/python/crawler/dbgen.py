@@ -8,7 +8,6 @@ import glob
 import os
 
 import config.reader as config
-from dbrecover.pickle_recover import PickleDBRecover
 from util.paths import get_dbpath
 
 
@@ -113,8 +112,6 @@ class DBGenerator(object):
         return row_dict
 
     def close(self):
-        rec = PickleDBRecover()
-        rec.save(self.__metalist)
         self.__connection.commit()
         self.__cursor.close()
 
@@ -124,7 +121,7 @@ if __name__ == '__main__':
             'mimeType'   : 'application/png',
             'domain'     : 'www.heise.de',
             'url'        : 'www.heise.de/news',
-            'path'    : '.',
+            'path'       : '.',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634634',
             'title'      : 'news for professionals'
@@ -133,7 +130,7 @@ if __name__ == '__main__':
             'mimeType'   : 'application/jpeg',
             'domain'     : 'www.golem.de',
             'url'        : 'www.golem.de/news',
-            'path'    : '..',
+            'path'       : '..',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634634',
             'title'      : 'news for retards'
