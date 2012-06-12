@@ -1,61 +1,91 @@
 /* 
  * Simple Notifier, which is written like the documentation told.
- * Need some help with the routine... I don't now wich classes/methodes i had to choose at yours...
- *  @ DB-Query and Sending the list ;)
+ * Todo: api.odel.TimeStamp...
  */
 
 
 package webarchive.notifier;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.lang.InterruptedException
 import java.util.List;
+import java.util.Iterator;
+import java.util.Date;
 import webarchive.api.model.CommitTag;
 import webarchive.api.select.SelectCommitTag;
 import webarchive.dbaccess.SqlHandler;
 
-public class Notifier {
+
+public class Notifier extends Thread {	
+	private Date lastSearch; // better prefer api.model.TimeStamp (wrapper für Date + getXmlFormat())
+	private dbaccess.SqlHandler sqlHandler;
+	private long mIntervall;
 	
-	private Date mLastSearch; // better prefer api.model.TimeStamp (wrapper für Date + getXmlFormat())
-	private SqlHandler sqlHandler;  	
-	public Notifier(Date lastSearch){ // add sqlHandler
-
-		lastSearch=mLastSearch;
-		routine();
+	public Notifier(long intervall){
 		
+		mIntervall = intervall;	
+		lastSearch=new Date(0);
 	}
-
-	private void routine() throws SQLException{
+	
+	
+	public void run() {
+		
+		while(true){
+			
+			//#############//
+			// start routine
+			new routine(lastSearch);
+			
+			//#############//
+			// set Date
+				long a;
+				a=System.currentTimeMillis();
+				lastSearch=new Date (a);
+				
+				
+			//#############//
+			// sleep (mIntervall)
+				try {
+				      sleep(mIntervall);
+				    }
+				    catch(InterruptedException e) {
+				   	 //ExceptionHandling
+				    }
+				
+				
+		}
+	}
+	
+	
+	
+	/*
+	 * private void Notifier(Date lastSearch){ // add sqlHandler
+	 * routine();
+	 * 	
+	 * }
+	 * 
+	 */
+  	
+	
+	private void routine(Date mLastSearch) throws SQLException{
 		//DB-Query & get list
-		//String where = "commitTime > " + mLastSearch.getXmlFormat(); // build where-clause example
-		//String orderBy = "domainName ASC, commitTime ASC"; // order by clause example
-		//List<CommitTag> list = sqlHandler.select(new SelectCommitTag(where, null, orderBy)); //execute sql & get list
-		 
-		
-		
+		String where = "commitTime > " + mLastSearch.getXmlFormat(); // build where-clause example
+		String orderBy = "commitTime ASC"; // order by clause example -- domainName ASC,
+		List<CommitTag> list = sqlHandler.select(new SelectCommitTag(where, null, orderBy)); //execute sql & get list
+
 		//send list
-		/*
-		 * First get an instance of "Server" by invoking Server.getInstance().
-		 * Then you can get the clients, that are registered as Observers in a List<Connection> by calling Server.getInstance().getObservers()
-		 * Each Connection represents a registered Client. You can iterate over this List<Connection> and use the send(Message)-method of each
-		 * Connection-Object in the List.
-		 * 
-		 * exemplum gratum:
-		 * 
-		 * Server sv = Server.getInstance();
-		 * Message msg = new Message(Header.NOTIFY, someData);
-		 * msg.setBroadCast(); // tells the other side NOT to answer to this message, this is IMPORTANT
-		 * List<Connection> list = sv.getObservers();
-		 * for ( Connection c : list ) {
-		 * 		try {
-		 * 			c.send(msg); //<- here you actually send it to the clients
-		 * 		} catch (Exception e) {
-		 * 		... //ExceptionHandling
-		 * 		}
-		 * }
-		 * 
-		 */
+		Server sv = Server.getInstance();
+		Message msg = new Message(Header.NOTIFY, list);
+		msg.setBroadCast();
 		
+		List<Connection> list = sv.getObservers();
+		for ( Connection c : list ) {
+		 	try {
+		 			c.send(msg); 
+		 		} catch (Exception e) {
+		 		 //ExceptionHandling
+		 		}
+		 }
 	}
 	
 	
