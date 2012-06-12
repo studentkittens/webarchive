@@ -86,7 +86,11 @@ class Cli(object):
         #iterating through arguments
         for module, handler in submodules.items():
             if self.__arguments[module]:
-                handler()
+                try:
+                    handler()
+                except lock.FileLockException:
+                    print("archive is currently locked with global.lock.")
+                    sys.exit(0)
 
     def not_implemented(self):
         raise NotImplementedError('It\'s not implemented, Sam.')
@@ -107,11 +111,7 @@ class Cli(object):
 
     def handle_crawler(self):
         if self.__arguments['--start']:
-            try:
-                self.__filelock.acquire()
-            except lock.FileLockException:
-                print("archive is currently locked with global.lock.")
-                sys.exit(0)
+            self.__filelock.acquire()
             cv = threading.Condition()
             i = imgur.IntervalManager()
             cmd_thread = threading.Thread(target=self.cmd_loop, args=(i, cv))
@@ -139,11 +139,7 @@ class Cli(object):
 
     def handle_db(self):
         if self.__arguments['--rebuild']:
-            try:
-                self.__filelock.acquire()
-            except lock.FileLockException:
-                print("archive is currently locked with global.lock.")
-                sys.exit(0)
+            self.__filelock.acquire()
             rebuild()
         elif self.__arguments['--remove']:
             try:
@@ -152,9 +148,6 @@ class Cli(object):
                 print('Done.')
             except OSError as err:
                 print('Unable to delete databse:', err)
-            except lock.FileLockException:
-                print("archive is currently locked with global.lock.")
-                sys.exit(0)
 
     def handle_config(self):
         if self.__arguments['--get']:
