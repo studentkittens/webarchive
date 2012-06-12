@@ -21,9 +21,14 @@ def rebuild():
     for strategy in strategies:
         metalist = strategy.load()
         if metalist is not None:
-            d = DBGenerator(metalist)
-            d.batch()
-            d.close()
+            while True:
+                try:
+                    d = DBGenerator(metalist)
+                    d.batch()
+                    d.close()
+                    break
+                except KeyboardInterrupt:
+                    print('Got Interrupt. Please wait till DB Query is done.')
             break
 
 
