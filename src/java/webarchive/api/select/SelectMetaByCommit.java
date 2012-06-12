@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import webarchive.api.model.CommitTag;
+import webarchive.api.model.MetaData;
 //TODO tests
 
 /**
@@ -14,7 +15,7 @@ import webarchive.api.model.CommitTag;
  *
  * @author ccwelich
  */
-public class SelectMetaByCommit extends Select {
+public class SelectMetaByCommit extends Select<MetaData> {
 
 	private Map<Integer, CommitTag> commits;
 

@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @param <Type> Type is is the classtype of results of selects.
  */
-public abstract class SelectJoin<Type> extends Select {
+public abstract class SelectJoin<Type> extends Select<Type> {
 
 	private String sqlTemplate;
 	private int maxWhere; // check value for asserts
@@ -60,16 +60,27 @@ public abstract class SelectJoin<Type> extends Select {
 		sql.append(';');
 		return executeSelect(sql.toString(), arg);
 	}
+
+	@Override
+	public List<Type> select(webarchive.api.select.Select<Type> select) throws
+		SQLException {
+
+		return select(select.getWhere(), select.getOrderBy(), select);
+	}
+
 	/**
 	 * get the template of the SQL-SELECT-statement
+	 *
 	 * @return the sqlTemplate
 	 */
 	public String getSqlTemplate() {
 		return sqlTemplate;
 	}
+
 	/**
 	 * array of where clause will be inserted int sqlTemplate
-	 * @param where 
+	 *
+	 * @param where
 	 * @return sqlStatement
 	 */
 	protected String insertWhere(String[] where) {
@@ -80,12 +91,11 @@ public abstract class SelectJoin<Type> extends Select {
 		for (; i < maxWhere; i++) {
 			where[i] = (where[i] == null) ? "" : "WHERE " + where[i];
 		}
-		
+
 		rc = String.format(sqlTemplate, where);
 		return rc;
 	}
-	
-	
+
 	private static String buildSqlTemplate(String[] tables, String[] using) {
 		assert tables.length > 0;
 		assert (tables.length == 1 && using == null) || (using.length == tables.length - 1);
@@ -117,6 +127,4 @@ public abstract class SelectJoin<Type> extends Select {
 		bld.append(index + 1);
 		bld.append("$s");
 	}
-
-	
 }
