@@ -23,6 +23,13 @@ default_options = {
         }
 
 
+def get_default(value):
+    try:
+        return default_options[value]
+    except KeyError:
+        return ''
+
+
 def get(value):
     try:
         return default_options[value]

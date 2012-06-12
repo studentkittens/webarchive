@@ -28,6 +28,10 @@ class XMLDBRecover(object):
         self.__metalist = []
         self.__shutdown = False
 
+    @property
+    def description(self):
+        return 'Collecting Metadata through XML Files'
+
     def __iterate_filetree(self, wrapper):
         for root, dirnames, filenames in os.walk(wrapper.domain):
             if self.__shutdown:
@@ -71,16 +75,12 @@ class XMLDBRecover(object):
         finally:
             wrapper.checkout('master')
 
-    def sanitize_domain(self, domain):
-        wrapper = git.Git(domain)
-        wrapper.checkout('master')
-
     def load(self):
         try:
             self.__init__()
             domain_patt = os.path.join(paths.get_content_root(), '*')
             domain_list = glob.glob(domain_patt)
-            threadPool = ThreadPool(8)
+            threadPool = ThreadPool(16)
             threadPool.map(self.recover_domain, domain_list)
             threadPool.close()
             threadPool.join()
@@ -90,9 +90,6 @@ class XMLDBRecover(object):
             self.__shutdown = True
             threadPool.close()
             threadPool.join()
-            logging.info('Making sure everything is clean on master..')
-            for domain in domain_list:
-                self.sanitize_domain(domain)
 
         return self.__metalist
 
