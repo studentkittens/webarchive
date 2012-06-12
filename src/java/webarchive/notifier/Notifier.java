@@ -1,13 +1,13 @@
-/* 
+﻿/* 
  * Simple Notifier, which is written like the documentation told.
  * Todo: api.odel.TimeStamp...
  */
 
 
-package webarchive.notifier;
+package notifier;
 
 import java.sql.SQLException;
-import java.lang.InterruptedException
+import java.lang.InterruptedException;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class Notifier extends Thread {
 			
 			//#############//
 			// start routine
-			new routine(lastSearch);
+			 routine(lastSearch);
 			
 			//#############//
 			// set Date
@@ -78,8 +78,8 @@ public class Notifier extends Thread {
 		Message msg = new Message(Header.NOTIFY, list);
 		msg.setBroadCast();
 		
-		List<Connection> list = sv.getObservers();
-		for ( Connection c : list ) {
+		List<Connection> listConnection = sv.getObservers();
+		for ( Connection c : listConnection ) {
 		 	try {
 		 			c.send(msg); 
 		 		} catch (Exception e) {
