@@ -83,7 +83,7 @@ class Cli(object):
         logging.basicConfig(level=severity,
                             format='%(asctime)s - %(levelname)s - %(message)s')
 
-        #iterating through arguments
+        # iterating through arguments
         for module, handler in submodules.items():
             if self.__arguments[module]:
                 handler()
@@ -151,7 +151,7 @@ class Cli(object):
                 remove()
                 print('Done.')
             except OSError as err:
-                print('Unable to delete databse:', err)
+                print('Unable to delete database:', err)
             except lock.FileLockException:
                 print("archive is currently locked with global.lock.")
                 sys.exit(0)
