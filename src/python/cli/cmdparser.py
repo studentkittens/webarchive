@@ -44,6 +44,10 @@ from dbrecover.repair import repair
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
 import config.reader as config
+import util.filelock as lock
+
+
+LOCKFILE = 'global'
 
 
 class Cli(object):
@@ -55,6 +59,7 @@ class Cli(object):
         """
         Collected arguments
         """
+        self.__filelock = lock.FileLock(LOCKFILE, folder=config.get('general.root'), timeout=1)
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
                 'init': self.handle_init,
@@ -102,6 +107,11 @@ class Cli(object):
 
     def handle_crawler(self):
         if self.__arguments['--start']:
+            try:
+                self.__filelock.acquire()
+            except lock.FileLockException:
+                print("archive is currently locked with global.lock.")
+                sys.exit(0)
             cv = threading.Condition()
             i = imgur.IntervalManager()
             cmd_thread = threading.Thread(target=self.cmd_loop, args=(i, cv))
@@ -129,13 +139,22 @@ class Cli(object):
 
     def handle_db(self):
         if self.__arguments['--rebuild']:
+            try:
+                self.__filelock.acquire()
+            except lock.FileLockException:
+                print("archive is currently locked with global.lock.")
+                sys.exit(0)
             rebuild()
         elif self.__arguments['--remove']:
             try:
+                self.__filelock.acquire()
                 remove()
                 print('Done.')
             except OSError as err:
                 print('Unable to delete databse:', err)
+            except lock.FileLockException:
+                print("archive is currently locked with global.lock.")
+                sys.exit(0)
 
     def handle_config(self):
         if self.__arguments['--get']:
@@ -144,6 +163,11 @@ class Cli(object):
             self.not_implemented()  # TODO: Wait for config implementation.
 
     def handle_repair(self):
+        try:
+            self.__filelock.acquire()
+        except lock.FileLockException:
+            print("archive is currently locked with global.lock.")
+            sys.exit(0)
         repair()
 
 if __name__ == '__main__':
