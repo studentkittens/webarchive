@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class SqlHandler {
 
-	private Map<String, SelectJoin> selectMethods;
+	private Map<String, Select> selectMethods;
 
 	/**
 	 * creates a SqlHandler-object, which initializes all Backend-Select-methods
@@ -30,7 +30,7 @@ public class SqlHandler {
 		add(new SelectMetaByCommit(dbaccess));
 	}
 
-	private void add(SelectJoin select) {
+	private void add(Select select) {
 		selectMethods.put(select.getClass().getSimpleName(), select);
 	}
 
@@ -44,13 +44,12 @@ public class SqlHandler {
 	 */
 	public List select(webarchive.api.select.Select select) throws SQLException,
 		UnsupportedOperationException {
-		SelectJoin selectMethod = selectMethods.get(select.getClass().
+		Select selectMethod = selectMethods.get(select.getClass().
 			getSimpleName());
 		if (selectMethod == null) {
 			throw new UnsupportedOperationException(select.getClass().
 				getSimpleName() + " method not yet implemented");
 		}
-		return selectMethod.select(select.getWhere(), select.getOrderBy(),
-			select);
+		return selectMethod.select(select);
 	}
 }

@@ -2,11 +2,14 @@
 package webarchive.api.select;
 //TODO tests
 
+import webarchive.api.model.CommitTag;
+
+
 /**
  * Select-statement for CommitTag-Objects
  * @author ccwelich
  */
-public class SelectCommitTag extends Select {
+public class SelectCommitTag extends Select<CommitTag> {
  /** selects CommitTag-objects from database by a join of commitTag and domain-table
 	 *
 	 * @param where minimal sql-syntax WHERE clauses for domain- and commitTag-table ,

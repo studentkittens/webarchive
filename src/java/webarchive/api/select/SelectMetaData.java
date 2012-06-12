@@ -1,12 +1,15 @@
 package webarchive.api.select;
 //TODO tests
 
+import webarchive.api.model.MetaData;
+
+
 /**
  * General Select-statement for MetaData-Objects
  *
  * @author ccwelich
  */
-public class SelectMetaData extends Select {
+public class SelectMetaData extends Select<MetaData> {
 
 	/**
 	 * selects metadata objects from database by a join of mimeType, metaData,

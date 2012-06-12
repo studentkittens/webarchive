@@ -8,8 +8,10 @@ package webarchive.api.select;
  * OrderBy-clauses have the shape <lt/>column<gt/> [ ASC | DESC ]
  *
  * @author ccwelich
+ * @param <Type> type to bind Select to. Type is the result which is returned by a select as a list.
+ * @see webarchive.dbaccess.Select
  */
-public abstract class Select {
+public abstract class Select<Type> {
 
 	private String[] where;
 	private String[] orderBy;
