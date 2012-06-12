@@ -29,6 +29,10 @@ def get_domain_path(domain):
     return os.path.join(get_content_root(), domain)
 
 
+def get_archive_root():
+    return config.get('general.root')
+
+
 def get_temp_root():
     return os.path.join(config.get('general.root'), config.get('crawler.tempRoot'))
 

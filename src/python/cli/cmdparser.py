@@ -9,6 +9,7 @@ Usage:
   archive.py [--loglevel=<severity>] crawler (--start|--stop)
   archive.py [--loglevel=<severity>] javadapter (--start|--stop)
   archive.py [--loglevel=<severity>] db (--rebuild|--remove)
+  archive.py [--loglevel=<severity>] repair
   archive.py config (--get=<confurl>|--set=<confurl><arg>)
   archive.py -h | --help
   archive.py --version
@@ -38,6 +39,7 @@ from docopt import docopt
 
 from init.init import init_archive
 from dbrecover.recover import rebuild, remove
+from dbrecover.repair import repair
 
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
@@ -59,7 +61,8 @@ class Cli(object):
                 'crawler': self.handle_crawler,
                 'javadapter': self.handle_javadapter,
                 'db': self.handle_db,
-                'config': self.handle_config
+                'config': self.handle_config,
+                'repair': self.handle_repair
                 }
 
         try:
@@ -140,6 +143,8 @@ class Cli(object):
         elif self.__arguments['--set']:
             self.not_implemented()  # TODO: Wait for config implementation.
 
+    def handle_repair(self):
+        repair()
 
 if __name__ == '__main__':
     c = Cli()

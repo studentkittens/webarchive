@@ -24,6 +24,10 @@ class PickleDBRecover(object):
     def __init__(self):
         self.__pickle_path = os.path.join(config.get('general.root'), 'pickle_cache')
 
+    @property
+    def description(self):
+        return 'Unpickling cached metalists in pickle_cache/'
+
     def load(self):
         metalist = []
         metalist_files = glob.glob(os.path.join(self.__pickle_path, '*.pickle'))
