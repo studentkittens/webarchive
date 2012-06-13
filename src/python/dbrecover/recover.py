@@ -26,6 +26,7 @@ def rebuild():
         if metalist:
             while True:
                 try:
+                    logging.info('-> Success! Generating Database.')
                     d = DBGenerator(metalist)
                     d.batch()
                     d.close()

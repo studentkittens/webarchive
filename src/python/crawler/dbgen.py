@@ -69,7 +69,7 @@ class DBGenerator(object):
 
     def insert_mdata_ctag(self):
         mdata = []
-        ctags = []
+        ctags = set()
 
         for item in self.__metalist:
             mdata.append((
@@ -77,13 +77,13 @@ class DBGenerator(object):
                     self.__mimedict[item['mimeType']],
                     item['path']))
 
-            ctags.append((
+            ctags.add((
                     item['commitTime'],
                     self.__domaindict[item['domain']]
                 ))
 
         self.execute_statement('insert_metadata', mdata)
-        self.execute_statement('insert_committag', ctags)
+        self.execute_statement('insert_committag', list(ctags))
 
         self.__mdidlist = self.select('metaData', 'metaId', 'url')
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')

@@ -11,14 +11,14 @@ import crawler.git as git
 
 
 def clear_locks():
-    cmd = 'find {path} -iname "*.lock"'.format(path=paths.get_archive_root())
+    cmd = 'find {path} -iname "*.lock"'.format(path=paths.get_content_root())
     try:
         locklist = str(subprocess.check_output(cmd, shell=True), 'UTF-8').splitlines()
 
         if len(locklist) > 0:
             logging.info('Wil remove following files:')
             for lockfile in locklist:
-                logging.info('rm -f', lockfile)
+                logging.info('rm -f ' + lockfile)
                 os.remove(lockfile)
     except subprocess.CalledProcessError:
         logging.exception('Cannot clear locks')

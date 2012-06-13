@@ -33,6 +33,10 @@ def get_archive_root():
     return config.get('general.root')
 
 
+def get_log_dir():
+    return os.path.join(config.get('general.root'), 'logs')
+
+
 def get_temp_root():
     return os.path.join(config.get('general.root'), config.get('crawler.tempRoot'))
 

@@ -32,6 +32,7 @@ __author__ = 'Christopher Pahl, Christoph Piechula'
 import threading
 import logging
 import sys
+import os
 
 # External dep.
 # pip install docopt
@@ -45,6 +46,7 @@ import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
 import config.reader as config
 import util.filelock as lock
+import util.paths as paths
 
 
 LOCKFILE = 'global'
@@ -59,7 +61,7 @@ class Cli(object):
         """
         Collected arguments
         """
-        self.__filelock = lock.FileLock(LOCKFILE, folder=config.get('general.root'), timeout=1)
+        self.__filelock = lock.FileLock(LOCKFILE, folder=config.get('general.root'), timeout=0.1)
         self.__arguments = docopt(__doc__, version='Archive 1.0')
         submodules = {
                 'init': self.handle_init,
@@ -80,7 +82,9 @@ class Cli(object):
             print(__doc__)
             sys.exit(-1)
 
+        print('Logging will be printed to logfile only.')
         logging.basicConfig(level=severity,
+                            filename=os.path.join(paths.get_log_dir(), 'archive.log'),
                             format='%(asctime)s - %(levelname)s - %(message)s')
 
         # iterating through arguments
@@ -102,10 +106,7 @@ class Cli(object):
         except KeyError:
             init_archive()
 
-    def cmd_loop(self,  i, cv):
-        shell = imgur.CrawlerShell()
-        shell.set_imanager(i, cv)
-        print('')
+    def cmd_loop(self, shell,  i, cv):
         shell.cmdloop()
         i.stop()
 
@@ -114,16 +115,24 @@ class Cli(object):
             self.__filelock.acquire()
             cv = threading.Condition()
             i = imgur.IntervalManager()
-            cmd_thread = threading.Thread(target=self.cmd_loop, args=(i, cv))
+
+            shell = imgur.CrawlerShell()
+            shell.set_imanager(i)
+            shell.set_condvar(cv)
+            shell.set_quitflag(False)
+            shell.set_activeflag(False)
+
+            cmd_thread = threading.Thread(target=self.cmd_loop, args=(shell, i, cv))
             cmd_thread.start()
 
-            while i.status != 'quit':
-                cv.acquire()
+            cv.acquire()
+            while shell.quitflag() is False:
                 cv.wait()
-                if i.status == 'nocrawl':
-                    print('=========== START ==============')
+                if i.status == 'ready':
+                    logging.info('=========== START ==============')
                     i.start()
-                cv.release()
+                    shell.set_activeflag(False)
+            cv.release()
             cmd_thread.join()
 
         elif self.__arguments['--stop']:
@@ -156,11 +165,7 @@ class Cli(object):
             self.not_implemented()  # TODO: Wait for config implementation.
 
     def handle_repair(self):
-        try:
-            self.__filelock.acquire()
-        except lock.FileLockException:
-            print("archive is currently locked with global.lock.")
-            sys.exit(0)
+        self.__filelock.acquire()
         repair()
 
 if __name__ == '__main__':

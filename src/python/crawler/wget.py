@@ -7,9 +7,11 @@ import subprocess
 import os
 import time
 import shlex
+import logging
+
 import config.reader as config
 import util.files as files
-import logging
+import util.paths as paths
 
 
 class Wget(object):
@@ -32,6 +34,7 @@ class Wget(object):
                       --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
         self.__process = None
         self.__pid = None
+        self.__wget_logfile = None
 
         urlset = files.unique_items_from_file(config.get('crawler.urllistpath'))
         self.__exclude_urls = ', '.join(list(urlset.difference({self.__url})))
@@ -51,14 +54,13 @@ class Wget(object):
                                  url=self.__url)
 
         cmd = shlex.split(cmd)
-        wget_path = os.path.join(config.get('general.root'),
-                                           'wget_' + self.__url + '.log')
-        wget_log = open(wget_path, 'w')
+        wget_path = os.path.join(paths.get_log_dir(), 'wget_' + self.__url + '.log')
+        self.__wget_logfile = open(wget_path, 'w')
 
         self.__process = subprocess.Popen(cmd, shell=False,
                                           bufsize=-1,
-                                          stdout=wget_log,
-                                          stderr=wget_log)
+                                          stdout=self.__wget_logfile,
+                                          stderr=self.__wget_logfile)
 
         self.__pid = self.__process.pid
         logging.info("[WGET] with pid {0} started.".format(self.__pid))
@@ -80,8 +82,13 @@ class Wget(object):
                 self.__process.terminate()
             finally:
                 self.__process = None
+                self.__wget_logfile.close()
         else:
             logging.warn("no process running.")
+
+    def __del__(self):
+        if self.__wget_logfile is not None:
+            self.__wget_logfile.close()
 
 
 ###########################################################################
