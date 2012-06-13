@@ -83,9 +83,12 @@ class Cli(object):
             sys.exit(-1)
 
         print('Logging will be printed to logfile only.')
-        logging.basicConfig(level=severity,
-                            filename=os.path.join(paths.get_log_dir(), 'archive.log'),
-                            format='%(asctime)s - %(levelname)s - %(message)s')
+        try:
+            logging.basicConfig(level=severity,
+                                filename=os.path.join(paths.get_log_dir(), 'archive.log'),
+                                format='%(asctime)s - %(levelname)s - %(message)s')
+        except IOError as err:
+            print('Cannot open log - file structure probably does not exist yet:', err)
 
         # iterating through arguments
         for module, handler in submodules.items():
