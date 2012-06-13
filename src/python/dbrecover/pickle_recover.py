@@ -35,7 +35,6 @@ class PickleDBRecover(object):
             with open(metalist_dump, 'rb') as fd:
                 metalist += pickle.load(fd)
 
-        print(metalist)
         return metalist
 
     def save(self, metalist):

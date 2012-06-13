@@ -32,15 +32,11 @@ class FilterSystem(object):
         else:
             actual_path = plugin_path
 
-        print(actual_path)
-
         # Built a list of (path_to_filter, filter_source)
         for source in sorted(glob.glob(os.path.join(actual_path, '*.py'))):
             with open(source, 'r') as handle:
                 self.__source_list.append(
                     (source, handle.read() + '\n'))
-
-        print('LOADED: ', self.__source_list)
 
     def clear(self):
         """
