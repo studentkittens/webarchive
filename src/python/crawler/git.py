@@ -35,14 +35,16 @@ class Git(object):
         self.__empty = os.path.join(self.__domain, 'empty_file')
 
         # Error checking via regex matches
-        self.__branch_pattern = re.compile('[0-9]{4}(H[0-9]{2}){2}T[0-9]{2}(C[0-9]{2}){2}$')
+        self.__branch_pattern = re.compile(
+                '[0-9]{4}(H[0-9]{2}){2}T[0-9]{2}(C[0-9]{2}){2}$')
         self.__commit_pattern = re.compile('[0-9a-z]{40}$')
-        self.__basecmd = 'git --git-dir {git_dir} --work-tree {git_cwd} '.format(
-                git_dir=self.__gitdir,
-                git_cwd=self.__domain)
+        self.__basecmd = 'git --git-dir {gitdir} --work-tree {gitcwd} '.format(
+                gitdir=self.__gitdir,
+                gitcwd=self.__domain)
 
     @property
     def domain(self):
+        """Return the domain, to which this wrapper belongs"""
         return self.__domain
 
     @classmethod
@@ -75,17 +77,19 @@ class Git(object):
             if len(line) > 0:
                 command += ''.join([self.__basecmd, line, '\n'])
 
-        logging.debug('Executing:\n%s' % command)
+        logging.debug('Executing: ' + command)
 
         proc = subprocess.Popen(command, shell=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        out, err = proc.communicate()
-        rc = proc.poll()
+        # Get stderr output
+        err = proc.communicate()[1]
+        rcode = proc.poll()
 
-        if rc is not 0:
-            logging.warn('Previous git command returned nonzero-returncode! {}'.format(err))
-        return rc
+        if rcode is not 0:
+            logging.warn('Previous git-cmd failed: {}'.format(err))
+
+        return rcode
 
     def init(self):
         """
@@ -93,39 +97,39 @@ class Git(object):
 
         The target directory does not need to exit yet
 
-        :returns: 0 on success, another rc on failure
+        :returns: 0 on success, another rcode on failure
         """
-        rc = 0
+        rcode = 0
 
         if not os.path.exists(self.__gitdir):
-            rc = self.__call_script("""
+            rcode = self.__call_script("""
                 init .
                 checkout -b 'empty'
                 """)
 
-            if rc == 0:
+            if rcode == 0:
                 # Create a dummy empty file (needed to add a commit)
                 with open(self.__empty, 'w') as dummy:
-                    dummy.write('Dummy File on default empty branch - do not delete!')
+                    dummy.write('Hi, Sam!')
 
-                rc = self.__call_script("""
+                rcode = self.__call_script("""
                     add empty_file
                     commit -am 'Initialiazed'
                     checkout -b master
                     """)
             else:
-                rc = -2
+                rcode = -2
         else:
-            rc = -1
+            rcode = -1
 
-        return rc
+        return rcode
 
     def checkout(self, target='master'):
         """
         checkout a certain point (tag, branch or commit)
 
         :target: the target to visit
-        :returns: 0 on success, another rc on failure
+        :returns: 0 on success, another rcode on failure
         """
         return self.__call_script('checkout {}'.format(target))
 
@@ -134,20 +138,19 @@ class Git(object):
         create a new named branch
 
         :branch_name: the name of the new branch, may not exist yet
-        :returns: 0 on success, another rc on failure
+        :returns: 0 on success, another rcode on failure
         """
-        rc = self.__call_script('checkout -fb {}'.format(
+        rcode = self.__call_script('checkout -fb {}'.format(
             Git.convert_branch_name(branch_name)))
 
         # remove old emptyfile
-        if rc == 0:
+        if rcode == 0:
             try:
                 os.remove(self.__empty)
-            except OSError as err:
-                # TODO: Log err
-                print('Cannot delete empty_file:', err)
+            except OSError:
+                logging.exception('Cannot delete empty_file:')
 
-        return rc
+        return rcode
 
     def commit(self, message='edit'):
         """
@@ -156,7 +159,7 @@ class Git(object):
         git add . and git commit -am <message> is done
 
         :message: The commit message
-        :returns: 0 on success, another rc on failure
+        :returns: 0 on success, another rcode on failure
         """
         return self.__call_script("""
                    add {path} &&
@@ -178,18 +181,30 @@ class Git(object):
                 """)
 
     def __list_data(self, command):
+        """
+        Internal helper for list_branches() and list_commits()
+
+        Opens a git command and buffers it's output.
+        """
         try:
             popen_command = shlex.split(self.__basecmd + command)
             data_list = subprocess.check_output(popen_command)
             return [str(item, 'ascii') for item in data_list.split()]
         except subprocess.CalledProcessError as err:
-            logging.error('Cannot get a list from $({ptype}); Returncode: {rc}'.format(
+            logging.error('Cannot get a list from $({ptype}); \
+                           Returncode: {rc}'.format(
                 pytype=command,
                 rc=err.returncode
                 ))
             return None
 
     def list_branches(self):
+        """
+        List all branches in this repo, which conform to the 'date'-regex.
+
+        This means, Empty and master branch are not mentioned. If you want
+        to checkout those, just checkout 'empty' or 'master'
+        """
         branch_list = self.__list_data('branch')
         if branch_list is not None:
             return list(filter(self.__branch_pattern.match, branch_list))
@@ -197,9 +212,10 @@ class Git(object):
             return None
 
     def list_commits(self):
-        commit_list = self.__list_data('--no-pager log --pretty="%h" --no-abbrev')
-        if commit_list is not None:
-            return list(filter(self.__commit_pattern.match, commit_list))
+        'List all commits in this repo and branch'
+        cmt_list = self.__list_data('--no-pager log --pretty="%h" --no-abbrev')
+        if cmt_list is not None:
+            return list(filter(self.__commit_pattern.match, cmt_list))
         else:
             return None
 
@@ -213,36 +229,41 @@ if __name__ == '__main__':
 
     TEST_DIR = '/tmp/git_test/'
 
+    def add_file(name, mode):
+        'Util for several testcases'
+        with open(os.path.join(TEST_DIR, name), mode) as dummy:
+            dummy.write('Hello Kitteh!')
+
     class GitTest(unittest.TestCase):
+        'Very basic testcases for this git wrapper'
         def setUp(self):
+            'Set up a dir'
             self.__repo = Git(TEST_DIR)
             self.__repo.init()
 
-        def add_file(self, name, mode):
-            with open(os.path.join(TEST_DIR, name), mode) as dummy:
-                dummy.write('Hello Kitteh!')
-
         def test_commit(self):
-            self.add_file('file', 'w')
+            'Test ability to commit files initially'
+            add_file('file', 'w')
             self.assertEqual(self.__repo.commit(message='init'), 0)
 
         def test_branch(self):
+            'test branching of repo'
             # make empty master
-            self.add_file('empty', 'w')
+            add_file('empty', 'w')
             self.assertEqual(self.__repo.commit(), 0)
 
             # branch to a new branch and commit something
             self.assertEqual(self.__repo.branch('2405TT2323'), 0)
-            self.add_file('file_new', 'w')
+            add_file('file_new', 'w')
             self.assertEqual(self.__repo.commit(), 0)
 
             # change back to master
             self.assertEqual(self.__repo.checkout(), 0)
-            self.add_file('file_new', 'w')
+            add_file('file_new', 'w')
             self.assertEqual(self.__repo.commit(), 0)
 
         def tearDown(self):
+            'Clean again'
             subprocess.call(['rm', '-rf', TEST_DIR])
-            pass
 
     unittest.main()

@@ -82,13 +82,14 @@ class Cli(object):
             print(__doc__)
             sys.exit(-1)
 
-        print('Logging will be printed to logfile only.')
         try:
             logging.basicConfig(level=severity,
                                 filename=os.path.join(paths.get_log_dir(), 'archive.log'),
                                 format='%(asctime)s - %(levelname)s - %(message)s')
         except IOError as err:
             print('Cannot open log - file structure probably does not exist yet:', err)
+        else:
+            print('Logging will be printed to logfile only.')
 
         # iterating through arguments
         for module, handler in submodules.items():
