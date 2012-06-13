@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import webarchive.client.ClientConnectionHandler;
-import webarchive.headers.Header;
 
 public class MyBAOS extends ByteArrayOutputStream {
 	

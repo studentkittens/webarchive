@@ -9,26 +9,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import webarchive.handler.Handler;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
 
-public class FileHandler implements IOHandler {
+public class FileHandler extends Handler {
 
 	public static final int BUFFER_SIZE = 4096; 
 	
-	@Override
 	public void lock(FileDescriptor fd) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void unlock(FileDescriptor fd) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public FileBuffer read(FileDescriptor fd) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		BufferedInputStream bis =null;
@@ -66,7 +64,6 @@ public class FileHandler implements IOHandler {
 		return new FileBuffer(baos.toByteArray(),fd);
 	}
 
-	@Override
 	public void write(FileBuffer buf) {
 		File f = buf.getFd().getAbsolutePath();
 		

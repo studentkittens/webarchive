@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import webarchive.handler.Handler;
 //TODO Tests
 
 /**
@@ -14,7 +16,7 @@ import java.util.Map;
  *
  * @author ccwelich
  */
-public class SqlHandler {
+public class SqlHandler extends Handler {
 
 	private Map<String, Select> selectMethods;
 

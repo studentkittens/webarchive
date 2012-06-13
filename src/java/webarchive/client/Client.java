@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
+import webarchive.handler.HandlerCollection;
 
 public class Client implements NetworkModule  {
 	public static final int DEFAULT_PORT = 21000;
@@ -15,11 +16,18 @@ public class Client implements NetworkModule  {
 	private int port;
 	private Connection c;
 	
+	private static Client cl=null;
+	public static Client getInstance() {
+		if(cl==null)
+			cl = new Client();
+		return cl;
+	}
+	
 	public Connection getConnection() {
 		return c;
 	}
 
-	public Client()
+	private Client()
 	{
 		this.port = DEFAULT_PORT;
 	}
@@ -74,6 +82,18 @@ public class Client implements NetworkModule  {
 	public void removeConnection(Connection c) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void main(String args[]) {
+		Client cl = new Client();
+		cl.setIp("localhost");
+		cl.connectToServer();
+	}
+
+	@Override
+	public HandlerCollection getHandlers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

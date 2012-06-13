@@ -4,6 +4,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import webarchive.api.XmlEdit;
+import webarchive.client.Client;
+import webarchive.connection.Connection;
+import webarchive.transfer.Header;
+import webarchive.transfer.Message;
+
 /**
  *
  * @author ccwelich
@@ -11,7 +17,7 @@ import org.w3c.dom.NodeList;
 //TODO finish implementation
 //TODO tests
 //TODO finish javadoc
-public class XmlEditor {
+public class XmlEditor implements XmlEdit {
 
 	private Document document;
 	private Element data;
@@ -56,6 +62,17 @@ public class XmlEditor {
 			throw new IllegalArgumentException("write protected");
 		}
 		//TODO send e to XmlHandler in server
+//		Client cl = Client.getInstance();
+//		Connection c = cl.getConnection();
+//		Message msg = new Message(Header.GETXMLEDIT,this);
+//		msg.setNoAnswer();
+//		try {
+//			c.send(msg);
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
 	}
 
 	public String prefix(String name) {

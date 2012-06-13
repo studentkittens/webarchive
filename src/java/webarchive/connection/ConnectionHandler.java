@@ -3,9 +3,10 @@ package webarchive.connection;
 import java.net.Socket;
 import java.util.HashMap;
 
+import webarchive.handler.Handler;
 import webarchive.transfer.Message;
 
-public abstract class ConnectionHandler {
+public abstract class ConnectionHandler extends Handler {
 
 	protected final Connection c;
 	private final HashMap<Integer,Message> map = new HashMap<Integer,Message>();

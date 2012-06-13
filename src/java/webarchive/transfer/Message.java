@@ -1,6 +1,5 @@
 package webarchive.transfer;
 
-import webarchive.headers.Header;
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -60,5 +59,9 @@ public class Message implements Serializable {
 	private synchronized  int incId() {
 		mId = (mId+2) % Integer.MAX_VALUE;
 		return mId;
+	}
+
+	public void setNoAnswer() {
+		this.setBroadCast();
 	}
 }

@@ -2,8 +2,11 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
-import webarchive.headers.Header;
+import webarchive.dbaccess.SqlHandler;
+import webarchive.handler.HandlerCollection;
+import webarchive.transfer.Header;
 import webarchive.transfer.Message;
+import webarchive.xml.XmlHandler;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,6 +24,7 @@ public class Server implements Runnable,NetworkModule {
     private int listenPort;
     private ServerSocket svSock;
     private List<Connection> cList;
+    private HandlerCollection handlers;
 
     private Boolean running = false;
     
@@ -33,6 +37,9 @@ public class Server implements Runnable,NetworkModule {
         
         this.cList = new ArrayList<Connection>();
         sv = this;
+        getHandlers().add(new FileHandler());
+//        TODO
+//        getHandlers().add(new SqlHandler());
     }
     
     public static Server getInstance() {
@@ -215,6 +222,15 @@ public class Server implements Runnable,NetworkModule {
 		synchronized (cList) {
 			cList.remove(c);
 		}
+	}
+	
+
+	@Override
+	public HandlerCollection getHandlers() {
+		if(handlers == null) {
+			handlers = new HandlerCollection();
+		}
+		return handlers;
 	}
     
 }
