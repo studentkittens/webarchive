@@ -6,22 +6,24 @@
 
 Usage:
   archive.py [--loglevel=<severity>] init [<path>]
-  archive.py [--loglevel=<severity>] crawler (--start|--stop)
-  archive.py [--loglevel=<severity>] javadapter (--start|--stop)
+  archive.py [--loglevel=<severity>] crawler
+  archive.py [--loglevel=<severity>] javadapter
   archive.py [--loglevel=<severity>] db (--rebuild|--remove)
   archive.py [--loglevel=<severity>] repair
   archive.py config (--get=<confurl>|--set=<confurl><arg>)
   archive.py -h | --help
   archive.py --version
 
-Options:
+General Options:
   -h --help                Show this screen.
   --version                Show version.
   --loglevel=<loglevel>    Set the loglevel to any of debug, info, warning, error, critical.
-  --start                  Starting a service.
-  --stop                   Stopping a service.
+
+DB Options:
   --rebuild                Rebuild Databse completely from XML Data.
   --remove                 Remove the Database completely.
+
+Config Opeions:
   --set=<confurl><value>   Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
 
@@ -99,9 +101,6 @@ class Cli(object):
                     print("archive is currently locked with global.lock.")
                     sys.exit(0)
 
-    def not_implemented(self):
-        raise NotImplementedError('It\'s not implemented, Sam.')
-
     def handle_init(self):
         try:
             path = self.__arguments['<path>']
@@ -114,40 +113,33 @@ class Cli(object):
         i.stop()
 
     def handle_crawler(self):
-        if self.__arguments['--start']:
-            self.__filelock.acquire()
-            cv = threading.Condition()
-            i = imgur.IntervalManager()
+        self.__filelock.acquire()
+        cv = threading.Condition()
+        i = imgur.IntervalManager()
 
-            shell = imgur.CrawlerShell()
-            shell.set_imanager(i)
-            shell.set_condvar(cv)
-            shell.set_quitflag(False)
-            shell.set_activeflag(False)
+        shell = imgur.CrawlerShell()
+        shell.set_imanager(i)
+        shell.set_condvar(cv)
+        shell.set_quitflag(False)
+        shell.set_activeflag(False)
 
-            cmd_thread = threading.Thread(target=self.cmd_loop, args=(shell, i, cv))
-            cmd_thread.start()
+        cmd_thread = threading.Thread(target=self.cmd_loop, args=(shell, i, cv))
+        cmd_thread.start()
 
-            cv.acquire()
-            while shell.quitflag() is False:
-                cv.wait()
-                if i.status == 'ready':
-                    logging.info('=========== START ==============')
-                    i.start()
-                    shell.set_activeflag(False)
-            cv.release()
-            cmd_thread.join()
-
-        elif self.__arguments['--stop']:
-            self.not_implemented()
+        cv.acquire()
+        while shell.quitflag() is False:
+            cv.wait()
+            if i.status == 'ready':
+                logging.info('=========== START ==============')
+                i.start()
+                shell.set_activeflag(False)
+        cv.release()
+        cmd_thread.join()
 
     def handle_javadapter(self):
-        if self.__arguments['--start']:
-            server = javadapter.start('localhost')
-            javadapter.ServerShell().cmdloop()
-            server.shutdown()
-        elif self.__arguments['--stop']:
-            self.not_implemented()
+        server = javadapter.start('localhost')
+        javadapter.ServerShell().cmdloop()
+        server.shutdown()
 
     def handle_db(self):
         if self.__arguments['--rebuild']:
@@ -165,7 +157,8 @@ class Cli(object):
         if self.__arguments['--get']:
             print(config.get(self.__arguments['<confurl>']))
         elif self.__arguments['--set']:
-            self.not_implemented()  # TODO: Wait for config implementation.
+            pass
+            # TODO: Wait for config implementation.
 
     def handle_repair(self):
         self.__filelock.acquire()

@@ -22,7 +22,7 @@ class Cleaner:
     def __init__(self, path):
         self.__mdlist = []
         self.__path = path
-        self.__commitTime = times.get_sys_time()  # TODO, Doku
+        self.__commitTime = times.get_sys_time()
         self.__filtersys = filter.FilterSystem()
 
     def __restructure_file(self, tmp_crawler_folder, file_name):
