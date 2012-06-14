@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+__author__ = 'Florian Bauer'
+
 import reader
 import writer
 
