@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+DBGenerator is capable of generating an sqlite database
+from a list of metadictionaries.
+"""
+
 __author__ = 'Christopher Pahl'
 
 import logging
@@ -14,8 +19,14 @@ from util.paths import get_dbpath
 
 
 class DBGenerator(object):
-
+    'The Procedure of creating the DB is encapsulated here'
     def __init__(self, meta_list=None):
+        """
+        Take a metalist and load sql templates from disk.
+        Start the actual generating by calling batch()
+
+        :meta_list: A list of MetaData Dictionaries
+        """
         self.__connection = sqlite3.connect(get_dbpath())
         self.__cursor = self.__connection.cursor()
         self.__statements = self.load_statements()
@@ -25,6 +36,10 @@ class DBGenerator(object):
     def load_statements(self):
         """
         (Re-)Load Sql Files from Disk
+
+        This is already called in init
+
+        :returns: a dictionary with statements, indexed by name (e.g. 'create')
         """
         self.__statements = []
         statements = dict()
@@ -38,6 +53,12 @@ class DBGenerator(object):
         return statements
 
     def execute_statement(self, source_name, arglist=None):
+        """
+        Exececute a previously loaded statement by name
+
+        :source_name: Sourcename to execute (e.g. 'create')
+        :arglist: You may pass an additional list of variable elements
+        """
         source = self.__statements[source_name]
         if arglist is not None:
             self.__cursor.executemany(source, arglist)
@@ -45,6 +66,11 @@ class DBGenerator(object):
             self.__cursor.executemany(source)
 
     def batch(self):
+        """
+        Start tb creating procedure
+
+        :returns: a truthy value on success
+        """
         try:
             self.insert_mime_domain()
             self.insert_mdata_ctag()
@@ -52,8 +78,14 @@ class DBGenerator(object):
         except:
             logging.critical('Unexcpected error while generating DB')
             logging.critical(traceback.format_exc())
+            return False
+        else:
+            return True
 
     def insert_mime_domain(self):
+        """
+        Fill mimeType and domain table
+        """
         mimes = []
         domains = []
 
@@ -68,6 +100,9 @@ class DBGenerator(object):
         self.__domaindict = self.select('domain', 'domainID', 'domainName')
 
     def insert_mdata_ctag(self):
+        """
+        Fill metadata and committag table
+        """
         mdata = []
         ctags = set()
 
@@ -89,6 +124,9 @@ class DBGenerator(object):
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')
 
     def insert_history(self):
+        """
+        Fill history table
+        """
         history = []
 
         for item in self.__metalist:
@@ -110,6 +148,13 @@ class DBGenerator(object):
         self.execute_statement('insert_history', history)
 
     def select(self, table, *columns):
+        """
+        Internal helper for collecting data
+
+        :table: Table on which a SELECT shall be performed
+        :columns: a list of columns to select
+        :returns: A dictionary of column[0]: column[1:]
+        """
         row_dict = dict()
 
         sql_statement = ''.join(['SELECT ', ', '.join(columns), ' FROM ', table, ';'])
@@ -125,6 +170,9 @@ class DBGenerator(object):
         return row_dict
 
     def close(self):
+        """
+        Close connection and commit.
+        """
         self.__connection.commit()
         self.__cursor.close()
 

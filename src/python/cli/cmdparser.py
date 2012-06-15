@@ -104,6 +104,7 @@ class Cli(object):
         raise NotImplementedError('It\'s not implemented, Sam.')
 
     def handle_init(self):
+        'Handle "init" submodule'
         try:
             path = self.__arguments['<path>']
             init_archive(path)
@@ -111,10 +112,14 @@ class Cli(object):
             init_archive()
 
     def cmd_loop(self, shell,  i, cv):
+        """
+        The cmdloop runs in a seperate thread.
+        """
         shell.cmdloop()
         i.stop()
 
     def handle_crawler(self):
+        'Handle "crawler" submodule'
         if self.__arguments['--start']:
             self.__filelock.acquire()
             cv = threading.Condition()
@@ -143,6 +148,7 @@ class Cli(object):
             self.not_implemented()
 
     def handle_javadapter(self):
+        'Handle "crawler" submodule'
         if self.__arguments['--start']:
             server = javadapter.start('localhost')
             javadapter.ServerShell().cmdloop()
@@ -151,6 +157,7 @@ class Cli(object):
             self.not_implemented()
 
     def handle_db(self):
+        'Handle "db" submodule'
         if self.__arguments['--rebuild']:
             self.__filelock.acquire()
             rebuild()
@@ -163,12 +170,14 @@ class Cli(object):
                 print('Unable to delete database:', err)
 
     def handle_config(self):
+        'Handle "config" submodule'
         if self.__arguments['--get']:
             print(config.get(self.__arguments['<confurl>']))
         elif self.__arguments['--set']:
             self.not_implemented()  # TODO: Wait for config implementation.
 
     def handle_repair(self):
+        'Handle "repair" submodule'
         self.__filelock.acquire()
         repair()
 
