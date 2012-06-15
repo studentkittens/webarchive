@@ -109,7 +109,9 @@ class IntervalManager(object):
         """
         Stopps the interval manager
         """
-        print("Intervalmanager stopped, crawljobs may be still running.")
+        if self.status != 'stop':
+            print("Intervalmanager stopped, Crawljobs may be still running.")
+
         self.__set_status('stop')
 
     def kill(self):
@@ -133,11 +135,13 @@ class CrawlerShell(cmd.Cmd):
 
     # Internal:
 
-    def set_imanager(self, imanager):
+    def __init__(self, imanager, condvar, autostart=False):
+        super(CrawlerShell, self).__init__()
         self.__imanager = imanager
-
-    def set_condvar(self, cv):
-        self.__cv = cv
+        self.__cv = condvar
+        self.__autostart = autostart
+        self.__activeflag = False
+        self.__quitflag = False
 
     def set_quitflag(self, state):
         self.__quitflag = state
@@ -150,6 +154,15 @@ class CrawlerShell(cmd.Cmd):
 
     def quitflag(self):
         return self.__quitflag
+
+    # Called before start:
+
+    def preloop(self):
+        # Well, this is silly.
+        time.sleep(0.1)
+
+        if self.__autostart:
+            self.do_start(None)
 
     # Commands:
 

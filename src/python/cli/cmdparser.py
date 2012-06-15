@@ -6,8 +6,8 @@
 
 Usage:
   archive.py [--loglevel=<severity>] init [<path>]
-  archive.py [--loglevel=<severity>] crawler
-  archive.py [--loglevel=<severity>] javadapter
+  archive.py [--loglevel=<severity>] crawler [--start]
+  archive.py [--loglevel=<severity>] javadapter [--start]
   archive.py [--loglevel=<severity>] db (--rebuild|--remove)
   archive.py [--loglevel=<severity>] repair
   archive.py config (--get=<confurl>|--set=<confurl><arg>)
@@ -18,6 +18,9 @@ General Options:
   -h --help                Show this screen.
   --version                Show version.
   --loglevel=<loglevel>    Set the loglevel to any of debug, info, warning, error, critical.
+
+Service Options:
+  --start                  Start service automatically and enter shell.
 
 DB Options:
   --rebuild                Rebuild Databse completely from XML Data.
@@ -58,7 +61,6 @@ class Cli(object):
     """
     Archive commandline intepreter
     """
-
     def __init__(self):
         """
         Collected arguments
@@ -120,31 +122,36 @@ class Cli(object):
     def handle_crawler(self):
         self.__filelock.acquire()
         cv = threading.Condition()
-        i = imgur.IntervalManager()
+        im = imgur.IntervalManager()
 
-        shell = imgur.CrawlerShell()
-        shell.set_imanager(i)
-        shell.set_condvar(cv)
-        shell.set_quitflag(False)
-        shell.set_activeflag(False)
+        do_autostart = False
+        if self.__arguments['--start']:
+            print('Note: Will start automatically')
+            do_autostart = True
 
-        cmd_thread = threading.Thread(target=self.cmd_loop, args=(shell, i, cv))
+        shell = imgur.CrawlerShell(imanager=im, condvar=cv, autostart=do_autostart)
+        cmd_thread = threading.Thread(target=self.cmd_loop, args=(shell, im, cv))
         cmd_thread.start()
 
         cv.acquire()
         while shell.quitflag() is False:
             cv.wait()
-            if i.status == 'ready':
+            if im.status == 'ready' and shell.quitflag() is False:
                 logging.info('=========== START ==============')
-                i.start()
+                im.start()
                 shell.set_activeflag(False)
         cv.release()
         cmd_thread.join()
 
     def handle_javadapter(self):
-        server = javadapter.start('localhost')
-        javadapter.ServerShell().cmdloop()
-        server.shutdown()
+        server = None
+        if self.__arguments['--start']:
+            server = javadapter.start('localhost')
+
+        javadapter.ServerShell(server_instance=server).cmdloop()
+
+        if self.__arguments['--start']:
+            server.shutdown()
 
     def handle_db(self):
         'Handle "db" submodule'

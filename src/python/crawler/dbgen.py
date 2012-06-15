@@ -15,7 +15,9 @@ import glob
 import os
 
 import config.reader as config
+import util.filelock as lock
 from util.paths import get_dbpath
+from util.paths import get_archive_root
 
 
 class DBGenerator(object):
@@ -32,6 +34,13 @@ class DBGenerator(object):
         self.__statements = self.load_statements()
         self.__cursor.executescript(self.__statements['create'])
         self.__metalist = meta_list
+
+        # We have to maintain a seperate lock for the db,
+        # the db itself is locked from itself, but many separate
+        # statements are not
+        self.__db_lock = lock.FileLock(file_name='db.lock',
+                folder=get_archive_root(),
+                timeout=100)
 
     def load_statements(self):
         """
@@ -72,9 +81,13 @@ class DBGenerator(object):
         :returns: a truthy value on success
         """
         try:
+            self.__db_lock.acquire()
             self.insert_mime_domain()
             self.insert_mdata_ctag()
             self.insert_history()
+            self.__db_lock.release()
+        except lock.FileLockException:
+            logging.critical('File-lock timed out; no db update was done')
         except:
             logging.critical('Unexcpected error while generating DB')
             logging.critical(traceback.format_exc())
