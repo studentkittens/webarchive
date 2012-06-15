@@ -173,5 +173,13 @@ List of commands
 Implementation
 --------------
 
-.. automodule:: javadapter.server
-    :members:
+**Actual function to start the server:**
+
+.. autofunction:: javadapter.server.start
+
+---------
+
+**Convienience class to show a servershell:**
+
+.. autoclass:: javadapter.server.ServerShell
+  :members:

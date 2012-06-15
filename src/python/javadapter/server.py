@@ -390,6 +390,7 @@ class ServerShell(cmd.Cmd):
         self.server = server_instance
 
     def do_start(self, arg):
+        'Start a server if not already active'
         try:
             self.server = start()
         except socket.error as err:
@@ -397,9 +398,12 @@ class ServerShell(cmd.Cmd):
             self.server = None
 
     def do_stop(self, arg):
+        'Stop a running Server'
         if self.server is not None:
             self.server.shutdown()
             self.server = None
+        else:
+            self.do_status(None)
 
     def do_status(self, arg):
         'Print current status of the Server'
