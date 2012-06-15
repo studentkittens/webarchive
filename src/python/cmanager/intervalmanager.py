@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Intervalmanager module to control the crawlmanager behaviour
+"""
 __author__ = 'Christoph Piechula'
 
 import time
@@ -8,7 +11,6 @@ import signal
 import logging
 import threading
 import cmd
-import ctypes
 import cmanager.crawlmanager as c
 import util.files as utl
 import util.times
@@ -19,26 +21,40 @@ class IntervalManager(object):
     """
     IntervalManager, manages crawling intervals
     """
-
     def __init__(self):
         self.__interval = None
         self.__cmanager = None
         self.__start_time = None
-        self.__system_status = 'ready'
         self.__kill_mtx = threading.Lock()
-
-        # Fun.
-        self.__status = {
-
-                (False, False): 'stop',
-                (True, False): 'nocrawl',
-                (False, True): 'stop',
-                (True, True): 'active'
-        }
+        self.__status_lock = threading.Lock()
+        self.__set_status('ready')
 
         signal.signal(signal.SIGINT, self.__ctrlc_handler)
 
+    def __set_status(self, state):
+        """
+        Set system status threadsafely
+
+        :state: The new state to set
+        """
+        self.__status_lock.acquire()
+        self.__system_status = state
+        self.__status_lock.release()
+
+    @property
+    def status(self):
+        """
+        :returns: current system status
+        """
+        self.__status_lock.acquire()
+        state = self.__system_status
+        self.__status_lock.release()
+        return state
+
     def __ctrlc_handler(self, signum, frame):
+        """
+        Called on Ctrl-C
+        """
         print('Interrupt: ', signum)
         self.kill()
 
@@ -49,24 +65,26 @@ class IntervalManager(object):
 
         :delay_in_sec: delay time in seconds
         """
-        #fetch interval from config
+        # fetch interval from config in seconds
         self.__interval = float(config.get('crawler.interval')) * 60
 
-        #delay before next crawl
+        # delay before next crawl
         if delay_in_sec != 0:
             logging.info("""
                   Next crawl will start in {0} seconds."""
                   .format(delay_in_sec))
             time.sleep(delay_in_sec)
 
-        if self.__system_status != 'stop':
-            self.__cmanager = c.CrawlerManager(utl.unique_items_from_file(config.get('crawler.urllistpath')))
+        if self.status != 'stop':
+            self.__cmanager = c.CrawlerManager(
+                    utl.unique_items_from_file(
+                    config.get('crawler.urllistpath')))
             self.__start_time = util.times.get_localtime_sec()
             self.__cmanager.register_done(self.crawling_done_callback)
-            self.__system_status = 'active'
+            self.__set_status('active')
             self.__cmanager.start()
         else:
-            self.__system_status = 'ready'
+            self.__set_status('ready')
 
     def crawling_done_callback(self):
         """
@@ -74,8 +92,8 @@ class IntervalManager(object):
         delay and starts next run
 
         """
-        if self.__system_status != 'stop':
-            self.__system_status = 'ready'
+        if self.status != 'stop':
+            self.__set_status('ready')
             current_time = util.times.get_localtime_sec()
             next_crawl_time = self.__start_time + self.__interval
 
@@ -85,27 +103,35 @@ class IntervalManager(object):
             delay = next_crawl_time - current_time
             self.start(delay)
         else:
-            self.__system_status = 'ready'
-
-    @property
-    def status(self):
-        return self.__system_status
+            self.__set_status('ready')
 
     def stop(self):
+        """
+        Stopps the interval manager
+        """
         print("Intervalmanager stopped, crawljobs may be still running.")
-        self.__system_status = 'stop'
+        self.__set_status('stop')
 
     def kill(self):
-        self.__kill_mtx.acquire()
+        """
+        Kills the system hard, like ctrl + c
+        """
         print("Killing and cleaning crawljobs...")
+        self.__kill_mtx.acquire()
         self.__cmanager.shutdown()
         self.stop()
         self.__kill_mtx.release()
 
 
 class CrawlerShell(cmd.Cmd):
-    intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
+    """
+    Interactive command shell to start, stop, kill and quit crawling procedure
+    """
+    intro = 'Crawler Shell: Type help or ? to list commands \
+             \nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
+
+    # Internal:
 
     def set_imanager(self, imanager):
         self.__imanager = imanager
@@ -124,6 +150,8 @@ class CrawlerShell(cmd.Cmd):
 
     def quitflag(self):
         return self.__quitflag
+
+    # Commands:
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
