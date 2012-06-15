@@ -9,7 +9,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 
 /**
- *
+ * Writes formatted org.w3c.dom.documents into an outputstream.
+ * 
  * @author ccwelich
  */
 //TODO javadoc

@@ -3,9 +3,9 @@ package webarchive.server;
 import java.sql.SQLException;
 import java.util.List;
 
-import webarchive.api.XmlEdit;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
+import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
@@ -102,7 +102,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			case GETXMLEDIT:
 			{
 				XmlHandler xml;
-				XmlEdit xmlEd = null;
+				XmlEditor xmlEd = null;
 				//TODO XMLHANDLING
 				//<-
 				

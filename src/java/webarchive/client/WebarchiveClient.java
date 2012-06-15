@@ -5,18 +5,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-
 import webarchive.api.WebarchiveObserver;
-import webarchive.api.XmlEdit;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
+import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
-import webarchive.transfer.FileBuffer;
-import webarchive.transfer.FileDescriptor;
-import webarchive.transfer.Header;
-import webarchive.transfer.Message;
-import webarchive.transfer.MyBAOS;
-import webarchive.xml.XmlEditor;
+import webarchive.transfer.*;
 
 public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 
@@ -59,11 +53,11 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 		return new MyBAOS(new FileBuffer(new FileDescriptor(meta,file)),(ClientConnectionHandler) con.getConHandler());
 	}
 
-	@Override
-	public XmlEdit getXMLEdit(MetaData meta) throws Exception {
+
+	public XmlEditor getXMLEdit(MetaData meta) throws Exception {
 		Object answer = queryServer(Header.GETXMLEDIT,meta);
 		assert answer instanceof XmlEditor;
-		return (XmlEdit) answer;
+		return (XmlEditor) answer;
 	}
 
 	@Override

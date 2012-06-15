@@ -1,5 +1,6 @@
 package webarchive.api;
 
+import webarchive.api.xml.XmlEditor;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -71,7 +72,7 @@ public interface WebarchiveClient {
 	 * @return XMLEdit XML-editor for further operations.
 	 * @throws Exception
 	 */
-	public XmlEdit getXMLEdit(MetaData meta) throws Exception;
+	public XmlEditor getXMLEdit(MetaData meta) throws Exception;
 
 	/**
 	 * @see java.util.Observable
