@@ -10,7 +10,11 @@ it again to run the DBGenerator on it
 
 import os
 import pickle
+import glob
+import uuid
+
 import config.reader as config
+import util.times as times
 
 __author__ = 'Christopher Pahl'
 
@@ -18,12 +22,24 @@ __author__ = 'Christopher Pahl'
 class PickleDBRecover(object):
     """Docstring for DBPickleRecover """
     def __init__(self):
-        self.__pickle_path = os.path.join(config.get('general.root'), 'db.pickle')
+        self.__pickle_path = os.path.join(config.get('general.root'), 'pickle_cache')
+
+    @property
+    def description(self):
+        return 'Unpickling cached metalists in pickle_cache/'
 
     def load(self):
-        with open(self.__pickle_path, 'rb') as fd:
-            return pickle.load(fd)
+        metalist = []
+        metalist_files = glob.glob(os.path.join(self.__pickle_path, '*.pickle'))
+        for metalist_dump in metalist_files:
+            with open(metalist_dump, 'rb') as fd:
+                metalist += pickle.load(fd)
+
+        print(metalist)
+        return metalist
 
     def save(self, metalist):
-        with open(self.__pickle_path, 'wb') as fd:
+        uid = str(uuid.uuid4())
+        metalist_path = os.path.join(self.__pickle_path, times.get_sys_time() + '_' + uid + '.pickle')
+        with open(metalist_path, 'wb') as fd:
             pickle.dump(metalist, fd)

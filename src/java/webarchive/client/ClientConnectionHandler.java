@@ -45,7 +45,7 @@ public class ClientConnectionHandler extends ConnectionHandler {
 		case SQL:
 		case WRITEFILE:
 		case READFILE:
-		case XMLEDIT:
+		case GETXMLEDIT:
 		case LS:
 		default:
 			wakeUp(msg);

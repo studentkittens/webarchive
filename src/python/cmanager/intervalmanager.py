@@ -4,7 +4,9 @@
 __author__ = 'Christoph Piechula'
 
 import time
+import signal
 import logging
+import threading
 import cmd
 import ctypes
 import cmanager.crawlmanager as c
@@ -24,7 +26,22 @@ class IntervalManager(object):
         self.__start_time = None
         self.__keep_running = True
         self.__crawler_running = False
+        self.__kill_mtx = threading.Lock()
         self.__crawling_done_callback = None
+
+        # Fun.
+        self.__statussen = {
+                (False, False): 'quit',
+                (True, False): 'nocrawl',
+                (False, True): 'stop',
+                (True, True): 'active'
+        }
+
+        signal.signal(signal.SIGINT, self.__ctrlc_handler)
+
+    def __ctrlc_handler(self, signum, frame):
+        print('Interrupt: ', signum)
+        self.kill()
 
     def format_time(self, time_in_secs):
         """
@@ -58,13 +75,9 @@ class IntervalManager(object):
         self.__start_time = util.times.get_localtime_sec()
         self.__cmanager.register_done(self.crawling_done_callback)
 
-        try:
-            if self.__keep_running:
-                self.__crawler_running = True
-                self.__cmanager.start()
-        except KeyboardInterrupt:
-            logging.warn('Got Ctrl-C => Will shutdown() now')
-            self.__cmanager.shutdown()
+        if self.__keep_running:
+            self.__crawler_running = True
+            self.__cmanager.start()
 
     def crawling_done_callback(self):
         """
@@ -83,44 +96,41 @@ class IntervalManager(object):
         if self.__keep_running:
             self.start(delay)
 
+    @property
     def status(self):
-        print('Cmanager is {0}, IntervalManager is {1}'.format(
-               'is running' if self.__crawler_running else 'is not running',
-               'is running' if self.__keep_running else 'is not running'))
-
-    def start_again(self):
-        self.start()
-        self.__keep_running = True
+        return self.__statussen[(self.__keep_running, self.__crawler_running)]
 
     def stop(self):
-        self.__keep_running = False
         print("Intervalmanager stopped, crawljobs may be still running.")
+        self.__keep_running = False
 
     def kill(self):
+        self.__kill_mtx.acquire()
+        print("Killing and cleaning crawljobs...")
         self.__cmanager.shutdown()
-        print("Killing an cleaning crawljobs...")
+        self.__crawler_running = False
+        self.__keep_running = False
+        self.__kill_mtx.release()
 
 
 class CrawlerShell(cmd.Cmd):
     intro = 'Crawler Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
-    def set_imanager(self, imanager):
+    def set_imanager(self, imanager, cv):
         self.__imanager = imanager
-
-    def do_kill(self, arg):
-        'kill all crawljobs immediately and cleans up tmp folder.'
-        self.__imanager.kill()
-        return False
+        self.__cv = cv
 
     def do_start(self, arg):
         'Starts crawljobs if stopped previously.'
-        self.__imanager.start_again()
+        self.__cv.acquire()
+        self.__cv.notify()
+        self.__cv.release()
         return False
 
     def do_status(self, arg):
         'Status of crawler an intervalmanager.'
-        self.__imanager.status()
+        print(self.__imanager.status)
         return False
 
     def do_stop(self, arg):
@@ -133,7 +143,7 @@ class CrawlerShell(cmd.Cmd):
         return True
 
     def do_EOF(self, arg):
-        return True
+        return self.do_quit(arg)
 
 ###########################################################################
 #                                unittest                                 #

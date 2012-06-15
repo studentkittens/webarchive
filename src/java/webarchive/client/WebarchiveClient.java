@@ -5,25 +5,21 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-
 import webarchive.api.WebarchiveObserver;
-import webarchive.api.xml.XmlEditor;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
-import webarchive.headers.Header;
-import webarchive.transfer.FileBuffer;
-import webarchive.transfer.FileDescriptor;
-import webarchive.transfer.Message;
-import webarchive.transfer.MyBAOS;
+import webarchive.api.xml.XmlEditor;
+import webarchive.connection.Connection;
+import webarchive.transfer.*;
 
 public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 
 	private Client cl;
-	private ClientConnectionHandler cH;
+	private Connection con;
 	
 	protected WebarchiveClient() {
-		cl = new Client();
-		cH = (ClientConnectionHandler) cl.getConnection().getConHandler();
+		cl = Client.getInstance();
+		con = cl.getConnection();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -54,12 +50,12 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 	@Override
 	public OutputStream getOutputStream(MetaData meta, File file)
 			throws Exception {
-		return new MyBAOS(new FileBuffer(new FileDescriptor(meta,file)),cH);
+		return new MyBAOS(new FileBuffer(new FileDescriptor(meta,file)),(ClientConnectionHandler) con.getConHandler());
 	}
 
-	@Override
+
 	public XmlEditor getXMLEdit(MetaData meta) throws Exception {
-		Object answer = queryServer(Header.XMLEDIT,meta);
+		Object answer = queryServer(Header.GETXMLEDIT,meta);
 		assert answer instanceof XmlEditor;
 		return (XmlEditor) answer;
 	}
@@ -91,8 +87,8 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 	
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);
-		cH.send(msg);
-		return  cH.waitForAnswer(msg).getData();
+		con.send(msg);
+		return  con.waitForAnswer(msg).getData();
 	}
 
 }

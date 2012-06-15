@@ -1,4 +1,4 @@
-package webarchive.headers;
+package webarchive.transfer;
 
 
 public enum Header {
@@ -9,8 +9,10 @@ public enum Header {
 	SQL,
 	WRITEFILE,
 	READFILE,
-	XMLEDIT,
+	GETXMLEDIT,
+	CLOSE_XMLEDIT,
 	LS,
-	NOTIFY,
+	NOTIFY, 
+	ADDXMLEDIT,
 	
 }

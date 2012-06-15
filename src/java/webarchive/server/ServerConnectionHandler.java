@@ -1,19 +1,30 @@
 package webarchive.server;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import webarchive.api.model.MetaData;
+import webarchive.api.select.Select;
+import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
-import webarchive.headers.Header;
+import webarchive.dbaccess.SqlHandler;
+import webarchive.handler.HandlerCollection;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
+import webarchive.transfer.Header;
 import webarchive.transfer.Message;
+import webarchive.xml.XmlHandler;
 
 public class ServerConnectionHandler extends ConnectionHandler {
 
-	private IOHandler io;
+	private FileHandler io;
+	private SqlHandler sql;
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
-		this.io = new FileHandler();
+		this.io = (FileHandler) netMod.getHandlers().get("FileHandler");
+		this.sql = (SqlHandler) netMod.getHandlers().get("SqlHandler");
 	}
 
 	@Override
@@ -37,7 +48,23 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				break;
 			case SQL:
 			{
-				
+				List<MetaData> list =null;
+				try {
+					list = sql.select((Select)msg.getData());
+				} catch (UnsupportedOperationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Message answer = new Message(msg,list);
+				try {
+					send(answer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 				break;
 			case WRITEFILE:
@@ -49,7 +76,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				Message answer = new Message(msg,null);
 				answer.setHeader(Header.SUCCESS);
 				try {
-					c.send(answer);
+					send(answer);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -65,14 +92,33 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				io.unlock(fd);
 				Message answer = new Message(msg,buf);
 				try {
-					c.send(answer);
+					send(answer);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 				break;
-			case XMLEDIT:
+			case GETXMLEDIT:
+			{
+				XmlHandler xml;
+				XmlEditor xmlEd = null;
+				//TODO XMLHANDLING
+				//<-
+				
+				//ccwelich
+				
+				//->
+				Message answer = new Message(msg,xmlEd);
+				try {
+					send(answer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+				break;
+			case ADDXMLEDIT:
 			{
 				
 			}

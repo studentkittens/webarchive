@@ -16,6 +16,7 @@ CONFIG_TEMPLATE = """
         <tempRoot>{temp_dir}</tmpRoot>
         <ignoreRobots>{robots}</ignoreRobots>
         <urllistpath>{url_path}</urllistpath>
+        <customWgetParms>{custom_wget}</customWgetParms>
     </crawler>
     <db>
         <path>{db_file}</path>

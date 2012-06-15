@@ -14,7 +14,7 @@ import webarchive.xml.DataElement;
  * @see DataElement
  * @author ccwelich
  */
-public interface XmlEditor {
+public interface XmlEditor extends AutoCloseable {
 
 	/**
 	 * get a data element from the data subtree by its tagname. The method
@@ -67,6 +67,8 @@ public interface XmlEditor {
 	 * @return prefix + name in the format "<prefix>:<name>"
 	 */
 	public String addPrefixTo(String name);
+	
+	
 	
 	
 }

@@ -11,6 +11,8 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import webarchive.transfer.FileDescriptor;
 
+import webarchive.handler.Handler;
+
 /**
  * Xml controller on the server side.
  * It controlls the loading of webarchive-xml-files into dom-objects,
