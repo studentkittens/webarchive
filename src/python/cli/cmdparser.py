@@ -23,7 +23,7 @@ DB Options:
   --rebuild                Rebuild Databse completely from XML Data.
   --remove                 Remove the Database completely.
 
-Config Opeions:
+Config Options:
   --set=<confurl><value>   Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
 

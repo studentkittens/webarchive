@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    cli 
+   git
    dbgen
 
 Indices and tables
