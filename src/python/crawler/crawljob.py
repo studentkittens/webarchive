@@ -17,7 +17,6 @@ import shutil
 import config.reader as config
 import crawler.wget as wget
 import util.paths as paths
-import util.files as ufile
 import crawler.cleaner as cleaner
 import crawler.xmlgen as xmlgen
 import crawler.rsync as rsync

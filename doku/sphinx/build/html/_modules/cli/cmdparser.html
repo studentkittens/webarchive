@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cli.cmdparser &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for cli.cmdparser</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+
+<span class="sd">&quot;&quot;&quot;Archive interface.</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] init [&lt;path&gt;]</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] crawler (--start|--stop)</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] javadapter (--start|--stop)</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] db (--rebuild|--remove)</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] repair</span>
+<span class="sd">  archive.py config (--get=&lt;confurl&gt;|--set=&lt;confurl&gt;&lt;arg&gt;)</span>
+<span class="sd">  archive.py -h | --help</span>
+<span class="sd">  archive.py --version</span>
+
+<span class="sd">Options:</span>
+<span class="sd">  -h --help                Show this screen.</span>
+<span class="sd">  --version                Show version.</span>
+<span class="sd">  --loglevel=&lt;loglevel&gt;    Set the loglevel to any of debug, info, warning, error, critical.</span>
+<span class="sd">  --start                  Starting a service.</span>
+<span class="sd">  --stop                   Stopping a service.</span>
+<span class="sd">  --rebuild                Rebuild Databse completely from XML Data.</span>
+<span class="sd">  --remove                 Remove the Database completely.</span>
+<span class="sd">  --set=&lt;confurl&gt;&lt;value&gt;   Set a Value in the config permanently.</span>
+<span class="sd">  --get=&lt;confurl&gt;          Acquire a Value in the config by it&#39;s url.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl, Christoph Piechula&#39;</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># External dep.</span>
+<span class="c"># pip install docopt</span>
+<span class="kn">from</span> <span class="nn">docopt</span> <span class="kn">import</span> <span class="n">docopt</span>
+
+<span class="kn">from</span> <span class="nn">init.init</span> <span class="kn">import</span> <span class="n">init_archive</span>
+<span class="kn">from</span> <span class="nn">dbrecover.recover</span> <span class="kn">import</span> <span class="n">rebuild</span><span class="p">,</span> <span class="n">remove</span>
+<span class="kn">from</span> <span class="nn">dbrecover.repair</span> <span class="kn">import</span> <span class="n">repair</span>
+
+<span class="kn">import</span> <span class="nn">cmanager.intervalmanager</span> <span class="kn">as</span> <span class="nn">imgur</span>
+<span class="kn">import</span> <span class="nn">javadapter.server</span> <span class="kn">as</span> <span class="nn">javadapter</span>
+<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
+
+
+<span class="n">LOCKFILE</span> <span class="o">=</span> <span class="s">&#39;global&#39;</span>
+
+
+<div class="viewcode-block" id="Cli"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli">[docs]</a><span class="k">class</span> <span class="nc">Cli</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive commandline intepreter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Collected arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">LOCKFILE</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span> <span class="o">=</span> <span class="n">docopt</span><span class="p">(</span><span class="n">__doc__</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;Archive 1.0&#39;</span><span class="p">)</span>
+        <span class="n">submodules</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;init&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_init</span><span class="p">,</span>
+                <span class="s">&#39;crawler&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_crawler</span><span class="p">,</span>
+                <span class="s">&#39;javadapter&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_javadapter</span><span class="p">,</span>
+                <span class="s">&#39;db&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_db</span><span class="p">,</span>
+                <span class="s">&#39;config&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_config</span><span class="p">,</span>
+                <span class="s">&#39;repair&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_repair</span>
+                <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">loglevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;&lt;severity&gt;&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="n">severity</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">loglevel</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">severity</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Error: </span><span class="se">\&quot;</span><span class="s">loglevel</span><span class="se">\&quot;</span><span class="s"> is not a valid severity level&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">__doc__</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">severity</span><span class="p">,</span>
+                                <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">get_log_dir</span><span class="p">(),</span> <span class="s">&#39;archive.log&#39;</span><span class="p">),</span>
+                                <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Cannot open log - file structure probably does not exist yet:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Logging will be printed to logfile only.&#39;</span><span class="p">)</span>
+
+        <span class="c"># iterating through arguments</span>
+        <span class="k">for</span> <span class="n">module</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">submodules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="n">module</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">handler</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLockException</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">&quot;archive is currently locked with global.lock.&quot;</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">not_implemented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;It</span><span class="se">\&#39;</span><span class="s">s not implemented, Sam.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Cli.handle_init"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_init">[docs]</a>    <span class="k">def</span> <span class="nf">handle_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;&lt;path&gt;&#39;</span><span class="p">]</span>
+            <span class="n">init_archive</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">init_archive</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Cli.cmd_loop"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.cmd_loop">[docs]</a>    <span class="k">def</span> <span class="nf">cmd_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span>  <span class="n">i</span><span class="p">,</span> <span class="n">cv</span><span class="p">):</span>
+        <span class="n">shell</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+        <span class="n">i</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Cli.handle_crawler"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_crawler">[docs]</a>    <span class="k">def</span> <span class="nf">handle_crawler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="n">cv</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Condition</span><span class="p">()</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">IntervalManager</span><span class="p">()</span>
+
+            <span class="n">shell</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">CrawlerShell</span><span class="p">()</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">set_imanager</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">set_condvar</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">set_quitflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">shell</span><span class="o">.</span><span class="n">set_activeflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+            <span class="n">cmd_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_loop</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">cv</span><span class="p">))</span>
+            <span class="n">cmd_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+            <span class="n">cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">shell</span><span class="o">.</span><span class="n">quitflag</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">cv</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s">&#39;ready&#39;</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;=========== START ==============&#39;</span><span class="p">)</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                    <span class="n">shell</span><span class="o">.</span><span class="n">set_activeflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="n">cmd_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--stop&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Cli.handle_javadapter"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_javadapter">[docs]</a>    <span class="k">def</span> <span class="nf">handle_javadapter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">javadapter</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+            <span class="n">javadapter</span><span class="o">.</span><span class="n">ServerShell</span><span class="p">()</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--stop&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Cli.handle_db"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_db">[docs]</a>    <span class="k">def</span> <span class="nf">handle_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--rebuild&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="n">rebuild</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--remove&#39;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+                <span class="n">remove</span><span class="p">()</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Done.&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Unable to delete database:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Cli.handle_config"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_config">[docs]</a>    <span class="k">def</span> <span class="nf">handle_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--get&#39;</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;&lt;confurl&gt;&#39;</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--set&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>  <span class="c"># TODO: Wait for config implementation.</span>
+</div>
+<div class="viewcode-block" id="Cli.handle_repair"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_repair">[docs]</a>    <span class="k">def</span> <span class="nf">handle_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">repair</span><span class="p">()</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Cli</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
