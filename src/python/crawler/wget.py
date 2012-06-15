@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Wget Wrapper submodule used by a crawljob
+"""
+
 __author__ = 'Christoph Piechula'
 
 import subprocess
@@ -16,7 +20,7 @@ import util.paths as paths
 
 class Wget(object):
     """
-    A simple wget wrapper class.
+    A wget wrapper submodule
     """
 
     def __init__(self, url, tmp_folder):
@@ -41,7 +45,7 @@ class Wget(object):
 
     def start(self):
         """
-        starts the wget crawl process
+        Starts the wget crawl process
         :returns: wget process exit code
         """
 
@@ -66,6 +70,10 @@ class Wget(object):
         logging.info("[WGET] with pid {0} started.".format(self.__pid))
 
     def poll(self):
+        """
+        Polls if process is still running
+        :returns: boolean flag if still running or not
+        """
         if self.__process is not None:
             return self.__process.poll()
         else:
@@ -73,7 +81,7 @@ class Wget(object):
 
     def stop(self):
         """
-        kills a still running wget process.
+        Kills a still running wget process
         """
         if self.__process != None:
             try:

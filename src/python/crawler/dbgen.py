@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+DBGenerator module t
+"""
+
 __author__ = 'Christopher Pahl'
 
 import logging
@@ -14,7 +18,9 @@ from util.paths import get_dbpath
 
 
 class DBGenerator(object):
-
+    """
+    DBGenerator module
+    """
     def __init__(self, meta_list=None):
         self.__connection = sqlite3.connect(get_dbpath())
         self.__cursor = self.__connection.cursor()
@@ -38,6 +44,9 @@ class DBGenerator(object):
         return statements
 
     def execute_statement(self, source_name, arglist=None):
+        """
+        Executes a given statements
+        """
         source = self.__statements[source_name]
         if arglist is not None:
             self.__cursor.executemany(source, arglist)
@@ -45,6 +54,9 @@ class DBGenerator(object):
             self.__cursor.executemany(source)
 
     def batch(self):
+        """
+        Batch processing insert statements
+        """
         try:
             self.insert_mime_domain()
             self.insert_mdata_ctag()
@@ -54,6 +66,9 @@ class DBGenerator(object):
             logging.critical(traceback.format_exc())
 
     def insert_mime_domain(self):
+        """
+        Insert mimetype and domain statements
+        """
         mimes = []
         domains = []
 
@@ -68,6 +83,9 @@ class DBGenerator(object):
         self.__domaindict = self.select('domain', 'domainID', 'domainName')
 
     def insert_mdata_ctag(self):
+        """
+        Insert metadata and committag statements
+        """
         mdata = []
         ctags = set()
 
@@ -89,6 +107,9 @@ class DBGenerator(object):
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')
 
     def insert_history(self):
+        """
+        Creates a insert history
+        """
         history = []
 
         for item in self.__metalist:
@@ -110,6 +131,9 @@ class DBGenerator(object):
         self.execute_statement('insert_history', history)
 
     def select(self, table, *columns):
+        """
+        Selects given columns in given tabel
+        """
         row_dict = dict()
 
         sql_statement = ''.join(['SELECT ', ', '.join(columns), ' FROM ', table, ';'])
@@ -125,6 +149,9 @@ class DBGenerator(object):
         return row_dict
 
     def close(self):
+        """
+        Closes db connection
+        """
         self.__connection.commit()
         self.__cursor.close()
 

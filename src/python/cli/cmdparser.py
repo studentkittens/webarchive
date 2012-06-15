@@ -102,6 +102,9 @@ class Cli(object):
                     sys.exit(0)
 
     def handle_init(self):
+        """
+        Initializes archive paths
+        """
         try:
             path = self.__arguments['<path>']
             init_archive(path)
@@ -109,10 +112,16 @@ class Cli(object):
             init_archive()
 
     def cmd_loop(self, shell,  i, cv):
+        """
+        Invokes shell cmdloop
+        """
         shell.cmdloop()
         i.stop()
 
     def handle_crawler(self):
+        """
+        Starts and controls crawler commandline
+        """
         self.__filelock.acquire()
         cv = threading.Condition()
         i = imgur.IntervalManager()
@@ -137,11 +146,17 @@ class Cli(object):
         cmd_thread.join()
 
     def handle_javadapter(self):
+        """
+        Starts javadapter commandline
+        """
         server = javadapter.start('localhost')
         javadapter.ServerShell().cmdloop()
         server.shutdown()
 
     def handle_db(self):
+        """
+        Invokes DB Operations
+        """
         if self.__arguments['--rebuild']:
             self.__filelock.acquire()
             rebuild()
@@ -154,6 +169,9 @@ class Cli(object):
                 print('Unable to delete database:', err)
 
     def handle_config(self):
+        """
+        Invokes Config Handler operations
+        """
         if self.__arguments['--get']:
             print(config.get(self.__arguments['<confurl>']))
         elif self.__arguments['--set']:
@@ -161,6 +179,9 @@ class Cli(object):
             # TODO: Wait for config implementation.
 
     def handle_repair(self):
+        """
+        Invokes archive rapair tool
+        """
         self.__filelock.acquire()
         repair()
 

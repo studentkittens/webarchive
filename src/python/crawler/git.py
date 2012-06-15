@@ -43,6 +43,9 @@ class Git(object):
 
     @property
     def domain(self):
+        """
+        Getter for domain property
+        """
         return self.__domain
 
     @classmethod
@@ -190,6 +193,9 @@ class Git(object):
             return None
 
     def list_branches(self):
+        """
+        List avaiable branches
+        """
         branch_list = self.__list_data('branch')
         if branch_list is not None:
             return list(filter(self.__branch_pattern.match, branch_list))
@@ -197,6 +203,9 @@ class Git(object):
             return None
 
     def list_commits(self):
+        """
+        Lists avaiable commits
+        """
         commit_list = self.__list_data('--no-pager log --pretty="%h" --no-abbrev')
         if commit_list is not None:
             return list(filter(self.__commit_pattern.match, commit_list))

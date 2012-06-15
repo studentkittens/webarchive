@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Rsync submodule
+"""
+
 __author__ = 'Christoph Piechula'
 
 import subprocess
