@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 """
-Recover DB from XML
+XMLDBRecover submodule
 """
 
 __author__ = 'Christopher Pahl'
@@ -21,18 +21,29 @@ from multiprocessing.pool import ThreadPool
 
 
 class XMLDBRecover(object):
-    """Docstring for XMLDBRecover """
+    """
+    XMLDBRecover submodule class
+    """
 
     def __init__(self):
-        """@todo: to be defined """
+        """
+        Inits metalist and shutdown flag on create
+        """
         self.__metalist = []
         self.__shutdown = False
 
     @property
     def description(self):
+        """
+        :returns: module description
+        """
         return 'Collecting Metadata through XML Files'
 
     def __iterate_filetree(self, wrapper):
+        """
+        Walks through file tree and generates
+        metadata list from xml files by invoking XMLReader()
+        """
         for root, dirnames, filenames in os.walk(wrapper.domain):
             if self.__shutdown:
                 raise KeyboardInterrupt
@@ -49,6 +60,9 @@ class XMLDBRecover(object):
                         raise
 
     def __iterate_commits(self, wrapper):
+        """
+        Iterates git commits
+        """
         # Last commit is not used, since it's the
         # ,,Initialized'' commit from the empty base branch
         commit_list = wrapper.list_commits()[:-1]
@@ -61,12 +75,18 @@ class XMLDBRecover(object):
                 self.__iterate_filetree(wrapper)
 
     def __iterate_branches(self, wrapper):
+        """
+        Iterates git branches
+        """
         for branch in wrapper.list_branches():
             logging.info('Processing branch ' + branch + ' (' + wrapper.domain + ')')
             wrapper.checkout(branch)
             self.__iterate_commits(wrapper)
 
     def recover_domain(self, domain):
+        """
+        Iterates through given domain trying to recover metadata
+        """
         try:
             wrapper = git.Git(domain)
             self.__iterate_branches(wrapper)
@@ -76,6 +96,9 @@ class XMLDBRecover(object):
             wrapper.checkout('master')
 
     def load(self):
+        """
+        Invokes threaded xml recovery
+        """
         try:
             self.__init__()
             domain_patt = os.path.join(paths.get_content_root(), '*')

@@ -12,6 +12,9 @@ Contents:
    :maxdepth: 2
 
    cli 
+   javadapter
+   git
+   dbgen
 
 Indices and tables
 ==================

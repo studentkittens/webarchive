@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Time helper module
+"""
+
 __author__ = 'Christoph Piechula'
 
 import time

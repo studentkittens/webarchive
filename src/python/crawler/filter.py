@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Filter plugin system submodule
+"""
+
 __author__ = 'Christopher Pahl'
 
 import glob
@@ -12,6 +16,9 @@ import logging
 
 
 class FilterSystem(object):
+    """
+    Filtersystem submodule invoked by a crawljob
+    """
     def __init__(self, plugin_path=None):
         self.__source_list = []
         self.load(plugin_path)
@@ -32,15 +39,11 @@ class FilterSystem(object):
         else:
             actual_path = plugin_path
 
-        print(actual_path)
-
         # Built a list of (path_to_filter, filter_source)
         for source in sorted(glob.glob(os.path.join(actual_path, '*.py'))):
             with open(source, 'r') as handle:
                 self.__source_list.append(
                     (source, handle.read() + '\n'))
-
-        print('LOADED: ', self.__source_list)
 
     def clear(self):
         """
