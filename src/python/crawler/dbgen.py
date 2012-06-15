@@ -21,7 +21,9 @@ from util.paths import get_archive_root
 
 
 class DBGenerator(object):
-    'The Procedure of creating the DB is encapsulated here'
+    """
+    DBGenerator module
+    """
     def __init__(self, meta_list=None):
         """
         Take a metalist and load sql templates from disk.
@@ -76,7 +78,7 @@ class DBGenerator(object):
 
     def batch(self):
         """
-        Start tb creating procedure
+        Start db creating procedure
 
         :returns: a truthy value on success
         """

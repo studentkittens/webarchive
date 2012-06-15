@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Filter plugin system submodule
+"""
+
 __author__ = 'Christopher Pahl'
 
 import glob
@@ -12,6 +16,9 @@ import logging
 
 
 class FilterSystem(object):
+    """
+    Filtersystem submodule invoked by a crawljob
+    """
     def __init__(self, plugin_path=None):
         self.__source_list = []
         self.load(plugin_path)

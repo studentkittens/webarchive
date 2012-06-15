@@ -2,11 +2,10 @@
 # encoding: utf-8
 
 """
-Recover. Srsly.
+DB Recover submodule
 """
 
 __author__ = 'Christopher Pahl'
-
 
 import os
 import logging
@@ -19,6 +18,9 @@ from dbrecover.repair import repair
 
 
 def rebuild():
+    """
+    Rebuilds the db either by using PickleDBRecover or XMLDBRecover
+    """
     strategies = [PickleDBRecover(), XMLDBRecover()]
     for strategy in strategies:
         logging.info('(!!) Probing strategy: ' + strategy.description)
@@ -39,11 +41,17 @@ def rebuild():
 
 
 def remove():
+    """
+    Removes db
+    """
     dbpath = get_dbpath()
     os.remove(dbpath)
 
 
 def main():
+    """
+    Starts rebuild - needed?
+    """
     rebuild()
 
 if __name__ == '__main__':

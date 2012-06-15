@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+XMLReader submodule
+"""
+
 __author__ = 'Christopher Pahl'
 
 from xml.etree.ElementTree import ElementTree

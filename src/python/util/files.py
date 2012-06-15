@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Helper module for url.txt
+"""
 __author__ = 'Christopher Pahl'
 
-import os
 import logging
 
 

@@ -204,6 +204,8 @@ class Git(object):
 
         This means, Empty and master branch are not mentioned. If you want
         to checkout those, just checkout 'empty' or 'master'
+
+        :returns: a list of branchestrings
         """
         branch_list = self.__list_data('branch')
         if branch_list is not None:
@@ -212,7 +214,11 @@ class Git(object):
             return None
 
     def list_commits(self):
-        'List all commits in this repo and branch'
+        """
+        List all commits in this repo and branch
+
+        :returns: a list of commithashestrings
+        """
         cmt_list = self.__list_data('--no-pager log --pretty="%h" --no-abbrev')
         if cmt_list is not None:
             return list(filter(self.__commit_pattern.match, cmt_list))

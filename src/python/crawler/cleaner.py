@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Cleaner submodule to clean  and restructure downloaded content by crawljob
+"""
+
 __author__ = 'Christoph Piechula'
 
 import subprocess
@@ -16,8 +20,8 @@ from crawler.metadata import MetaData
 
 class Cleaner:
     """
-    Cleaner, walk dir tree, cleans and restructures
-    tmp_crawler_folder hierarchy, calls filter subsystem
+    Cleaner submodule, walk dir tree, cleans and restructures
+    tmp_crawler_folder hierarchy and calls filter subsystem
     """
     def __init__(self, path):
         self.__mdlist = []
@@ -62,14 +66,14 @@ class Cleaner:
     @property
     def meta_list(self):
         """
-        :returns: meta list
+        :returns: metalist
         """
         return self.__mdlist
 
     def restructure(self):
         """
-        Walks through tmp_crawler_folder hierarchy calling internal
-        restructure method.
+        Walks through crawler temp folder hierarchy calling internal
+        restructure method to 'normalize' file hierarchy
         """
         logging.debug("starting restructure.")
         try:
@@ -81,6 +85,9 @@ class Cleaner:
             logging.exception("cannot walk through dir structure.")
 
     def clean_empty(self):
+        """
+        Removes empty files and folders
+        """
         logging.debug("removing empty files and folders.")
         subprocess.call(['find', self.__path, '-empty', '-delete'])
 

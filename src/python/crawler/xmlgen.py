@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Xmlgen submodule that contains the metadata xml template
+"""
+
 __author__ = 'Christoph Piechula'
 
 import os

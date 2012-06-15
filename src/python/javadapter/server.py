@@ -377,6 +377,9 @@ def start(host='localhost', port=config.get('javadapter.port')):
 
 
 class ServerShell(cmd.Cmd):
+    """
+    Command shell to manage javadapter
+    """
     intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 

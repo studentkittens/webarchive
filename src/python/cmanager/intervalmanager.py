@@ -19,7 +19,7 @@ import config.reader as config
 
 class IntervalManager(object):
     """
-    IntervalManager, manages crawling intervals
+    IntervalManager, manages crawling intervals including start, stop functionality
     """
     def __init__(self):
         self.__interval = None
@@ -144,15 +144,27 @@ class CrawlerShell(cmd.Cmd):
         self.__quitflag = False
 
     def set_quitflag(self, state):
+        """
+        Setting 'quit' flag
+        """
         self.__quitflag = state
 
     def set_activeflag(self, state):
+        """
+        Setting 'active' flag
+        """
         self.__activeflag = state
 
     def activeflag(self):
+        """
+        Getter for 'active' flag
+        """
         return self.__activeflag
 
     def quitflag(self):
+        """
+        Getter for 'quit' flag
+        """
         return self.__quitflag
 
     # Called before start:
@@ -167,6 +179,9 @@ class CrawlerShell(cmd.Cmd):
     # Commands:
 
     def do_start(self, arg):
+        """
+        Invokes start command
+        """
         'Starts crawljobs if stopped previously.'
         if self.__activeflag == False:
             self.__activeflag = True
@@ -176,16 +191,25 @@ class CrawlerShell(cmd.Cmd):
         return False
 
     def do_status(self, arg):
+        """
+        Invokes status command
+        """
         'Status of crawler an intervalmanager.'
         print(self.__imanager.status)
         return False
 
     def do_stop(self, arg):
+        """
+        Invokes stop command
+        """
         'Stopps self.__imanager.'
         self.__imanager.stop()
         return False
 
     def do_quit(self, arg):
+        """
+        Invokes quit command
+        """
         'Quits Intervalmanager, Crawljobs will still run until finished.'
         self.__cv.acquire()
         self.__quitflag = True
@@ -194,6 +218,9 @@ class CrawlerShell(cmd.Cmd):
         return True
 
     def do_EOF(self, arg):
+        """
+        Invokes quit on EOF
+        """
         return self.do_quit(arg)
 
 ###########################################################################
