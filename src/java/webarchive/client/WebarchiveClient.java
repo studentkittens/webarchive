@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import webarchive.api.WebarchiveObserver;
-import webarchive.api.XmlEdit;
+import webarchive.api.xml.XmlEditor;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
 import webarchive.headers.Header;
@@ -58,10 +58,10 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 	}
 
 	@Override
-	public XmlEdit getXMLEdit(MetaData meta) throws Exception {
+	public XmlEditor getXMLEdit(MetaData meta) throws Exception {
 		Object answer = queryServer(Header.XMLEDIT,meta);
-		assert answer instanceof XmlEdit;
-		return (XmlEdit) answer;
+		assert answer instanceof XmlEditor;
+		return (XmlEditor) answer;
 	}
 
 	@Override

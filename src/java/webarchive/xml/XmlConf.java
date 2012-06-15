@@ -1,6 +1,7 @@
 package webarchive.xml;
 
 import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
 import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
@@ -16,17 +17,32 @@ public class XmlConf {
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
 	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
+	private final DocumentBuilderFactory documentBuilderFactory;
+
+	/**
+	 * @return the default DocumentBuilderFactory
+	 */
+	public DocumentBuilderFactory getDocumentBuilderFactory() {
+		return documentBuilderFactory;
+	}
 
 	/**
 	 * create XmlConf with default values
 	 */
 	public XmlConf() {
+		// init DocumentBuilderFactory
+		documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setValidating(false);
+		documentBuilderFactory.setIgnoringComments(true);
+		documentBuilderFactory.setIgnoringElementContentWhitespace(true);
+		documentBuilderFactory.setExpandEntityReferences(true);
+		documentBuilderFactory.setNamespaceAware(true);
 	}
 
 	/**
 	 * sets XmlHandler AutoValidatingMode. default: AFTER_UPDATE
 	 *
-	 * @see AutoValidatingMode
+	 * @see XmlConf.AutoValidatingMode
 	 * @param autoValidatingMode
 	 */
 	public void setAutoValidatingMode(AutoValidatingMode autoValidatingMode) {
@@ -81,7 +97,7 @@ public class XmlConf {
 	 * @return data-element name
 	 */
 	String getDataTag() {
-		return prefix(dataTag);
+		return addPrefixTo(dataTag);
 	}
 
 	/**
@@ -105,10 +121,10 @@ public class XmlConf {
 	}
 
 	/**
-	 * set the prefix of all XML-elements according to XML-Metafile. default:
+	 * set the addPrefixTo of all XML-elements according to XML-Metafile. default:
 	 * "wa:"
 	 *
-	 * @param prefix
+	 * @param addPrefixTo
 	 */
 	public void setPrefix(String prefix) {
 		assert prefix != null;
@@ -117,7 +133,7 @@ public class XmlConf {
 	}
 
 	/**
-	 * get the prefix of all XML-elements according to XML-Metafile.
+	 * get the addPrefixTo of all XML-elements according to XML-Metafile.
 	 *
 	 * @return
 	 */
@@ -126,14 +142,14 @@ public class XmlConf {
 	}
 
 	/**
-	 * prefixes a given string by the default prefix. If name has already a
+	 * adds a prefix to a given string by the default prefix. If name has already a
 	 * prefix, which is terminated by ':', then this prefix will be replaced by
 	 * the default prefix.
 	 *
-	 * @param name name to prefix
-	 * @return prefix+name
+	 * @param name name to addPrefixTo
+	 * @return addPrefixTo+name
 	 */
-	public String prefix(String name) {
+	public String addPrefixTo(String name) {
 		assert prefix.endsWith(":");
 		int i = name.indexOf(':');
 		return prefix + ((i != -1) ? name : name.substring(i + 1));
