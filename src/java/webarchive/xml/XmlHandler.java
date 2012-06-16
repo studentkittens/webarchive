@@ -45,7 +45,7 @@ public class XmlHandler {
 	}
 	private final XmlConf conf;
 	private Document document;
-	private final Element data;
+	private Element data;
 	private final XmlIOHandler ioHandler;
 
 	public Document getDocument() {
@@ -59,6 +59,7 @@ public class XmlHandler {
 		// preconditions
 		assert xmlPath != null;
 		assert conf != null;
+		this.conf = conf;
 
 		// set ioHandler
 		this.ioHandler = new XmlIOHandler(conf, xmlPath);
@@ -66,10 +67,7 @@ public class XmlHandler {
 		// build document
 		buildDocument();
 
-		// other members
-		this.data = (Element) (document.getElementsByTagName(conf.getDataTag()).
-			item(0));
-		this.conf = conf;
+		
 	}
 
 	public final void buildDocument() throws ParserConfigurationException,
@@ -79,6 +77,7 @@ public class XmlHandler {
 		if (mode == XmlHandler.AutoValidatingMode.ALWAYS || mode == XmlHandler.AutoValidatingMode.AFTER_BUILT_DOM) {
 			validate();
 		}
+		this.data = (Element) (document.getElementsByTagName(conf.getDataTag()).item(0));
 	}
 
 	public XmlEditor newEditor() {
@@ -101,7 +100,7 @@ public class XmlHandler {
 				"element " + tagName + " already exists");
 		}
 		// append in sequence
-		data.appendChild(e.getDataElement());
+		data.appendChild(document.adoptNode(e.getDataElement()));
 		// validate
 		AutoValidatingMode mode = conf.getAutoValidatingMode();
 		if (mode == AutoValidatingMode.ALWAYS || mode == AutoValidatingMode.AFTER_UPDATE) {

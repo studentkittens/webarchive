@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-//TODO Tests
 
 /**
  * Generic class to select data from db and map it java data-objects.

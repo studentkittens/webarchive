@@ -1,8 +1,6 @@
 package webarchive.api.model;
-//TODO tests
 
 import java.io.Serializable;
-
 
 /**
  * Represents a commitTag. A commitTag is related to a domain-folder in archive

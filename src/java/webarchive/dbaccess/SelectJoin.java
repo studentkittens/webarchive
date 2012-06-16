@@ -2,7 +2,6 @@ package webarchive.dbaccess;
 
 import java.sql.SQLException;
 import java.util.List;
-//TODO Tests
 
 /**
  * Generic class to build and execute Select-statements. A SQL-template is built

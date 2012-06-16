@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.MetaData;
 import webarchive.api.model.TimeStamp;
-//TODO Tests
 
 /**
  * Backend of {@link webarchive.api.select.SelectMetaByCommit}

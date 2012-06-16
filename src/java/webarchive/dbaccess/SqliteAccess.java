@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//TODO Tests
 /**
  * Implements DbAccess for sqlite dataBase.
  * The database-file is accessed by a given path.

@@ -35,6 +35,7 @@ public class XmlIOHandler {
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty(
 			"{http://xml.apache.org/xslt}indent-amount", "2");
+		streamResult = new StreamResult(file);
 	}
 
 	public Document buildDocument() throws ParserConfigurationException,
@@ -51,7 +52,6 @@ public class XmlIOHandler {
 		//TODO lock
 		DOMSource source = new DOMSource(document);
 		transformer.transform(source, streamResult);
-		throw new UnsupportedOperationException("Not yet implemented");
 		//TODO unlock
 
 	}

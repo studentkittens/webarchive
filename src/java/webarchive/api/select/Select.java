@@ -1,5 +1,4 @@
 package webarchive.api.select;
-//TODO tests
 
 import java.io.Serializable;
 

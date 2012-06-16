@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.TimeStamp;
-//TODO Tests
 
 /**
  * Backend of {@link webarchive.api.select.SelectCommitTag}

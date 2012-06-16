@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import webarchive.handler.Handler;
-//TODO Tests
 
 /**
  * Access class for SQL-Statements. accepts raw select-statements from

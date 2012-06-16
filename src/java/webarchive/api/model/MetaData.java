@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
-//TODO tests
 
 /**
  * Basic MetaData class in use with webarchive. It contains metadata of an

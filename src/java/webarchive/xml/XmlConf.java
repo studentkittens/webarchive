@@ -42,7 +42,11 @@ public class XmlConf {
 		documentBuilderFactory.setExpandEntityReferences(true);
 		documentBuilderFactory.setNamespaceAware(true);
 		// init workers
-		xmlErrorHandler = new XmlErrorHandler();
+		xmlErrorHandler = null;// new XmlErrorHandler();
+		updateValidator();
+	}
+
+	public final void updateValidator() throws SAXException {
 		xmlValidator = new XmlValidator(this, xmlErrorHandler);
 	}
 
