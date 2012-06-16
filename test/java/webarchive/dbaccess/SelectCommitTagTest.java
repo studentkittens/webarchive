@@ -5,11 +5,12 @@
 package webarchive.dbaccess;
 
 import java.io.File;
+import java.sql.ResultSet;
 import java.util.List;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import org.junit.*;
 import webarchive.api.model.CommitTag;
+import webarchive.api.model.TimeStamp;
 
 /**
  *
@@ -45,16 +46,17 @@ public class SelectCommitTagTest {
 	@Test
 	public void testSelect() throws Exception {
 		System.out.println("select");
-		String[] where = {"domainName='www.heise.de'",null};
-		String[] orderBy = {"commitTime DESC","domainName ASC"};
-		
-		List<CommitTag> expResult = null;
-		List<CommitTag> result = instance.select(where, orderBy, null);
-		for(CommitTag tag : result) {
-			System.out.println("  "+tag.getId() + ", " +tag);
-		}	
-		
-		fail("The test case is a prototype.");
+		String whereCommitTag = "commitTime='2012-05-15T17:30:00'";
+		String whereDomain = "domainName='www.heise.de'";
+		String[] orderBy = {"domainName ASC"};
+		webarchive.api.select.SelectCommitTag select = new webarchive.api.select.SelectCommitTag(
+			whereCommitTag, whereDomain, orderBy);
+				
+		CommitTag expect = new CommitTag(1,new TimeStamp("2012-05-15T17:30:00"),"www.heise.de");
+		List<CommitTag> result = instance.select(select);
+		assertTrue(result.size()==1);
+		assertEquals(expect, result.get(0));
+				
 	}
 
 }

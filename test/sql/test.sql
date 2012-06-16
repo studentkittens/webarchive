@@ -29,21 +29,24 @@ insert into history(metaId, commitId, createTime, title)
 insert into history(metaId, commitId, createTime, title) 
 	values( 1, 3, '2012-05-15T18:32:42', 'Heise online');
 
+.mode tabs
+.header on
 
 select * from mimeType;
 select * from domain;
+select * from commitTag;
 select * from metaData;
 select * from history;
 
-select * from mimeType join (
-	select * from metaData join (
-		select * from domain join (
-			select * from commitTag join (
-				select * from history 
-			) using (commitId)
-		) using (domainId)
-	) using (metaId)
-) using (mimeId);
+--select * from mimeType join (
+--	select * from metaData join (
+--		select * from domain join (
+--			select * from commitTag join (
+--				select * from history 
+--			) using (commitId)
+--		) using (domainId)
+--	) using (metaId)
+--) using (mimeId);
 
 --select * from mimeType join (
 --	select * from metaData join(

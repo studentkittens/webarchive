@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.List;
 import org.junit.*;
 import static org.junit.Assert.*;
+import webarchive.api.model.CommitTag;
+import webarchive.api.model.TimeStamp;
 import webarchive.api.select.Select;
 
 /**
@@ -49,19 +51,36 @@ public class SqlHandlerTest {
 	@Test
 	public void testSelect() throws Exception {
 		System.out.println("select");
-		Select select = new webarchive.api.select.SelectCommitTag(null, null);
-		List result = instance.select(select);
+		Select select = new webarchive.api.select.SelectCommitTag("commitId = 1",
+			null);
+		List<CommitTag> result = instance.select(select);
 		System.out.println(result);
-		result = instance.select(new NotImplementedSelect(null, null));
-		
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
-	class NotImplementedSelect extends Select {
+		assertTrue(result.size() == 1);
+		assertEquals(new CommitTag(1, new TimeStamp("2012-05-15T17:30:00"),
+			"www.heise.de"), result.get(0));
 
-		public NotImplementedSelect(String[] where, String[] orderBy) {
-			super(where, orderBy);
+		// illegal access
+		boolean thrown = false;
+		try {
+			instance.select(null);
+		} catch (NullPointerException exc) {
+			thrown = true;
 		}
-		
+		assertTrue(thrown);
+		thrown = false;
+		try {
+			instance.select(new IllegalSelect(null, null));
+		} catch (UnsupportedOperationException exc) {
+			thrown = true;
+		}
+		assertTrue(thrown);
+
+	}
+}
+
+class IllegalSelect extends webarchive.api.select.Select {
+
+	public IllegalSelect(String[] where, String[] orderBy) {
+		super(where, orderBy);
 	}
 }
