@@ -2,6 +2,7 @@
 build/*
 nbproject/*
 javadoc/*
+*.doctree
 
 #-- vim files
 *.vim

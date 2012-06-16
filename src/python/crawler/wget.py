@@ -1,20 +1,26 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Wget Wrapper submodule used by a crawljob
+"""
+
 __author__ = 'Christoph Piechula'
 
 import subprocess
 import os
 import time
 import shlex
+import logging
+
 import config.reader as config
 import util.files as files
-import logging
+import util.paths as paths
 
 
 class Wget(object):
     """
-    A simple wget wrapper class.
+    A wget wrapper submodule
     """
 
     def __init__(self, url, tmp_folder):
@@ -32,13 +38,14 @@ class Wget(object):
                       --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
         self.__process = None
         self.__pid = None
+        self.__wget_logfile = None
 
         urlset = files.unique_items_from_file(config.get('crawler.urllistpath'))
         self.__exclude_urls = ', '.join(list(urlset.difference({self.__url})))
 
     def start(self):
         """
-        starts the wget crawl process
+        Starts the wget crawl process
         :returns: wget process exit code
         """
 
@@ -51,19 +58,22 @@ class Wget(object):
                                  url=self.__url)
 
         cmd = shlex.split(cmd)
-        wget_path = os.path.join(config.get('general.root'),
-                                           'wget_' + self.__url + '.log')
-        wget_log = open(wget_path, 'w')
+        wget_path = os.path.join(paths.get_log_dir(), 'wget_' + self.__url + '.log')
+        self.__wget_logfile = open(wget_path, 'w')
 
         self.__process = subprocess.Popen(cmd, shell=False,
                                           bufsize=-1,
-                                          stdout=wget_log,
-                                          stderr=wget_log)
+                                          stdout=self.__wget_logfile,
+                                          stderr=self.__wget_logfile)
 
         self.__pid = self.__process.pid
         logging.info("[WGET] with pid {0} started.".format(self.__pid))
 
     def poll(self):
+        """
+        Polls if process is still running
+        :returns: boolean flag if still running or not
+        """
         if self.__process is not None:
             return self.__process.poll()
         else:
@@ -71,7 +81,7 @@ class Wget(object):
 
     def stop(self):
         """
-        kills a still running wget process.
+        Kills a still running wget process
         """
         if self.__process != None:
             try:
@@ -80,8 +90,13 @@ class Wget(object):
                 self.__process.terminate()
             finally:
                 self.__process = None
+                self.__wget_logfile.close()
         else:
             logging.warn("no process running.")
+
+    def __del__(self):
+        if self.__wget_logfile is not None:
+            self.__wget_logfile.close()
 
 
 ###########################################################################

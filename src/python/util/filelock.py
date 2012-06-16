@@ -4,8 +4,9 @@ import errno
 import unittest
 
 """
-Code from: http://www.evanfosmark.com/2009/01/cross-platform-file-locking-support-in-python/
+Filelock module, with minor modification
 
+Code from: http://www.evanfosmark.com/2009/01/cross-platform-file-locking-support-in-python/
 BSD Licensed
 """
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Metadata object module
+"""
+
 __author__ = 'Christoph Piechula'
 
 import util.times as utl

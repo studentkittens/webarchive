@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Crawl Manager module to manage running crawljob instances
+"""
+
 __author__ = 'Christoph Piechula'
 
 import multiprocessing.pool as mpool
