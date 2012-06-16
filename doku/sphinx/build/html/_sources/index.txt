@@ -8,13 +8,22 @@ Welcome to Webarchiv's documentation!
 
 Contents:
 
+.. highlight:: bash 
+   :linenothreshold: 5
+
 .. toctree::
    :maxdepth: 2
 
    cli 
    javadapter
+   filter
+
+   wget
+   rsync
+   recover
    git
    dbgen
+   utils
 
 Indices and tables
 ==================

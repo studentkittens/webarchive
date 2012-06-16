@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Recovering of the Database &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="index.html" />
+    <link rel="next" title="Git-Handling" href="git.html" />
+    <link rel="prev" title="Python to Java Interface (aka Javadapter)" href="javadapter.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="git.html" title="Git-Handling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="javadapter.html" title="Python to Java Interface (aka Javadapter)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="recovering-of-the-database">
+<h1>Recovering of the Database<a class="headerlink" href="#recovering-of-the-database" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="strategies">
+<h2>Strategies<a class="headerlink" href="#strategies" title="Permalink to this headline">¶</a></h2>
+<p>Currently, there are two strategies to re-generate the Database:</p>
+<dl class="docutils">
+<dt><strong>Reading all XML Files:</strong></dt>
+<dd><p class="first">With this method the whole archive is traversed like this:</p>
+<dl class="docutils">
+<dt>Iterate over all domains.</dt>
+<dd><dl class="first last docutils">
+<dt>Iterate over all branches of this domain (excluding <tt class="docutils literal"><span class="pre">empty</span></tt> branch)</dt>
+<dd><dl class="first last docutils">
+<dt>Iterate over all commits (excluding <tt class="docutils literal"><span class="pre">Init</span></tt> commit)</dt>
+<dd>Iterate over all XML Files in there and build metadata-dicts from them</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>From the generated metadata-list a new Database can be generated.</p>
+<p><em>Advantages:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Works always, unless the archive is not totally broken</li>
+<li>Also works for XML-Files that were modified somehow (also their baseattribs shouldn&#8217;t)</li>
+</ul>
+</div></blockquote>
+<p><em>Disadvantages:</em></p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>May not be fast enough.</li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+<p><strong>Using Cached .pickle files:</strong></p>
+<blockquote>
+<div><p>Instead of converting each XML costly to the internal representation, an object dump of the metadata-list
+is written to <tt class="docutils literal"><span class="pre">/archive-root/pickle_cache/</span></tt> on each crawl-run. If a recover is desired all of these
+<cite>pickled</cite> lists are joined, and the DB is regnerated.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Files are named like this:</span>
+<span class="c"># &lt;system-date-on-write&gt;_&lt;uuid&gt;.pickle</span>
+2012-06-15T22:10:29_7cc2292a-80a6-4fcf-98fc-376953b387ca.pickle
+2012-06-15T22:10:41_e2b1ebb2-1b13-4fb4-bd1c-7fe06aff2758.pickle
+2012-06-15T23:04:35_59dc7790-5f65-47af-99fe-099610099ea4.pickle
+2012-06-15T23:04:36_e58bf4c4-2639-4950-a788-6c84e1c4d1a6.pickle
+2012-06-15T23:04:51_360107b5-d946-4c66-95c8-0d6ceb7a8c8a.pickle
+...
+</pre></div>
+</div>
+<p><em>Advantages:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Much faster.</li>
+</ul>
+</div></blockquote>
+<p><em>Disadvantages:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Changes in the internal representation may break things</li>
+<li>If Base-Attributes of the XML Files are changed manually, they will not be found.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Actual functions to use:</strong></p>
+<dl class="function">
+<dt id="dbrecover.recover.rebuild">
+<tt class="descclassname">dbrecover.recover.</tt><tt class="descname">rebuild</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/recover.html#rebuild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.recover.rebuild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rebuilds the db either by using PickleDBRecover or XMLDBRecover</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dbrecover.recover.remove">
+<tt class="descclassname">dbrecover.recover.</tt><tt class="descname">remove</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/recover.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.recover.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes db</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dbrecover.repair.repair">
+<tt class="descclassname">dbrecover.repair.</tt><tt class="descname">repair</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/repair.html#repair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.repair.repair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Walks through domain hierarchy invoking repair() and clear_locks()</p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="dbrecover.xml_recover.XMLDBRecover">
+<em class="property">class </em><tt class="descclassname">dbrecover.xml_recover.</tt><tt class="descname">XMLDBRecover</tt><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover" title="Permalink to this definition">¶</a></dt>
+<dd><p>XMLDBRecover submodule class</p>
+<dl class="attribute">
+<dt id="dbrecover.xml_recover.XMLDBRecover.description">
+<tt class="descname">description</tt><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.description" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">module description</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dbrecover.xml_recover.XMLDBRecover.load">
+<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invokes threaded xml recovery</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="dbrecover.xml_recover.XMLDBRecover.recover_domain">
+<tt class="descname">recover_domain</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.recover_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.recover_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates through given domain trying to recover metadata</p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="dbrecover.pickle_recover.PickleDBRecover">
+<em class="property">class </em><tt class="descclassname">dbrecover.pickle_recover.</tt><tt class="descname">PickleDBRecover</tt><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recovers database from previously generated pickle files</p>
+<dl class="attribute">
+<dt id="dbrecover.pickle_recover.PickleDBRecover.description">
+<tt class="descname">description</tt><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.description" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">description</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dbrecover.pickle_recover.PickleDBRecover.load">
+<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads pickle files and regenerates metalist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">metalist object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dbrecover.pickle_recover.PickleDBRecover.save">
+<tt class="descname">save</tt><big>(</big><em>metalist</em><big>)</big><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps given metalist as pickle file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Recovering of the Database</a><ul>
+<li><a class="reference internal" href="#strategies">Strategies</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="javadapter.html"
+                        title="previous chapter">Python to Java Interface (aka Javadapter)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="git.html"
+                        title="next chapter">Git-Handling</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/recover.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="git.html" title="Git-Handling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="javadapter.html" title="Python to Java Interface (aka Javadapter)"
+             >previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
