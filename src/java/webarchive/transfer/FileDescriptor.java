@@ -26,7 +26,7 @@ public class FileDescriptor {
 		this.meta = meta;
 	}
 	public File getAbsolutePath() {
-		return file;
+		return file; //TODO real absolute path 
 	}
 	public void setFile(File file) {
 		this.file = file;

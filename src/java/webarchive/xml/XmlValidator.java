@@ -12,7 +12,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * 
  * @author ccwelich
  */
 //TODO tests
@@ -21,7 +21,7 @@ public class XmlValidator {
 	private final Schema schema;
 	private ErrorHandler err;
 
-	public XmlValidator(XmlConf conf, XmlErrorHandler err) throws SAXException {
+	public XmlValidator(XmlConf conf, ErrorHandler err) throws SAXException {
 		// preconditions
 		assert conf != null;
 		assert err != null;

@@ -47,7 +47,7 @@ public class TestXml {
 		System.out.println("validate");
 		
 		// start XmlEditor
-		XmlEditor edit = h.getEditor();
+		XmlEditor edit = h.newEditor();
 		// get data element and add some content
 		DataElement de = edit.createDataElement("data1");
 		Element sub = edit.createElement("subdata");
@@ -61,7 +61,7 @@ public class TestXml {
 		
 		// result will be printed in console...
 		
-//		XmlPrinter.printNodes("", h.getEditor().getDataElement("data1").getDataElement());
+//		XmlPrinter.printNodes("", h.newEditor().getDataElement("data1").getDataElement());
 //		h.addDataElement(de); // throws exception, since de element is already in XML
 		//		XmlPrinter.printNodes("", h.getDocument());
 

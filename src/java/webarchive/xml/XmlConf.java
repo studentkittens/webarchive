@@ -2,6 +2,8 @@ package webarchive.xml;
 
 import java.io.File;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
@@ -18,6 +20,8 @@ public class XmlConf {
 	private File schemaPath = new File("xml/file.xsd");
 	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
 	private final DocumentBuilderFactory documentBuilderFactory;
+	private ErrorHandler xmlErrorHandler;
+	private XmlValidator xmlValidator;
 
 	/**
 	 * @return the default DocumentBuilderFactory
@@ -29,7 +33,7 @@ public class XmlConf {
 	/**
 	 * create XmlConf with default values
 	 */
-	public XmlConf() {
+	public XmlConf() throws SAXException {
 		// init DocumentBuilderFactory
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(false);
@@ -37,6 +41,17 @@ public class XmlConf {
 		documentBuilderFactory.setIgnoringElementContentWhitespace(true);
 		documentBuilderFactory.setExpandEntityReferences(true);
 		documentBuilderFactory.setNamespaceAware(true);
+		// init workers
+		xmlErrorHandler = new XmlErrorHandler();
+		xmlValidator = new XmlValidator(this, xmlErrorHandler);
+	}
+
+	public ErrorHandler getXmlErrorHandler() {
+		return xmlErrorHandler;
+	}
+
+	public XmlValidator getXmlValidator() {
+		return xmlValidator;
 	}
 
 	/**

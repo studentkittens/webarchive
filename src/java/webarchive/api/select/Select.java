@@ -1,6 +1,9 @@
 package webarchive.api.select;
 //TODO tests
 
+import java.io.Serializable;
+
+
 /**
  * Abstract class for userdefined SELECT-statements. contains a list of minimal
  * where and orderBy Clauses.
@@ -11,7 +14,7 @@ package webarchive.api.select;
  * @param <Type> type to bind Select to. Type is the result which is returned by a select as a list.
  * @see webarchive.dbaccess.Select
  */
-public abstract class Select<Type> {
+public abstract class Select<Type> implements Serializable {
 
 	private String[] where;
 	private String[] orderBy;

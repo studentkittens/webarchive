@@ -1,12 +1,12 @@
 package webarchive.api;
 
-import webarchive.api.xml.XmlEditor;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
+import webarchive.api.xml.XmlEditor;
 //TODO implementation by Eddy
 
 /**
