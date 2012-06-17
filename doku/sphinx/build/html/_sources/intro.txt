@@ -15,7 +15,7 @@ Getting Started
 
   $ archive.py init /tmp         # Create a new Archive-Root
   $ cd /tmp/archive/             # cd to it, so it can find the config
-  $ archive.py crawl --start     # Start a crawl
+  $ archive.py crawler --start   # Start a crawl
   >>> stop
   >>> (Ctrl+D)
   $ ls -l
