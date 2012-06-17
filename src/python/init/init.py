@@ -29,7 +29,7 @@ def init_archive(init_path=os.getcwd()):
             os.mkdir(os.path.join(base_path, 'logs'))
             os.mkdir(os.path.join(base_path, 'pickle_cache'))
 
-            with open(os.path.join(base_path, 'archive.cfg'), 'w') as cfg_handle:
+            with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
                 cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
                     archive_path=base_path,
                     filter_path=config.get_default('general.filterpath'),

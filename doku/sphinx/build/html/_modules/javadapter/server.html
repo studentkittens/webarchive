@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="javadapter" href="../javadapter.html" /> 
+    <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,8 +39,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../javadapter.html" accesskey="U">javadapter</a> &raquo;</li> 
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -90,7 +89,7 @@
 <span class="c">###########################################################################</span>
 
 
-<div class="viewcode-block" id="ProtocolError"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ProtocolError">[docs]</a><span class="k">class</span> <span class="nc">ProtocolError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ProtocolError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;raise a &#39;ACK cause&#39;</span>
 
 <span class="sd">    Simple Exception that offers</span>
@@ -109,11 +108,11 @@
 <span class="c">###########################################################################</span>
 
 <span class="c"># The Lock that can be set via lock and unlock</span>
-<span class="c"># It is global for sake of simplicity - there may not be more than one</span></div>
+<span class="c"># It is global for sake of simplicity - there may not be more than one</span>
 <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
 
 
-<div class="viewcode-block" id="lock_domain"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.lock_domain">[docs]</a><span class="k">def</span> <span class="nf">lock_domain</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">lock_timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">lock_domain</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">lock_timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implementation for lock/try_lock, very common</span>
 <span class="sd">    and therefore in an own function</span>
@@ -141,8 +140,8 @@
         <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
 
-</div>
-<div class="viewcode-block" id="lock_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.lock_handler">[docs]</a><span class="k">def</span> <span class="nf">lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lock a domain and wait to a max. time</span>
 <span class="sd">    of 5 minutes, will return a timeout then</span>
@@ -154,8 +153,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">lock_domain</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-</div>
-<div class="viewcode-block" id="try_lock_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.try_lock_handler">[docs]</a><span class="k">def</span> <span class="nf">try_lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">try_lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lock a domain, but do not wait</span>
 
@@ -166,8 +165,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">lock_domain</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-</div>
-<div class="viewcode-block" id="unlock_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.unlock_handler">[docs]</a><span class="k">def</span> <span class="nf">unlock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">unlock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Unlock a previous lock</span>
 
@@ -186,8 +185,8 @@
             <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Unlocking failed.&#39;</span><span class="p">)</span>
         <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
 
-</div>
-<div class="viewcode-block" id="checkout_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.checkout_handler">[docs]</a><span class="k">def</span> <span class="nf">checkout_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">checkout_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checkout a certain branch (usually a commitTag or master)</span>
 
@@ -224,8 +223,8 @@
 
     <span class="k">return</span> <span class="n">domain_path</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 
-</div>
-<div class="viewcode-block" id="commit_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.commit_handler">[docs]</a><span class="k">def</span> <span class="nf">commit_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">commit_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make a commit on a certain domain:</span>
 
@@ -247,8 +246,8 @@
     <span class="k">if</span> <span class="n">rcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;commit returned {rc}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="n">rcode</span><span class="p">))</span>
 
-</div>
-<div class="viewcode-block" id="list_branches_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.list_branches_handler">[docs]</a><span class="k">def</span> <span class="nf">list_branches_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">list_branches_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    List all branches on a certain domain:</span>
 
@@ -266,8 +265,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Invalid Domain.&#39;</span><span class="p">)</span>
 
-</div>
-<div class="viewcode-block" id="list_commits_handler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.list_commits_handler">[docs]</a><span class="k">def</span> <span class="nf">list_commits_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">list_commits_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    List all commits on a certain domain and its current branch:</span>
 
@@ -293,7 +292,7 @@
 <span class="c"># command</span>
 <span class="c">#     =&gt; takes: how many arguments to take</span>
 <span class="c">#     =&gt; func: a handler that does something with the args</span>
-<span class="c">#              and return some bytebuffer</span></div>
+<span class="c">#              and return some bytebuffer</span>
 <span class="n">PROTOCOL</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;lock&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -330,14 +329,14 @@
 <span class="c">###########################################################################</span>
 
 
-<div class="viewcode-block" id="AdapterHandler"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.AdapterHandler">[docs]</a><span class="k">class</span> <span class="nc">AdapterHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">AdapterHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The RequestHandler class for the Javadapter</span>
 
 <span class="sd">    It is instantiated once per connection to the server, and must</span>
 <span class="sd">    override the handle() method to implement communication to the</span>
 <span class="sd">    client. It is never instantiated explicitely.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="AdapterHandler.serve_request"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.AdapterHandler.serve_request">[docs]</a>    <span class="k">def</span> <span class="nf">serve_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">serve_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle a certain command</span>
 
 <span class="sd">        Try to see a meaning in a command,</span>
@@ -368,8 +367,8 @@
             <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Unknown command: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cmd</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">response</span>
-</div>
-<div class="viewcode-block" id="AdapterHandler.handle"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.AdapterHandler.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implemented from RequestHandler</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -401,8 +400,8 @@
                 <span class="k">finally</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">send_data</span> <span class="o">+</span> <span class="n">b</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
 
-</div></div>
-<div class="viewcode-block" id="ThreadedTCPServer"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ThreadedTCPServer">[docs]</a><span class="k">class</span> <span class="nc">ThreadedTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">ThreadedTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A &#39;own&#39; socketserver, with ThreadingMixIn</span>
 
@@ -410,7 +409,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
 
-</div>
+
 <div class="viewcode-block" id="start"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.start">[docs]</a><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;javadapter.port&#39;</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Start the Javadapter server, and exit once done</span>
@@ -442,6 +441,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server_instance</span>
 
 <div class="viewcode-block" id="ServerShell.do_start"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_start">[docs]</a>    <span class="k">def</span> <span class="nf">do_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Start a server if not already active&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
         <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
@@ -449,9 +449,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="ServerShell.do_stop"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_stop">[docs]</a>    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Stop a running Server&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_status</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ServerShell.do_status"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_status">[docs]</a>    <span class="k">def</span> <span class="nf">do_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="s">&#39;Print current status of the Server&#39;</span>
@@ -529,8 +532,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../javadapter.html" >javadapter</a> &raquo;</li> 
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
