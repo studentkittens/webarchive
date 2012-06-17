@@ -18,9 +18,11 @@ Contents:
    config
    javadapter
    xml2metadata
+   intervalmanager
    filter
 
    wget
+   cleaner
    rsync
    recover
    git
