@@ -38,6 +38,20 @@ Additional Notes
 - Before stating the submodule common options may be set (e.g. *--loglevel*)
 - The submodules *javadapter* and *crawler* start a special shell
 - In order to locate the config you either have to pass it explicitly, or your current working directory is at the archive root.
+- URLs are stored in a file like this: 
+
+  .. code-block:: bash
+
+    # Comments go like this
+    www.0pointer.de
+    www.hack.org
+    blog.fefe.de
+    #www.stackoverflow.com
+    #www.blendpolis.de
+    #www.golem.de
+    #www.heise.de
+  
+  The path to this file is found in the config.
 
 
 Implementation

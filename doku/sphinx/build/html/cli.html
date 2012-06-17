@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>Commandlineinterface &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -84,12 +83,30 @@ Config Options:
 </div>
 <div class="section" id="additional-notes">
 <h2>Additional Notes<a class="headerlink" href="#additional-notes" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The Commandline interfaces relies on submodules like <em>crawler</em>, <em>config</em> ...</li>
-<li>Submodules may have own options</li>
-<li>Before stating the submodule common options may be set (e.g. <em>&#8211;loglevel</em>)</li>
-<li>The submodules <em>javadapter</em> and <em>crawler</em> start a special shell</li>
-<li>In order to locate the config you either have to pass it explicitly, or your current working directory is at the archive root.</li>
+<ul>
+<li><p class="first">The Commandline interfaces relies on submodules like <em>crawler</em>, <em>config</em> ...</p>
+</li>
+<li><p class="first">Submodules may have own options</p>
+</li>
+<li><p class="first">Before stating the submodule common options may be set (e.g. <em>&#8211;loglevel</em>)</p>
+</li>
+<li><p class="first">The submodules <em>javadapter</em> and <em>crawler</em> start a special shell</p>
+</li>
+<li><p class="first">In order to locate the config you either have to pass it explicitly, or your current working directory is at the archive root.</p>
+</li>
+<li><p class="first">URLs are stored in a file like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># Comments go like this</span>
+www.0pointer.de
+www.hack.org
+blog.fefe.de
+<span class="c">#www.stackoverflow.com</span>
+<span class="c">#www.blendpolis.de</span>
+<span class="c">#www.golem.de</span>
+<span class="c">#www.heise.de</span>
+</pre></div>
+</div>
+<p>The path to this file is found in the config.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="implementation">
