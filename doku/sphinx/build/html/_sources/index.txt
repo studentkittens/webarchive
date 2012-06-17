@@ -16,9 +16,11 @@ Contents:
 
    cli 
    javadapter
+   intervalmanager
    filter
 
    wget
+   cleaner
    rsync
    recover
    git

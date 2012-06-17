@@ -1,0 +1,1320 @@
+.TH "WEBARCHIV" "1" "June 16, 2012" "1.0" "Webarchiv"
+.SH NAME
+webarchiv \- Webarchiv Documentation
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.\" Man page generated from reStructuredText.
+.
+.sp
+Contents:
+.SH COMMANDLINEINTERFACE
+.SS Quick\-Reference
+.sp
+.nf
+.ft C
+Usage:
+  archive.py [\-\-loglevel=<severity>] init [<path>]
+  archive.py [\-\-loglevel=<severity>] crawler
+  archive.py [\-\-loglevel=<severity>] javadapter
+  archive.py [\-\-loglevel=<severity>] db (\-\-rebuild|\-\-remove)
+  archive.py [\-\-loglevel=<severity>] repair
+  archive.py config (\-\-get=<confurl>|\-\-set=<confurl><arg>)
+  archive.py \-h | \-\-help
+  archive.py \-\-version
+
+General Options:
+  \-h \-\-help                Show this screen.
+  \-\-version                Show version.
+  \-\-loglevel=<loglevel>    Set the loglevel to any of debug, info, warning, error, critical.
+
+DB Options:
+  \-\-rebuild                Rebuild Databse completely from XML Data.
+  \-\-remove                 Remove the Database completely.
+
+Config Options:
+  \-\-set=<confurl><value>   Set a Value in the config permanently.
+  \-\-get=<confurl>          Acquire a Value in the config by it\(aqs url.
+.ft P
+.fi
+.SS Additional Notes
+.INDENT 0.0
+.IP \(bu 2
+The Commandline interfaces relies on submodules like \fIcrawler\fP, \fIconfig\fP ...
+.IP \(bu 2
+Submodules may have own options
+.IP \(bu 2
+Before stating the submodule common options may be set (e.g. \fI\-\-loglevel\fP)
+.IP \(bu 2
+The submodules \fIjavadapter\fP and \fIcrawler\fP start a special shell
+.IP \(bu 2
+In order to locate the config you either have to pass it explicitly, or your current working directory is at the archive root.
+.UNINDENT
+.SS Implementation
+.INDENT 0.0
+.TP
+.B class cli.cmdparser.Cli
+Archive commandline intepreter
+.INDENT 7.0
+.TP
+.B cmd_loop(shell, i, cv)
+The cmdloop runs in a seperate thread.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_config()
+Invokes Config Handler operations
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_crawler()
+Starts and controls crawler commandline
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_db()
+Handle "db" submodule
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_init()
+Initializes archive paths
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_javadapter()
+Starts javadapter commandline
+.UNINDENT
+.INDENT 7.0
+.TP
+.B handle_repair()
+Invokes archive rapair tool
+.UNINDENT
+.UNINDENT
+.SH PYTHON TO JAVA INTERFACE (AKA JAVADAPTER)
+.SS Description
+.sp
+The Javadapter is a simple TCPServer that will listen by default on port \fB42421\fP on \fBlocalhost\fP.
+One may connect to this server and send one of the commands below.
+On success the server will send a reponse that is terminated with \fBOK\fP, otherwise
+\fBACK Some Error Description.\fP is send.
+.sp
+The Server may be started via:
+.sp
+.nf
+.ft C
+$ archive.py javadapter \-\-start
+# This will enter a special shell.
+# Use \(gahelp\(ga to see what you can do there
+.ft P
+.fi
+.SS List of commands
+.INDENT 0.0
+.TP
+.B \fBlock\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+Lock a domain and wait to a maximal time
+of 5 minutes, will return a timeout then
+.TP
+.B \fIusage:\fP
+\fBlock [domain]\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+Returns nothing
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ lock www.heise.de
+OK
+$ lock www.heise.de
+(... will timeout after 5 mins ...)
+ACK Timeout occured.
+$ unlock www.heise.de
+OK
+$ lock www.heise.de
+OK
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBtry_lock\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+As \fBlock\fP, but return immediately with
+\fBACK Already locked.\fP if already locked previously.
+.TP
+.B \fIusage:\fP
+\fBtry_lock [domain]\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+Returns nothing
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ try_lock www.heise.de
+OK
+$ try_lock www.heise.de
+ACK Already locked.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBunlock\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+Unlock a previous lock
+.TP
+.B \fIusage:\fP
+\fBunlock [domain]\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+Returns nothing
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ unlock www.heise.de
+OK
+$ unlock www.youporn.com
+ACK Invalid Domain.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBcheckout\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+Checkout a certain branch (usually a commitTag or \fBmaster\fP)
+You do not need to manually set a lock for this.
+.TP
+.B \fIusage:\fP
+\fBcheckout [domain] {branch_name}\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+branch_name the entity to checkout, if omitted only
+the path is returned (if valid) and no git work is done.
+.IP \(bu 2
+Returns: The Path to the checkout\(aqd domain
+.UNINDENT
+.TP
+.B \fIwarning:\fP
+\fBNote:\fP You should always checkout \fBmaster\fP when done!
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ checkout www.hack.org 2012H06H15T19C08C15
+/tmp/archive/content/www.hack.org
+OK
+$ checkout www.youporn.com
+ACK Invalid Domain.
+$ checkout www.hack.org no_branch_name
+ACK checkout returned 1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBcommit\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+Make a commit on a certain domain.
+.TP
+.B \fIusage:\fP
+\fBcommit [domain] {message}\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+message is the commit message (optional, \fBedit\fP by default)
+.IP \(bu 2
+Returns nothing
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ commit www.hack.org HelloWorld
+ACK commit returned 1
+# Uh\-Oh, nothing to commit \- add some content manually
+user@arc $ touch /tmp/archive/content/www.hack.org/new_file
+# Now commiting works:
+$ commit www.hack.org
+OK
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBlist_commits:\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+List all commits on a certain domain and its current branch.
+.TP
+.B \fIusage:\fP
+\fBlist_commits [domain]\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+Returns a newline seperated list of commithashes
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ list_commits www.hack.org
+6309b01f5b04b4e60c19f5dd147f935f40d94840
+942f9a1da172592228d22ca638dd3f5ae583d285
+OK
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBlist_branches:\fP
+.INDENT 7.0
+.TP
+.B \fIdescription:\fP
+List all branches on a certain domain.
+.TP
+.B \fIusage:\fP
+\fBlist_branches [domain]\fP
+.INDENT 7.0
+.IP \(bu 2
+domain is e.g. www.heise.de
+.IP \(bu 2
+Returns a newline seperated list of branchnames
+.UNINDENT
+.TP
+.B \fIexamples:\fP
+.sp
+.nf
+.ft C
+$ list_branches www.hack.org
+2012H06H13T23C02C18
+2012H06H15T19C07C46
+2012H06H15T19C08C15
+2012H06H15T21C57C35
+2012H06H15T21C57C43
+# (..snip..)
+OK
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Implementation
+.sp
+\fBActual function to start the server:\fP
+.INDENT 0.0
+.TP
+.B javadapter.server.start(host=\(aqlocalhost\(aq, port=42421)
+Start the Javadapter server, and exit once done
+.INDENT 7.0
+.TP
+.B Host 
+the host to start the server on (does anythinh but localhost work?)
+.TP
+.B Port 
+the port on which the server listens on
+.TP
+.B Returns
+a server, on which shutdown() can be called
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.sp
+\fBConvienience class to show a servershell:\fP
+.INDENT 0.0
+.TP
+.B class javadapter.server.ServerShell(host=\(aqlocalhost\(aq, port=\(aq42421\(aq, server_instance=None)
+Command shell to manage javadapter
+.INDENT 7.0
+.TP
+.B do_EOF(arg)
+Shortcut for quit (Press CTRL+D)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B do_quit(arg)
+Quits the server
+.UNINDENT
+.INDENT 7.0
+.TP
+.B do_start(arg)
+Start a server if not already active
+.UNINDENT
+.INDENT 7.0
+.TP
+.B do_status(arg)
+Print current status of the Server
+.UNINDENT
+.INDENT 7.0
+.TP
+.B do_stop(arg)
+Stop a running Server
+.UNINDENT
+.UNINDENT
+.SH FILTERING CRAWLED CONTENT
+.SS Overview
+.sp
+One may filter the crawled data by Python\-source files that are placed inside \fB/archive\-root/filter/\fP.
+These are called \fIFilters\fP and are executed once for each file that is supposed to be synched to ther archive.
+Filtering is done after collecting all metadata (except the commitTag), so \fIFilters\fP may take
+advantage of e.g. the mimeType and other stuff. An example filter may look like this:
+.sp
+.nf
+.ft C
+"""
+Filter module to demonstrate filter subsystem
+Example: Filtering *.png files by mime type
+"""
+__author__ = \(aqSam Rockwell\(aq
+
+import re
+if re.match(\(aq.*/png\(aq, filter_input[\(aqmimeType\(aq]):
+    filter_result = False
+.ft P
+.fi
+.sp
+There are two global variables defined in the \fIFilters\fP (they are not in Standard\-Python, that\(aqs why you cant execute them directly!):
+.INDENT 0.0
+.TP
+.B \fBfilter_input:\fP
+Input Variable. A dictionary with all metadata collected at this point.
+You may safely modify it \- it\(aqs just a copy.
+.TP
+.B \fBfilter_result:\fP
+Out Variable. This will be read after executing the filter.
+If the var was set to \fBFalse\fP the file will be deleted,
+and no other filters will be called. By default this is on \fBTrue\fP.
+.UNINDENT
+.SS Implementation
+.sp
+\fBInternal usage of the Filtersystem:\fP
+.INDENT 0.0
+.TP
+.B class crawler.filter.FilterSystem(plugin_path=None)
+Filtersystem submodule invoked by a crawljob
+.INDENT 7.0
+.TP
+.B check(meta_dict)
+Perform the actual filtering
+.sp
+Iterate over all loaded filters, and exec() them
+.INDENT 7.0
+.TP
+.B Meta_dict 
+the dictionary that will be passed to the filter
+as a \(aqfilter_input\(aq global var
+.TP
+.B Returns
+True if file should be kept, or False if it should be deleted
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B clear()
+Clears loaded filters
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load(plugin_path=None)
+Load a list of *.py files from a directory
+.sp
+The .py files are read in and stored in\-memory
+.INDENT 7.0
+.TP
+.B Plugin_path 
+A path to a directory with .py files
+or None to read the value from the cfg
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH CRAWLING PROGRAM (WGET)
+.SS Overview
+.sp
+Wget is used with the following params:
+.sp
+.nf
+.ft C
+\(aqwget "{user_agent}" \e
+      \-e robots={rob} \e
+      \-\-recursive \e
+      \-l {depth} \e
+      \-\-exclude\-domains "{ex_domains}" \e
+      {custom_parms} \e
+      \-P {folder} \e
+      {url}\(aq
+.ft P
+.fi
+.sp
+In \fBcuston_parms\fP custom options from the config are inserted.
+They may replace options stated \fBbefore\fP. Use at your own risk.
+.sp
+For more information see \fIwget(1)\fP.
+.SS Implementation
+.INDENT 0.0
+.TP
+.B class crawler.wget.Wget(url, tmp_folder)
+A wget wrapper submodule
+.INDENT 7.0
+.TP
+.B poll()
+Polls if process is still running
+:returns: boolean flag if still running or not
+.UNINDENT
+.INDENT 7.0
+.TP
+.B start()
+Starts the wget crawl process
+:returns: wget process exit code
+.UNINDENT
+.INDENT 7.0
+.TP
+.B stop()
+Kills a still running wget process
+.UNINDENT
+.UNINDENT
+.SH SYNCHRONISATION BETWEEN TEMP AND ARCHIVE
+.SS Overview
+.sp
+Rsync is used with the following parameters:
+.sp
+.nf
+.ft C
+\(aqrsync \-acP <source> <dest>\(aq
+.ft P
+.fi
+.sp
+For more information see \fIrsync(1)\fP.
+.SS Implementation
+.INDENT 0.0
+.TP
+.B class crawler.rsync.Rsync(src_path, dest_path)
+.INDENT 7.0
+.TP
+.B start_sync()
+Starts the synchronization process,
+this function will block until finished
+.UNINDENT
+.UNINDENT
+.SH RECOVERING OF THE DATABASE
+.SS Strategies
+.sp
+Currently, there are two strategies to re\-generate the Database:
+.INDENT 0.0
+.TP
+.B \fBReading all XML Files:\fP
+With this method the whole archive is traversed like this:
+.INDENT 7.0
+.TP
+.B Iterate over all domains.
+.INDENT 7.0
+.TP
+.B Iterate over all branches of this domain (excluding \fBempty\fP branch)
+.INDENT 7.0
+.TP
+.B Iterate over all commits (excluding \fBInit\fP commit)
+Iterate over all XML Files in there and build metadata\-dicts from them
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+From the generated metadata\-list a new Database can be generated.
+.sp
+\fIAdvantages:\fP
+.INDENT 7.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Works always, unless the archive is not totally broken
+.IP \(bu 2
+Also works for XML\-Files that were modified somehow (also their baseattribs shouldn\(aqt)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fIDisadvantages:\fP
+.INDENT 7.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+May not be fast enough.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fBUsing Cached .pickle files:\fP
+.INDENT 0.0
+.INDENT 3.5
+Instead of converting each XML costly to the internal representation, an object dump of the metadata\-list
+is written to \fB/archive\-root/pickle_cache/\fP on each crawl\-run. If a recover is desired all of these
+\fIpickled\fP lists are joined, and the DB is regnerated.
+.sp
+.nf
+.ft C
+# Files are named like this:
+# <system\-date\-on\-write>_<uuid>.pickle
+2012\-06\-15T22:10:29_7cc2292a\-80a6\-4fcf\-98fc\-376953b387ca.pickle
+2012\-06\-15T22:10:41_e2b1ebb2\-1b13\-4fb4\-bd1c\-7fe06aff2758.pickle
+2012\-06\-15T23:04:35_59dc7790\-5f65\-47af\-99fe\-099610099ea4.pickle
+2012\-06\-15T23:04:36_e58bf4c4\-2639\-4950\-a788\-6c84e1c4d1a6.pickle
+2012\-06\-15T23:04:51_360107b5\-d946\-4c66\-95c8\-0d6ceb7a8c8a.pickle
+\&...
+.ft P
+.fi
+.sp
+\fIAdvantages:\fP
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Much faster.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fIDisadvantages:\fP
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP \(bu 2
+Changes in the internal representation may break things
+.IP \(bu 2
+If Base\-Attributes of the XML Files are changed manually, they will not be found.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Implementation
+.sp
+\fBActual functions to use:\fP
+.INDENT 0.0
+.TP
+.B dbrecover.recover.rebuild()
+Rebuilds the db either by using PickleDBRecover or XMLDBRecover
+.UNINDENT
+.INDENT 0.0
+.TP
+.B dbrecover.recover.remove()
+Removes db
+.UNINDENT
+.INDENT 0.0
+.TP
+.B dbrecover.repair.repair()
+Walks through domain hierarchy invoking repair() and clear_locks()
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B class dbrecover.xml_recover.XMLDBRecover
+XMLDBRecover submodule class
+.INDENT 7.0
+.TP
+.B description
+.INDENT 7.0
+.TP
+.B Returns
+module description
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load()
+Invokes threaded xml recovery
+.UNINDENT
+.INDENT 7.0
+.TP
+.B recover_domain(domain)
+Iterates through given domain trying to recover metadata
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B class dbrecover.pickle_recover.PickleDBRecover
+Recovers database from previously generated pickle files
+.INDENT 7.0
+.TP
+.B description
+.INDENT 7.0
+.TP
+.B Returns
+description
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load()
+Loads pickle files and regenerates metalist
+.INDENT 7.0
+.TP
+.B Returns
+metalist object
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B save(metalist)
+Dumps given metalist as pickle file
+.UNINDENT
+.UNINDENT
+.SH GIT-HANDLING
+.SS Overview
+.sp
+\fBInitialization:\fP
+.sp
+.nf
+.ft C
+$ git init
+$ git checkout \-b empty
+# At least one commit is needed for a valid branch
+$ echo \(aqThis is Empty\(aq > EMPTY
+$ git add EMPTY
+$ git commit \-a \-m \(aqInit\(aq
+# master will be used to track
+# the most recent branch
+.ft P
+.fi
+.sp
+\fBSynchronization:\fP
+.sp
+.nf
+.ft C
+\&... lock ...
+# Go back to \(aqempty\(aq (otherwise the new branch inherits a bad history)
+$ git checkout empty
+# Neuer branch mit ehem. Tagnamen
+$ git checkout \-b 24052012T1232
+\&... rsync ...
+$ git add .
+$ git commit \-am \(aqSeite xyz.com wurde gekrault\(aq
+# Make \(aqmaster\(aq identical to the most recent branch:
+$ git branch \-d master
+$ git checkout \-b master
+\&... unlock ...
+.ft P
+.fi
+.sp
+\fBReading/Writing on most recent data:\fP
+.sp
+.nf
+.ft C
+# No git\-work required
+\&... lock ...
+\&... read ...
+\&... unlock ...
+.ft P
+.fi
+.sp
+\fBReading/Writing from/in old checkouts:\fP
+.sp
+.nf
+.ft C
+\&... lock ...
+# Use \-f to overwrite unallowed data
+$ git checkout \-f old_date
+\&... read / write ...
+# In case of writing:
+$ git add .
+$ git commit \-am \(aqEdited old Kraul\(aq
+# HEAD of the new branch points to the new commit
+$ git checkout master
+\&... unlock ...
+.ft P
+.fi
+.sp
+\fBRough schema as ASCII\-Art:\fP
+.sp
+.nf
+.ft C
+          \-\- Kraul1 \-> edit <\- branch \(aq03052012T1232\(aq
+        /
+Init \-\- \-\-\-\- Kraul2 <\- branch \(aq15052012T1232\(aq
+|       \e
+|         \-\- Kraul3 <\- branch \(aq24052012T1232\(aq <\- branch \(aqmaster\(aq
+|
+|
+\e\-> branch \(aqempty\(aq
+.ft P
+.fi
+.sp
+\fBPreviously, with the \(ga\(gatag\(ga\(ga approach: (outdated)\fP
+.sp
+.nf
+.ft C
+Kraul1 \-> Kraul2 \-> Kraul3 \-> Kraul4 <\- branch \(aqmaster\(aq
+|         |         |         |
+|         |         |          \e
+|         |         \e            \-\- Tag 04
+|         \e           \-\- Tag 03
+\e           \-\- Tag 02
+  \-\- Tag 01
+.ft P
+.fi
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.INDENT 0.0
+.TP
+.B \fBAdvantages:\fP
+.INDENT 7.0
+.IP \(bu 2
+Old branches are editable
+.IP \(bu 2
+\fICheck\-If\-Current\fP not needded
+.IP \(bu 2
+For some strange reason: Less Disk Usage
+.UNINDENT
+.TP
+.B \fBDisadvantages:\fP
+.INDENT 7.0
+.IP \(bu 2
+\fBcheckout\fP may be slower.
+.IP \(bu 2
+Traversing over all branches may be harder \- but possible.
+.UNINDENT
+.UNINDENT
+.SS Implementation
+.sp
+Wrapper for Git
+.sp
+This is highly simplified, and may be replaced
+by a faster, native implementation using Dunwhich.
+But that\(aqs not on the plan due our limited time.
+.sp
+Git commands (init e.g.) are tailored for use
+in this archive, less for general use.
+.INDENT 0.0
+.TP
+.B class crawler.git.Git(domain)
+A (overly\-simple) Wrapper for the git binary
+.INDENT 7.0
+.TP
+.B branch(branch_name=\(aqempty\(aq)
+create a new named branch
+.INDENT 7.0
+.TP
+.B Branch_name 
+the name of the new branch, may not exist yet
+.TP
+.B Returns
+0 on success, another rcode on failure
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B checkout(target=\(aqmaster\(aq)
+checkout a certain point (tag, branch or commit)
+.INDENT 7.0
+.TP
+.B Target 
+the target to visit
+.TP
+.B Returns
+0 on success, another rcode on failure
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B commit(message=\(aqedit\(aq)
+commit any changes made
+.sp
+git add . and git commit \-am <message> is done
+.INDENT 7.0
+.TP
+.B Message 
+The commit message
+.TP
+.B Returns
+0 on success, another rcode on failure
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod convert_branch_name(date_string)
+Convert a datestring suitably to a branch name
+.sp
+Git does not allow special characters such as : or \-
+in branchnames for whatever reason
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdate_string\fP \-\- the string to convert
+.TP
+.B Returns
+the new, converted string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B domain
+Return the domain, to which this wrapper belongs
+.UNINDENT
+.INDENT 7.0
+.TP
+.B init()
+Create a new archive at specified domain path
+.sp
+The target directory does not need to exit yet
+.INDENT 7.0
+.TP
+.B Returns
+0 on success, another rcode on failure
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B list_branches()
+List all branches in this repo, which conform to the \(aqdate\(aq\-regex.
+.sp
+This means, Empty and master branch are not mentioned. If you want
+to checkout those, just checkout \(aqempty\(aq or \(aqmaster\(aq
+.INDENT 7.0
+.TP
+.B Returns
+a list of branchestrings
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B list_commits()
+List all commits in this repo and branch
+.INDENT 7.0
+.TP
+.B Returns
+a list of commithashestrings
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B recreate_master()
+A very special helper.
+.sp
+It deletes the current master branch,
+and recreates it. So, the master always points
+to the most recently created branch
+.UNINDENT
+.UNINDENT
+.SH DATABASE GENERATION
+.SS Overview
+.sp
+On the very end of every run of the crawler an update is done on the database, by
+iterating over all data in the internal metadata\-list and builiding SQL Statements from this.
+.sp
+Insertion, for every:
+.INDENT 0.0
+.IP 1. 3
+... domain a new row is inserted to the \fIdomain\fP table. (Already existent domains are ignored)
+.IP 2. 3
+... mimeType a new row is inserted to the \fImimeType\fP table.
+.IP 3. 3
+... url and path a new row is inserted to the \fImetaData\fP table.
+.IP 4. 3
+... commit a new row is inserted to the \fIcommitTag\fP table, with a reference to the corresponding domain.
+.IP 5. 3
+... new file committed to the archive a new row is inserted into the \fIhistory\fP table.
+.UNINDENT
+.sp
+If a row with this data already exists it is ignored.
+.SS Implementation
+.sp
+For Peformance\-reasons only very simple insert\-statements are used in combination
+with as simple select statements, instead of insert\-statements with sub\-selects.
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.sp
+DBGenerator is capable of generating an sqlite database
+from a list of metadictionaries.
+.INDENT 0.0
+.TP
+.B class crawler.dbgen.DBGenerator(meta_list=None)
+DBGenerator module
+.INDENT 7.0
+.TP
+.B batch()
+Start db creating procedure
+.INDENT 7.0
+.TP
+.B Returns
+a truthy value on success
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B close()
+Close connection and commit.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B execute_statement(source_name, arglist=None)
+Exececute a previously loaded statement by name
+.INDENT 7.0
+.TP
+.B Source_name 
+Sourcename to execute (e.g. \(aqcreate\(aq)
+.TP
+.B Arglist 
+You may pass an additional list of variable elements
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_history()
+Fill history table
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_mdata_ctag()
+Fill metadata and committag table
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_mime_domain()
+Fill mimeType and domain table
+.UNINDENT
+.INDENT 7.0
+.TP
+.B load_statements()
+(Re\-)Load Sql Files from Disk
+.sp
+This is already called in init
+.INDENT 7.0
+.TP
+.B Returns
+a dictionary with statements, indexed by name (e.g. \(aqcreate\(aq)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B select(table, *columns)
+Internal helper for collecting data
+.INDENT 7.0
+.TP
+.B Table 
+Table on which a SELECT shall be performed
+.TP
+.B Columns 
+a list of columns to select
+.TP
+.B Returns
+A dictionary of column[0]: column[1:]
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH UTIL FUNCTIONS (INTERNAL USE ONLY)
+.sp
+\fBFS Mutexes:\fP
+.INDENT 0.0
+.TP
+.B class util.filelock.FileLock(file_name, folder=\(aq/home/christoph/devf/webarchive/doku/sphinx\(aq, timeout=10, delay=0.05, destroy=True)
+A file locking mechanism that has context\-manager support so
+you can use it in a with statement. This should be relatively cross
+compatible as it doesn\(aqt rely on msvcrt or fcntl for the locking.
+.INDENT 7.0
+.TP
+.B acquire()
+Acquire the lock, if possible. If the lock is in use, it check again
+every \fIwait\fP seconds. It does this until it either gets the lock or
+exceeds \fItimeout\fP number of seconds, in which case it throws
+an exception.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B release()
+Get rid of the lock by deleting the lockfile.
+When working in a \fIwith\fP statement, this gets automatically
+called at the end.
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.sp
+\fBFile Handling:\fP
+.sp
+Helper module for url.txt
+.INDENT 0.0
+.TP
+.B util.files.unique_items_from_file(path)
+Creates a unique set with urls from a given file
+commented urls \(aq#\(aq are ignored
+.INDENT 7.0
+.TP
+.B Path 
+path to url list file
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.sp
+\fBOften used paths:\fP
+.sp
+Path helper module
+.INDENT 0.0
+.TP
+.B util.paths.get_archive_root()
+.INDENT 7.0
+.TP
+.B Returns
+archive root path
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.paths.get_content_root()
+.INDENT 7.0
+.TP
+.B Returns
+\(aq{archive_root}/content/\(aq path
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.paths.get_dbpath()
+.INDENT 7.0
+.TP
+.B Returns
+db path
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.paths.get_domain_path(domain)
+Creates domain path from archive path an given domain
+.INDENT 7.0
+.TP
+.B Domain 
+domain to which you want to get a path
+.TP
+.B Returns
+domain path as string
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.paths.get_log_dir()
+.INDENT 7.0
+.TP
+.B Returns
+log dir path
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.paths.get_temp_root()
+.INDENT 7.0
+.TP
+.B Returns
+temp dir path
+.UNINDENT
+.UNINDENT
+
+.sp
+.ce
+----
+
+.ce 0
+.sp
+.sp
+\fBOften used Time\-Helpers:\fP
+.sp
+Time helper module
+.INDENT 0.0
+.TP
+.B util.times.get_ctime(file_path)
+gets ISO 8601 formated timestamp (create time) of a given file
+.INDENT 7.0
+.TP
+.B File_path 
+file of which you want to get ctime
+.TP
+.B Returns
+ISO 8601 formated timestamp as string
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.times.get_localtime_sec()
+.INDENT 7.0
+.TP
+.B Returns
+localtime in sec from the epoch
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.times.get_sys_time()
+localtime as ISO 8601 timestamp
+:returns: ISO 8601 formated timestamp as string
+.UNINDENT
+.INDENT 0.0
+.TP
+.B util.times.sec_to_timestamp(form, seconds)
+Converts seconds to a timestamp defined by form
+.INDENT 7.0
+.TP
+.B Form 
+format for timestamp
+.TP
+.B Seconds 
+seconds to convert
+.TP
+.B Returns
+time as formatted string
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fIgenindex\fP
+.IP \(bu 2
+\fImodindex\fP
+.IP \(bu 2
+\fIsearch\fP
+.UNINDENT
+.SH AUTHOR
+Christopher Pahl, Christoph Piechula
+.SH COPYRIGHT
+2012, Christopher Pahl, Christoph Piechula
+.\" Generated by docutils manpage writer.
+.
