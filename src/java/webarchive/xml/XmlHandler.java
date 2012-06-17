@@ -70,6 +70,10 @@ public class XmlHandler {
 		
 	}
 
+	public XmlIOHandler getIoHandler() {
+		return ioHandler;
+	}
+
 	public final void buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
 		document = ioHandler.buildDocument();

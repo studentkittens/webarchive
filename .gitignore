@@ -3,6 +3,7 @@ build/*
 nbproject/*
 javadoc/*
 *.doctree
+test/xml/example.xml
 
 #-- vim files
 *.vim

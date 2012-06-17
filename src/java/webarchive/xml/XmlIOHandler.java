@@ -23,18 +23,22 @@ public class XmlIOHandler {
 	private final File file;
 	private Transformer transformer;
 	private StreamResult streamResult;
+	private boolean debug;
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
 
 	XmlIOHandler(XmlConf conf, FileDescriptor xmlPath) throws
 		TransformerConfigurationException {
 		assert conf != null;
 		assert xmlPath != null;
 		this.conf = conf;
-		this.file = xmlPath.getAbsolutePath(); 
+		this.file = xmlPath.getAbsolutePath();
 		transformer = transformerFactory.newTransformer();
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(
-			"{http://xml.apache.org/xslt}indent-amount", "2");
+		transformer.setOutputProperty(OutputKeys.INDENT, "no");
+
 		streamResult = new StreamResult(file);
 	}
 
@@ -50,10 +54,14 @@ public class XmlIOHandler {
 
 	public void write(Document document) throws TransformerException {
 		//TODO lock
+		System.out.println("XmlIOHandler::write transformer props = " + transformer.
+			getOutputProperties());
 		DOMSource source = new DOMSource(document);
+		if (debug) {
+			streamResult = new StreamResult(System.out);
+		}
 		transformer.transform(source, streamResult);
 		//TODO unlock
 
 	}
 }
-
