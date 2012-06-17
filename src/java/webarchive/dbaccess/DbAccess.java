@@ -2,7 +2,6 @@ package webarchive.dbaccess;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-//TODO Tests
 
 /**
  * DbAccess Interface provides a JDBC access to a database.

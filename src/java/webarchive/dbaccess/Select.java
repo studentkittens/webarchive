@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-//TODO Tests
 
 /**
  * Generic class to select data from db and map it java data-objects.
@@ -31,7 +30,7 @@ public abstract class Select<Type> {
 	 * @throws SQLException
 	 */
 	protected abstract Type fromResultSet(ResultSet rs, Object arg) throws
-		SQLException;
+		Exception;
 
 	/**
 	 * return List of type
@@ -42,7 +41,7 @@ public abstract class Select<Type> {
 	 * @throws SQLException
 	 */
 	protected List<Type> executeSelect(String selectStatement, Object arg) throws
-		SQLException {
+		Exception {
 		Connection connection = null;
 		List<Type> list = new LinkedList<>();
 		try {
@@ -78,5 +77,5 @@ public abstract class Select<Type> {
 		}
 	}
 
-	abstract List<Type> select(webarchive.api.select.Select<Type> select) throws SQLException;
+	abstract List<Type> select(webarchive.api.select.Select<Type> select) throws Exception;
 }

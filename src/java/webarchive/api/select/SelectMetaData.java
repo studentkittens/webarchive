@@ -1,5 +1,4 @@
 package webarchive.api.select;
-//TODO tests
 
 import webarchive.api.model.MetaData;
 

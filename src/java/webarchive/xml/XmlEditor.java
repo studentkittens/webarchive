@@ -1,5 +1,6 @@
 package webarchive.xml;
 
+import java.io.Serializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -16,7 +17,7 @@ import webarchive.transfer.Message;
  */
 //TODO finish implementation
 //TODO tests
-public class XmlEditor implements webarchive.api.xml.XmlEditor {
+public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
 
 	private Document document;
