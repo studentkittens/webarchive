@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>crawler.crawljob &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for crawler.crawljob</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Crawljob module, encapsulated &quot;crawling thread&quot; which is managed by</span>
+<span class="sd">the Crawl Manager</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christoph Piechula, Christopher Pahl&#39;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">crawler.wget</span> <span class="kn">as</span> <span class="nn">wget</span>
+<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
+<span class="kn">import</span> <span class="nn">crawler.cleaner</span> <span class="kn">as</span> <span class="nn">cleaner</span>
+<span class="kn">import</span> <span class="nn">crawler.xmlgen</span> <span class="kn">as</span> <span class="nn">xmlgen</span>
+<span class="kn">import</span> <span class="nn">crawler.rsync</span> <span class="kn">as</span> <span class="nn">rsync</span>
+<span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">import</span> <span class="nn">crawler.git</span> <span class="kn">as</span> <span class="nn">git</span>
+<span class="kn">import</span> <span class="nn">crawler.exceptions</span>
+<span class="kn">import</span> <span class="nn">crawler.dbgen</span>
+
+<span class="kn">from</span> <span class="nn">dbrecover.pickle_recover</span> <span class="kn">import</span> <span class="n">PickleDBRecover</span>
+
+
+<div class="viewcode-block" id="CrawlJob"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob">[docs]</a><span class="k">class</span> <span class="nc">CrawlJob</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CrawlJob Process that starts with crawling</span>
+<span class="sd">    and ends with db commit.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">get_temp_root</span><span class="p">(),</span> <span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ident</span> <span class="o">=</span> <span class="n">ident</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shutdown</span> <span class="o">=</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="CrawlJob.shutdown"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shutdown flag for &#39;hard&#39;-way shutdown</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shutdown</span> <span class="o">=</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.run"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the Crawljob procedure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Crawling&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_crawl</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Cleaning&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_clean</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Gen XML&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_xml_gen</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Rsyncing&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_sync</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Gen DB&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_dbgen</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Caching metalist&#39;</span><span class="p">)</span>
+            <span class="n">rec</span> <span class="o">=</span> <span class="n">PickleDBRecover</span><span class="p">()</span>
+            <span class="n">rec</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;--&gt; Done&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">crawler</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ShutdownException</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Job #{cid} ({curl}) stopped.&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__ident</span><span class="p">,</span> <span class="n">curl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.start_crawl"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_crawl">[docs]</a>    <span class="k">def</span> <span class="nf">start_crawl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the wget module to download specific website</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wget_proc</span> <span class="o">=</span> <span class="n">wget</span><span class="o">.</span><span class="n">Wget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">))</span>
+        <span class="n">wget_proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c"># Check in a polling loop for the termination</span>
+        <span class="c"># of wget - Or shutdown ealry if desired</span>
+        <span class="k">while</span> <span class="n">wget_proc</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+            <span class="c"># shutdown() was called</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shutdown</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Stopping wget&#39;</span><span class="p">)</span>
+                <span class="n">wget_proc</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="k">raise</span> <span class="n">crawler</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ShutdownException</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.start_clean"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_clean">[docs]</a>    <span class="k">def</span> <span class="nf">start_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the cleaning procedure which kills empty files, dirs</span>
+<span class="sd">        and restructures the complete dir hierarchy downloaded by a crawljob</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cleaner_proc</span> <span class="o">=</span> <span class="n">cleaner</span><span class="o">.</span><span class="n">Cleaner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">)</span>
+        <span class="n">cleaner_proc</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
+        <span class="n">cleaner_proc</span><span class="o">.</span><span class="n">restructure</span><span class="p">()</span>
+        <span class="n">cleaner_proc</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span> <span class="o">=</span> <span class="n">cleaner_proc</span><span class="o">.</span><span class="n">meta_list</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.start_xml_gen"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_xml_gen">[docs]</a>    <span class="k">def</span> <span class="nf">start_xml_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dumps &#39;in-memory&#39; metadata list to xml files on disk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xml_proc</span> <span class="o">=</span> <span class="n">xmlgen</span><span class="o">.</span><span class="n">XmlGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">)</span>
+        <span class="n">xml_proc</span><span class="o">.</span><span class="n">dump_all</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.start_sync"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_sync">[docs]</a>    <span class="k">def</span> <span class="nf">start_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts rsync procedure (rsync submodule) to mirror temporaray source</span>
+<span class="sd">        to destination -&gt; content archive path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">content_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;content&#39;</span><span class="p">)</span>
+        <span class="n">itemlist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="n">itemlist</span><span class="p">:</span>
+            <span class="n">domain_path</span> <span class="o">=</span> <span class="n">paths</span><span class="o">.</span><span class="n">get_domain_path</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+            <span class="n">fsmutex</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">content_path</span><span class="p">)</span>
+            <span class="n">fsmutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Creating directory: &#39;</span> <span class="o">+</span> <span class="n">domain_path</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">domain_path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="c"># This is expected</span>
+                <span class="k">pass</span>
+
+            <span class="n">git_proc</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Git</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+            <span class="n">git_proc</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+            <span class="n">git_proc</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s">&#39;empty&#39;</span><span class="p">)</span>
+            <span class="n">git_proc</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;commitTime&#39;</span><span class="p">])</span>
+
+            <span class="n">rsync</span><span class="o">.</span><span class="n">Rsync</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span> <span class="n">domain</span><span class="p">),</span> <span class="n">content_path</span><span class="p">)</span><span class="o">.</span><span class="n">start_sync</span><span class="p">()</span>
+
+            <span class="n">git_proc</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="s">&#39;Site {domain_name} was crawled.&#39;</span>
+                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain_name</span><span class="o">=</span><span class="n">domain</span><span class="p">))</span>
+            <span class="n">git_proc</span><span class="o">.</span><span class="n">recreate_master</span><span class="p">()</span>
+            <span class="n">fsmutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+<span class="c"># TODO: Lock should be released after db gen not before?</span>
+<span class="c">#       crawl a sync -&gt; lock release -&gt; there is time span -&gt; crawl a db gen.</span>
+<span class="c">#       its possible that crawl b checks in and commits db</span>
+<span class="c">#       within this time span, beforce crawl a db gen is started -&gt; BAAAM ... invalid db structure?</span>
+</div>
+<div class="viewcode-block" id="CrawlJob.start_dbgen"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_dbgen">[docs]</a>    <span class="k">def</span> <span class="nf">start_dbgen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Invokes DB generator submodule to create db statements from</span>
+<span class="sd">        metalist and &#39;commiting&#39; to db</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">crawler</span><span class="o">.</span><span class="n">dbgen</span><span class="o">.</span><span class="n">DBGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">batch</span><span class="p">()</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                                unittest                                 #</span>
+<span class="c">###########################################################################</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">CrawlJob</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;www.nullcat.de&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

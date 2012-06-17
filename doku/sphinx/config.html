@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="index.html" />
+    <link rel="next" title="Python to Java Interface (aka Javadapter)" href="javadapter.html" />
+    <link rel="prev" title="Commandlineinterface" href="cli.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="javadapter.html" title="Python to Java Interface (aka Javadapter)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Commandlineinterface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Many details of the archive can be configured in the configuration file,
+which is generated on <tt class="docutils literal"><span class="pre">archive.py</span> <span class="pre">init</span> <span class="pre">/your/path</span></tt> - so the default-config
+is in <tt class="docutils literal"><span class="pre">/your/path/webarchive.conf.xml</span></tt>.</p>
+<p>Additional Notes:</p>
+<ul class="simple">
+<li>Inside the Archive, values may be identified by an URL like <tt class="docutils literal"><span class="pre">server.notify.interval</span></tt></li>
+<li>Except for the <tt class="docutils literal"><span class="pre">general.root</span></tt> all paths are relative to <tt class="docutils literal"><span class="pre">general.root</span></tt></li>
+<li>If a value cannot be found a dictionary with default-values is used internally.</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;webarchive&gt;</span>
+    <span class="nt">&lt;general&gt;</span>
+        <span class="nt">&lt;root&gt;</span>/tmp/archive<span class="nt">&lt;/root&gt;</span>
+        <span class="nt">&lt;filterpath&gt;</span>filter/<span class="nt">&lt;/filterpath&gt;</span>
+    <span class="nt">&lt;/general&gt;</span>
+    <span class="c">&lt;!-- modules --&gt;</span>
+    <span class="nt">&lt;crawler&gt;</span>
+        <span class="nt">&lt;depth&gt;</span>1<span class="nt">&lt;/depth&gt;</span>
+        <span class="nt">&lt;interval&gt;</span>0.5<span class="nt">&lt;/interval&gt;</span>
+        <span class="nt">&lt;maxInst&gt;</span>10<span class="nt">&lt;/maxInst&gt;</span>
+        <span class="nt">&lt;userAgent&gt;</span>webarchive/0.1 +https://github.com/studentkittens/webarchive<span class="nt">&lt;/userAgent&gt;</span>
+        <span class="nt">&lt;tempRoot&gt;</span>tmp/<span class="nt">&lt;/tmpRoot&gt;</span>
+        <span class="nt">&lt;ignoreRobots&gt;</span>true<span class="nt">&lt;/ignoreRobots&gt;</span>
+        <span class="nt">&lt;urllistpath&gt;</span>url.txt<span class="nt">&lt;/urllistpath&gt;</span>
+        <span class="nt">&lt;customWgetParms&gt;&lt;/customWgetParms&gt;</span>
+    <span class="nt">&lt;/crawler&gt;</span>
+    <span class="nt">&lt;db&gt;</span>
+        <span class="nt">&lt;path&gt;</span>metadata.db<span class="nt">&lt;/path&gt;</span>
+        <span class="nt">&lt;sqlSource&gt;</span>../sql/<span class="nt">&lt;/sqlSource&gt;</span>
+    <span class="nt">&lt;/db&gt;</span>
+    <span class="nt">&lt;xml&gt;</span>
+        <span class="nt">&lt;schemaPath&gt;</span>xml/<span class="nt">&lt;/schemaPath&gt;</span>
+    <span class="nt">&lt;/xml&gt;</span>
+    <span class="nt">&lt;server&gt;</span>
+        <span class="nt">&lt;port&gt;</span>42420<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;notify&gt;</span>
+            <span class="nt">&lt;interval&gt;</span>15<span class="nt">&lt;/interval&gt;</span>
+        <span class="nt">&lt;/notify&gt;</span>
+    <span class="nt">&lt;/server&gt;</span>
+    <span class="nt">&lt;javadapter&gt;</span>
+      <span class="nt">&lt;port&gt;</span>42421<span class="nt">&lt;/port&gt;</span>
+    <span class="nt">&lt;/javadapter&gt;</span>
+<span class="nt">&lt;/webarchive&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="config.reader.get">
+<tt class="descclassname">config.reader.</tt><tt class="descname">get</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/config/reader.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#config.reader.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="config.reader.get_default">
+<tt class="descclassname">config.reader.</tt><tt class="descname">get_default</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/config/reader.html#get_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#config.reader.get_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cli.html"
+                        title="previous chapter">Commandlineinterface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="javadapter.html"
+                        title="next chapter">Python to Java Interface (aka Javadapter)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/config.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="javadapter.html" title="Python to Java Interface (aka Javadapter)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Commandlineinterface"
+             >previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
