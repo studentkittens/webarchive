@@ -255,6 +255,8 @@
 
 <span class="sd">        This means, Empty and master branch are not mentioned. If you want</span>
 <span class="sd">        to checkout those, just checkout &#39;empty&#39; or &#39;master&#39;</span>
+
+<span class="sd">        :returns: a list of branchestrings</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">branch_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list_data</span><span class="p">(</span><span class="s">&#39;branch&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">branch_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -263,7 +265,11 @@
             <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="Git.list_commits"><a class="viewcode-back" href="../../git.html#crawler.git.Git.list_commits">[docs]</a>    <span class="k">def</span> <span class="nf">list_commits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">&#39;List all commits in this repo and branch&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all commits in this repo and branch</span>
+
+<span class="sd">        :returns: a list of commithashestrings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cmt_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list_data</span><span class="p">(</span><span class="s">&#39;--no-pager log --pretty=&quot;%h&quot; --no-abbrev&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cmt_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__commit_pattern</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="n">cmt_list</span><span class="p">))</span>

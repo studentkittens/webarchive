@@ -34,7 +34,7 @@ class Rsync(object):
         this function will block until finished
 
         """
-        cmd = 'rsync -avcP {src} {dest}'.format(src=self.__src, dest=self.__dest)
+        cmd = 'rsync -acP {src} {dest}'.format(src=self.__src, dest=self.__dest)
         self.__process = subprocess.Popen(cmd, shell=True,
                                                stdout=subprocess.PIPE,
                                                stderr=subprocess.PIPE)

@@ -25,7 +25,7 @@ class FilterSystem(object):
 
     def load(self, plugin_path=None):
         """
-        Load a list of *.py files from a directory
+        Load a list of \*.py files from a directory
 
         The .py files are read in and stored in-memory
 

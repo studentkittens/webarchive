@@ -57,22 +57,27 @@
 
 <span class="sd">Usage:</span>
 <span class="sd">  archive.py [--loglevel=&lt;severity&gt;] init [&lt;path&gt;]</span>
-<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] crawler (--start|--stop)</span>
-<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] javadapter (--start|--stop)</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] crawler [--start]</span>
+<span class="sd">  archive.py [--loglevel=&lt;severity&gt;] javadapter [--start]</span>
 <span class="sd">  archive.py [--loglevel=&lt;severity&gt;] db (--rebuild|--remove)</span>
 <span class="sd">  archive.py [--loglevel=&lt;severity&gt;] repair</span>
 <span class="sd">  archive.py config (--get=&lt;confurl&gt;|--set=&lt;confurl&gt;&lt;arg&gt;)</span>
 <span class="sd">  archive.py -h | --help</span>
 <span class="sd">  archive.py --version</span>
 
-<span class="sd">Options:</span>
+<span class="sd">General Options:</span>
 <span class="sd">  -h --help                Show this screen.</span>
 <span class="sd">  --version                Show version.</span>
 <span class="sd">  --loglevel=&lt;loglevel&gt;    Set the loglevel to any of debug, info, warning, error, critical.</span>
-<span class="sd">  --start                  Starting a service.</span>
-<span class="sd">  --stop                   Stopping a service.</span>
+
+<span class="sd">Service Options:</span>
+<span class="sd">  --start                  Start service automatically and enter shell.</span>
+
+<span class="sd">DB Options:</span>
 <span class="sd">  --rebuild                Rebuild Databse completely from XML Data.</span>
 <span class="sd">  --remove                 Remove the Database completely.</span>
+
+<span class="sd">Config Options:</span>
 <span class="sd">  --set=&lt;confurl&gt;&lt;value&gt;   Set a Value in the config permanently.</span>
 <span class="sd">  --get=&lt;confurl&gt;          Acquire a Value in the config by it&#39;s url.</span>
 
@@ -107,7 +112,6 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Archive commandline intepreter</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Collected arguments</span>
@@ -151,10 +155,10 @@
                     <span class="k">print</span><span class="p">(</span><span class="s">&quot;archive is currently locked with global.lock.&quot;</span><span class="p">)</span>
                     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">not_implemented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;It</span><span class="se">\&#39;</span><span class="s">s not implemented, Sam.&#39;</span><span class="p">)</span>
-
 <div class="viewcode-block" id="Cli.handle_init"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_init">[docs]</a>    <span class="k">def</span> <span class="nf">handle_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes archive paths</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;&lt;path&gt;&#39;</span><span class="p">]</span>
             <span class="n">init_archive</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -162,46 +166,54 @@
             <span class="n">init_archive</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cli.cmd_loop"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.cmd_loop">[docs]</a>    <span class="k">def</span> <span class="nf">cmd_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span>  <span class="n">i</span><span class="p">,</span> <span class="n">cv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The cmdloop runs in a seperate thread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shell</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
         <span class="n">i</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cli.handle_crawler"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_crawler">[docs]</a>    <span class="k">def</span> <span class="nf">handle_crawler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts and controls crawler commandline</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Condition</span><span class="p">()</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">IntervalManager</span><span class="p">()</span>
+
+        <span class="n">do_autostart</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-            <span class="n">cv</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Condition</span><span class="p">()</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">IntervalManager</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Note: Will start automatically&#39;</span><span class="p">)</span>
+            <span class="n">do_autostart</span> <span class="o">=</span> <span class="bp">True</span>
 
-            <span class="n">shell</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">CrawlerShell</span><span class="p">()</span>
-            <span class="n">shell</span><span class="o">.</span><span class="n">set_imanager</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">shell</span><span class="o">.</span><span class="n">set_condvar</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
-            <span class="n">shell</span><span class="o">.</span><span class="n">set_quitflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">shell</span><span class="o">.</span><span class="n">set_activeflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">shell</span> <span class="o">=</span> <span class="n">imgur</span><span class="o">.</span><span class="n">CrawlerShell</span><span class="p">(</span><span class="n">imanager</span><span class="o">=</span><span class="n">im</span><span class="p">,</span> <span class="n">condvar</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">autostart</span><span class="o">=</span><span class="n">do_autostart</span><span class="p">)</span>
+        <span class="n">cmd_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_loop</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">im</span><span class="p">,</span> <span class="n">cv</span><span class="p">))</span>
+        <span class="n">cmd_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-            <span class="n">cmd_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_loop</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">cv</span><span class="p">))</span>
-            <span class="n">cmd_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-            <span class="n">cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-            <span class="k">while</span> <span class="n">shell</span><span class="o">.</span><span class="n">quitflag</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-                <span class="n">cv</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s">&#39;ready&#39;</span><span class="p">:</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;=========== START ==============&#39;</span><span class="p">)</span>
-                    <span class="n">i</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-                    <span class="n">shell</span><span class="o">.</span><span class="n">set_activeflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-            <span class="n">cmd_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--stop&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>
+        <span class="n">cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">shell</span><span class="o">.</span><span class="n">quitflag</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="n">cv</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">im</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s">&#39;ready&#39;</span> <span class="ow">and</span> <span class="n">shell</span><span class="o">.</span><span class="n">quitflag</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;=========== START ==============&#39;</span><span class="p">)</span>
+                <span class="n">im</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">shell</span><span class="o">.</span><span class="n">set_activeflag</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">cmd_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cli.handle_javadapter"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_javadapter">[docs]</a>    <span class="k">def</span> <span class="nf">handle_javadapter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts javadapter commandline</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
             <span class="n">server</span> <span class="o">=</span> <span class="n">javadapter</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
-            <span class="n">javadapter</span><span class="o">.</span><span class="n">ServerShell</span><span class="p">()</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+
+        <span class="n">javadapter</span><span class="o">.</span><span class="n">ServerShell</span><span class="p">(</span><span class="n">server_instance</span><span class="o">=</span><span class="n">server</span><span class="p">)</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
             <span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--stop&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cli.handle_db"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_db">[docs]</a>    <span class="k">def</span> <span class="nf">handle_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">&#39;Handle &quot;db&quot; submodule&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--rebuild&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
             <span class="n">rebuild</span><span class="p">()</span>
@@ -214,12 +226,19 @@
                 <span class="k">print</span><span class="p">(</span><span class="s">&#39;Unable to delete database:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Cli.handle_config"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_config">[docs]</a>    <span class="k">def</span> <span class="nf">handle_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Invokes Config Handler operations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--get&#39;</span><span class="p">]:</span>
             <span class="k">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;&lt;confurl&gt;&#39;</span><span class="p">]))</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--set&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">not_implemented</span><span class="p">()</span>  <span class="c"># TODO: Wait for config implementation.</span>
+            <span class="k">pass</span>
+            <span class="c"># TODO: Wait for config implementation.</span>
 </div>
 <div class="viewcode-block" id="Cli.handle_repair"><a class="viewcode-back" href="../../cli.html#cli.cmdparser.Cli.handle_repair">[docs]</a>    <span class="k">def</span> <span class="nf">handle_repair</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Invokes archive rapair tool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__filelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
         <span class="n">repair</span><span class="p">()</span>
 </div></div>
