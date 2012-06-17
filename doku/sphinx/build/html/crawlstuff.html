@@ -60,7 +60,7 @@
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Both CrawlJob and CrawlerManager are internal modules that encapsulate the
 whole crawling procedure. The CrawlJob is a job that starts with crawling and
-ends with database insert/update, it handles all the needed stuff from
+ends with database insert/update, hence it handles all the needed stuff from
 downloading to archiving.
 The CrawlerManager just manages a threadpool with those jobs and limits the
 maximum number of parallel running jobs at a time. For more details see

@@ -8,6 +8,7 @@ One Requirement was to extract the title from HTML Documents. There is no Plugin
 but one may write an extractor function that will be called for a specific mimeType and register it like this:
 
 .. code-block:: python
+  :emphasize-lines: 4 
 
   # In crawler.extractor.py
   EXTRACTORS = {
