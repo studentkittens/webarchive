@@ -17,7 +17,6 @@ Install the following modules from PyPI:
 - ``docopt`` - Intelligent argument Parsing
 - ``beautifulsoup4`` - Title Extraction from HTML
 
-
 **Listen and Repeat:**
 
 .. code-block:: bash
