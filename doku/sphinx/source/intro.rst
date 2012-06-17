@@ -11,6 +11,15 @@ Both sides try to shed some light onto the internal stuff happening.
 Getting Started
 ---------------
 
+Install the following modules from PyPI:
+
+- ``filemagic`` - Determining MIME Type
+- ``docopt`` - Intelligent argument Parsing
+- ``beautifulsoup4`` - Title Extraction from HTML
+
+
+**Listen and Repeat:**
+
 .. code-block:: bash
 
   $ archive.py init /tmp         # Create a new Archive-Root
@@ -33,9 +42,3 @@ Getting Started
   ...
   $ rm metadata.db               # Oops. This was an accident. I swear.
   $ archive.py db --rebuild      # But luckily we can just rebuild it.
-
-All ``archive.py`` may log information to the corresponding logfile. Use this to watch it in parallel:
-
-.. code-block:: bash
-
-  $ tail -f /tmp/archive/log/archive.log
