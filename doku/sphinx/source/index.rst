@@ -20,7 +20,7 @@ User Manual:
    extractor
 
 Internal Stuff:
-
+    
 .. toctree::
    :maxdepth: 2
 
@@ -30,6 +30,7 @@ Internal Stuff:
    recover
    git
    dbgen
+   crawlstuff
    utils
 
 Indices and tables
