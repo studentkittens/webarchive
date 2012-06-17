@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Git-Handling &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="index.html" />
+    <link rel="next" title="Database Generation" href="dbgen.html" />
+    <link rel="prev" title="Recovering of the Database" href="recover.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dbgen.html" title="Database Generation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="recover.html" title="Recovering of the Database"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="git-handling">
+<h1>Git-Handling<a class="headerlink" href="#git-handling" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p><strong>Initialization:</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git init
+<span class="nv">$ </span>git checkout -b empty
+<span class="c"># At least one commit is needed for a valid branch</span>
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;This is Empty&#39;</span> &gt; EMPTY
+<span class="nv">$ </span>git add EMPTY
+<span class="nv">$ </span>git commit -a -m <span class="s1">&#39;Init&#39;</span>
+<span class="c"># master will be used to track</span>
+<span class="c"># the most recent branch</span>
+</pre></div>
+</div>
+<p><strong>Synchronization:</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>... lock ...
+<span class="c"># Go back to &#39;empty&#39; (otherwise the new branch inherits a bad history)</span>
+<span class="nv">$ </span>git checkout empty
+<span class="c"># New branch with the date as tagname</span>
+<span class="nv">$ </span>git checkout -b 24052012T1232
+... rsync ...
+<span class="nv">$ </span>git add .
+<span class="nv">$ </span>git commit -am <span class="s1">&#39;Seite xyz.com wurde gekrault&#39;</span>
+<span class="c"># Make &#39;master&#39; identical to the most recent branch:</span>
+<span class="nv">$ </span>git branch -d master
+<span class="nv">$ </span>git checkout -b master
+... unlock ...
+</pre></div>
+</div>
+<p><strong>Reading/Writing on most recent data:</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># No git-work required</span>
+... lock ...
+... <span class="nb">read</span> ...
+... unlock ...
+</pre></div>
+</div>
+<p><strong>Reading/Writing from/in old checkouts:</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>... lock ...
+<span class="c"># Use -f to overwrite unallowed data</span>
+<span class="nv">$ </span>git checkout -f old_date
+... <span class="nb">read</span> / write ...
+<span class="c"># In case of writing:</span>
+<span class="nv">$ </span>git add .
+<span class="nv">$ </span>git commit -am <span class="s1">&#39;Edited old Kraul&#39;</span>
+<span class="c"># HEAD of the new branch points to the new commit</span>
+<span class="nv">$ </span>git checkout master
+... unlock ...
+</pre></div>
+</div>
+<p><strong>Rough schema as ASCII-Art:</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>          -- Kraul1 -&gt; edit &lt;- branch <span class="s1">&#39;03052012T1232&#39;</span>
+        /
+Init -- ---- Kraul2 &lt;- branch <span class="s1">&#39;15052012T1232&#39;</span>
+|       <span class="se">\</span>
+|         -- Kraul3 &lt;- branch <span class="s1">&#39;24052012T1232&#39;</span> &lt;- branch <span class="s1">&#39;master&#39;</span>
+|
+|
+<span class="se">\-</span>&gt; branch <span class="s1">&#39;empty&#39;</span>
+</pre></div>
+</div>
+<p><strong>Previously, with the ``tag`` approach: (outdated)</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre>Kraul1 -&gt; Kraul2 -&gt; Kraul3 -&gt; Kraul4 &lt;- branch <span class="s1">&#39;master&#39;</span>
+|         |         |         |
+|         |         |          <span class="se">\</span>
+|         |         <span class="se">\ </span>           -- Tag 04
+|         <span class="se">\ </span>          -- Tag 03
+<span class="se">\ </span>          -- Tag 02
+  -- Tag 01
+</pre></div>
+</div>
+<hr class="docutils" />
+<dl class="docutils">
+<dt><strong>Advantages:</strong></dt>
+<dd><ul class="first last simple">
+<li>Old branches are editable</li>
+<li><em>Check-If-Current</em> not needded</li>
+<li>For some strange reason: Less Disk Usage</li>
+</ul>
+</dd>
+<dt><strong>Disadvantages:</strong></dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal"><span class="pre">checkout</span></tt> may be slower.</li>
+<li>Traversing over all branches may be harder - but possible.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="module-crawler.git">
+<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-crawler.git" title="Permalink to this headline">¶</a></h2>
+<p>Wrapper for Git</p>
+<p>This is highly simplified, and may be replaced
+by a faster, native implementation using Dunwhich.
+But that&#8217;s not on the plan due our limited time.</p>
+<p>Git commands (init e.g.) are tailored for use
+in this archive, less for general use.</p>
+<dl class="class">
+<dt id="crawler.git.Git">
+<em class="property">class </em><tt class="descclassname">crawler.git.</tt><tt class="descname">Git</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git" title="Permalink to this definition">¶</a></dt>
+<dd><p>A (overly-simple) Wrapper for the git binary</p>
+<dl class="method">
+<dt id="crawler.git.Git.branch">
+<tt class="descname">branch</tt><big>(</big><em>branch_name='empty'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.branch" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a new named branch</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Branch_name :</th><td class="field-body">the name of the new branch, may not exist yet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">0 on success, another rcode on failure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.checkout">
+<tt class="descname">checkout</tt><big>(</big><em>target='master'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.checkout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.checkout" title="Permalink to this definition">¶</a></dt>
+<dd><p>checkout a certain point (tag, branch or commit)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Target :</th><td class="field-body">the target to visit</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">0 on success, another rcode on failure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.commit">
+<tt class="descname">commit</tt><big>(</big><em>message='edit'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit any changes made</p>
+<p>git add . and git commit -am &lt;message&gt; is done</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Message :</th><td class="field-body">The commit message</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">0 on success, another rcode on failure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="crawler.git.Git.convert_branch_name">
+<em class="property">classmethod </em><tt class="descname">convert_branch_name</tt><big>(</big><em>date_string</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.convert_branch_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.convert_branch_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a datestring suitably to a branch name</p>
+<p>Git does not allow special characters such as : or -
+in branchnames for whatever reason</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>date_string</strong> &#8211; the string to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the new, converted string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crawler.git.Git.domain">
+<tt class="descname">domain</tt><a class="reference internal" href="_modules/crawler/git.html#Git.domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the domain, to which this wrapper belongs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new archive at specified domain path</p>
+<p>The target directory does not need to exit yet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">0 on success, another rcode on failure</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.list_branches">
+<tt class="descname">list_branches</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.list_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.list_branches" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all branches in this repo, which conform to the &#8216;date&#8217;-regex.</p>
+<p>This means, Empty and master branch are not mentioned. If you want
+to checkout those, just checkout &#8216;empty&#8217; or &#8216;master&#8217;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of branchestrings</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.list_commits">
+<tt class="descname">list_commits</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.list_commits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.list_commits" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all commits in this repo and branch</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of commithashestrings</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.git.Git.recreate_master">
+<tt class="descname">recreate_master</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.recreate_master"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.recreate_master" title="Permalink to this definition">¶</a></dt>
+<dd><p>A very special helper.</p>
+<p>It deletes the current master branch,
+and recreates it. So, the master always points
+to the most recently created branch</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Git-Handling</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#module-crawler.git">Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="recover.html"
+                        title="previous chapter">Recovering of the Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dbgen.html"
+                        title="next chapter">Database Generation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/git.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dbgen.html" title="Database Generation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="recover.html" title="Recovering of the Database"
+             >previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
