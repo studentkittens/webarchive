@@ -33,3 +33,9 @@ Getting Started
   ...
   $ rm metadata.db               # Oops. This was an accident. I swear.
   $ archive.py db --rebuild      # But luckily we can just rebuild it.
+
+All ``archive.py`` may log information to the corresponding logfile. Use this to watch it in parallel:
+
+.. code-block:: bash
+
+  $ tail -f /tmp/archive/log/archive.log

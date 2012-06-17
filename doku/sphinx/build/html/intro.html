@@ -66,7 +66,7 @@ Both sides try to shed some light onto the internal stuff happening.</p>
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>archive.py init /tmp         <span class="c"># Create a new Archive-Root</span>
 <span class="nv">$ </span><span class="nb">cd</span> /tmp/archive/             <span class="c"># cd to it, so it can find the config</span>
-<span class="nv">$ </span>archive.py crawl --start     <span class="c"># Start a crawl</span>
+<span class="nv">$ </span>archive.py crawler --start   <span class="c"># Start a crawl</span>
 &gt;&gt;&gt; stop
 &gt;&gt;&gt; <span class="o">(</span>Ctrl+D<span class="o">)</span>
 <span class="nv">$ </span>ls -l
@@ -84,6 +84,10 @@ drwxr-xr-x www.hack.org
 ...
 <span class="nv">$ </span>rm metadata.db               <span class="c"># Oops. This was an accident. I swear.</span>
 <span class="nv">$ </span>archive.py db --rebuild      <span class="c"># But luckily we can just rebuild it.</span>
+</pre></div>
+</div>
+<p>All <tt class="docutils literal"><span class="pre">archive.py</span></tt> may log information to the corresponding logfile. Use this to watch it in parallel:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tail -f /tmp/archive/log/archive.log
 </pre></div>
 </div>
 </div>
