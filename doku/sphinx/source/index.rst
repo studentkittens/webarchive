@@ -6,10 +6,7 @@
 Welcome to Webarchiv's documentation!
 =====================================
 
-Contents:
-
-.. highlight:: bash 
-   :linenothreshold: 5
+User Manual:
 
 .. toctree::
    :maxdepth: 2
@@ -20,6 +17,12 @@ Contents:
    xml2metadata
    intervalmanager
    filter
+   extractor
+
+Internal Stuff:
+
+.. toctree::
+   :maxdepth: 2
 
    wget
    cleaner
