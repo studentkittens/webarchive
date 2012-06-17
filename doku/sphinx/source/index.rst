@@ -15,7 +15,9 @@ Contents:
    :maxdepth: 2
 
    cli 
+   config
    javadapter
+   xml2metadata
    filter
 
    wget

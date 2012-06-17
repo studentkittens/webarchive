@@ -47,7 +47,8 @@ def main():
     """@todo: Docstring for main
     :returns: @todo
     """
-    XMLReader('data.xml')
+    from pprint import pprint
+    pprint(XMLReader('data.xml').parse())
 
 if __name__ == '__main__':
     main()

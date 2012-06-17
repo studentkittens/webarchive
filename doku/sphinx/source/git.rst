@@ -24,7 +24,7 @@ Overview
   ... lock ...
   # Go back to 'empty' (otherwise the new branch inherits a bad history)
   $ git checkout empty
-  # Neuer branch mit ehem. Tagnamen
+  # New branch with the date as tagname 
   $ git checkout -b 24052012T1232
   ... rsync ...
   $ git add . 
