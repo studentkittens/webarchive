@@ -56,10 +56,37 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>Welcome.</p>
+<div class="section" id="welcome">
+<h2>Welcome.<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h2>
 <p>This is the documentation of the final Archive-Backend.
 It is seperated in External (What you gonna use) and Internal (What we used) documentation.
 Both sides try to shed some light onto the internal stuff happening.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>archive.py init /tmp         <span class="c"># Create a new Archive-Root</span>
+<span class="nv">$ </span><span class="nb">cd</span> /tmp/archive/             <span class="c"># cd to it, so it can find the config</span>
+<span class="nv">$ </span>archive.py crawl --start     <span class="c"># Start a crawl</span>
+&gt;&gt;&gt; stop
+&gt;&gt;&gt; <span class="o">(</span>Ctrl+D<span class="o">)</span>
+<span class="nv">$ </span>ls -l
+-rw-r--r-- webarchive.conf.xml <span class="c"># configuration for this archive-root</span>
+drwxr-xr-x content             <span class="c"># crawled content</span>
+drwxr-xr-x filter              <span class="c"># filters may be placed here</span>
+drwxr-xr-x logs                <span class="c"># logs are stored here</span>
+-rw-r--r-- metadata.db         <span class="c"># SQLite DB</span>
+drwxr-xr-x pickle_cache        <span class="c"># Additional Cache for metalists, explained later</span>
+drwxr-xr-x tmp                 <span class="c"># tmp-Root</span>
+<span class="nv">$ </span>ls -l content/
+drwxr-xr-x blog.fefe.de
+drwxr-xr-x www.0pointer.de
+drwxr-xr-x www.hack.org
+...
+<span class="nv">$ </span>rm metadata.db               <span class="c"># Oops. This was an accident. I swear.</span>
+<span class="nv">$ </span>archive.py db --rebuild      <span class="c"># But luckily we can just rebuild it.</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -68,6 +95,15 @@ Both sides try to shed some light onto the internal stuff happening.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#welcome">Welcome.</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to Webarchiv&#8217;s documentation!</a></p>
