@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>crawler.dbgen &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for crawler.dbgen</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">DBGenerator is capable of generating an sqlite database</span>
+<span class="sd">from a list of metadictionaries.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_dbpath</span>
+<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_archive_root</span>
+
+
+<div class="viewcode-block" id="DBGenerator"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator">[docs]</a><span class="k">class</span> <span class="nc">DBGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DBGenerator module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_list</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Take a metalist and load sql templates from disk.</span>
+<span class="sd">        Start the actual generating by calling batch()</span>
+
+<span class="sd">        :meta_list: A list of MetaData Dictionaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">get_dbpath</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_statements</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__statements</span><span class="p">[</span><span class="s">&#39;create&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span> <span class="o">=</span> <span class="n">meta_list</span>
+
+        <span class="c"># We have to maintain a seperate lock for the db,</span>
+        <span class="c"># the db itself is locked from itself, but many separate</span>
+        <span class="c"># statements are not</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&#39;db.lock&#39;</span><span class="p">,</span>
+                <span class="n">folder</span><span class="o">=</span><span class="n">get_archive_root</span><span class="p">(),</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DBGenerator.load_statements"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.load_statements">[docs]</a>    <span class="k">def</span> <span class="nf">load_statements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        (Re-)Load Sql Files from Disk</span>
+
+<span class="sd">        This is already called in init</span>
+
+<span class="sd">        :returns: a dictionary with statements, indexed by name (e.g. &#39;create&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">statements</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;db.sqlSource&#39;</span><span class="p">),</span> <span class="s">&#39;*.sql&#39;</span><span class="p">)):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">source_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">source_base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.sql&#39;</span><span class="p">):</span>
+                    <span class="n">source_base</span> <span class="o">=</span> <span class="n">source_base</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+
+                <span class="n">statements</span><span class="p">[</span><span class="n">source_base</span><span class="p">]</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">statements</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.execute_statement"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.execute_statement">[docs]</a>    <span class="k">def</span> <span class="nf">execute_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exececute a previously loaded statement by name</span>
+
+<span class="sd">        :source_name: Sourcename to execute (e.g. &#39;create&#39;)</span>
+<span class="sd">        :arglist: You may pass an additional list of variable elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">arglist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">arglist</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.batch"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.batch">[docs]</a>    <span class="k">def</span> <span class="nf">batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start db creating procedure</span>
+
+<span class="sd">        :returns: a truthy value on success</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">insert_mime_domain</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">insert_mdata_ctag</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">insert_history</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLockException</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;File-lock timed out; no db update was done&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;Unexcpected error while generating DB&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.insert_mime_domain"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_mime_domain">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mime_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill mimeType and domain table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mimes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">domains</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">:</span>
+            <span class="n">mimes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;mimeType&#39;</span><span class="p">],))</span>
+            <span class="n">domains</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;domain&#39;</span><span class="p">],))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_mimetype&#39;</span><span class="p">,</span> <span class="n">mimes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_domain&#39;</span><span class="p">,</span> <span class="n">domains</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mimedict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;mimeType&#39;</span><span class="p">,</span> <span class="s">&#39;mimeID&#39;</span><span class="p">,</span> <span class="s">&#39;mimeName&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__domaindict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;domain&#39;</span><span class="p">,</span> <span class="s">&#39;domainID&#39;</span><span class="p">,</span> <span class="s">&#39;domainName&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.insert_mdata_ctag"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_mdata_ctag">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mdata_ctag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill metadata and committag table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ctags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">:</span>
+            <span class="n">mdata</span><span class="o">.</span><span class="n">append</span><span class="p">((</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__mimedict</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;mimeType&#39;</span><span class="p">]],</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]))</span>
+
+            <span class="n">ctags</span><span class="o">.</span><span class="n">add</span><span class="p">((</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s">&#39;commitTime&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__domaindict</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;domain&#39;</span><span class="p">]]</span>
+                <span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_metadata&#39;</span><span class="p">,</span> <span class="n">mdata</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_committag&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">ctags</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mdidlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;metaData&#39;</span><span class="p">,</span> <span class="s">&#39;metaId&#39;</span><span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ctaglist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;commitTag&#39;</span><span class="p">,</span> <span class="s">&#39;commitId&#39;</span><span class="p">,</span> <span class="s">&#39;commitTime&#39;</span><span class="p">,</span> <span class="s">&#39;domainId&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.insert_history"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_history">[docs]</a>    <span class="k">def</span> <span class="nf">insert_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill history table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="p">:</span>
+            <span class="n">ctag_tuple_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;commitTime&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__domaindict</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;domain&#39;</span><span class="p">]])</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">metadata_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdidlist</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]]</span>
+                <span class="n">commitag_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ctaglist</span><span class="p">[</span><span class="n">ctag_tuple_key</span><span class="p">]</span>
+
+                <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">((</span>
+                    <span class="n">metadata_id</span><span class="p">,</span>
+                    <span class="n">commitag_id</span><span class="p">,</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s">&#39;createTime&#39;</span><span class="p">],</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span>
+                    <span class="p">))</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;Cannot find URL &#39;</span> <span class="o">+</span> <span class="n">item</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; in DB.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_history&#39;</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.select"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal helper for collecting data</span>
+
+<span class="sd">        :table: Table on which a SELECT shall be performed</span>
+<span class="sd">        :columns: a list of columns to select</span>
+<span class="sd">        :returns: A dictionary of column[0]: column[1:]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">row_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="n">sql_statement</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;SELECT &#39;</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">),</span> <span class="s">&#39; FROM &#39;</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="s">&#39;;&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_statement</span><span class="p">)</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">row_dict</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">row_dict</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">row_dict</span>
+</div>
+<div class="viewcode-block" id="DBGenerator.close"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close connection and commit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">DBGenerator</span><span class="p">([</span>
+        <span class="p">{</span>
+            <span class="s">&#39;mimeType&#39;</span>   <span class="p">:</span> <span class="s">&#39;application/png&#39;</span><span class="p">,</span>
+            <span class="s">&#39;domain&#39;</span>     <span class="p">:</span> <span class="s">&#39;www.heise.de&#39;</span><span class="p">,</span>
+            <span class="s">&#39;url&#39;</span>        <span class="p">:</span> <span class="s">&#39;www.heise.de/news&#39;</span><span class="p">,</span>
+            <span class="s">&#39;path&#39;</span>       <span class="p">:</span> <span class="s">&#39;.&#39;</span><span class="p">,</span>
+            <span class="s">&#39;commitTime&#39;</span> <span class="p">:</span> <span class="s">&#39;23324534634634&#39;</span><span class="p">,</span>
+            <span class="s">&#39;createTime&#39;</span> <span class="p">:</span> <span class="s">&#39;32535245634634&#39;</span><span class="p">,</span>
+            <span class="s">&#39;title&#39;</span>      <span class="p">:</span> <span class="s">&#39;news for professionals&#39;</span>
+            <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">&#39;mimeType&#39;</span>   <span class="p">:</span> <span class="s">&#39;application/jpeg&#39;</span><span class="p">,</span>
+            <span class="s">&#39;domain&#39;</span>     <span class="p">:</span> <span class="s">&#39;www.golem.de&#39;</span><span class="p">,</span>
+            <span class="s">&#39;url&#39;</span>        <span class="p">:</span> <span class="s">&#39;www.golem.de/news&#39;</span><span class="p">,</span>
+            <span class="s">&#39;path&#39;</span>       <span class="p">:</span> <span class="s">&#39;..&#39;</span><span class="p">,</span>
+            <span class="s">&#39;commitTime&#39;</span> <span class="p">:</span> <span class="s">&#39;23324534634634&#39;</span><span class="p">,</span>
+            <span class="s">&#39;createTime&#39;</span> <span class="p">:</span> <span class="s">&#39;32535245634634&#39;</span><span class="p">,</span>
+            <span class="s">&#39;title&#39;</span>      <span class="p">:</span> <span class="s">&#39;news for retards&#39;</span>
+            <span class="p">}</span>
+        <span class="p">])</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">batch</span><span class="p">()</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
