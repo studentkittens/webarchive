@@ -78,8 +78,9 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 		Client cl = Client.getInstance();
 		Connection c = cl.getConnection();
 		Message msg = new Message(Header.ADDXMLEDIT,element);
-		// TODO return updated document
 		c.send(msg);
+		Message answer = c.waitForAnswer(msg);
+		document = (Document)answer.getData();
 	}
 
 	@Override
@@ -87,11 +88,4 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 		return conf.addPrefixTo(name);
 	}
 
-	@Override
-	public void close() throws Exception {
-		Connection con = Client.getInstance().getConnection();
-		Message msg = new Message(Header.CLOSE_XMLEDIT, null);
-		msg.setNoAnswer();
-		con.send(msg);
-	}
 }

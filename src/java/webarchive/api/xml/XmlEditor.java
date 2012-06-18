@@ -14,7 +14,7 @@ import webarchive.xml.DataElement;
  * @see DataElement
  * @author ccwelich
  */
-public interface XmlEditor extends AutoCloseable {
+public interface XmlEditor {
 
 	/**
 	 * get a data element from the data subtree by its tagname. The method

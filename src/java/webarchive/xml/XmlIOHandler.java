@@ -9,6 +9,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import webarchive.server.LockHandler;
+import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
 /**
@@ -20,11 +23,11 @@ public class XmlIOHandler {
 	private static TransformerFactory transformerFactory = TransformerFactory.
 		newInstance();
 	private final XmlConf conf;
-	private final File file;
+	private final FileDescriptor file;
 	private Transformer transformer;
 	private StreamResult streamResult;
 	private boolean debug;
-
+	private LockHandler locker;
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
@@ -34,26 +37,28 @@ public class XmlIOHandler {
 		assert conf != null;
 		assert xmlPath != null;
 		this.conf = conf;
-		this.file = xmlPath.getAbsolutePath();
+		this.file = xmlPath;
 		transformer = transformerFactory.newTransformer();
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
-
-		streamResult = new StreamResult(file);
+		
+		this.locker = (LockHandler)Server.getInstance().getHandlers().get("LockHandler");
+		
+		streamResult = new StreamResult(file.getAbsolutePath());
 	}
 
 	public Document buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
-		//TODO lock
+		locker.lock(file);
 		DocumentBuilder db = conf.getDocumentBuilderFactory().newDocumentBuilder();
 		db.setErrorHandler(conf.getXmlErrorHandler());
-		Document document = db.parse(file);
-		//TODO unlock
+		Document document = db.parse(file.getAbsolutePath());
+		locker.unlock(file);
 		return document;
 	}
 
 	public void write(Document document) throws TransformerException {
-		//TODO lock
+		locker.checkout(file);
 		System.out.println("XmlIOHandler::write transformer props = " + transformer.
 			getOutputProperties());
 		DOMSource source = new DOMSource(document);
@@ -61,7 +66,7 @@ public class XmlIOHandler {
 			streamResult = new StreamResult(System.out);
 		}
 		transformer.transform(source, streamResult);
-		//TODO unlock
+		locker.checkout(file);
 
 	}
 }

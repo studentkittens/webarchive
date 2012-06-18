@@ -7,6 +7,7 @@ import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.HandlerCollection;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
+import webarchive.xml.XmlConf;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.xml.sax.SAXException;
 
 public class Server implements Runnable,NetworkModule {
 
@@ -46,6 +49,12 @@ public class Server implements Runnable,NetworkModule {
         try {
 			getHandlers().add(new LockHandler(InetAddress.getLocalHost(),42421));
 		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			getHandlers().add(new XmlConf()); //TODO
+		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

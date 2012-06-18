@@ -4,6 +4,8 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+
+import webarchive.handler.Handler;
 import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
@@ -12,7 +14,7 @@ import webarchive.xml.XmlHandler.AutoValidatingMode;
  * @author ccwelich
  */
 //TODO tests
-public class XmlConf {
+public class XmlConf extends Handler {
 
 	private String namespace = "http://www.hof-university.de/webarchive";
 	private String prefix = "wa:";

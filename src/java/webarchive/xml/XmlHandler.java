@@ -55,7 +55,6 @@ public class XmlHandler {
 	public XmlHandler(FileDescriptor xmlPath, XmlConf conf) throws
 		ParserConfigurationException, SAXException, IOException,
 		TransformerConfigurationException {
-		// TODO FileHandler access
 		// preconditions
 		assert xmlPath != null;
 		assert conf != null;
