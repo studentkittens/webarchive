@@ -14,7 +14,6 @@ import sqlite3
 import glob
 import os
 
-import config.reader as config
 import util.filelock as lock
 from util.paths import get_dbpath
 from util.paths import get_archive_root
