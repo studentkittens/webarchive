@@ -32,27 +32,31 @@ def unique_items_from_file(path):
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-
-class TestUtilFiles(unittest.TestCase):
-    def setUp(self):
-        # generate testfile with 12 urls of which 8 are equal
-        with open('testfile_files.txt','w') as test_file:
-            for x in range(1, 10):
-                test_file.write('www.heise.de\n')
-                test_file.write('www.golem.de\n')
-            test_file.write('www.phoronix.de\n')
-            test_file.write('www.linux.org\n')
-
-    def test_num_of_elements(self):
-        # get url list from file
-        urls = unique_items_from_file('testfile_files.txt')
-        # only 4 urls should be unique
-        self.assertTrue(len(urls) == 4)
-
-    def tearDown(self):
-        # clean test data
-        os.remove('testfile_files.txt')
-
-
 if __name__ == '__main__':
+    class TestUtilFiles(unittest.TestCase):
+        def setUp(self):
+            # generate testfile with 7 urls of which 3 are equal
+            testinput = "www.heise.de\n \
+                         www.heise.de\n \
+                         www.golem.de\n \
+                         www.linux.org\n \
+                         www.heise.de\n \
+                         www.phoronix.com\n \
+                         www.golem.de\n"
+
+            # feed test file with input
+            with open('testfile_files.txt', 'w') as test_file:
+                test_file.write(testinput)
+
+        def test_num_of_elements(self):
+            # get url list from file
+            urls = unique_items_from_file('testfile_files.txt')
+            # only 4 urls should be unique
+            self.assertTrue(len(urls) == 4)
+
+        def tearDown(self):
+            # clean test data
+            os.remove('testfile_files.txt')
+
+    # starts unittest
     unittest.main()
