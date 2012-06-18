@@ -15,5 +15,6 @@ For more information see :manpage:`rsync(1)`.
 Implementation
 --------------
 
-.. autoclass:: crawler.rsync.Rsync
-  :members:
+``rsync()`` basically works like on the commandline:
+
+.. autofunction:: crawler.rsync.rsync

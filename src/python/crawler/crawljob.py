@@ -19,13 +19,13 @@ import crawler.wget as wget
 import util.paths as paths
 import crawler.cleaner as cleaner
 import crawler.xmlgen as xmlgen
-import crawler.rsync as rsync
 import util.filelock as lock
 import crawler.git as git
 import crawler.exceptions
 import crawler.dbgen
 
 from dbrecover.pickle_recover import PickleDBRecover
+from crawler.rsync import rsync
 
 
 class CrawlJob(object):
@@ -133,6 +133,7 @@ class CrawlJob(object):
                 os.mkdir(domain_path)
             except OSError:
                 # This is expected
+                # (I swear)
                 pass
 
             git_proc = git.Git(domain)
@@ -140,7 +141,7 @@ class CrawlJob(object):
             git_proc.checkout('empty')
             git_proc.branch(self.__metalist[0]['commitTime'])
 
-            rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
+            rsync(os.path.join(self.__path, domain), content_path)
 
             git_proc.commit('Site {domain_name} was crawled.'
                             .format(domain_name=domain))

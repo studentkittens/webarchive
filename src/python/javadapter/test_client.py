@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-__author__ = 'Christopher Pahl'
+__author__ = 'Christopher Pahl, Christoph Piechula'
 
 import unittest
 import socket
