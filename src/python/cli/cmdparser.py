@@ -36,6 +36,7 @@ __author__ = 'Christopher Pahl, Christoph Piechula'
 
 import threading
 import logging
+import socket
 import sys
 import os
 
@@ -154,7 +155,11 @@ class Cli(object):
         """
         server = None
         if self.__arguments['--start']:
-            server = javadapter.start('localhost')
+            try:
+                server = javadapter.start('localhost')
+            except socket.error as err:
+                print('Cannot start javadapter:', err)
+                sys.exit(-2)
 
         javadapter.ServerShell(server_instance=server).cmdloop()
 

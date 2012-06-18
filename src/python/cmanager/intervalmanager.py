@@ -55,7 +55,6 @@ class IntervalManager(object):
         """
         Called on Ctrl-C
         """
-        print('Interrupt: ', signum)
         self.kill()
 
     def start(self, delay_in_sec=0):
@@ -85,6 +84,7 @@ class IntervalManager(object):
             self.__cmanager.start()
         else:
             self.__set_status('ready')
+            logging.info('Interval Manager finished - current state set to ready.')
 
     def crawling_done_callback(self):
         """
@@ -104,6 +104,7 @@ class IntervalManager(object):
             self.start(delay)
         else:
             self.__set_status('ready')
+            logging.info('Interval Manager finished - current state set to ready.')
 
     def stop(self):
         """

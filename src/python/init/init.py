@@ -7,6 +7,7 @@ Init module to initialize archive parms on first start
 
 import os
 import os.path
+import shutil
 
 import init.default_cfg as default_cfg
 import config.reader as config
@@ -28,6 +29,7 @@ def init_archive(init_path=os.getcwd()):
             os.mkdir(os.path.join(base_path, 'filter'))
             os.mkdir(os.path.join(base_path, 'logs'))
             os.mkdir(os.path.join(base_path, 'pickle_cache'))
+            shutil.copytree('../sql', os.path.join(base_path,'sql'))
 
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
                 cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(

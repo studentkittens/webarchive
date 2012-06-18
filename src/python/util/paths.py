@@ -19,6 +19,13 @@ def get_dbpath():
     return os.path.join(config.get('general.root'), config.get('db.path'))
 
 
+def get_sqlpath():
+    """
+    :returns: sql statements path
+    """
+    return os.path.join(config.get('general.root'), config.get('db.sqlSource'))
+
+
 def get_content_root():
     """
     :return: '{archive_root}/content/' path
