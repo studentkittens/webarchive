@@ -22,8 +22,9 @@ def unique_items_from_file(path):
     try:
         with open(path, 'r') as urlfile:
             for line in urlfile:
-                if line[0] != '#':
-                    urls.add(line.strip())
+                line = line.strip()
+                if len(line) > 0 and line[0] != '#':
+                    urls.add(line)
     except IOError:
         logging.exception("cannot read url list from disk.")
     return urls
@@ -38,10 +39,13 @@ if __name__ == '__main__':
             # generate testfile with 7 urls of which 3 are equal
             testinput = "www.heise.de\n \
                          www.heise.de\n \
-                         www.golem.de\n \
+                         www.golem.de   \n \
+                         # a comment \n \
                          www.linux.org\n \
+                         \n\
                          www.heise.de\n \
                          www.phoronix.com\n \
+                         # ignore this\n \
                          www.golem.de\n"
 
             # feed test file with input
@@ -53,6 +57,11 @@ if __name__ == '__main__':
             urls = unique_items_from_file('testfile_files.txt')
             # only 4 urls should be unique
             self.assertTrue(len(urls) == 4)
+            self.assertEqual({
+                'www.linux.org',
+                'www.heise.de',
+                'www.golem.de',
+                'www.phoronix.com'}, urls)
 
         def tearDown(self):
             # clean test data
