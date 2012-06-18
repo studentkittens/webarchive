@@ -1,5 +1,8 @@
 package webarchive.client;
 
+import java.util.List;
+
+import webarchive.api.model.CommitTag;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
@@ -13,6 +16,7 @@ public class ClientConnectionHandler extends ConnectionHandler {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handle(Message msg) {
 		// TODO Auto-generated method stub
@@ -33,7 +37,8 @@ public class ClientConnectionHandler extends ConnectionHandler {
 			break;
 		case NOTIFY:
 		{
-			//TODO
+			WebarchiveClient obs = (WebarchiveClient) ((Client)netMod).getObservable();
+			obs.notifyClients((List<CommitTag>)msg.getData());
 			break;
 		}
 		case EXCEPTION:

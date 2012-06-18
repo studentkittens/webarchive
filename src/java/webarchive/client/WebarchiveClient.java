@@ -5,14 +5,17 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Observable;
+
 import webarchive.api.WebarchiveObserver;
+import webarchive.api.model.CommitTag;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
 import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
 import webarchive.transfer.*;
 
-public class WebarchiveClient implements webarchive.api.WebarchiveClient {
+public class WebarchiveClient extends Observable implements webarchive.api.WebarchiveClient {
 
 	private Client cl;
 	private Connection con;
@@ -61,26 +64,38 @@ public class WebarchiveClient implements webarchive.api.WebarchiveClient {
 	}
 
 	@Override
-	public void addObserver(WebarchiveObserver o) {
-		// TODO Auto-generated method stub
-
+	public void addObserver(WebarchiveObserver o) throws Exception {
+		queryServer(Header.REGISTER_OBSERVER,null);
+		cl.setObservable(this);
+		super.addObserver(o);
 	}
-
+	
+	void notifyClients(List<CommitTag> list) {
+		super.setChanged();
+		super.notifyObservers(list);
+	}
+	
 	@Override
 	public int countObservers() {
-		// TODO Auto-generated method stub
-		return 0;
+		return super.countObservers();
 	}
 
 	@Override
-	public void deleteObserver(WebarchiveObserver o) {
-		// TODO Auto-generated method stub
-
+	public void deleteObserver(WebarchiveObserver o) throws Exception {
+		queryServer(Header.DELETE_OBSERVER,null);
+		cl.setObservable(null);
+		super.deleteObserver(o);
 	}
 
 	@Override
-	public void deleteObservers() {
-		// TODO Auto-generated method stub
+	public void deleteObservers()  {
+		try {
+			queryServer(Header.DELETE_OBSERVER,null);
+		} catch (Exception e) {
+			//DONOTHING
+		}
+		cl.setObservable(null);
+		super.deleteObservers();
 
 	}
 	

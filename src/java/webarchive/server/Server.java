@@ -3,17 +3,20 @@ package webarchive.server;
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
 import webarchive.dbaccess.SqlHandler;
+import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.HandlerCollection;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-import webarchive.xml.XmlHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class Server implements Runnable,NetworkModule {
     private int listenPort;
     private ServerSocket svSock;
     private List<Connection> cList;
+    private List<Connection> observers;
     private HandlerCollection handlers;
 
     private Boolean running = false;
@@ -36,10 +40,16 @@ public class Server implements Runnable,NetworkModule {
     	this.listenPort = DEFAULT_PORT;
         
         this.cList = new ArrayList<Connection>();
+        this.observers = new ArrayList<Connection>();
         sv = this;
         getHandlers().add(new FileHandler());
-//        TODO
-//        getHandlers().add(new SqlHandler());
+        try {
+			getHandlers().add(new LockHandler(InetAddress.getLocalHost(),42421));
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        getHandlers().add(new SqlHandler( new SqliteAccess(new File ("bla"))));
     }
     
     public static Server getInstance() {
@@ -232,5 +242,10 @@ public class Server implements Runnable,NetworkModule {
 		}
 		return handlers;
 	}
+
+	public List<Connection> getObservers() {
+		return observers;
+	}
+
     
 }
