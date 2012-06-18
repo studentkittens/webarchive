@@ -9,7 +9,8 @@ from various content files. Currently only text/html files are supported.
 
 from bs4 import BeautifulSoup
 import logging
-
+import unittest
+import os
 
 def extract_html(file_path):
     """
@@ -50,3 +51,23 @@ def get_title(file_path, mime):
         logging.exception('cannot read file.')
     finally:
         return str(title)
+
+###########################################################################
+#                                unittest                                 #
+###########################################################################
+TESTDATA_PATH = '/home/christoph/devf/webarchive/src/python/testdata/html/'
+
+if __name__ == '__main__':
+    class TestTitle(unittest.TestCase):
+        def test_get_mime(self):
+
+            expectations = {'a.html': {'title' :'Golem.de: IT-News für Profis', 'mime':'text/html'},
+                            'b.html': {'title' :"heise online | IT-News, c't, iX, Technology Review, Telepolis", 'mime':'text/html'},
+                            'c.html': {'title' :'', 'mime':'text/plain'},
+                            'd.html': {'title' :'', 'mime':'application/octet-stream'}}
+
+            for key, value in expectations.items():
+                path = os.path.join(TESTDATA_PATH, key)
+                self.assertEqual(value['title'], get_title(path, value['mime']))
+
+    unittest.main()
