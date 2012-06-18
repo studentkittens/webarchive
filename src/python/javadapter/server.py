@@ -209,7 +209,9 @@ def list_branches_handler(args):
     domain = args[0]
 
     branch_list = Git(domain).list_branches()
-    if branch_list is not None:
+    print('--> ', branch_list)
+    if type(branch_list) is list:
+        print('it a list')
         return '\n'.join(branch_list) + '\n'
     else:
         raise ProtocolError('Invalid Domain.')
@@ -227,7 +229,7 @@ def list_commits_handler(args):
     domain = args[0]
 
     cmt_list = Git(domain).list_commits()
-    if cmt_list is not None:
+    if type(cmt_list) is list:
         return '\n'.join(cmt_list) + '\n'
     else:
         raise ProtocolError('Invalid Domain.')

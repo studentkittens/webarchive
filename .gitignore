@@ -3,7 +3,7 @@ build/*
 nbproject/*
 javadoc/*
 *.doctree
-
+doku/sphinx/build/*
 #-- vim files
 *.vim
 *.swp
