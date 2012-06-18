@@ -11,6 +11,14 @@ Both sides try to shed some light onto the internal stuff happening.
 Getting Started
 ---------------
 
+Install the following modules from PyPI:
+
+- ``filemagic`` - Determining MIME Type
+- ``docopt`` - Intelligent argument Parsing
+- ``beautifulsoup4`` - Title Extraction from HTML
+
+**Listen and Repeat:**
+
 .. code-block:: bash
 
   $ archive.py init /tmp         # Create a new Archive-Root
