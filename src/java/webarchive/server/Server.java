@@ -232,6 +232,9 @@ public class Server implements Runnable,NetworkModule {
 		synchronized (cList) {
 			cList.remove(c);
 		}
+		synchronized (observers) {
+			observers.remove(c);
+		}
 	}
 	
 
