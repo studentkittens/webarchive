@@ -18,6 +18,7 @@ import config.reader as config
 import util.filelock as lock
 from util.paths import get_dbpath
 from util.paths import get_archive_root
+from util.paths import get_sqlpath
 
 
 class DBGenerator(object):
@@ -54,7 +55,7 @@ class DBGenerator(object):
         """
         self.__statements = []
         statements = dict()
-        for source in glob.glob(os.path.join(config.get('db.sqlSource'), '*.sql')):
+        for source in glob.glob(os.path.join(get_sqlpath(), '*.sql')):
             with open(source, 'r') as fd:
                 source_base = os.path.basename(source)
                 if source_base.endswith('.sql'):
