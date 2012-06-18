@@ -145,6 +145,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			{
 				List<Connection> l = Server.getInstance().getObservers();
 				synchronized (l) {
+					l.remove(c);
 					l.add(c);
 				}
 				Message answer = new Message(msg,null);
