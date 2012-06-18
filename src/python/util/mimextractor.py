@@ -30,30 +30,28 @@ def get_mime(filepath):
 #                                unittest                                 #
 ###########################################################################
 
-TESTDATA_PATH = '/home/christoph/devf/webarchive/src/python/testdata/html/'
-
-def file_helper(path_to_file):
-    mime = subprocess.check_output(["file", "-b", "--mime-type", path_to_file])
-    mime = str(mime, "UTF-8").strip()
-    return mime
 
 if __name__ == '__main__':
+    TESTDATA_PATH = 'testdata/html/'
+
+    def file_helper(path_to_file):
+        mime = subprocess.check_output(["file", "-b", "--mime-type", path_to_file])
+        mime = str(mime, "UTF-8").strip()
+        return mime
+
+    # check if `file` returns the same MIME as we do
     class TestMime(unittest.TestCase):
         def test_get_mime(self):
-            file_ = os.path.join(TESTDATA_PATH, 'a.html')
-            self.assertEqual(file_helper(file_), get_mime(file_))
-            self.assertEqual('text/html', get_mime(file_))
+            expectations = {
+                    'a.html': 'text/html',
+                    'b.html': 'text/html',
+                    'c.html': 'text/plain',
+                    'd.html': 'application/octet-stream'
+                    }
 
-            file_ = os.path.join(TESTDATA_PATH, 'b.html')
-            self.assertEqual(file_helper(file_), get_mime(file_))
-            self.assertEqual('text/html', get_mime(file_))
-
-            file_ = os.path.join(TESTDATA_PATH, 'c.html')
-            self.assertEqual(file_helper(file_), get_mime(file_))
-            self.assertEqual('text/plain', get_mime(file_))
-
-            file_ = os.path.join(TESTDATA_PATH, 'd.html')
-            self.assertEqual(file_helper(file_), get_mime(file_))
-            self.assertEqual('application/octet-stream', get_mime(file_))
+            for key, value in expectations.items():
+                path = os.path.join(TESTDATA_PATH, key)
+                self.assertEqual(file_helper(path), get_mime(path))
+                self.assertEqual(value, get_mime(path))
 
     unittest.main()
