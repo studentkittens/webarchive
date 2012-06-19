@@ -9,7 +9,6 @@ __author__ = 'Christoph Piechula'
 
 import subprocess
 import os
-import sys
 import shutil
 import logging
 import unittest
@@ -104,7 +103,7 @@ if __name__ == '__main__':
 
     def content_helper(folder):
         content = [item for item in os.walk(folder)]
-        return itertools.starmap(lambda root, dirs, files: [dirs, files], content)
+        return list(itertools.starmap(lambda root, dirs, files: [dirs, files], content))
 
     class TestCleaner(unittest.TestCase):
         def setUp(self):
@@ -120,17 +119,18 @@ if __name__ == '__main__':
             shutil.copytree(self.__clean_should_be, self.__clean_test_data)
             self.__clean_test_dataer = Cleaner(self.__restruct_test_data)
 
+        def compare_filetree(self, should_be, test_data):
+            should_be = content_helper(should_be)
+            really_is = content_helper(test_data)
+            self.assertEqual(should_be, really_is)
+
         def test_restructure(self):
             self.__clean_test_dataer.restructure()
-            should_be = content_helper(self.__restruct_should_be)
-            really_is = content_helper(self.__restruct_test_data)
-            self.assertTrue(list(should_be) == list(really_is))
+            self.compare_filetree(self.__restruct_should_be, self.__restruct_test_data)
 
         def test_clean_empty(self):
             self.__clean_test_dataer.clean_empty()
-            should_be = content_helper(self.__clean_should_be)
-            really_is = content_helper(self.__clean_test_data)
-            self.assertTrue(list(should_be) == list(really_is))
+            self.compare_filetree(self.__clean_should_be, self.__clean_test_data)
 
         def tearDown(self):
             shutil.rmtree(self.__restruct_test_data, ignore_errors=True)
