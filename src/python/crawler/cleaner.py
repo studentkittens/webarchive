@@ -94,9 +94,18 @@ class Cleaner:
 ###########################################################################
 #                                 content                                 #
 ###########################################################################
-
 if __name__ == '__main__':
-    c = Cleaner(sys.argv[1])
-    c.restructure()
-    c.clean_empty()
-    print(c.print_list())
+    TESTDATA_PATH = 'testdata/cleaner/'
+
+    class TestMime(unittest.TestCase):
+        def setUp(self):
+            shutil.copytree(os.path.join(TESTDATA, 'before'),
+                            os.path.join(TESTDATA_PATH, 'after'))
+
+    unittest.main()
+
+# if __name__ == '__main__':
+#     c = Cleaner(sys.argv[1])
+#     c.restructure()
+#     c.clean_empty()
+#     print(c.print_list())
