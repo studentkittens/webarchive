@@ -22,14 +22,24 @@ def makecleandict(dirtydict):
 
 
 class XMLReader(object):
-    """Docstring for XMLReader """
+    """Read a certain XML File and return a metadict"""
 
     def __init__(self, xmlpath):
+        """
+        Convert any valid data.xml to a metadict
+
+        :xmlpath: path to data.xml
+        """
         self.__xmlpath = xmlpath
         self.__tree = ElementTree()
         self.__tree.parse(xmlpath)
 
     def parse(self):
+        """
+        Do actual parsing
+
+        :returns: a new metadict
+        """
         metadict, tagdict = dict(), dict()
         for node in self.__tree.iter():
             tag = actual_name(node.tag)

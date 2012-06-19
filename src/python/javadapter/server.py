@@ -209,9 +209,7 @@ def list_branches_handler(args):
     domain = args[0]
 
     branch_list = Git(domain).list_branches()
-    print('--> ', branch_list)
     if type(branch_list) is list:
-        print('it a list')
         return '\n'.join(branch_list) + '\n'
     else:
         raise ProtocolError('Invalid Domain.')

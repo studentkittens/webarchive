@@ -7,8 +7,12 @@ import unittest
 import socket
 import os
 
-import  util.paths as paths
+import util.paths as paths
 
+
+# At the moment, testing is only possible when a domain
+# called www.hack.org is actually there.. this needs a proper config,
+# but it isn't done yet at time of writing..
 
 TESTDOMAIN = 'www.hack.org'
 

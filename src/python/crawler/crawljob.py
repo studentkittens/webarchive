@@ -148,11 +148,6 @@ class CrawlJob(object):
             git_proc.recreate_master()
             fsmutex.release()
 
-# TODO: Lock should be released after db gen not before?
-#       crawl a sync -> lock release -> there is time span -> crawl a db gen.
-#       its possible that crawl b checks in and commits db
-#       within this time span, beforce crawl a db gen is started -> BAAAM ... invalid db structure?
-
     def start_dbgen(self):
         """
         Invokes DB generator submodule to create db statements from
