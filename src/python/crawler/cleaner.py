@@ -12,6 +12,8 @@ import os
 import sys
 import shutil
 import logging
+import unittest
+import itertools
 
 import util.times as times
 import crawler.filter as filter
@@ -94,9 +96,46 @@ class Cleaner:
 ###########################################################################
 #                                 content                                 #
 ###########################################################################
-
 if __name__ == '__main__':
-    c = Cleaner(sys.argv[1])
-    c.restructure()
-    c.clean_empty()
-    print(c.print_list())
+    TESTDATA_PATH = 'testdata/cleaner/'
+
+    def path_helper(folder):
+        return os.path.join(TESTDATA_PATH, folder)
+
+    def content_helper(folder):
+        content = [item for item in os.walk(folder)]
+        return itertools.starmap(lambda root, dirs, files: [dirs, files], content)
+
+    class TestCleaner(unittest.TestCase):
+        def setUp(self):
+            self.__before = path_helper('raw_data')
+            self.__after = path_helper('after')
+            shutil.copytree(self.__before, self.__after)
+            self.__cleaner = Cleaner(self.__after)
+
+        def test_restructure(self):
+            self.__cleaner.restructure()
+            source_dir = path_helper('what_raw_data_should_look_like_after_restruct')
+
+            should_be = content_helper(source_dir)
+            really_is = content_helper(self.__after)
+
+            self.assertTrue(list(should_be) == list(really_is))
+
+        def test_clean_empty(self):
+            self.__cleaner.clean_empty()
+            source_dir = path_helper('what_raw_data_should_look_like_after_clean_empty')
+            should_be = content_helper(source_dir)
+            really_is = content_helper(self.__after)
+            self.assertTrue(list(should_be) == list(really_is))
+
+        def tearDown(self):
+           shutil.rmtree(self.__after, ignore_errors=True)
+
+    unittest.main()
+
+# if __name__ == '__main__':
+#     c = Cleaner(sys.argv[1])
+#     c.restructure()
+#     c.clean_empty()
+#     print(c.print_list())

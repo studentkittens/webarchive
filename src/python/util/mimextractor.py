@@ -30,7 +30,6 @@ def get_mime(filepath):
 #                                unittest                                 #
 ###########################################################################
 
-
 if __name__ == '__main__':
     TESTDATA_PATH = 'testdata/html/'
 
