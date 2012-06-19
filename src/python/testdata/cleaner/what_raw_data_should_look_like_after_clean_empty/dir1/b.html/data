@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    
+    
+
+    <title>heise online | IT-News, c't, iX, Technology Review, Telepolis</title>
+
+    
+
+
+
+
+<meta charset="utf-8">
+<meta name="publisher" content="Heise Zeitschriften Verlag" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="home" type="text/html" title="Startseite" href="/" />
+<link rel="copyright" title="Copyright" href="/Impressum-4862.html" />    
+    
+        <!--googleoff: all-->
+    <meta property="fb:page_id"     content="333992367317" />
+    <meta property="og:title"       content="IT-News, c&#39;t, iX, Technology Review, Telepolis" />
+    <meta property="og:type"        content="website" />
+    <meta property="og:locale"      content="de_DE" />
+    <meta property="og:url"         content="http://www.heise.de/" />
+    <meta property="og:site_name"   content="heise online" />
+    <meta property="og:image"       content="http://www.heise.de/icons/ho/heise_online_logo.gif" />
+
+    <!--googleon: all--><!--googleoff: all-->
+<meta name="generator" content="InterRed V12.0, http://www.interred.de/, InterRed GmbH" />
+<!--googleon: all-->
+
+    
+
+
+
+<script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/js/plugins/jquery-ui-1.8.18_cycle.custom.min.js"></script>
+<script type="text/javascript" src="/support/lib/jquery/jquery.equalheights.js"></script>
+<script type="text/javascript" src="/support/lib/social_bookmarks.js"></script>
+<script type="text/javascript" src="/support/lib/external.js"></script>
+<script type="text/javascript" src="/support/lib/teaser_linking.js"></script>
+
+<!-- view_relaunch: 0 -->
+
+    
+
+
+
+<link href="/stil/standard2008.css" rel="stylesheet" type="text/css" />
+<link href="/stil/navi_top2008.css" rel="stylesheet" type="text/css" />
+<link href="/stil/drucken.css" rel="stylesheet" type="text/css" media="print" />
+
+
+    <link href="/favicon.ico" rel="shortcut icon" />
+    <link rel="author" title="Kontakt" href="mailto:kontakt%40heise.de?subject=heise%20online" />
+    <link rel="search" title="Suche" href="http://www.heise.de/suche/" />
+    <link rel="alternate" type="application/atom+xml" title="Aktuelle News von heise online" href="http://www.heise.de/newsticker/heise-atom.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Aktuelle News von heise online (für ältere RSS-Reader)" href="http://www.heise.de/newsticker/heise.rdf" />
+    <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-57x57-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/apple-touch-icon-114x114-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/apple-touch-icon-72x72-precomposed.png" />
+    <meta name="DC.creator" content="heise online" />
+        <meta name="description" content="News und Foren zu Computer, IT, Wissenschaft, Medien und Politik. Preisvergleich von Hardware und Software sowie Downloads beim Heise Zeitschriften Verlag." />
+            <meta name="keywords" content="heise online, c't, iX, Technology Review, Newsticker, Telepolis, Security, Netze" />        <link href="/stil/ho/heiseonline2012.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+
+
+
+
+
+
+<!--googleoff: all-->
+
+<div class="heisetopnavi no-touch">
+    <div class="heisetopnavi_header">
+    <header role="banner">
+        <div class="heisetopnavi_login">
+            <script type="text/javascript" src="/js/ho/login.min.js"></script>
+            <div id="navi_login">
+                <p><a href="https://www.heise.de/userdb/sso?rm=show_login&amp;dirid=1&amp;objekt=/">Einloggen</a> auf heise online</p>
+            </div>
+        </div>
+        <nav role="navigation">
+        <ul class="heisetopnavi_navi"><li class="heisetopnavi_logo" aria-haspopup="true">
+            <a href="/index.html/from/navi_oben_ho" title="heise online"><img src="//www.heise.de/icons/ho/heise_online_logo_top.gif" alt="heise online" /></a>
+            <ul class="heisetopnavi_sub">
+                <li class="heisetopnavi_sub">
+                    <ul class="heisetopnavi_sub_item one">
+                        <li class="heisetopnavi_ho"><a href="/index.html/from/navi_oben_ho" title="heise online – IT-News">News</a></li>
+                        <li class="heisetopnavi_ct"><a href="/ct/from/navi_oben_ct" title="c't – Magazin für Computertechnik">c't</a></li>
+                        <li class="heisetopnavi_ix"><a href="/ix/from/navi_oben_ix" title="iX – Magazin für professionelle Informationstechnik">iX</a></li>
+                        <li class="heisetopnavi_tr"><a href="/tr/from/navi_oben_tr" title="Technology Review – Das M.I.T.-Magazin für Innovation">Technology Review</a></li>
+                        <li class="heisetopnavi_mac"><a href="/mac-and-i/from/navi_oben_mac" title="Mac &amp; i – Nachrichten, Tests, Tipps und Meinungen rund um Apple">Mac &amp; i</a></li>
+                        <li class="heisetopnavi_tp"><a href="/tp/from/navi_oben_tp" title="Telepolis">Telepolis</a></li>
+                        <li class="heisetopnavi_hh"><a href="/hardware-hacks/from/navi_oben_hh" title="Hardware Hacks – Kreativ mit Technik">Hardware Hacks</a></li>
+                        <li class="heisetopnavi_df"><a href="/foto/special/from/navi_oben_df" title="Digitale Fotografie">Digitale Fotografie</a></li>
+                    </ul>
+                    <ul class="heisetopnavi_sub_item two">
+                        <li class="heisetopnavi_aut"><a href="/autos/from/navi_oben_aut" title="heise Autos – News, Tests, Technik, Service rund ums Auto">heise Autos</a></li>
+                        <li class="heisetopnavi_dev"><a href="/developer/from/navi_oben_dev" title="heise Developer – Informationen für Entwickler">heise Developer</a></li>
+                        <li class="heisetopnavi_foto"><a href="/foto/from/navi_oben_foto" title="heise Foto – Das Online-Magazin rund ums digitale Bild">heise Foto</a></li>
+                        <li class="heisetopnavi_mob"><a href="/mobil/from/navi_oben_mob" title="heise mobil – Tipps &amp; Tricks sowie Produktvorstellungen rund um das mobile Internet">heise mobil</a></li>
+                        <li class="heisetopnavi_net"><a href="/netze/from/navi_oben_net" title="heise Netze – Alles über Netzwerk-Technik">heise Netze</a></li>
+                        <li class="heisetopnavi_op"><a href="/open/from/navi_oben_op" title="heise open – Open Source im Unternehmen">heise Open Source</a></li>
+                        <li class="heisetopnavi_res"><a href="/resale/from/navi_oben_res" title="heise resale – Fakten, Trends und Standpunkte für das ITK-Geschäft">heise resale</a></li>
+                        <li class="heisetopnavi_sec"><a href="/security/from/navi_oben_sec" title="heise Security – News, Dienste und Foren zum Thema Computer-Sicherheit">heise Security</a></li>
+                        <li class="heisetopnavi_video"><a href="/video/from/navi_oben_video" title="ctmagazin.tv">heise Video</a></li>
+                    </ul>
+                    <ul class="heisetopnavi_sub_item three">
+                        <li class="heisetopnavi_swv"><a href="/download/from/navi_oben_swv" title="Software-Verzeichnis – Software zum Download fuer Windows, Mac, Linux, iPhone, Symbian, Android">Download</a></li>
+                        <li class="heisetopnavi_pvg"><a href="/preisvergleich/from/navi_oben_pvg" title="Preisvergleich">Preisvergleich</a></li>
+                        <li class="heisetopnavi_job"><a href="/jobs/from/navi_oben_job" title="heise jobs – Jobbörse für qualifizierte Fach- und Führungskräfte aus der IT-Branche">Stellenmarkt</a></li>
+                        <li class="heisetopnavi_eve"><a href="/events/from/navi_oben_eve" title="heise Events – Konferenzen, Seminare, Workshops">Veranstaltungen</a></li>
+                        <li class="heisetopnavi_mkt"><a href="/redirect-to/marktplatz/from/navi_oben_mkt" title="heise-marktplatz – Kostenlose Kleinanzeigen">heise-marktplatz</a></li>
+                        <li class="heisetopnavi_itm"><a href="/itmarkt/from/navi_oben_itm" title="IT-Markt – Branchenverzeichnis der IT-Fachhändler">IT-Markt</a></li>
+                        <li class="heisetopnavi_whi"><a href="/whitepapers/from/navi_oben_whi" title="heise Whitepapers – Kostenloser Download aktueller Praxisbeispiele, Firmeninfos, Case Studies und Webcasts zu neuen Produkten, Strategien und Lösungen namhafter IT-Hersteller">Whitepapers</a></li>
+                        <li class="heisetopnavi_webcasts"><a href="/redirect-to/webcasts/from/navi_oben_webcasts" title="heise Webcasts – Kompakte Firmeninformationen zu komplexen IT-Sachverhalten">Webcasts</a></li>
+                        <li class="heisetopnavi_tarifr"><a href="/redirect-to/tarifrechner/from/navi_oben_tarifr" title="Tarifrechner – DSL, Mobiles Internet, Handy, Telefon, Strom, Gas">Tarifrechner</a></li>
+                    </ul>
+                    <ul class="heisetopnavi_sub_item four">
+                        <li class="heisetopnavi_shop"><a href="/redirect-to/shop/from/navi_oben_shop" title="heise-shop – IT Fachzeitschriften, Bücher, CD/DVD/Blu-ray">heise-shop</a></li>
+                        <li class="heisetopnavi_kio"><a href="/artikel-archiv/from/navi_oben_kio" title="Artikel-Archiv – c't, iX, Technology Review, Digitale Fotografie, Mac &amp; i, Sonderhefte">Artikel-Archiv</a></li>
+                        <li class="heisetopnavi_abo"><a href="/redirect-to/abo/from/navi_oben_abo" title="Abo – c't, iX, Technology Review, Digitale Fotografie, Mac &amp; i">Zeitschriften-Abo</a></li>
+                        <li class="heisetopnavi_hmg"><a href="/redirect-to/hmg/from/navi_oben_hmg" title="Jobs bei Heise – Aktuelle Stellenangebote der Heise Medien Gruppe">Jobs bei Heise</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li></ul>
+        </nav>
+        
+            
+                
+                
+        
+            <form accept-charset="utf-8" method="get" action="/suche/" id="heisetopnavi_search" role="search">
+                <fieldset>
+                    <input type="text" class="search_text" value="" name="q" placeholder="in heise online suchen"><input type="image" src="//www.heise.de/icons/ho/heise_online_lupe.gif" alt="Los" class="search_submit" name="search_submit">
+                    <input type="hidden" class="search_hidden" value="search" name="rm">
+                </fieldset>
+            </form>
+    </header>
+    </div><div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+if (typeof jQuery !== "undefined") {
+    jQuery(document).ready(function($) {
+        if ("ontouchstart" in document) {
+            $(".heisetopnavi").removeClass("no-touch");
+        }
+        $(".heisetopnavi_logo").on("touchstart", function(e) {
+            if ($(e.target).is("li.heisetopnavi_logo")) {
+                $(this).toggleClass("active");
+            }
+        });
+    });
+
+    heiseLogin.login_fill_navigation({});
+}
+</script>
+
+
+
+    <div id="container">
+        <div id="container_content">
+            <div id="logo_bereich">
+                <div class="logo">
+                                    <a href="/" title="heise online News" class="channel_titel">News</a>
+                                </div>
+                <ul class="navigation">
+                    <li><strong><a href="/newsticker/classic/" title="Newsticker Classic">Newsticker</a></strong></li>
+                    <li><strong><a href="/newsticker/" title="7-Tage-News">7-Tage-News</a></strong></li>
+                    <li><strong><a href="/newsticker/archiv/" title="Newsticker Archiv">Archiv</a></strong></li>
+                    <li><strong><a href="/foren/" title="Leserforum">Foren</a></strong></li>
+                </ul>
+                <ul class="sub_navigation">
+                    <li class="rss"><a href="/news-extern/news.html" title="RSS-Feeds">RSS</a></li>
+                    <li class="mobi"><a href="http://heise-online.mobi/" title="News mobil">News mobil</a></li>
+                    <li class="newsletter"><a href="/newsletter/" title="Newsletter">Newsletter</a></li>
+                </ul>
+            </div>
+                            
+                        <div id="mitte">
+            
+                <div id="mitte_links">
+            
+            <!--googleon: all-->
+            
+
+
+<div id="mitte_news">
+	
+
+
+    
+		
+			<div id="oben" class="topteaser_2011 layout_2 teaser_linker">
+			
+			
+		
+		
+			
+			<b class="dachzeile">
+			
+				Spielkonsolen
+			
+			</b>
+			
+				<h2><a href="/newsticker/meldung/Microsofts-Holodeck-Xbox-Roadmap-mit-Augmented-Reality-Brille-1620008.html" title="Microsofts geheime Pläne für die Xbox" class="the_content_url">Microsofts geheime Pläne für die Xbox</a></h2>
+			
+			
+						
+					<div class="img_clip"><img src="/imgs/71/8/7/6/9/6/2/0ae066ed775062af.jpeg" width="260" height="175" alt=""  /></div>		
+				
+			
+			
+			<p> 
+			In einem Strategiepapier rollt Microsoft die künftige Entwicklung seiner Spielkonsole aus, inklusive AR-Brille und Cloud-Angeboten. Microsofts Anwälte versuchen, die Verbreitung des internen Dokuments im Netz zu unterbinden. <span class="mehr_schnipsel">Mehr…</span>
+			</p>
+			<div class="kommentare">50</div>  
+			
+						
+				<ul>
+				
+					<li><a href="/meldung/E3-SmartGlass-soll-Xbox-mit-Smartphones-und-Tablets-verkuppeln-1604554.html">SmartGlass verkuppelt Xbox mit Smartphones und Tablets</a></li>
+				</ul>
+
+			
+			
+			
+						
+	
+			</div>
+		
+		
+			<div id="unten" class="topteaser_2011 layout_8">
+					
+				<script type="text/javascript">
+				<!--//--><![CDATA[//><!--
+				$(document).ready( function() {
+					if ( $('#unten .multiple .img_clip').length ) {
+						$('#unten .multiple .img_clip').height($('#unten .multiple .img_clip img').objectMinHeight());
+					}
+					if ( $('#unten .multiple h2').length ) {
+						$('#unten .multiple h2').objectToMaxHeight();
+					}
+					if ( $('#unten .multiple .dachzeile').length ) {
+						$('#unten .multiple .dachzeile').objectToMaxHeight();
+					}
+					if ( $('#unten .multiple p').length ) {
+						$('#unten .multiple p').objectToMaxHeight();
+					}
+				});
+				//--><!]]>
+				</script>
+			
+			
+		
+		
+			
+				<div class="multiple teaser_linker">
+			
+			<b class="dachzeile">
+			
+				Supercomputer
+			
+			</b>
+			
+				<h2><a href="/newsticker/meldung/Supercomputer-USA-holen-Spitzenposition-zurueck-1619629.html" title="USA wieder Spitze" class="the_content_url">USA wieder Spitze</a></h2>
+			
+			
+						
+					<div class="img_clip"><img src="/imgs/71/8/7/6/9/6/2/nt-superc-1d07fe76310db785.jpg" width="160" height="120" alt=""  /></div>		
+				
+			
+			
+			<p> 
+			Der schnellste Computer steht in den USA, zwei deutsche Rechner sind in den Top 10. <span class="mehr_schnipsel">Mehr…</span>
+			</p>
+			<div class="kommentare">127</div>  
+			
+			
+			
+			
+				</div>
+			
+		
+			
+				<div class="multiple teaser_linker">
+			
+			<b class="dachzeile">
+			
+				Tastaturen
+			
+			</b>
+			
+				<h2><a href="/newsticker/meldung/Computertastatur-wird-nur-selten-geputzt-1620027.html" title="Schmutzfänger" class="the_content_url">Schmutzfänger</a></h2>
+			
+			
+						
+					<div class="img_clip"><img src="/imgs/71/8/7/6/9/6/2/a34c975a3bc65c90.jpeg" width="160" height="120" alt=""  /></div>		
+				
+			
+			
+			<p> 
+			Nicht alle Besitzer eines Computers reinigen die Tastatur regelmäßig. <span class="mehr_schnipsel">Mehr…</span>
+			</p>
+			<div class="kommentare">310</div>  
+			
+			
+			
+			
+				</div>
+			
+		
+			
+				<div class="multiple last teaser_linker">
+			
+			<b class="dachzeile">
+			
+				Eröffnung
+			
+			</b>
+			
+				<h2><a href="/newsticker/meldung/Kraft-Oeffentlich-rechtliche-Inhalte-sollten-im-Netz-bleiben-1620164.html" title="Medienforum NRW" class="the_content_url">Medienforum NRW</a></h2>
+			
+			
+						
+					<div class="img_clip"><img src="/imgs/71/8/7/6/9/6/2/ecfd0675d223693f.jpeg" width="160" height="120" alt=""  /></div>		
+				
+			
+			
+			<p> 
+			Mehr öffentlich-rechtliche Inhalte im Netz forderte NRW-Ministerpräsidentin Kraft. <span class="mehr_schnipsel">Mehr…</span>
+			</p>
+			<div class="kommentare">42</div>  
+			
+			
+			
+			
+				</div>
+			
+						
+	
+			</div>
+				
+		<div class="trennlinie_6px"></div>
+    
+
+ 
+    <div class="anrissliste">
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/AK-Vorrat-kritisiert-Speicherpraxis-bei-Mobilfunkanbietern-1620508.html" title="AK Vorrat kritisiert Speicherpraxis bei Mobilfunkanbietern">AK Vorrat kritisiert Speicherpraxis bei Mobilfunkanbietern</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Sie speichern Einzelverbindungen von Flatrate-Usern oder Nummern eingehender Anrufe aus dem Inland. Dank der Datenschutzaktivisten wurde bekannt, dass die Bundesnetzagentur die Speichermethoden der Provider eingehend untersucht. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">11</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Schwedische-Netzfilter-sollen-unabhaengig-ueberprueft-werden-1620484.html" title="Schwedische Netzfilter sollen unabhängig überprüft werden">Schwedische Netzfilter sollen unabhängig überprüft werden</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Nach acht Jahren im Einsatz lässt der schwedische Netzbetreiber die Filterlisten der schwedischen Behörden von einer Universität untersuchen, für eine regelmäßige Prüfung wird noch einem geeigneten Partner gesucht. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">15</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Parallels-will-Hoster-und-Agenturen-als-Vertriebspartner-gewinnen-1620466.html" title="Parallels will Hoster und Agenturen als Vertriebspartner gewinnen">Parallels will Hoster und Agenturen als Vertriebspartner gewinnen</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Speziell für die Bedürfnisse von Hosting-Anbietern und Internet-Agenturen im Cloud-Umfeld ergänzt der Hersteller sein Channel-Programm um die Stufen &quot;Member&quot; und &quot;Bronze&quot;. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">1</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Suedkorea-erlaesst-Handelsverbot-fuer-virtuelle-Spielgegenstaende-1619879.html" title="Südkorea erlässt Handelsverbot für virtuelle Spielgegenstände">Südkorea erlässt Handelsverbot für virtuelle Spielgegenstände</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/4/7/1/silberscheibe_36047258_original.large-4-3-800-228-0-4668-3336.jpg-58d355011dd72e3d.jpeg" width="100" height="75" alt="Spielen am Computer" title="Spielen am Computer" />
+			
+			<p>
+			Gegenstände aus Computerspielen dürfen in Südkorea laut einem neuen Gesetz bald nicht mehr gehandelt werden. Auch die automatisierte Schatzjagd mit Bots soll untersagt werden. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">71</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Guenstiger-4K-Kinoprojektor-Beamerlampen-statt-Xenon-1620120.html" title="Günstiger 4K-Kinoprojektor: Beamerlampen statt Xenon">Günstiger 4K-Kinoprojektor: Beamerlampen statt Xenon</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/6/5/3/TN_44008502_105371895c-041ac2f9ea2f933e.png" width="100" height="100" alt="" title="" />
+			
+			<p>
+			Sonys neuer 4K-Digitalprojektor SRX-R515 soll kleineren Kinos eine billigere Digitalisierung ermöglichen: Er kostet 15.000 Euro weniger als das Vorgängermodell. Statt Xenonlampen nutzt er konventionelle Beamer-Hochdrucklampen. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">33</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/95-Prozent-der-EU-Buerger-haben-Breitbandzugang-1620213.html" title="95 Prozent der EU-Bürger haben Breitbandzugang">95 Prozent der EU-Bürger haben Breitbandzugang</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Mittlerweile sind 68 Prozent der Europäer regelmäßig online und 170 Millionen nutzen soziale Netze, wie aus der Jahresstatistik der EU-Kommission zur Digitalen Agenda hervorgeht. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">53</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Europaeisches-Forum-fuer-High-Performance-Computing-gegruendet-1620050.html" title="Europäisches Forum für High Performance Computing gegründet">Europäisches Forum für High Performance Computing gegründet</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/6/0/4/nt-etp.jpg-ccd125185616a64b.jpeg" width="99" height="64" alt="" title="" />
+			
+			<p>
+			Ein neuer Zusammenschluss zum Thema High Performance Computing soll nach dem Willen der Europäischen Kommission die bestehende PRACE-Partnerschaft um ein HPC-Forschungsprogramm ergänzen. <span class="mehr_schnipsel">Mehr…</span>
+			  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/ISC12-Intel-stellt-HPC-Beschleuniger-Xeon-Phi-vor-1619632.html" title="ISC12: Intel stellt HPC-Beschleuniger Xeon Phi vor">ISC12: Intel stellt HPC-Beschleuniger Xeon Phi vor</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/8/3/xeon-phi-68d4a677f12235a6.png" width="100" height="74" alt="" title="" />
+			
+			<p>
+			Bislang lief Intels Vielkernstrategie unter der Bezeichnung Many Integrated Cores (MIC), nun hat Intel für diese Produktfamilie den offiziellen Namen enthüllt: Xeon Phi. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">13</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Google-beklagt-Zunahme-staatlicher-Loeschanfragen-1619874.html" title="Google beklagt Zunahme staatlicher Löschanfragen">Google beklagt Zunahme staatlicher Löschanfragen</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/4/6/6/Google-_36235906_original.large-4-3-800-0-0-3443-2579.jpg-4a40b2a6746904d6.jpeg" width="100" height="75" alt="Google" title="Google" />
+			
+			<p>
+			Von Juli bis Dezember 2011 hat der Suchmaschinenanbieter mehr als 1000 staatliche Anfragen zur Löschung von Webinhalten bekommen. Das geht aus dem aktuellen &quot;Transparency Report&quot; des Unternehmens hervor. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">30</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Virenscanner-uebersehen-alte-PDF-Exploits-im-XML-Kleid-1619890.html" title="Virenscanner übersehen alte PDF-Exploits im XML-Kleid">Virenscanner übersehen alte PDF-Exploits im XML-Kleid</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Sämtliche Virenscanner haben laut einem Sicherheitsforscher ein Problem damit, Exploits in PDF-Dokumenten zu erkennen, die in ein spezielles Format konvertiert wurden. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">86</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Oracle-antwortet-auf-Kundenkritik-1614758.html" title="Oracle antwortet auf Kundenkritik">Oracle antwortet auf Kundenkritik</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Die deutsche Anwendervereinigung hatte dem Konzern vorgeworfen, Kunden mit Schwierigkeiten bei der Virtualisierungstechnik VM alleine zu lassen. Oracle hat nun darauf reagiert. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">48</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Growl-2-unterstuetzt-Notification-Center-1619876.html" title="Growl 2 unterstützt Notification Center">Growl 2 unterstützt Notification Center</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/4/6/8/nt-growl.jpg-2d6ba6d2941a5826.jpeg" width="100" height="80" alt="" title="" />
+			
+			<p>
+			Apple integriert mit dem Notification Center eine Funktion in Mac OS X, die dem Benachrichtigungsdienst Growl sehr ähnlich ist. Die Growl-Entwickler lassen sich davon aber nicht entmutigen.  <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">62</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Akkutausch-beim-MacBook-Pro-mit-Retina-Display-wird-teuer-1619822.html" title="Akkutausch beim MacBook Pro mit Retina-Display wird teuer">Akkutausch beim MacBook Pro mit Retina-Display wird teuer</a><b class="update">Update</b> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/4/1/4/index.jpg-7537abf40472cb30.jpeg" width="100" height="65" alt="" title="" />
+			
+			<p>
+			Apple hat eine Preistabelle veröffentlicht, aus der zu entnehmen ist, was ein neuer Akku für das Spitzenmodell außerhalb der Gewährleistungszeit kostet. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">894</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/iOS-6-fragt-ob-Apps-auf-persoenliche-Daten-zugreifen-duerfen-1619009.html" title="iOS 6 fragt, ob Apps auf persönliche Daten zugreifen dürfen">iOS 6 fragt, ob Apps auf persönliche Daten zugreifen dürfen</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/5/8/1/5/path-f9aaf8847dfae264.jpeg" width="100" height="44" alt="" title="" />
+			
+			<p>
+			Ab der kommenden iOS-Version 6 fragt das System nach, ob eine App auf die Kontakte, Kalendereinträge, Erinnerungen oder Fotos zugreifen darf. Bislang gab es eine solche Abfrage nur für die Standortinformationen. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">200</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Mozilla-arbeitet-an-iOS-Browser-und-Social-Networking-Client-1619771.html" title="Mozilla arbeitet an iOS-Browser und Social Networking Client">Mozilla arbeitet an iOS-Browser und Social Networking Client</a> 
+			</h3>
+			</div>
+			
+			<p>
+			Die Mozilla-Entwickler wollen sich nach der Erfahrung mit iOS und Android nicht mehr von den Innovationen anderer überraschen lassen. Das Team für Produktdesign und Strategie arbeitet daher an neuen Angeboten. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">39</div>  
+			</p>
+			
+		</div>
+		
+		
+			<div class="bcadv"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=4x4;tile=1;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=4x4;tile=1;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=4x4;tile=1;ord=8009217165?" /></a></div></noscript>
+</div>
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Glasfaser-fuer-die-Gropiusstadt-1619781.html" title="Glasfaser für die Gropiusstadt">Glasfaser für die Gropiusstadt</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/3/7/9/nt-grop.jpg-386c029c8543ee1f.jpeg" width="100" height="53" alt="" title="" />
+			
+			<p>
+			In einem Pilotprojekt des Wohnungsunternehmens degewo wurden die ersten Mieter an schnelles Breitbandkabel angeschlossen. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">131</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Mac-i-Heft-6-jetzt-im-Handel-1619100.html" title="Mac &amp; i Heft 6 jetzt im Handel">Mac &amp; i Heft 6 jetzt im Handel</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/5/8/7/4/MDB2784_4c5f39ff84.jpg-1a9dbf75fa4a59b6.jpeg" width="71" height="100" alt="" title="" />
+			
+			<p>
+			Themen unter anderem: Fit mit dem iPhone, Virenscanner für den Mac, Web-Browser im Vergleich, Kameraqualität von iPhone, iPad &amp; Co. im Test, Praxis zu iLife für iOS und iBooks Author sowie Dienste, die iCloud ergänzen. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">17</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/RoboCup-WM-in-Mexico-City-vor-der-Eroeffnung-1619652.html" title="RoboCup-WM in Mexico City vor der Eröffnung">RoboCup-WM in Mexico City vor der Eröffnung</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/3/0/3/nt-robo.jpg-e9473af08b37ac79.jpeg" width="100" height="57" alt="" title="" />
+			
+			<p>
+			Am Dienstag wird das Turnier offiziell eröffnet. Ein wissenschaftliches Symposium soll am Sonntag die Veranstaltung abschließen. <span class="mehr_schnipsel">Mehr…</span>
+			  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/c-t-Digitale-Fotografie-3-12-jetzt-im-Handel-1617471.html" title="c't Digitale Fotografie 3/12 jetzt im Handel">c't Digitale Fotografie 3/12 jetzt im Handel</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/4/7/0/4/Titel_DF_0312.jpg-b01f20c74f9f7613.jpeg" width="71" height="100" alt="" title="" />
+			
+			<p>
+			Schwerpunktthemen sind diesmal Tests zu aktuellen Highend-Kameras, Inkjet-Shops und Foto-Tools sowie Praxisthemen zu Fotosammlung, Photoshop CS6, Naturfotografie und eigene Gratis-Webgalerie. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">17</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Torvalds-zeigt-Nvidia-den-Stinkefinger-1619616.html" title="Torvalds zeigt Nvidia den Stinkefinger">Torvalds zeigt Nvidia den Stinkefinger</a> <img src="/icons/ho/video.png"             width="17"  height="11" alt="Video"         title="Video im Beitrag"         /> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/6/9/TorvaldsFinger.jpg-b3c20b22f148a9b2.jpeg" width="100" height="75" alt="" title="" />
+			
+			<p>
+			Ein YouTube-Video zeigt den Linux-Erfinder Linus Torvalds, wie er sich über Nvidia in Rage redet. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">579</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Island-Insel-der-gruenen-Rechenzentren-1619591.html" title="Island - Insel der grünen Rechenzentren">Island - Insel der grünen Rechenzentren</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/6/2/e95fc1069be7d941.jpeg" width="100" height="100" alt="" title="" />
+			
+			<p>
+			Die Welt braucht für die stetig wachsende Datenmenge immer mehr Speicherplatz. Um die Rechenzentren der Internet-Riesen bemüht sich Island. Die Insel im Nordatlantik wirbt dabei mit Feuer und Eis. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">72</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Weiterhin-Raetselraten-um-bevorstehendes-Microsoft-Event-1619566.html" title="Weiterhin Rätselraten um bevorstehendes Microsoft-Event">Weiterhin Rätselraten um bevorstehendes Microsoft-Event</a> <img src="/icons/ho/video.png"             width="17"  height="11" alt="Video"         title="Video im Beitrag"         /> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/3/8/mwckrams-1-3.jpg-2f823278d4cee096.jpeg" width="100" height="75" alt="" title="" />
+			
+			<p>
+			Bringt Microsoft ein eigenes Tablet auf den Markt? Gibt es Neuigkeiten zu Windows Phone 8? Eine knapp gehaltene Einladung für den kommenden Montag befeuert die Gerüchteküche. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">174</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Moderne-Videoschnittprogramme-foerdern-den-Nachwuchs-1619577.html" title="Moderne Videoschnittprogramme fördern den Nachwuchs">Moderne Videoschnittprogramme fördern den Nachwuchs</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/4/8/ct0410Einfach_S_64292-uh-A.jpg.jpg-8c79d34426bd3936.jpeg" width="100" height="80" alt="" title="" />
+			
+			<p>
+			Der Deutsche Jugendvideopreis kann sich nicht über einen Mangel an Bewerbern beklagen. Rund 700 Arbeiten von Amateur- und Nachwuchsfilmern wurden für die diesjährige Auflage eingereicht. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">24</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Exploit-fuer-ungepatchte-IE-Luecke-veroeffentlicht-1619571.html" title="Exploit für ungepatchte IE-Lücke veröffentlicht">Exploit für ungepatchte IE-Lücke veröffentlicht</a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/4/3/910c2cd64240506f-73d83042099d525b.png" width="100" height="83" alt="" title="" />
+			
+			<p>
+			Für eine kritische Lücke in den Microsoft XML Core Services gibt es inzwischen einen öffentlichen Exploit. Es ist höchste Zeit, das von Microsoft herausgegebene &quot;FixIt&quot; einzuspielen. <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">94</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+		
+		
+			
+			
+			
+		
+		<div class="anriss_mit_bild_links">	
+			<div class="titel_mit_zusaetzen">	
+			<h3>
+				
+				<a href="/newsticker/meldung/Tablet-Prognose-iPad-vergroessert-Marktanteil-1619551.html" title="Tablet-Prognose: iPad vergrößert Marktanteil ">Tablet-Prognose: iPad vergrößert Marktanteil </a> 
+			</h3>
+			</div>
+			
+			<img src="/imgs/18/8/7/6/2/2/3/bild1.jpg-3d4d75d475b05ce7-151465a6d9db8b2a.jpeg" width="81" height="76" alt="" title="" />
+			
+			<p>
+			Das Marktforschungsinstitut IDC hat seine Prognose für den Tabletmarkt 2012 nach oben korrigiert: Der Marktanteil von Apples iPad soll dabei stärker zulegen als der von Android-Tablets.  <span class="mehr_schnipsel">Mehr…</span>
+			<div class="kommentare">660</div>  
+			</p>
+			
+		</div>
+		
+		
+    
+    </div>
+    <p class="clear"></p>
+    <p class="news_navi">
+	<span class="rsaquo">«&nbsp;</span>
+	Neuere
+	|
+	<a href="/?seite=1">Ältere</a>
+	<span class="rsaquo">&nbsp;»</span>
+    </p>
+    
+    
+	<h4 class="weitere">
+	    <a href="/newsticker/">Weitere Meldungen im News-Überblick</a>
+	</h4>
+    
+    
+	<p class="nachricht">
+	    Fehlt eine wichtige Nachricht? Geben Sie uns <a href="mailto:newstips@heise.de">Bescheid</a>!<br />
+	</p>
+    
+</div>
+
+<div>
+    <img src="/icons/ho/00on.gif" width="1" height="1" alt="" />
+    <noscript>
+    <div><img src="/icons/ho/00off.gif" width="1" height="1" alt="" /></div>
+    </noscript>
+</div>
+
+<div class="promoad"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=137x150;tile=2;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=137x150;tile=2;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=137x150;tile=2;ord=8009217165?" /></a></div></noscript>
+</div>
+
+            <!--googleoff: all-->
+            <div class="adbottom">                        <a href="http://www.heise.de/avw-bin/ivw/CP/hp-dc-pre" target="_blank"><img alt="" src="http://www.heise.de/avw-bin/ivw/CP/hp-dc-pre" /></a>                <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=500x500;tile=3;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=500x500;tile=3;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=500x500;tile=3;ord=8009217165?" /></a></div></noscript>
+
+            </div>
+            
+            
+                </div>
+                <div id="mitte_rechts">
+                
+                
+                    
+                        
+                            <!--googleoff: index-->
+<!-- RSPEAK_STOP -->
+<div  class="bcadv ISI_IGNORE"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=300x250,336x280;tile=4;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=300x250,336x280;tile=4;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=300x250,336x280;tile=4;ord=8009217165?" /></a></div></noscript>
+</div>
+<!-- RSPEAK_START -->
+<!--googleon: index--><!--googleoff: all--><!-- RSPEAK_STOP -->
+                        
+                        
+                            
+                                <!-- Keine Top-News -->
+                            
+                            
+
+
+
+    
+        <div class="teaser_left">
+            <p>
+                <a href="/ct/artikel/Finger-weg-Augen-geradeaus-1616860.html"><img src="/imgs/02/6/3/5/7/5/4/ho_Teaser_MediaAuto-ebee3bb3b2856480.png" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">c't</b><br />
+                <a href="/ct/artikel/Finger-weg-Augen-geradeaus-1616860.html"><b>Mediacenter Auto</b></a><br />
+                <span class="size80">Musikanlage, Navi, Telefon und neuerdings auch ein Computer mit Internet und Apps lenken den Fahrer in einem modernen Auto vom Fahren ab. Immer mehr Knöpfe sind keine Lösung.<br />
+<br />
+</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_left">
+            <p>
+                <a href="/resale/artikel/Arbeitnehmer-leisten-eine-Milliarde-unbezahlter-Ueberstunden-1604742.html"><img src="/imgs/02/6/0/7/6/5/2/Regus_Home_Office2.jpg-7261ec21ae580a1c.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">heise resale – Management</b><br />
+                <a href="/resale/artikel/Arbeitnehmer-leisten-eine-Milliarde-unbezahlter-Ueberstunden-1604742.html"><b>Arbeitnehmer leisten 1 Milliarde unbezahlter Überstunden</b></a><br />
+                <span class="size80">Um die sogenannte Work-Life-Balance ist es in Deutschland im internationalen Vergleich schlecht bestellt. Aber sie hat sich immerhin verbessert.</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_left">
+            <p>
+                <a href="/developer/artikel/Gedanken-zum-Refund-Button-in-Google-Play-1618354.html"><img src="/imgs/02/3/9/7/2/2/1/autoren_kk-e2619b6705251068.jpg-e474647bc7e14c4d.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">heise Developer – Kais bewegtes Web</b><br />
+                <a href="/developer/artikel/Gedanken-zum-Refund-Button-in-Google-Play-1618354.html"><b>Google Play</b></a><br />
+                <span class="size80">Der Refund-Button in Googles Android-Marktplatz ist eine sinnvolle Eigenschaft, die sich Apple gerne abschauen darf.</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_left">
+            <p>
+                <a href="/ix/artikel/Elfer-raus-1583139.html"><img src="/imgs/02/4/0/0/3/1/2/aufmacher_ajax.pl.jpg-62f77a5ebeb02336.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">iX 6/2012</b><br />
+                <a href="/ix/artikel/Elfer-raus-1583139.html"><b>Was gibt's Neues bei Solaris 11?</b></a><br />
+                <span class="size80">Solaris 11 sollte mit Innovativem aufwarten können, denn es droht ins Abseits zu geraten.<br />
+<br />
+<br />
+</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+                                
+                                
+
+
+
+    <div class="teaser_adliste">
+        <p>Werbung</p>
+        <ul class="microsites">
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=20870990&amp;iu=/6514/newsticker">Webcast-Aufzeichnung: Sicher mobil arbeiten!</a></li>
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=20711150&amp;iu=/6514/microsite/qualys">Qualys: IT-Sicherheits- und Compliance-Lösungen</a></li>
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=21009470&amp;iu=/6514/newsticker">So optimieren Sie Unternehmensprozesse</a></li>
+        
+            <li><a href="http://www.heise.de/microsites/effizienter-arbeiten/fachinformationen/in-5-schritten-zum-erfolgreichen-collaboration-projekt/150/264/784/">5 Schritte zum erfolgreichen Collaboration-Projekt</a></li>
+        
+            <li><a href="http://www.heise.de/microsites/sichere-und-leistungsfaehige-business-clients/sicherheit/analyse-so-kann-desktop-virtualisierung-fuer-mehr-sicherheit-im-unternehmen-sorgen/150/282/847/">Mit Desktop-Virtualisierung Sicherheit erhöhen</a></li>
+        
+            <li><a href="http://www.mittelstandswiki.de">MittelstandsWiki: Themen für Unternehmen</a></li>
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=2831990&amp;iu=/6514/newsticker">Whitepapers &amp; Webcasts</a></li>
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=21057830&amp;iu=/6514/newsticker">Sichere und leistungsfähige Business-Clients</a></li>
+        
+            <li><a href="http://pubads.g.doubleclick.net/gampad/clk?id=21059750&amp;iu=/6514/newsticker">Freiheit für Ihre Geschäftsprozesse: Managed ICT</a></li>
+        
+        </ul>
+    </div>
+    
+
+
+                            
+                            <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=2x1;tile=5;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=2x1;tile=5;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=2x1;tile=5;ord=8009217165?" /></a></div></noscript>
+
+                            <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=2x2;tile=6;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=2x2;tile=6;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=2x2;tile=6;ord=8009217165?" /></a></div></noscript>
+
+                            
+
+
+
+    
+        <div class="teaser_right">
+            <p>
+                <a href="/tr/artikel/Litfasssaeule-fuer-unterwegs-1614498.html"><img src="/imgs/02/8/0/9/1/0/0/mobmarkheft130.jpg-b81a76d6d2b95514.jpg-9f94c8bba85258e1.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">Technology Review</b><br />
+                <a href="/tr/artikel/Litfasssaeule-fuer-unterwegs-1614498.html"><b>Litfaßsäule für unterwegs</b></a><br />
+                <span class="size80">Smartphones werden immer leistungsfähiger und eignen sich inzwischen ideal als Reklamefläche. Experten sagen dem &quot;Mobile Advertising&quot; ein rasantes Wachstum voraus.</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_right">
+            <p>
+                <a href="/netze/artikel/Netalyzr-1045926.html"><img src="/imgs/02/6/5/1/8/0/9/netalyzr_100x100-a9f0245062ae0555.png" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">heise Netze</b><br />
+                <a href="/netze/artikel/Netalyzr-1045926.html"><b>Netalyzr – Internetzugangstest</b></a><br />
+                <span class="size80">Netalyzr informiert detailliert über alle Performance- und Sicherheitsprobleme Ihres Internetzugangs.</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_left">
+            <p>
+                <a href="http://www.heise-shop.de/heise-zeitschriften-verlag/ct-windows-7-02-2012_pid_18900291.html"><img src="/imgs/02/4/0/0/3/1/9/Windows7.jpg-fb4f238d7f1ba166.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">c't ratgeber</b><br />
+                <a href="http://www.heise-shop.de/heise-zeitschriften-verlag/ct-windows-7-02-2012_pid_18900291.html"><b>Windows 7 - Praxis-Handbuch</b></a><br />
+                <span class="size80">Windows 7 anpassen, gekonnt nutzen, beschleunigen und reparieren. Mit großer Tipps-Sammlung, ein Jahr kostenlosem Virenschutz sowie Grundausstattung und Systemwerkzeuge auf DVD. </span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_right">
+            <p>
+                <a href="/mobil/artikel/Sonys-Tablet-mit-zwei-Displays-1436130.html"><img src="/imgs/02/3/9/9/2/9/0/Klapptablet_72047-cwo-jg_PR-137-5adab7d5ac4d5542.gif" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">heise mobil</b><br />
+                <a href="/mobil/artikel/Sonys-Tablet-mit-zwei-Displays-1436130.html"><b>Klapp-Tab</b></a><br />
+                <span class="size80">Das erste Android-Tablet zum Aufklappen passt in die Jackentasche und zeigt trotzdem mehr Pixel als das iPad 2. Zum Doppeldisplay-Konzept passen aber nur wenige Apps.</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            
+
+
+
+    
+        <div class="teaser_right">
+            <p>
+                <a href="/autos/artikel/Tempo-Tempo-Diese-Autos-schaffen-mindestens-300-km-h-1577731.html"><img src="/imgs/02/3/9/8/2/9/6/001.jpg-773bef96945d456f.jpeg" alt="" style="margin-bottom: 3px;" /></a><br />
+                <b class="size80">heise Autos</b><br />
+                <a href="/autos/artikel/Tempo-Tempo-Diese-Autos-schaffen-mindestens-300-km-h-1577731.html"><b>Tempo, Tempo</b></a><br />
+                <span class="size80">Diese Autos schaffen 300 km/h - mindestens</span>
+            </p>
+            <div class="clear"></div>
+        </div>
+    
+
+
+
+                            <script type="text/javascript">
+    $(document).ready( function() {
+        $('div#software_tabbox').tabs();
+    });
+</script>
+
+<div id="software_tabbox">
+    <h4><a href="http://www.heise.de/download/" title="heise Software-Verzeichnis">Software-Verzeichnis</a></h4>
+    
+    <p class="teaser_mit_bild_und_text">
+	<a href="http://www.heise.de/download/special-die-besten-android-apps-150821.html" title="Themen-Special: Die besten Android-Apps"><img src="http://www.heise.de/software/screenshots/sps82.jpg" alt="" /></a>
+	<span class="titelzeile"><a href="http://www.heise.de/download/special-die-besten-android-apps-150821.html" title="Themen-Special: Die besten Android-Apps">Die besten Android-Apps</a></span>
+	<span class="textzeile">Teil 1: Empfehlenswerte System-Tools und Anwendungen f&uuml;r Reise, Foto, Video, Musik und Business</span>
+    </p>
+    
+
+    <ul>
+	<li><a href="#software_tabs-1" class="update">Updates</a></li>
+	<li><a href="#software_tabs-2" class="neu">Neuzug&auml;nge</a></li>
+	<li><a href="#software_tabs-3" class="top">Top-5</a></li>
+	<li><a href="#software_tabs-4" class="best">Bestbewertet</a></li>
+    </ul>    
+
+    
+    <div id="software_tabs-1">
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/teamdrive-1143466.html" title="TeamDrive f&uuml;r Windows XP, Server 2003, Server 2008, Vista, 7, Linux, Mac OS X, Mac OS X/Intel">TeamDrive</a>
+		<span class="info">Erm&ouml;glicht den automatischen Austausch von Daten, Backup und Zusammenarbeit zwischen zwei oder beliebig vielen Computern &uuml;ber das Internet, online&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/simpo-pdf-creator-pro-1177555.html" title="Simpo PDF Creator Pro f&uuml;r Windows 2000, XP, Vista, 7">Simpo PDF Creator Pro</a>
+		<span class="info">Erstellt PDF-Dokumente &uuml;ber die Druckfunktion von Windows-Anwendungen; unterst&uuml;tzt unter anderem Word, Excel und Powerpoint und bietet einen&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/icinga-1170701.html" title="Icinga f&uuml;r Linux">Icinga</a>
+		<span class="info">Auf Nagios beruhendes Open-Source-Tool zum &Uuml;berwachen von Netzwerken und Netzwerkressourcen in Unternehmen&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/5-clicks-screen-capture-program-1123768.html" title="5 Clicks - screen capture program f&uuml;r Windows 95, 98, ME, NT, 2000, XP, Server 2003, Vista">5 Clicks - screen capture program</a>
+		<span class="info">Mit wenigen Klicks Screenshots erstellen und als PNG-, JPG- oder Bitmap-Datei speichern</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/run.gps-trainer-uv-pro-1147404.html" title="Run.GPS Trainer UV Pro f&uuml;r Android, Windows Mobile">Run.GPS Trainer UV Pro</a>
+		<span class="info">Zeichnet das Laufverhalten von Personen via GPS auf und wertet es aus, etwa Geschwindigkeit, Distanz und H&ouml;he&nbsp;...</span>
+	    </p>
+	
+	<p class="rss">
+	    <a href="http://www.heise.de/download/updates-50000304000/" title="Alle Updates im heise Software-Verzeichnis">Alle Updates</a>
+	</p>
+    </div>
+    
+    <div id="software_tabs-2">
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/secure-banking-1186018.html" title="Secure Banking f&uuml;r Windows XP, Vista, 7">Secure Banking</a>
+		<span class="info">Sch&uuml;tzt Firefox, Google Chrome und Internet Explorer vor Banking-Trojanern, die gezielt Login-Daten von beispielsweise Online-Banking-, E-Mail- und&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/derstall-1185866.html" title="derStall f&uuml;r Windows NT, 2000, XP, Server 2003, Server 2008, Vista, 7">derStall</a>
+		<span class="info">Verwaltungsprogramm f&uuml;r Pferde- und Stallmanagement; hilft bei der Organisation von Kunden, Pferden, Mitarbeitern und Stallpl&auml;tzen&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/hrworks-1185968.html" title="HRworks f&uuml;r Windows NT, 2000, XP, Vista, 7, 8, Linux, Mac OS X, Mac OS X/Intel">HRworks</a>
+		<span class="info">Browser-basiertes Mitarbeiterportal, unter anderem f&uuml;r Reisekostenabrechnung, Abwesenheits- sowie Arbeitsmittelverwaltung&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/sonnenschutz-timer-1181537.html" title="Sonnenschutz-Timer f&uuml;r iOS">Sonnenschutz-Timer</a>
+		<span class="info">App zum Ermitteln der maximalen Aufenthaltsdauer von Personen in der Sonne, ohne einen Sonnenbrand zu bekommen&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/croadx-1187023.html" title="CRoadX f&uuml;r Windows XP, Server 2003, Server 2008, Vista, 7, 8">CRoadX</a>
+		<span class="info">Wissensmanagement-Tool zum Erfassen und Organisieren verschiedener Daten und Dokumente&nbsp;...</span>
+	    </p>
+	
+	<p class="rss">
+	    <a href="http://www.heise.de/download/neuzugaenge-50000311000/" title="Alle Neuzug&auml;nge im heise Software-Verzeichnis">Alle Neuzug&auml;nge</a>
+	</p>
+    </div>
+    
+    <div id="software_tabs-3">
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/irfanview.html" title="IrfanView f&uuml;r Windows 95, 98, ME, NT, 2000, XP, Server 2003, Server 2008, Vista, 7">IrfanView</a>
+		<span class="info">Schneller Viewer f&uuml;r diverse Bildformate, spielt &uuml;ber Plug-ins auch andere Multimedia-Formate ab und kann unter anderem Bilder mit diversen Effekten&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/h2testw.html" title="H2testw f&uuml;r Windows 2000, XP, Server 2003, Server 2008, Vista, 7">H2testw</a>
+		<span class="info">Integrit&auml;tstest f&uuml;r Datentr&auml;ger, vor allem zur Erkennung manipulierter USB-Sticks (siehe auch c&#39;t 1/08, S. 24)&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/phraseexpress.html" title="PhraseExpress f&uuml;r Windows 2000, XP, Server 2003, Server 2008, Vista, 7">PhraseExpress</a>
+		<span class="info">Verwaltet h&auml;ufig ben&ouml;tigte Textbausteine, die inklusive Schriftformatierung und Bildern in Kategorien organisiert werden k&ouml;nnen, und f&uuml;gt diese in&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/firefox.html" title="Firefox f&uuml;r Windows 2000, XP, Server 2003, Server 2008, Vista, 7, 8, Linux, Mac OS X/Intel">Firefox</a>
+		<span class="info">M&auml;chtiger Browser, unter anderem mit Popup-Blocker, Malware-Schutz, Tabbed-Browsing, Tagging, Zoom-Funktionen, eingebetteter Google-, Yahoo- und&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/gimp.html" title="GIMP f&uuml;r Windows XP, Vista, 7, 8, Linux, Mac OS X, Mac OS X/Intel">GIMP</a>
+		<span class="info">Professionelle Bildbearbeitung, die alle daf&uuml;r wichtigen Werkzeuge bietet, zahlreiche Filter und Effekte enth&auml;lt sowie Ebenen unterst&uuml;tzt&nbsp;...</span>
+	    </p>
+	
+	<p class="rss">
+	    <a href="http://www.heise.de/download/top-downloads-50000505000/" title="Alle Top-Downloads im heise Software-Verzeichnis">Alle Top-Downloads</a>
+	</p>
+    </div>
+    
+    <div id="software_tabs-4">
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/wsus-offline-update-ct.html" title="WSUS Offline Update (ehemals c&#39;t Offline Update) f&uuml;r Windows 2000, XP, Server 2003, Server 2008, Vista, 7, Linux">WSUS Offline Update (ehemals c&#39;t Offline Update)</a>
+		<span class="info">Skriptsammlung, die s&auml;mtliche Updates f&uuml;r Windows XP, Server 2003, Server 2008, Vista oder Windows 7 sowie f&uuml;r Office herunterl&auml;dt und daraus&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/truecrypt.html" title="TrueCrypt f&uuml;r Windows XP, Vista, 7, Linux, Mac OS X, Mac OS X/Intel">TrueCrypt</a>
+		<span class="info">Legt verschl&uuml;sselte Festplattenpartitionen an, die nur unter Zuhilfenahme des richtigen Passworts gelesen und beschrieben werden k&ouml;nnen&nbsp;...</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/hbci-fuer-ms-money-99-hbcifm99-118317.html" title="HBCI f&uuml;r MS Money 99 (HBCIFM99) f&uuml;r Windows 95, 98, ME, NT, 2000, XP, Server 2003, Server 2008, Vista, 7">HBCI f&uuml;r MS Money 99 (HBCIFM99)</a>
+		<span class="info">HBCI-Homebanking-Modul f&uuml;r MS Money 99 Version 2000</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/putty.html" title="PuTTY f&uuml;r Windows 95, 98, ME, NT, 2000, XP, Vista, 7, Linux">PuTTY</a>
+		<span class="info">SSH-, Telnet- und Rlogin-Client mit einem xterm-Terminal-Emulator, Version f&uuml;r Symbian-Smartphones ebenfalls verf&uuml;gbar</span>
+	    </p>
+	
+	    <p class="teaser_mit_bild_und_text">
+		<a href="http://www.heise.de/download/mediathek.html" title="Mediathek f&uuml;r Mac OS X, Mac OS X/Intel">Mediathek</a>
+		<span class="info">Durchsucht und l&auml;dt Beitr&auml;ge aus den Mediatheken von ARD, ZDF, 3sat, Arte und WDR</span>
+	    </p>
+	
+	<p class="rss">
+	    <a href="http://www.heise.de/download/bestbewertet-50000606000/" title="Alle am besten bewerteten Programme im heise Software-Verzeichnis">Alle am besten bewerteten Programme</a>
+	</p>
+    </div>
+    
+
+</div>
+
+                            <script type="text/javascript">
+    $(document).ready( function() {
+        $('div#ho_meistgelesen_tabbox').tabs();
+    });
+</script>
+
+<div id="ho_meistgelesen_tabbox">
+	<ul id="ho_meistgelesen_tabs">
+		<li><a href="#ho_meistgelesen_tabs-1">Meistgelesen</a></li>
+		<li><a href="#ho_meistgelesen_tabs-2">Meistkommentiert</a></li>
+	</ul>
+	<div id="ho_meistgelesen_tabs-1">
+		<ul>
+		
+		    
+		      <li>
+			<a href="/newsticker/meldung/Akkutausch-beim-MacBook-Pro-mit-Retina-Display-wird-teuer-1619822.html">Akkutausch beim MacBook Pro mit Retina-Display wird teuer</a>
+		      </li>
+		    
+		      <li>
+			<a href="/newsticker/meldung/Torvalds-zeigt-Nvidia-den-Stinkefinger-1619616.html">Torvalds zeigt Nvidia den Stinkefinger</a>
+		      </li>
+		    
+		      <li>
+			<a href="/newsticker/meldung/Supercomputer-USA-holen-Spitzenposition-zurueck-1619629.html">Supercomputer: USA holen Spitzenposition zur&#xfc;ck </a>
+		      </li>
+		    
+		      <li>
+			<a href="/newsticker/meldung/Microsofts-Holodeck-Xbox-Roadmap-mit-Augmented-Reality-Brille-1620008.html">Microsofts Holodeck: Xbox-Roadmap mit Augmented-Reality-Brille</a>
+		      </li>
+		    
+		      <li>
+			<a href="/newsticker/meldung/Computertastatur-wird-nur-selten-geputzt-1620027.html">Computertastatur wird nur selten geputzt</a>
+		      </li>
+		    
+		
+		</ul>
+	</div>
+	<div id="ho_meistgelesen_tabs-2">
+		<ul>
+		
+  
+    <li>
+      <a href="/newsticker/meldung/Akkutausch-beim-MacBook-Pro-mit-Retina-Display-wird-teuer-1619822.html">
+	Akkutausch beim MacBook Pro mit Retina-Display wird teuer
+      </a>
+    </li>
+  
+    <li>
+      <a href="/newsticker/meldung/Tablet-Prognose-iPad-vergroessert-Marktanteil-1619551.html">
+	Tablet-Prognose: iPad vergr&#xf6;&#xdf;ert Marktanteil 
+      </a>
+    </li>
+  
+    <li>
+      <a href="/newsticker/meldung/Torvalds-zeigt-Nvidia-den-Stinkefinger-1619616.html">
+	Torvalds zeigt Nvidia den Stinkefinger
+      </a>
+    </li>
+  
+    <li>
+      <a href="/newsticker/meldung/Computertastatur-wird-nur-selten-geputzt-1620027.html">
+	Computertastatur wird nur selten geputzt
+      </a>
+    </li>
+  
+    <li>
+      <a href="/newsticker/meldung/iOS-6-fragt-ob-Apps-auf-persoenliche-Daten-zugreifen-duerfen-1619009.html">
+	iOS 6 fragt, ob Apps auf pers&#xf6;nliche Daten zugreifen d&#xfc;rfen
+      </a>
+    </li>
+  
+
+
+		</ul>
+	</div>
+</div>
+
+                            <div class="naviad"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=336x200;tile=7;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=336x200;tile=7;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=336x200;tile=7;ord=8009217165?" /></a></div></noscript>
+</div>
+                            <div class="clear"></div>
+                            
+<div class="teaser_liste_foren">
+    <h4><a href="/foren/" title="Neueste Foren-Beitr&auml;ge">Neueste Foren-Beitr&auml;ge</a></h4>
+
+	<ul>
+  	
+    	<li>
+      		<a href="/open/news/foren/S-Erst-den-Drucker-ueber-die-USB-Buchse-anschliessen/forum-231152/msg-21993239/read/" title="Torvalds zeigt Nvidia den Stinkefinger">Erst den Drucker über die USB Buchse anschließen!</a>
+    	</li>
+  		
+    	<li>
+      		<a href="/tp/foren/S-Re-Irgendwer-hat-hier-versagt/forum-231157/msg-21993238/read/" title="Geheimnisvolle Lichtmuster aus fernster Zeit">Re: Irgendwer hat hier versagt</a>
+    	</li>
+  		
+    	<li>
+      		<a href="/mac-and-i/artikel/foren/S-Re-nexus1212-durchschaut/forum-231058/msg-21993237/read/" title="Angetestet: MacBook Pro Retina">Re: nexus1212 durchschaut</a>
+    	</li>
+  		
+    	<li>
+      		<a href="/newsticker/foren/S-Re-Bei-Simyo-versucht-Auskunft-ueber-alle-gespeicherten-Daten-zu-bekommen/forum-231219/msg-21993236/read/" title="AK Vorrat kritisiert Speicherpraxis bei Mobilfunkanbietern">Re: Bei Simyo versucht, Auskunft über alle gespeicherten Daten zu bekommen...</a>
+    	</li>
+  		
+    	<li>
+      		<a href="/tp/foren/S-Re-Wo-liegt-jetzt-eigentlich-das-Problem/forum-231149/msg-21993235/read/" title="Don&#39;t Ask, Don&#39;t Tell">Re: Wo liegt jetzt eigentlich das Problem?</a>
+    	</li>
+  		
+	</ul>
+</div>
+                            <div class="online-markt">
+    <p class="left">ONLINE MARKT</p>
+    <p class="right">Werbung</p>
+    
+    <div class="teaser_unternehmen">
+	<h5>Verbundene Unternehmen</h5>
+	<a href="http://www.fotoespresso.de/" rel="external" title="dpunkt.foto - Portal für Fotografie"><img src="/icons/ho/dpunktfoto.gif" alt="dpunkt.foto - Portal für Fotografie" width="140" height="45" style="margin-left: 7px;" /></a><br class="clear" />
+	<a title="MittelstandsWiki - Themen für Unternehmen" href="http://www.mittelstandswiki.de/" rel="external"><img src="/icons/ho/mittelstandswiki.gif" alt="MittelstandsWiki - MittelstadtsBlog, ITK Journal, Pressezentrum, Pro Journal" width="280" height="30" /></a>
+    </div>
+</div>
+
+                            
+    <div class="teaser_preisvergleich">
+	<h4><a href="http://www.heise.de/preisvergleich/" title="Recherche und Preisvergleich Top 10">Top-10 Preisvergleich</a></h4>
+
+
+<ol>
+
+    <li>
+	<span class="num">1.</span>
+	<a href="http://www.heise.de/preisvergleich/a740867.html" title="Samsung SSD 830 Series 128GB, 2.5&quot;, SATA 6Gb/s (MZ-7PC128B)" class="top10">Samsung SSD 830 Series 128GB</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=3">Festplatten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=hdssd">Solid State Drives (SSD)</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">2.</span>
+	<a href="http://www.heise.de/preisvergleich/a772297.html" title="Samsung Galaxy S3 i9300 16GB blau" class="top10">Samsung Galaxy S3 i9300 16GB blau</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=5">Telefon &amp; Co</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=39">Mobiltelefone</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=umtsover">ohne Vertrag</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">3.</span>
+	<a href="http://www.heise.de/preisvergleich/a740876.html" title="Samsung SSD 830 Series 256GB, 2.5&quot;, SATA 6Gb/s (MZ-7PC256B)" class="top10">Samsung SSD 830 Series 256GB</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=3">Festplatten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=hdssd">Solid State Drives (SSD)</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">4.</span>
+	<a href="http://www.heise.de/preisvergleich/a714550.html" title="OCZ Petrol 256GB, 2.5&quot;, SATA 6Gb/s (PTL1-25SAT3-256G)" class="top10">OCZ Petrol 256GB</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=3">Festplatten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=hdssd">Solid State Drives (SSD)</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">5.</span>
+	<a href="http://www.heise.de/preisvergleich/a761856.html" title="Intel Core i5-3570K, 4x 3.40GHz, boxed (BX80637I53570K)" class="top10">Intel Core i5-3570K</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=4">CPUs</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=cpu1155">Intel Sockel 1155</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">6.</span>
+	<a href="http://www.heise.de/preisvergleich/a776592.html" title="ASUS GTX670-DC2T-2GD5, GeForce GTX 670, 2GB GDDR5, 2x DVI, HDMI, DisplayPort (90-C1CS31-S0UAY0BZ)" class="top10">ASUS GTX670-DC2T-2GD5</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=8">Grafikkarten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=gra16_512">PCIe</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">7.</span>
+	<a href="http://www.heise.de/preisvergleich/a615532.html" title="Samsung Galaxy S2 i9100 16GB schwarz" class="top10">Samsung Galaxy S2 i9100 16GB schwarz</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=5">Telefon &amp; Co</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=39">Mobiltelefone</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=umtsover">ohne Vertrag</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">8.</span>
+	<a href="http://www.heise.de/preisvergleich/a772300.html" title="Samsung Galaxy S3 i9300 16GB weiß" class="top10">Samsung Galaxy S3 i9300 16GB weiß</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=5">Telefon &amp; Co</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=39">Mobiltelefone</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=umtsover">ohne Vertrag</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">9.</span>
+	<a href="http://www.heise.de/preisvergleich/a626737.html" title="Crucial m4 SSD 256GB, 2.5&quot;, SATA 6Gb/s (CT256M4SSD2)" class="top10">Crucial m4 SSD 256GB</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=3">Festplatten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=hdssd">Solid State Drives (SSD)</a>
+	</div>
+    </li>
+
+    <li>
+	<span class="num">10.</span>
+	<a href="http://www.heise.de/preisvergleich/a626829.html" title="Crucial m4 SSD 128GB, 2.5&quot;, SATA 6Gb/s (CT128M4SSD2)" class="top10">Crucial m4 SSD 128GB</a>
+	<div>
+	    <a href="http://www.heise.de/preisvergleich/?m=1">Hardware</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?o=3">Festplatten</a>
+	    <span class="rsaquo">&rsaquo;</span>
+	    <a href="http://www.heise.de/preisvergleich/?cat=hdssd">Solid State Drives (SSD)</a>
+	</div>
+    </li>
+
+</ol>
+
+<form method="get" action="http://www.heise.de/preisvergleich/" id="sform">
+<div>
+    <input type="text" name="fs" size="15" />
+    <select name="in">
+	<option value="">in allen Kategorien</option>
+	<option value="1">in Hardware</option>
+	<option value="2">in Software</option>
+	<option value="3">in Games</option>
+	<option value="4">in Video/Foto/TV</option>
+	<option value="5">in Telefon &amp; Co</option>
+	<option value="6">in Audio/HIFI</option>
+	<option value="7">in DVD</option>
+	<option value="8">in Haushalt</option>
+    </select>
+    <input type="submit" value="Suchen" class="submit" />
+</div>
+</form>
+
+
+    </div>
+
+
+                            
+                            
+                            <div class="sales"></div>
+                            <div class="contentbanner"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=137x150;tile=8;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=137x150;tile=8;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=137x150;tile=8;ord=8009217165?" /></a></div></noscript>
+</div>
+                            <div class="teaser_abdeckung"></div>
+                        
+                    
+                
+                </div>
+            
+            </div>
+        </div>
+        <div id="bannerzone">
+            <div class="leaderboard"><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+var rb = false; document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=728x90,468x60;tile=9;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=728x90,468x60;tile=9;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=728x90,468x60;tile=9;ord=8009217165?" /></a></div></noscript>
+</div>
+            <div class="heiseadvert"></div>
+            <div class="skyscraper" ><script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var dfp_ord; if (!dfp_ord) { dfp_ord = Math.floor(Math.random()*1000000000)+1000000000; }
+if (typeof rb != "undefined" && rb != true) document.write('<script src="http://ad-emea.doubleclick.net/N6514/adj/newsticker/homepage;sz=120x600,120x800,160x600,160x800;tile=10;ord=_ORD_?" type="text/javascript"><\/script>'.replace('_ORD_', dfp_ord));
+//--><!]]>
+</script>
+<noscript><div><a href="http://ad-emea.doubleclick.net/N6514/jump/newsticker/homepage;sz=120x600,120x800,160x600,160x800;tile=10;ord=8009217165?" target="_blank"><img alt="" src="http://ad-emea.doubleclick.net/N6514/ad/newsticker/homepage;sz=120x600,120x800,160x600,160x800;tile=10;ord=8009217165?" /></a></div></noscript>
+</div>
+            
+        </div>
+        <div id="sitemap">
+            <ul class="navi_top_abschnitt">
+                <li><a href="/"                         title="heise online"            class="navi_oben_ho">heise online</a></li>
+                <li><a href="/ct/"                      title="c't"                     class="navi_oben_ct">c't Magazin</a></li>
+                <li><a href="/ix/"                      title="iX"                      class="navi_oben_ix">iX Magazin</a></li>
+                <li><a href="/tr/"                      title="Technology Review"       class="navi_oben_tr">Technology&nbsp;Review</a></li>
+                <li><a href="/mac-and-i/"               title="Mac &amp; i"             class="navi_oben_mac" >Mac &amp; i</a></li>
+            </ul>
+            <ul class="navi_top_abschnitt">
+                <li><a href="/mobil/"                   title="heise mobil"             class="navi_oben_mob">heise mobil</a></li>
+                <li><a href="/security/"                title="heise Security"          class="navi_oben_sec">heise Security</a></li>
+                <li><a href="/netze/"                   title="heise Netze"             class="navi_oben_net">heise Netze</a></li>
+                <li><a href="/open/"                    title="heise Open Source"       class="navi_oben_op" >Open Source</a></li>
+                <li><a href="/developer/"               title="heise Developer"         class="navi_oben_dev">heise Developer</a></li>
+            </ul>
+            <ul class="navi_top_abschnitt">
+                <li><a href="/download/"                title="Software-Verzeichnis"    class="navi_oben_swv">Download</a></li>
+                <li><a href="/tp/"                      title="Telepolis"               class="navi_oben_tp">Telepolis</a></li>
+                <li><a href="/resale/"                  title="heise resale"            class="navi_oben_res" >heise Resale</a></li>
+                <li><a href="/foto/"                    title="heise Foto"              class="navi_oben_foto">heise Foto</a></li>
+                <li><a href="/autos/"                   title="heise Autos"             class="navi_oben_aut" >heise Autos</a></li>
+            </ul>
+            <ul class="navi_top_abschnitt">
+                <li><a href="/preisvergleich/"          title="Preisvergleich"          class="navi_oben_pvg">Preisvergleich</a></li>
+                <li><a href="/jobs/"                    title="heise jobs"              class="navi_oben_job">Stellenmarkt</a></li>
+                <li><a href="https://abo.heise.de/"     title="Zeitschriften-Abo"       class="navi_oben_abo">Abo</a></li>
+                <li><a href="http://www.heise-shop.de/" title="heise-shop"              class="navi_oben_shop">Shop</a></li>
+                <li><a href="/artikel-archiv/"          title="Artikel-Archiv"          class="navi_oben_kio">Artikel-Archiv</a></li>
+            </ul>
+            <ul class="navi_top_abschnitt">
+                <li><a href="/events/"                      title="heise Events"            class="navi_oben_eve">Veranstaltungen</a></li>
+                <li><a href="/whitepapers/"                 title="heise Whitepapers"       class="navi_oben_whi">heise Whitepapers</a></li>
+                <li><a href="/itmarkt/"                     title="IT-Markt"                class="navi_oben_itm">IT-Markt</a></li>
+                <li><a href="http://tarifrechner.heise.de/" title="Tarifrechner"            class="navi_oben_tarifr">Tarifrechner</a></li>
+                <li><a href="/loseblattwerke/"              title="Loseblattwerke">Loseblattwerke</a></li>
+            </ul>
+            <ul id="navi_service">
+                <li><a href="/foren/"                                                   title="Leserforum">Leserforum</a></li>
+                <li><a href="/newsletter/"                                              title="Newsletter">Newsletter</a></li>
+                <li><a href="/news-extern/news.html"   title="RSS">RSS</a></li>
+                <li><a href="/suche/"                                                   title="Suche">Suche</a></li>
+                <li><a href="/netze/netzwerk-tools/imonitor-internet-stoerungen/"       title="iMonitor – Internet-Störungen">iMonitor</a></li>
+            </ul>
+            <ul class="navi_international">
+                <li><strong>UK</strong></li>
+                <li><a href="http://www.h-online.com/"          title="The H">The H</a></li>
+                <li><a href="http://www.h-online.com/security/" title="The H Security">The H Security</a></li>
+                <li><a href="http://www.h-online.com/open/"     title="The H Open Source">The H Open Source</a></li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+        <!--//--><![CDATA[//><!--
+        $(document).ready( function() {
+            $('#mitte_links, #mitte_rechts').objectToMaxHeight();
+        });
+        //--><!]]>
+        </script>
+    </div>
+
+
+
+
+
+
+
+<div style="display: inline;"><img id="ivw_pixel_intern" src="/ivw-bin/ivw/CP/" width="1" height="1" alt="" /></div>
+    
+    <script type="text/javascript">
+        <!--//--><![CDATA[//><!--
+            var AVW = '<' + 'div style="display: inline;"><' + 'img id="avw_pixel_intern" src="/avw-bin/ivw/CP/mbe/newsticker/homepage" width="1" height="1" alt="" /><' + '/div>';
+            document.write(AVW);
+        //--><!]]>
+    </script>
+    
+        <script type="text/javascript">
+            <!--//--><![CDATA[//><!--
+            var IVW='<div style="display: inline;"><img id="ivw_pixel" src="http://heise.ivwbox.de/cgi-bin/ivw/CP/homepage;%2F?r=';
+            document.write(IVW + '&amp;d=' + (Math.random()*100000) + '" width="1" height="1" alt="" /><' + '/div>');
+            //--><!]]>
+        </script>
+        
+        <noscript>
+            <div style="display: inline;"><img src="http://heise.ivwbox.de/cgi-bin/ivw/CP/homepage;/?r=&amp;d=" width="1" height="1" alt="" /></div>
+        </noscript>
+        <script type="text/javascript">
+            <!--//--><![CDATA[//><!--
+            window.onunload=function() {};
+            //--><!]]>
+        </script>
+        
+
+
+<!-- RL -->
+
+    <!-- RL_PATH:%2Fho%2Fcms%2F5%2F20 -->
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var screenInfo = escape( screen.width + 'x' + screen.height + 'x' + screen.colorDepth );
+var cookiesEnabled = 0;
+if (navigator.cookieEnabled) cookiesEnabled=1;
+var referrer = escape(document.referrer);
+referrer = referrer.replace( /(\/software\/download).*$/, "$1/" );
+document.write(
+'<div style="display: inline;"><img id="rl_pixel" src="http://rl.heise.de/images/pic.gif?r=' + referrer + ';tp=1073741824%7C1073827193;m=Heise;tid=1073838799;random=' + (Math.random()*100000) + ';con=1;json=1;tc=1073741824%7C1073827193%7C1073838799;c=20;b=16;sep=%7C;tce=1;tn=News;tpn=heise%20online%7CRedaktioneller%20Content%7CNews;url=http%3A%2F%2Fwww.heise.de%2F;tit=Startseite;tpu=1;sz=' + screenInfo + ';con=' + cookiesEnabled + ';cs=1" width="1" height="1" alt="" /><' + '/div>'
+);
+//--><!]]>
+</script>
+<noscript>
+  <div style="display: inline;"><img id="rl_pixel" src="http://rl.heise.de/images/pic.gif?r=;tp=1073741824%7C1073827193;m=Heise;tid=1073838799;random=1143296765;json=0;tc=1073741824%7C1073827193%7C1073838799;c=20;b=16;sep=%7C;tce=1;tn=News;tpn=heise%20online%7CRedaktioneller%20Content%7CNews;url=http%3A%2F%2Fwww.heise.de%2F;tit=Startseite;tpu=1;con=1;cs=1" width="1" height="1" alt="" /></div>
+</noscript>
+
+<!-- /RL -->
+
+
+    
+        
+
+	<ul id="navi_bottom">
+
+	
+		<li class="left"><a href="/Privacy-Policy-der-Heise-Zeitschriften-Verlag-GmbH-Co-KG-4860.html">Datenschutzhinweis</a> </li>
+	
+
+	
+		<li class="left"><a href="/Impressum-4862.html">Impressum</a> </li>
+	
+
+	
+		<li class="left"><a href="/Kontakt-4864.html">Kontakt</a> </li>
+	
+
+	
+		<li class="left"><a href="/mediadaten/">Mediadaten</a> </li>
+	
+
+
+
+
+    <li class="right"><a href="http://www.interred.de/" rel="external" style="margin-right: 0;">Content Management</a> by <b style="margin-right: 0.5em;">Inter<span class="tx_red">Red</span></b></li>
+
+	
+		
+		<li class="right"><a href="http://www.plusline.de/">Hosted by Plus.line</a> </li>
+		
+		<li class="right"><a href="http://www.heise-medien.de/zeitschriften/">Copyright © 2012 Heise Zeitschriften Verlag</a> </li>
+		
+	
+
+	
+</ul>
+
+    
+
+</body>
+</html>
+<!-- Created with InterRed V12.0-x.x.x.x, http://www.interred.de/, by InterRed GmbH -->
+<!-- BID: 16, iBID: 721625, CID: 20, iCID: 1357206 -->
+<!-- Link: $(LB16:Linktext)$ $(LC20:Linktext)$ -->
+<!-- Generiert: 2012-06-18 18:54:29 -->
+
