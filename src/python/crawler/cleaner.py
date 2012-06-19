@@ -47,7 +47,7 @@ class Cleaner:
             # moving an renaming to 'data'
             final_data_path = os.path.join(src_file, 'data')
             shutil.move(dest_file, final_data_path)
-        except OSError as err:
+        except OSError:
             logging.exception('error during cleaning procedure')
         else:
             meta_obj = MetaData.build_metadata_from_file(self.__path,
