@@ -16,7 +16,7 @@ actual_options = {
         'crawler.urllistpath': 'url.txt',
         'crawler.customWgetParms': '',
         'db.path': 'metadata.db',
-        'db.sqlSource': '../sql/',
+        'db.sqlSource': 'sql/',
         'xml.schemaPath': 'xml/',
         'server.port': 42420,
         'server.notify.interval': 15,
@@ -36,7 +36,7 @@ default_options = {
         'crawler.urllistpath': 'url.txt',
         'crawler.customWgetParms': '',
         'db.path': 'metadata.db',
-        'db.sqlSource': '../sql/',
+        'db.sqlSource': 'sql/',
         'xml.schemaPath': 'xml/',
         'server.port': 42420,
         'server.notify.interval': 15,
@@ -44,4 +44,4 @@ default_options = {
         }
 
 
-    
+

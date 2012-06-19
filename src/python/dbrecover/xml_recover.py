@@ -16,7 +16,7 @@ import util.paths as paths
 import logging
 import threading
 
-from crawler.xmlreader import XMLReader
+from crawler.xmlreader import XmlReader
 from multiprocessing.pool import ThreadPool
 
 
@@ -42,7 +42,7 @@ class XMLDBRecover(object):
     def __iterate_filetree(self, wrapper):
         """
         Walks through file tree and generates
-        metadata list from xml files by invoking XMLReader()
+        metadata list from xml files by invoking XmlReader()
         """
         for root, dirnames, filenames in os.walk(wrapper.domain):
             if self.__shutdown:
@@ -53,7 +53,7 @@ class XMLDBRecover(object):
                 for xml in xmlfiles:
                     xml_path = os.path.join(root, xml)
                     try:
-                        reader = XMLReader(xml_path)
+                        reader = XmlReader(xml_path)
                         self.__metalist.append(reader.parse())
                     except:
                         print('Parsing of XML failed on file:', xml_path)

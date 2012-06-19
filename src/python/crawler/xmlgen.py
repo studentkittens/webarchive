@@ -88,7 +88,7 @@ class XmlGenerator(object):
 
 if __name__ == '__main__':
     import unittest
-    from crawler.xmlreader import XMLReader
+    from crawler.xmlreader import XmlReader
 
     class TestXMLGen(unittest.TestCase):
         def setUp(self):
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
         def test_xmlgen_and_read(self):
             XmlGenerator([self.__input_dict]).dump_all()
-            trans_dict = XMLReader('data.xml').parse()
+            trans_dict = XmlReader('data.xml').parse()
             self.assertEqual(trans_dict, self.__input_dict)
 
         def tearDown(self):

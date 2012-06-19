@@ -24,14 +24,18 @@ class DBGenerator(object):
     """
     DBGenerator module
     """
-    def __init__(self, meta_list=None):
+    def __init__(self, meta_list=None, abspath=None):
         """
         Take a metalist and load sql templates from disk.
         Start the actual generating by calling batch()
 
         :meta_list: A list of MetaData Dictionaries
         """
-        self.__connection = sqlite3.connect(get_dbpath())
+        if abspath is None:
+            self.__connection = sqlite3.connect(get_dbpath())
+        else:
+            self.__connection = sqlite3.connect(abspath)
+
         self.__cursor = self.__connection.cursor()
         self.__statements = self.load_statements()
         self.__cursor.executescript(self.__statements['create'])
@@ -192,8 +196,11 @@ class DBGenerator(object):
         self.__cursor.close()
 
 if __name__ == '__main__':
-    d = DBGenerator([
-        {
+    import unittest
+
+    REAL_DB = 'metadata.db'
+    SAMPLE_DB = 'dummy.db'
+    SAMPLE_DATA = [{
             'mimeType'   : 'application/png',
             'domain'     : 'www.heise.de',
             'url'        : 'www.heise.de/news',
@@ -208,9 +215,62 @@ if __name__ == '__main__':
             'url'        : 'www.golem.de/news',
             'path'       : '..',
             'commitTime' : '23324534634634',
-            'createTime' : '32535245634634',
+            'createTime' : '32535245634637',
             'title'      : 'news for retards'
-            }
-        ])
-    d.batch()
-    d.close()
+            }]
+
+    class TestDBGen(unittest.TestCase):
+        def create_sample_db(self):
+            conn = sqlite3.connect(SAMPLE_DB)
+            crsr = conn.cursor()
+
+            with open('../sql/create.sql', 'r') as create_stmt:
+                crsr.executescript(create_stmt.read())
+
+            def write_dict(metadict, rowid):
+                insert_script = """
+                        BEGIN IMMEDIATE;
+                        INSERT INTO mimeType VALUES({0}, '{meta[mimeType]}');
+                        INSERT INTO domain VALUES({1}, '{meta[domain]}');
+                        INSERT INTO commitTag VALUES({2}, '{meta[commitTime]}', {1});
+                        INSERT INTO metaData VALUES({3}, '{meta[url]}', {0}, '{meta[path]}');
+                        INSERT INTO history VALUES({3}, {2}, '{meta[createTime]}', '{meta[title]}');
+                        COMMIT;
+                """.format(rowid, rowid + 1, rowid + 2, rowid + 3, meta=metadict)
+                crsr.executescript(insert_script)
+
+            rowid = 0
+            write_dict(SAMPLE_DATA[0], rowid)
+            rowid += 5
+            write_dict(SAMPLE_DATA[1], rowid)
+            conn.commit()
+
+            return crsr
+
+        def test_equality(self):
+            def compare_rows(table, column, dmmy, real):
+                sql = 'SELECT ' + column + ' FROM ' + table
+                dmmy_rows = set(dmmy.execute(sql))
+                real_rows = set(real.execute(sql))
+                self.assertEqual(dmmy_rows, real_rows)
+
+
+            d = DBGenerator(SAMPLE_DATA, abspath=REAL_DB)
+            d.batch()
+            d.close()
+            dmmy_crsr = self.create_sample_db()
+            real_crsr = sqlite3.connect(REAL_DB)
+
+            compare_rows('mimeType', 'mimeName', dmmy_crsr, real_crsr)
+            compare_rows('domain', 'domainName', dmmy_crsr, real_crsr)
+            compare_rows('commitTag', 'commitTime', dmmy_crsr, real_crsr)
+            compare_rows('metaData', 'url', dmmy_crsr, real_crsr)
+            compare_rows('metaData', 'path', dmmy_crsr, real_crsr)
+            compare_rows('history', 'createTime', dmmy_crsr, real_crsr)
+            compare_rows('history', 'title', dmmy_crsr, real_crsr)
+
+        def tearDown(self):
+            os.remove(SAMPLE_DB)
+            os.remove(REAL_DB)
+
+    unittest.main()

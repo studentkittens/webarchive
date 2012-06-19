@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 """
-XMLReader submodule
+XmlReader submodule
 """
 
 __author__ = 'Christopher Pahl'
@@ -21,7 +21,7 @@ def makecleandict(dirtydict):
     return cleandict
 
 
-class XMLReader(object):
+class XmlReader(object):
     """Read a certain XML File and return a metadict"""
 
     def __init__(self, xmlpath):
@@ -56,4 +56,4 @@ class XMLReader(object):
 if __name__ == '__main__':
     # tests for this are in xmlgen.py
     from pprint import pprint
-    pprint(XMLReader('data.xml').parse())
+    pprint(XmlReader('data.xml').parse())
