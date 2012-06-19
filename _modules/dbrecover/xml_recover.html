@@ -66,7 +66,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 
-<span class="kn">from</span> <span class="nn">crawler.xmlreader</span> <span class="kn">import</span> <span class="n">XMLReader</span>
+<span class="kn">from</span> <span class="nn">crawler.xmlreader</span> <span class="kn">import</span> <span class="n">XmlReader</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.pool</span> <span class="kn">import</span> <span class="n">ThreadPool</span>
 
 
@@ -92,7 +92,7 @@
     <span class="k">def</span> <span class="nf">__iterate_filetree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Walks through file tree and generates</span>
-<span class="sd">        metadata list from xml files by invoking XMLReader()</span>
+<span class="sd">        metadata list from xml files by invoking XmlReader()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="n">domain</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shutdown</span><span class="p">:</span>
@@ -103,7 +103,7 @@
                 <span class="k">for</span> <span class="n">xml</span> <span class="ow">in</span> <span class="n">xmlfiles</span><span class="p">:</span>
                     <span class="n">xml_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">xml</span><span class="p">)</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">reader</span> <span class="o">=</span> <span class="n">XMLReader</span><span class="p">(</span><span class="n">xml_path</span><span class="p">)</span>
+                        <span class="n">reader</span> <span class="o">=</span> <span class="n">XmlReader</span><span class="p">(</span><span class="n">xml_path</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">parse</span><span class="p">())</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="k">print</span><span class="p">(</span><span class="s">&#39;Parsing of XML failed on file:&#39;</span><span class="p">,</span> <span class="n">xml_path</span><span class="p">)</span>

@@ -197,11 +197,6 @@
                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain_name</span><span class="o">=</span><span class="n">domain</span><span class="p">))</span>
             <span class="n">git_proc</span><span class="o">.</span><span class="n">recreate_master</span><span class="p">()</span>
             <span class="n">fsmutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-
-<span class="c"># TODO: Lock should be released after db gen not before?</span>
-<span class="c">#       crawl a sync -&gt; lock release -&gt; there is time span -&gt; crawl a db gen.</span>
-<span class="c">#       its possible that crawl b checks in and commits db</span>
-<span class="c">#       within this time span, beforce crawl a db gen is started -&gt; BAAAM ... invalid db structure?</span>
 </div>
 <div class="viewcode-block" id="CrawlJob.start_dbgen"><a class="viewcode-back" href="../../crawlstuff.html#crawler.crawljob.CrawlJob.start_dbgen">[docs]</a>    <span class="k">def</span> <span class="nf">start_dbgen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

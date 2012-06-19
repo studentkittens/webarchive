@@ -61,14 +61,14 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span>
 
 </div>
 <div class="viewcode-block" id="get"><a class="viewcode-back" href="../../config.html#config.reader.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">actual_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span>
 
 </div>
 <span class="k">def</span> <span class="nf">get_with_default</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>

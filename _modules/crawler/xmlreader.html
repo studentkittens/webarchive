@@ -52,7 +52,7 @@
 <span class="c"># encoding: utf-8</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">XMLReader submodule</span>
+<span class="sd">XmlReader submodule</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
@@ -71,15 +71,25 @@
     <span class="k">return</span> <span class="n">cleandict</span>
 
 
-<div class="viewcode-block" id="XMLReader"><a class="viewcode-back" href="../../xml2metadata.html#crawler.xmlreader.XMLReader">[docs]</a><span class="k">class</span> <span class="nc">XMLReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Docstring for XMLReader &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="XmlReader"><a class="viewcode-back" href="../../xml2metadata.html#crawler.xmlreader.XmlReader">[docs]</a><span class="k">class</span> <span class="nc">XmlReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read a certain XML File and return a metadict&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmlpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert any valid data.xml to a metadict</span>
+
+<span class="sd">        :xmlpath: path to data.xml</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__xmlpath</span> <span class="o">=</span> <span class="n">xmlpath</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tree</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__tree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xmlpath</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="XmlReader.parse"><a class="viewcode-back" href="../../xml2metadata.html#crawler.xmlreader.XmlReader.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Do actual parsing</span>
+
+<span class="sd">        :returns: a new metadict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">metadict</span><span class="p">,</span> <span class="n">tagdict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__tree</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="n">actual_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
@@ -92,16 +102,11 @@
 
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">metadict</span><span class="p">,</span> <span class="o">**</span><span class="n">tagdict</span><span class="p">)</span>
 
-</div>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;@todo: Docstring for main</span>
-<span class="sd">    :returns: @todo</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-    <span class="n">pprint</span><span class="p">(</span><span class="n">XMLReader</span><span class="p">(</span><span class="s">&#39;data.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">())</span>
-
+</div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="c"># tests for this are in xmlgen.py</span>
+    <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+    <span class="n">pprint</span><span class="p">(</span><span class="n">XmlReader</span><span class="p">(</span><span class="s">&#39;data.xml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">())</span>
 </pre></div>
 
           </div>

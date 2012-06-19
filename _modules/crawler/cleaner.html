@@ -59,9 +59,10 @@
 
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
 
 <span class="kn">import</span> <span class="nn">util.times</span> <span class="kn">as</span> <span class="nn">times</span>
 <span class="kn">import</span> <span class="nn">crawler.filter</span> <span class="kn">as</span> <span class="nn">filter</span>
@@ -96,7 +97,7 @@
             <span class="c"># moving an renaming to &#39;data&#39;</span>
             <span class="n">final_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">)</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">dest_file</span><span class="p">,</span> <span class="n">final_data_path</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;error during cleaning procedure&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">meta_obj</span> <span class="o">=</span> <span class="n">MetaData</span><span class="o">.</span><span class="n">build_metadata_from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span>
@@ -143,13 +144,49 @@
 
 <span class="c">###########################################################################</span>
 <span class="c">#                                 content                                 #</span>
-<span class="c">###########################################################################</span>
-</div></div>
+<span class="c">###########################################################################</span></div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">Cleaner</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">restructure</span><span class="p">()</span>
-    <span class="n">c</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">print_list</span><span class="p">())</span>
+    <span class="n">TESTDATA_PATH</span> <span class="o">=</span> <span class="s">&#39;testdata/cleaner/&#39;</span>
+
+    <span class="k">def</span> <span class="nf">path_helper</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">TESTDATA_PATH</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">content_helper</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">folder</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span><span class="p">:</span> <span class="p">[</span><span class="n">dirs</span><span class="p">,</span> <span class="n">files</span><span class="p">],</span> <span class="n">content</span><span class="p">))</span>
+
+    <span class="k">class</span> <span class="nc">TestCleaner</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c"># setting path vars</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__raw_data</span> <span class="o">=</span> <span class="n">path_helper</span><span class="p">(</span><span class="s">&#39;raw_data&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span> <span class="o">=</span> <span class="n">path_helper</span><span class="p">(</span><span class="s">&#39;restruct&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span> <span class="o">=</span> <span class="n">path_helper</span><span class="p">(</span><span class="s">&#39;clean&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_should_be</span> <span class="o">=</span> <span class="n">path_helper</span><span class="p">(</span><span class="s">&#39;what_raw_data_should_look_like_after_restruct&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_should_be</span> <span class="o">=</span> <span class="n">path_helper</span><span class="p">(</span><span class="s">&#39;what_raw_data_should_look_like_after_clean_empty&#39;</span><span class="p">)</span>
+            <span class="c"># copying raw &#39;downlaoded&#39; data for restruct testing</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__raw_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
+            <span class="c"># copying &#39;raw restructured&#39; data for clean empty testing</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clean_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span> <span class="o">=</span> <span class="n">Cleaner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">should_be</span><span class="p">,</span> <span class="n">test_data</span><span class="p">):</span>
+            <span class="n">should_be</span> <span class="o">=</span> <span class="n">content_helper</span><span class="p">(</span><span class="n">should_be</span><span class="p">)</span>
+            <span class="n">really_is</span> <span class="o">=</span> <span class="n">content_helper</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">should_be</span><span class="p">,</span> <span class="n">really_is</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">test_restructure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span><span class="o">.</span><span class="n">restructure</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">test_clean_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clean_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
           </div>
