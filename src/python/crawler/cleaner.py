@@ -9,7 +9,6 @@ __author__ = 'Christoph Piechula'
 
 import subprocess
 import os
-import sys
 import shutil
 import logging
 import unittest
@@ -48,7 +47,7 @@ class Cleaner:
             # moving an renaming to 'data'
             final_data_path = os.path.join(src_file, 'data')
             shutil.move(dest_file, final_data_path)
-        except OSError as err:
+        except OSError:
             logging.exception('error during cleaning procedure')
         else:
             meta_obj = MetaData.build_metadata_from_file(self.__path,
@@ -104,38 +103,37 @@ if __name__ == '__main__':
 
     def content_helper(folder):
         content = [item for item in os.walk(folder)]
-        return itertools.starmap(lambda root, dirs, files: [dirs, files], content)
+        return list(itertools.starmap(lambda root, dirs, files: [dirs, files], content))
 
     class TestCleaner(unittest.TestCase):
         def setUp(self):
-            self.__before = path_helper('raw_data')
-            self.__after = path_helper('after')
-            shutil.copytree(self.__before, self.__after)
-            self.__cleaner = Cleaner(self.__after)
+            # setting path vars
+            self.__raw_data = path_helper('raw_data')
+            self.__restruct_test_data = path_helper('restruct')
+            self.__clean_test_data = path_helper('clean')
+            self.__restruct_should_be = path_helper('what_raw_data_should_look_like_after_restruct')
+            self.__clean_should_be = path_helper('what_raw_data_should_look_like_after_clean_empty')
+            # copying raw 'downlaoded' data for restruct testing
+            shutil.copytree(self.__raw_data, self.__restruct_test_data)
+            # copying 'raw restructured' data for clean empty testing
+            shutil.copytree(self.__clean_should_be, self.__clean_test_data)
+            self.__clean_test_dataer = Cleaner(self.__restruct_test_data)
+
+        def compare_filetree(self, should_be, test_data):
+            should_be = content_helper(should_be)
+            really_is = content_helper(test_data)
+            self.assertEqual(should_be, really_is)
 
         def test_restructure(self):
-            self.__cleaner.restructure()
-            source_dir = path_helper('what_raw_data_should_look_like_after_restruct')
-
-            should_be = content_helper(source_dir)
-            really_is = content_helper(self.__after)
-
-            self.assertTrue(list(should_be) == list(really_is))
+            self.__clean_test_dataer.restructure()
+            self.compare_filetree(self.__restruct_should_be, self.__restruct_test_data)
 
         def test_clean_empty(self):
-            self.__cleaner.clean_empty()
-            source_dir = path_helper('what_raw_data_should_look_like_after_clean_empty')
-            should_be = content_helper(source_dir)
-            really_is = content_helper(self.__after)
-            self.assertTrue(list(should_be) == list(really_is))
+            self.__clean_test_dataer.clean_empty()
+            self.compare_filetree(self.__clean_should_be, self.__clean_test_data)
 
         def tearDown(self):
-           shutil.rmtree(self.__after, ignore_errors=True)
+            shutil.rmtree(self.__restruct_test_data, ignore_errors=True)
+            shutil.rmtree(self.__clean_test_data, ignore_errors=True)
 
     unittest.main()
-
-# if __name__ == '__main__':
-#     c = Cleaner(sys.argv[1])
-#     c.restructure()
-#     c.clean_empty()
-#     print(c.print_list())
