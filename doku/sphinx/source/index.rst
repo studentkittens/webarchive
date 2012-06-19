@@ -40,6 +40,7 @@ Internal Documentation:
    dbgen
    crawlstuff
    utils
+   testing
 
 Indices and tables
 ==================

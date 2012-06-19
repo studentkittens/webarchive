@@ -4,7 +4,7 @@
 __author__ = 'Florian Bauer'
 
 
-import options
+import config.options as options
 
 
 def get_default(value):

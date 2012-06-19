@@ -80,22 +80,34 @@ class XmlGenerator(object):
                 with open(os.path.join(item[1], 'data.xml'), 'w') as f:
                     f.write(str(item[0]))
         else:
-            logging.warn("nothing to dump.")
+            logging.warn("nothing to dump - Go eat something.")
 
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
 
 if __name__ == '__main__':
-    testdata = [{
-            'url': "www.heise.de/index.html",
-            'mimeType': "text/html",
-            'path': "www.heise.de/index.html",
-            'createTime': "2012-05-15T17:28:42",
-            'title': "heise \"online\"",
-            'commitTime': "2012-05-15T17:30:00",
-            'domain': "www.heise.de"
-    }]
+    import unittest
+    from crawler.xmlreader import XMLReader
 
-    x = XmlGenerator(testdata)
-    x.dump_all()
+    class TestXMLGen(unittest.TestCase):
+        def setUp(self):
+            self.__input_dict = {
+                'url': "www.heise.de/index.html",
+                'mimeType': "text/html",
+                'path': "test",
+                'createTime': "2012-05-15T17:28:42",
+                'title': "heise \"online\" &&&&! ",
+                'commitTime': "2012-05-15T17:30:00",
+                'domain': "www.heise.de"
+            }
+
+        def test_xmlgen_and_read(self):
+            XmlGenerator([self.__input_dict]).dump_all()
+            trans_dict = XMLReader('data.xml').parse()
+            self.assertEqual(trans_dict, self.__input_dict)
+
+        def tearDown(self):
+            os.remove('data.xml')
+
+    unittest.main()
