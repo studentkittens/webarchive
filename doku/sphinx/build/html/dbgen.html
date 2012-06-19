@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Database Generation &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="index.html" />
+    <link rel="next" title="Crawljob and Crawerlmanager" href="crawlstuff.html" />
+    <link rel="prev" title="Git-Handling" href="git.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="crawlstuff.html" title="Crawljob and Crawerlmanager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="git.html" title="Git-Handling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="database-generation">
+<h1>Database Generation<a class="headerlink" href="#database-generation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>On the very end of every run of the crawler an update is done on the database, by
+iterating over all data in the internal metadata-list and builiding SQL Statements from this.</p>
+<p>Insertion, for every:</p>
+<ol class="arabic simple">
+<li>... domain a new row is inserted to the <em>domain</em> table. (Already existent domains are ignored)</li>
+<li>... mimeType a new row is inserted to the <em>mimeType</em> table.</li>
+<li>... url and path a new row is inserted to the <em>metaData</em> table.</li>
+<li>... commit a new row is inserted to the <em>commitTag</em> table, with a reference to the corresponding domain.</li>
+<li>... new file committed to the archive a new row is inserted into the <em>history</em> table.</li>
+</ol>
+<p>If a row with this data already exists it is ignored.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>For Peformance-reasons only very simple insert-statements are used in combination
+with as simple select statements, instead of insert-statements with sub-selects.</p>
+<hr class="docutils" />
+<span class="target" id="module-crawler.dbgen"></span><p>DBGenerator is capable of generating an sqlite database
+from a list of metadictionaries.</p>
+<dl class="class">
+<dt id="crawler.dbgen.DBGenerator">
+<em class="property">class </em><tt class="descclassname">crawler.dbgen.</tt><tt class="descname">DBGenerator</tt><big>(</big><em>meta_list=None</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>DBGenerator module</p>
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.batch">
+<tt class="descname">batch</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start db creating procedure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a truthy value on success</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close connection and commit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.execute_statement">
+<tt class="descname">execute_statement</tt><big>(</big><em>source_name</em>, <em>arglist=None</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.execute_statement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.execute_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exececute a previously loaded statement by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Source_name :</th><td class="field-body">Sourcename to execute (e.g. &#8216;create&#8217;)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Arglist :</th><td class="field-body">You may pass an additional list of variable elements</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.insert_history">
+<tt class="descname">insert_history</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill history table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.insert_mdata_ctag">
+<tt class="descname">insert_mdata_ctag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_mdata_ctag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_mdata_ctag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill metadata and committag table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.insert_mime_domain">
+<tt class="descname">insert_mime_domain</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_mime_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_mime_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill mimeType and domain table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.load_statements">
+<tt class="descname">load_statements</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.load_statements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.load_statements" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)Load Sql Files from Disk</p>
+<p>This is already called in init</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a dictionary with statements, indexed by name (e.g. &#8216;create&#8217;)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="crawler.dbgen.DBGenerator.select">
+<tt class="descname">select</tt><big>(</big><em>table</em>, <em>*columns</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal helper for collecting data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Table :</th><td class="field-body">Table on which a SELECT shall be performed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Columns :</th><td class="field-body">a list of columns to select</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary of column[0]: column[1:]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Database Generation</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="git.html"
+                        title="previous chapter">Git-Handling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="crawlstuff.html"
+                        title="next chapter">Crawljob and Crawerlmanager</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dbgen.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="crawlstuff.html" title="Crawljob and Crawerlmanager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="git.html" title="Git-Handling"
+             >previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

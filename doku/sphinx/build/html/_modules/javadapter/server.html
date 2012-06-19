@@ -1,0 +1,544 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>javadapter.server &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for javadapter.server</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">###########################################################################</span>
+<span class="sd">#                               Javadapter                                #</span>
+<span class="sd">###########################################################################</span>
+
+<span class="sd">A simple Server with a textprotocol, representing the API to Java.</span>
+
+<span class="sd">Usage: Start with python server.py &lt;port&gt;,</span>
+<span class="sd">       test with telnet localhost &lt;port&gt;, or</span>
+<span class="sd">       python test_client &lt;port&gt;</span>
+
+<span class="sd">       Type &#39;quit&#39; on the server-cmd to exit</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
+
+<span class="c"># Stdlib</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">socketserver</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">cmd</span>
+
+<span class="c"># Locking</span>
+<span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
+
+<span class="c"># Git Interaction</span>
+<span class="kn">from</span> <span class="nn">crawler.git</span> <span class="kn">import</span> <span class="n">Git</span>
+<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                             Error Handling                              #</span>
+<span class="c">###########################################################################</span>
+
+
+<span class="k">class</span> <span class="nc">ProtocolError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise a &#39;ACK cause&#39;</span>
+
+<span class="sd">    Simple Exception that offers</span>
+<span class="sd">    a sendable bytebuffer for errors</span>
+<span class="sd">    via self.failure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :msg: a string message, describing the error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProtocolError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failure</span> <span class="o">=</span> <span class="n">b</span><span class="s">&#39;ACK &#39;</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#            Actual Handlers that do something with the input             #</span>
+<span class="c">###########################################################################</span>
+
+<span class="c"># The Lock that can be set via lock and unlock</span>
+<span class="c"># It is global for sake of simplicity - there may not be more than one</span>
+<span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<span class="k">def</span> <span class="nf">lock_domain</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">lock_timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation for lock/try_lock, very common</span>
+<span class="sd">    and therefore in an own function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">GLOBAL_LOCK</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">GLOBAL_LOCK</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># Create a new lock</span>
+            <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span>
+                    <span class="n">file_name</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+                    <span class="n">folder</span><span class="o">=</span><span class="n">paths</span><span class="o">.</span><span class="n">get_content_root</span><span class="p">(),</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="n">lock_timeout</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># We do not want to wait, so raise a ProtocolError immediately</span>
+            <span class="k">if</span> <span class="n">GLOBAL_LOCK</span><span class="o">.</span><span class="n">is_locked</span> <span class="ow">and</span> <span class="n">wait</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Already locked.&#39;</span><span class="p">)</span>
+
+        <span class="c"># Wait.</span>
+        <span class="n">GLOBAL_LOCK</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+
+    <span class="c"># Convert other exceptions to a ProtocolError</span>
+    <span class="k">except</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLockException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lock a domain and wait to a max. time</span>
+<span class="sd">    of 5 minutes, will return a timeout then</span>
+
+<span class="sd">       lock [domain]</span>
+
+<span class="sd">       * domain is e.g. www.heise.de</span>
+<span class="sd">       * Returns nothing (but OK or ACK ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">lock_domain</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">try_lock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lock a domain, but do not wait</span>
+
+<span class="sd">       try_lock [domain]</span>
+
+<span class="sd">       * domain is e.g. www.heise.de</span>
+<span class="sd">       * Returns nothing (but OK or ACK ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">lock_domain</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wait</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">unlock_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unlock a previous lock</span>
+
+<span class="sd">       unlock [domain]</span>
+
+<span class="sd">       * domain is e.g. www.heise.de</span>
+<span class="sd">       * Returns nothing (but OK or ACK ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">GLOBAL_LOCK</span>
+
+    <span class="k">if</span> <span class="n">GLOBAL_LOCK</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;No previous lock.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">GLOBAL_LOCK</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">GLOBAL_LOCK</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Unlocking failed.&#39;</span><span class="p">)</span>
+        <span class="n">GLOBAL_LOCK</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<span class="k">def</span> <span class="nf">checkout_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checkout a certain branch (usually a commitTag or master)</span>
+
+<span class="sd">       checkout [domain] {branch_name}</span>
+
+<span class="sd">       * domain is e.g. www.heise.de</span>
+<span class="sd">       * branch_name the entity to checkout,</span>
+<span class="sd">                     if omitted only the path is returned</span>
+<span class="sd">                     and no git work is done</span>
+
+<span class="sd">       * Returns: The Path to the checkout&#39;d domain</span>
+
+<span class="sd">       Note: You should always checkout master when you&#39;re done!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">domain_path</span> <span class="o">=</span> <span class="n">paths</span><span class="o">.</span><span class="n">get_domain_path</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">domain_path</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Invalid Domain.&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">branch</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">branch</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">wrapper</span> <span class="o">=</span> <span class="n">Git</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+        <span class="n">try_lock_handler</span><span class="p">([</span><span class="n">domain</span><span class="p">])</span>
+        <span class="n">rcode</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+        <span class="n">unlock_handler</span><span class="p">([</span><span class="n">domain</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">rcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;checkout returned {rc}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="n">rcode</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">domain_path</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">commit_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a commit on a certain domain:</span>
+
+<span class="sd">       commit [domain] {message}</span>
+
+<span class="sd">       * domain is e.g. www.heise.de</span>
+<span class="sd">       * message is the commit message (optional, &#39;edit&#39; by default)</span>
+<span class="sd">       * Returns nothing (but OK or ACK ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;edit&#39;</span>
+
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">Git</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+    <span class="n">rcode</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;commit returned {rc}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="n">rcode</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">list_branches_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List all branches on a certain domain:</span>
+
+<span class="sd">        list_branches [domain]</span>
+
+<span class="sd">        * domain is e.g. www.heise.de</span>
+<span class="sd">        * Returns a newline seperated list of branchnames,</span>
+<span class="sd">          excluding &#39;master&#39; and &#39;empty&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">branch_list</span> <span class="o">=</span> <span class="n">Git</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span><span class="o">.</span><span class="n">list_branches</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;--&gt; &#39;</span><span class="p">,</span> <span class="n">branch_list</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">branch_list</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;it a list&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">branch_list</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Invalid Domain.&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">list_commits_handler</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List all commits on a certain domain and its current branch:</span>
+
+<span class="sd">        list_commits [domain]</span>
+
+<span class="sd">        * domain is e.g. www.heise.de</span>
+<span class="sd">        * Returns a newline seperated list of commithashes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">cmt_list</span> <span class="o">=</span> <span class="n">Git</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span><span class="o">.</span><span class="n">list_commits</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cmt_list</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmt_list</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Invalid Domain.&#39;</span><span class="p">)</span>
+
+
+<span class="c">###########################################################################</span>
+<span class="c">#                              Protocolspec                               #</span>
+<span class="c">###########################################################################</span>
+
+<span class="c"># Simple dictionary based description of the protocol</span>
+<span class="c"># command</span>
+<span class="c">#     =&gt; takes: how many arguments to take</span>
+<span class="c">#     =&gt; func: a handler that does something with the args</span>
+<span class="c">#              and return some bytebuffer</span>
+<span class="n">PROTOCOL</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;lock&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">lock_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;try_lock&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">try_lock_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;unlock&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">unlock_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;checkout&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">checkout_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;commit&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">commit_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;list_branches&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">list_branches_handler</span>
+            <span class="p">},</span>
+        <span class="s">&#39;list_commits&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;takes&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s">&#39;func&#39;</span><span class="p">:</span> <span class="n">list_commits_handler</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                              Actual Server                              #</span>
+<span class="c">###########################################################################</span>
+
+
+<span class="k">class</span> <span class="nc">AdapterHandler</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The RequestHandler class for the Javadapter</span>
+
+<span class="sd">    It is instantiated once per connection to the server, and must</span>
+<span class="sd">    override the handle() method to implement communication to the</span>
+<span class="sd">    client. It is never instantiated explicitely.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">serve_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle a certain command</span>
+
+<span class="sd">        Try to see a meaning in a command,</span>
+<span class="sd">        raise an ProtocolError or return a</span>
+<span class="sd">        bytebuffer with a suitable reponse,</span>
+<span class="sd">        which is ended with a linefeed in any case</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">b</span><span class="s">&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Try to get a handler for this command,</span>
+            <span class="c"># if not part of the protocol raise a ProtocolError</span>
+            <span class="c"># and send an &#39;ACK ...&#39; back to the caller</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="n">PROTOCOL</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__cmd</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__arg</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">handler</span><span class="p">[</span><span class="s">&#39;takes&#39;</span><span class="p">]:</span>
+                <span class="c"># More error checking might be done here,</span>
+                <span class="c"># but currently only the number of args is checked</span>
+                <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span>
+                        <span class="s">&#39;&quot;{cmd}&quot; takes exactly {arg} argument(s)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">cmd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cmd</span><span class="p">,</span>
+                        <span class="n">arg</span><span class="o">=</span><span class="n">handler</span><span class="p">[</span><span class="s">&#39;takes&#39;</span><span class="p">]))</span>
+
+            <span class="c"># the handlers simply return strings, but for send()</span>
+            <span class="c"># we need bytes. If func() returns a False value,</span>
+            <span class="c"># an empty string is used as response instead</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">handler</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">__arg</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ProtocolError</span><span class="p">(</span><span class="s">&#39;Unknown command: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implemented from RequestHandler</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># Convert input to a list of trimmed strings</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;invalid_utf8&gt;&#39;</span><span class="p">]</span>
+
+            <span class="c"># Got EOF, so we better quit</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Quitting connection &quot;</span><span class="si">%s</span><span class="s">&quot; to client&#39;</span> <span class="o">%</span>
+                        <span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__cmd</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__arg</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+                <span class="c"># No matter what, something is send always,</span>
+                <span class="c"># even it&#39;s a ProtocolError</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serve_request</span><span class="p">()</span>
+                    <span class="n">send_data</span> <span class="o">=</span> <span class="n">response</span> <span class="o">+</span> <span class="n">b</span><span class="s">&#39;OK&#39;</span>
+                <span class="k">except</span> <span class="n">ProtocolError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="n">send_data</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">failure</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">send_data</span> <span class="o">+</span> <span class="n">b</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ThreadedTCPServer</span><span class="p">(</span><span class="n">socketserver</span><span class="o">.</span><span class="n">ThreadingMixIn</span><span class="p">,</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A &#39;own&#39; socketserver, with ThreadingMixIn</span>
+
+<span class="sd">    Reference: http://docs.python.org/py3k/library/socketserver.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="start"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.start">[docs]</a><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;javadapter.port&#39;</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start the Javadapter server, and exit once done</span>
+
+<span class="sd">    :host: the host to start the server on (does anythinh but localhost work?)</span>
+<span class="sd">    :port: the port on which the server listens on</span>
+<span class="sd">    :returns: a server, on which shutdown() can be called</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Spawn a new thread for each connection</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">ThreadedTCPServer</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">AdapterHandler</span><span class="p">)</span>
+    <span class="n">server_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">)</span>
+    <span class="n">server_thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">server_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">server</span>
+
+</div>
+<div class="viewcode-block" id="ServerShell"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell">[docs]</a><span class="k">class</span> <span class="nc">ServerShell</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command shell to manage javadapter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">intro</span> <span class="o">=</span> <span class="s">&#39;Javadapter Shell: Type help or ? to list commands</span><span class="se">\n</span><span class="s">Use Ctrl-P and Ctrl-N to repeat the last commands&#39;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="s">&#39;&gt;&gt;&gt; &#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="s">&#39;42421&#39;</span><span class="p">,</span> <span class="n">server_instance</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ServerShell</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server_instance</span>
+
+<div class="viewcode-block" id="ServerShell.do_start"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_start">[docs]</a>    <span class="k">def</span> <span class="nf">do_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Start a server if not already active&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Cannot start:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="ServerShell.do_stop"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_stop">[docs]</a>    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Stop a running Server&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_status</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ServerShell.do_status"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_status">[docs]</a>    <span class="k">def</span> <span class="nf">do_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Print current status of the Server&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Server listening on&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Server is not running&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="ServerShell.do_quit"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Quits the server&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_stop</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="ServerShell.do_EOF"><a class="viewcode-back" href="../../javadapter.html#javadapter.server.ServerShell.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="s">&#39;Shortcut for quit (Press CTRL+D)&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_quit</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                           Testing / Starting                            #</span>
+<span class="c">###########################################################################</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        main() for cmd use, pass a port as only arg</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;usage: {prog} port&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">start</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+            <span class="n">ServerShell</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Quitting Server because of Ctrl-C&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Wait 30 seconds or change your port&#39;</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Extracting data from crawled content &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="index.html" />
+    <link rel="next" title="Crawling Program (WGET)" href="wget.html" />
+    <link rel="prev" title="Filtering crawled content" href="filter.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wget.html" title="Crawling Program (WGET)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Filtering crawled content"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="extracting-data-from-crawled-content">
+<h1>Extracting data from crawled content<a class="headerlink" href="#extracting-data-from-crawled-content" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>One Requirement was to extract the title from HTML Documents. There is no Plugin-System as for the <em>Filters</em>,
+but one may write an extractor function that will be called for a specific mimeType and register it like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># In crawler.extractor.py</span>
+<span class="n">EXTRACTORS</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s">&quot;text/html&quot;</span><span class="p">:</span> <span class="n">extract_html</span>
+<span class="hll">      <span class="s">&quot;application/pdf&quot;</span><span class="p">:</span> <span class="n">extract_pdf</span>
+</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-crawler.extractor">
+<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-crawler.extractor" title="Permalink to this headline">¶</a></h2>
+<p>Title extractor module which makes possible to extract title names
+from various content files. Currently only text/html files are supported.</p>
+<dl class="function">
+<dt id="crawler.extractor.extract_html">
+<tt class="descclassname">crawler.extractor.</tt><tt class="descname">extract_html</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="_modules/crawler/extractor.html#extract_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.extractor.extract_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title extractor for text/html files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">File_path :</th><td class="field-body">path to html file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">extracted title or empty string if no title is found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="crawler.extractor.get_title">
+<tt class="descclassname">crawler.extractor.</tt><tt class="descname">get_title</tt><big>(</big><em>file_path</em>, <em>mime</em><big>)</big><a class="reference internal" href="_modules/crawler/extractor.html#get_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.extractor.get_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extractor &#8216;interface&#8217; to delegate file by
+mime type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">File_path :</th><td class="field-body">path to content file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Mime :</th><td class="field-body">mime type of that file to determinate extractor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extracted title as string if extraction is successful
+else an empty string will be returned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Extracting data from crawled content</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#module-crawler.extractor">Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="previous chapter">Filtering crawled content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wget.html"
+                        title="next chapter">Crawling Program (WGET)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/extractor.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wget.html" title="Crawling Program (WGET)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Filtering crawled content"
+             >previous</a> |</li>
+        <li><a href="index.html">Webarchiv 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

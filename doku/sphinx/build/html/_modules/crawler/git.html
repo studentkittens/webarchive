@@ -1,0 +1,368 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>crawler.git &mdash; Webarchiv 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for crawler.git</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Wrapper for Git</span>
+
+<span class="sd">This is highly simplified, and may be replaced</span>
+<span class="sd">by a faster, native implementation using Dunwhich.</span>
+<span class="sd">But that&#39;s not on the plan due our limited time.</span>
+
+<span class="sd">Git commands (init e.g.) are tailored for use</span>
+<span class="sd">in this archive, less for general use.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
+
+
+<div class="viewcode-block" id="Git"><a class="viewcode-back" href="../../git.html#crawler.git.Git">[docs]</a><span class="k">class</span> <span class="nc">Git</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A (overly-simple) Wrapper for the git binary&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance a new Git Wrapper for a certain domain</span>
+
+<span class="sd">        :param domain: A domain found in the archive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__domain</span> <span class="o">=</span> <span class="n">paths</span><span class="o">.</span><span class="n">get_domain_path</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gitdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">,</span> <span class="s">&#39;.git&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__empty</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">,</span> <span class="s">&#39;empty_file&#39;</span><span class="p">)</span>
+
+        <span class="c"># Error checking via regex matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__branch_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="s">&#39;[0-9]{4}(H[0-9]{2}){2}T[0-9]{2}(C[0-9]{2}){2}$&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__commit_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;[0-9a-z]{40}$&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__basecmd</span> <span class="o">=</span> <span class="s">&#39;git --git-dir {gitdir} --work-tree {gitcwd} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">gitdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__gitdir</span><span class="p">,</span>
+                <span class="n">gitcwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Git.domain"><a class="viewcode-back" href="../../git.html#crawler.git.Git.domain">[docs]</a>    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the domain, to which this wrapper belongs&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__domain</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Git.convert_branch_name"><a class="viewcode-back" href="../../git.html#crawler.git.Git.convert_branch_name">[docs]</a>    <span class="k">def</span> <span class="nf">convert_branch_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">date_string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a datestring suitably to a branch name</span>
+
+<span class="sd">        Git does not allow special characters such as : or -</span>
+<span class="sd">        in branchnames for whatever reason</span>
+
+<span class="sd">        :param date_string: the string to convert</span>
+<span class="sd">        :returns: the new, converted string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">date_string</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">({</span><span class="s">&#39;:&#39;</span><span class="p">:</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="s">&#39;H&#39;</span><span class="p">}))</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a git script</span>
+
+<span class="sd">        Prepend the basecmd to each line in command,</span>
+<span class="sd">        and subprocess.call() the resulting string synchronously</span>
+
+<span class="sd">        :param command: a multiline git script</span>
+<span class="sd">        :param forkShell: call subprocess.call with shell=True</span>
+<span class="sd">        :returns: the returncode of the last command in line</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">script</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__basecmd</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Executing: &#39;</span> <span class="o">+</span> <span class="n">command</span><span class="p">)</span>
+
+        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+
+        <span class="c"># Get stderr output</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">rcode</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">rcode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Previous git-cmd failed: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">rcode</span>
+
+<div class="viewcode-block" id="Git.init"><a class="viewcode-back" href="../../git.html#crawler.git.Git.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new archive at specified domain path</span>
+
+<span class="sd">        The target directory does not need to exit yet</span>
+
+<span class="sd">        :returns: 0 on success, another rcode on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rcode</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__gitdir</span><span class="p">):</span>
+            <span class="n">rcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                init .</span>
+<span class="s">                checkout -b &#39;empty&#39;</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">rcode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c"># Create a dummy empty file (needed to add a commit)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__empty</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dummy</span><span class="p">:</span>
+                    <span class="n">dummy</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Hi, Sam!&#39;</span><span class="p">)</span>
+
+                <span class="n">rcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                    add empty_file</span>
+<span class="s">                    commit -am &#39;Initialiazed&#39;</span>
+<span class="s">                    checkout -b master</span>
+<span class="s">                    &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rcode</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rcode</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">rcode</span>
+</div>
+<div class="viewcode-block" id="Git.checkout"><a class="viewcode-back" href="../../git.html#crawler.git.Git.checkout">[docs]</a>    <span class="k">def</span> <span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s">&#39;master&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checkout a certain point (tag, branch or commit)</span>
+
+<span class="sd">        :target: the target to visit</span>
+<span class="sd">        :returns: 0 on success, another rcode on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&#39;checkout {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Git.branch"><a class="viewcode-back" href="../../git.html#crawler.git.Git.branch">[docs]</a>    <span class="k">def</span> <span class="nf">branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_name</span><span class="o">=</span><span class="s">&#39;empty&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        create a new named branch</span>
+
+<span class="sd">        :branch_name: the name of the new branch, may not exist yet</span>
+<span class="sd">        :returns: 0 on success, another rcode on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rcode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&#39;checkout -fb {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">Git</span><span class="o">.</span><span class="n">convert_branch_name</span><span class="p">(</span><span class="n">branch_name</span><span class="p">)))</span>
+
+        <span class="c"># remove old emptyfile</span>
+        <span class="k">if</span> <span class="n">rcode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__empty</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;Cannot delete empty_file:&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rcode</span>
+</div>
+<div class="viewcode-block" id="Git.commit"><a class="viewcode-back" href="../../git.html#crawler.git.Git.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&#39;edit&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        commit any changes made</span>
+
+<span class="sd">        git add . and git commit -am &lt;message&gt; is done</span>
+
+<span class="sd">        :message: The commit message</span>
+<span class="sd">        :returns: 0 on success, another rcode on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                   add {path} &amp;&amp;</span>
+<span class="s">                   commit -am &#39;{msg}&#39;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                       <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">,</span>
+                       <span class="n">msg</span><span class="o">=</span><span class="n">message</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Git.recreate_master"><a class="viewcode-back" href="../../git.html#crawler.git.Git.recreate_master">[docs]</a>    <span class="k">def</span> <span class="nf">recreate_master</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A very special helper.</span>
+
+<span class="sd">        It deletes the current master branch,</span>
+<span class="sd">        and recreates it. So, the master always points</span>
+<span class="sd">        to the most recently created branch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                branch -D master</span>
+<span class="s">                checkout -b master</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__list_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal helper for list_branches() and list_commits()</span>
+
+<span class="sd">        Opens a git command and buffers it&#39;s output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">popen_command</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__basecmd</span> <span class="o">+</span> <span class="n">command</span><span class="p">)</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">popen_command</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s">&#39;ascii&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_list</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;Cannot get a list from $({ptype}); </span><span class="se">\</span>
+<span class="s">                           Returncode: {rc}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">pytype</span><span class="o">=</span><span class="n">command</span><span class="p">,</span>
+                <span class="n">rc</span><span class="o">=</span><span class="n">err</span><span class="o">.</span><span class="n">returncode</span>
+                <span class="p">))</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="Git.list_branches"><a class="viewcode-back" href="../../git.html#crawler.git.Git.list_branches">[docs]</a>    <span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all branches in this repo, which conform to the &#39;date&#39;-regex.</span>
+
+<span class="sd">        This means, Empty and master branch are not mentioned. If you want</span>
+<span class="sd">        to checkout those, just checkout &#39;empty&#39; or &#39;master&#39;</span>
+
+<span class="sd">        :returns: a list of branchestrings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">branch_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list_data</span><span class="p">(</span><span class="s">&#39;branch&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">branch_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__branch_pattern</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="n">branch_list</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="Git.list_commits"><a class="viewcode-back" href="../../git.html#crawler.git.Git.list_commits">[docs]</a>    <span class="k">def</span> <span class="nf">list_commits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all commits in this repo and branch</span>
+
+<span class="sd">        :returns: a list of commithashestrings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmt_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list_data</span><span class="p">(</span><span class="s">&#39;--no-pager log --pretty=&quot;%h&quot; --no-abbrev&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cmt_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__commit_pattern</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="n">cmt_list</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                                unittests                                #</span>
+<span class="c">###########################################################################</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">unittest</span>
+
+    <span class="n">TEST_DIR</span> <span class="o">=</span> <span class="s">&#39;/tmp/git_test/&#39;</span>
+
+    <span class="k">def</span> <span class="nf">add_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="s">&#39;Util for several testcases&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">TEST_DIR</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">dummy</span><span class="p">:</span>
+            <span class="n">dummy</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Hello Kitteh!&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">GitTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+        <span class="s">&#39;Very basic testcases for this git wrapper&#39;</span>
+        <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="s">&#39;Set up a dir&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__repo</span> <span class="o">=</span> <span class="n">Git</span><span class="p">(</span><span class="n">TEST_DIR</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">test_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="s">&#39;Test ability to commit files initially&#39;</span>
+            <span class="n">add_file</span><span class="p">(</span><span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&#39;init&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">test_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="s">&#39;test branching of repo&#39;</span>
+            <span class="c"># make empty master</span>
+            <span class="n">add_file</span><span class="p">(</span><span class="s">&#39;empty&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">commit</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="c"># branch to a new branch and commit something</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">branch</span><span class="p">(</span><span class="s">&#39;2405TT2323&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">add_file</span><span class="p">(</span><span class="s">&#39;file_new&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">commit</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="c"># change back to master</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">checkout</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">add_file</span><span class="p">(</span><span class="s">&#39;file_new&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__repo</span><span class="o">.</span><span class="n">commit</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="s">&#39;Clean again&#39;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;rm&#39;</span><span class="p">,</span> <span class="s">&#39;-rf&#39;</span><span class="p">,</span> <span class="n">TEST_DIR</span><span class="p">])</span>
+
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
