@@ -51,39 +51,31 @@
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Florian Bauer&#39;</span>
 
-<span class="n">default_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;general.root&#39;</span><span class="p">:</span> <span class="s">&#39;/tmp/archive/&#39;</span><span class="p">,</span>
-        <span class="s">&#39;general.filterpath&#39;</span><span class="p">:</span> <span class="s">&#39;filter/&#39;</span><span class="p">,</span>
-        <span class="s">&#39;crawler.depth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s">&#39;crawler.interval&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-        <span class="s">&#39;crawler.maxInst&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s">&#39;crawler.userAgent&#39;</span><span class="p">:</span> <span class="s">&#39;webarchive/0.1 +https://github.com/studentkittens/webarchive&#39;</span><span class="p">,</span>
-        <span class="s">&#39;crawler.tempRoot&#39;</span><span class="p">:</span> <span class="s">&#39;tmp/&#39;</span><span class="p">,</span>
-        <span class="s">&#39;crawler.ignoreRobots&#39;</span><span class="p">:</span> <span class="s">&#39;true&#39;</span><span class="p">,</span>
-        <span class="s">&#39;crawler.urllistpath&#39;</span><span class="p">:</span> <span class="s">&#39;url.txt&#39;</span><span class="p">,</span>
-        <span class="s">&#39;crawler.customWgetParms&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
-        <span class="s">&#39;db.path&#39;</span><span class="p">:</span> <span class="s">&#39;metadata.db&#39;</span><span class="p">,</span>
-        <span class="s">&#39;db.sqlSource&#39;</span><span class="p">:</span> <span class="s">&#39;../sql/&#39;</span><span class="p">,</span>
-        <span class="s">&#39;xml.schemaPath&#39;</span><span class="p">:</span> <span class="s">&#39;xml/&#39;</span><span class="p">,</span>
-        <span class="s">&#39;server.port&#39;</span><span class="p">:</span> <span class="mi">42420</span><span class="p">,</span>
-        <span class="s">&#39;server.notify.interval&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
-        <span class="s">&#39;javadapter.port&#39;</span><span class="p">:</span> <span class="mi">42421</span>
-        <span class="p">}</span>
+
+<span class="kn">import</span> <span class="nn">config.options</span> <span class="kn">as</span> <span class="nn">options</span>
 
 
 <div class="viewcode-block" id="get_default"><a class="viewcode-back" href="../../config.html#config.reader.get_default">[docs]</a><span class="k">def</span> <span class="nf">get_default</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
 
 </div>
 <div class="viewcode-block" id="get"><a class="viewcode-back" href="../../config.html#config.reader.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">actual_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;&#39;</span></div>
+        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
+
+</div>
+<span class="k">def</span> <span class="nf">get_with_default</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;Actual: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">actual_options</span><span class="p">[</span><span class="n">value</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;   Default: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
 </pre></div>
 
           </div>

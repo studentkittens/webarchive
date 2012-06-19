@@ -105,7 +105,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called on Ctrl-C</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Interrupt: &#39;</span><span class="p">,</span> <span class="n">signum</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
 
 <div class="viewcode-block" id="IntervalManager.start"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_in_sec</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -135,6 +134,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__cmanager</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;ready&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Interval Manager finished - current state set to ready.&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="IntervalManager.crawling_done_callback"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.crawling_done_callback">[docs]</a>    <span class="k">def</span> <span class="nf">crawling_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -154,6 +154,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;ready&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Interval Manager finished - current state set to ready.&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="IntervalManager.stop"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

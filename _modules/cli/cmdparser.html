@@ -86,6 +86,7 @@
 
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socket</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -204,7 +205,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">server</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arguments</span><span class="p">[</span><span class="s">&#39;--start&#39;</span><span class="p">]:</span>
-            <span class="n">server</span> <span class="o">=</span> <span class="n">javadapter</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">server</span> <span class="o">=</span> <span class="n">javadapter</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Cannot start javadapter:&#39;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">javadapter</span><span class="o">.</span><span class="n">ServerShell</span><span class="p">(</span><span class="n">server_instance</span><span class="o">=</span><span class="n">server</span><span class="p">)</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
 

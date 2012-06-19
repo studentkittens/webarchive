@@ -59,7 +59,8 @@
 
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <div class="viewcode-block" id="extract_html"><a class="viewcode-back" href="../../extractor.html#crawler.extractor.extract_html">[docs]</a><span class="k">def</span> <span class="nf">extract_html</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -99,7 +100,27 @@
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;cannot read file.&#39;</span><span class="p">)</span>
     <span class="k">finally</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                                unittest                                 #</span>
+<span class="c">###########################################################################</span></div>
+<span class="n">TESTDATA_PATH</span> <span class="o">=</span> <span class="s">&#39;/home/christoph/devf/webarchive/src/python/testdata/html/&#39;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">TestTitle</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">test_get_mime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+            <span class="n">expectations</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a.html&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;title&#39;</span> <span class="p">:</span><span class="s">&#39;Golem.de: IT-News für Profis&#39;</span><span class="p">,</span> <span class="s">&#39;mime&#39;</span><span class="p">:</span><span class="s">&#39;text/html&#39;</span><span class="p">},</span>
+                            <span class="s">&#39;b.html&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;title&#39;</span> <span class="p">:</span><span class="s">&quot;heise online | IT-News, c&#39;t, iX, Technology Review, Telepolis&quot;</span><span class="p">,</span> <span class="s">&#39;mime&#39;</span><span class="p">:</span><span class="s">&#39;text/html&#39;</span><span class="p">},</span>
+                            <span class="s">&#39;c.html&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;title&#39;</span> <span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;mime&#39;</span><span class="p">:</span><span class="s">&#39;text/plain&#39;</span><span class="p">},</span>
+                            <span class="s">&#39;d.html&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;title&#39;</span> <span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;mime&#39;</span><span class="p">:</span><span class="s">&#39;application/octet-stream&#39;</span><span class="p">}}</span>
+
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">expectations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">TESTDATA_PATH</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">],</span> <span class="n">get_title</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="s">&#39;mime&#39;</span><span class="p">]))</span>
+
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
           </div>

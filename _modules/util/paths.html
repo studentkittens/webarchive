@@ -69,11 +69,18 @@
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;db.path&#39;</span><span class="p">))</span>
 
 </div>
+<div class="viewcode-block" id="get_sqlpath"><a class="viewcode-back" href="../../utils.html#util.paths.get_sqlpath">[docs]</a><span class="k">def</span> <span class="nf">get_sqlpath</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :returns: sql statements path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;db.sqlSource&#39;</span><span class="p">))</span>
+
+</div>
 <div class="viewcode-block" id="get_content_root"><a class="viewcode-back" href="../../utils.html#util.paths.get_content_root">[docs]</a><span class="k">def</span> <span class="nf">get_content_root</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :return: &#39;{archive_root}/content/&#39; path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;content&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;content/&#39;</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="get_domain_path"><a class="viewcode-back" href="../../utils.html#util.paths.get_domain_path">[docs]</a><span class="k">def</span> <span class="nf">get_domain_path</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
@@ -97,7 +104,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :returns: log dir path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;logs&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;logs/&#39;</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="get_temp_root"><a class="viewcode-back" href="../../utils.html#util.paths.get_temp_root">[docs]</a><span class="k">def</span> <span class="nf">get_temp_root</span><span class="p">():</span>
@@ -109,16 +116,44 @@
 <span class="c">###########################################################################</span>
 <span class="c">#                                unittest                                 #</span>
 <span class="c">###########################################################################</span>
-</div>
+
+<span class="c"># some predefined values to test with</span></div>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">)</span>
+<span class="n">SQL_PATH</span> <span class="o">=</span> <span class="s">&#39;sql/&#39;</span>
+<span class="n">DB_PATH</span> <span class="o">=</span> <span class="s">&#39;metadata.db&#39;</span>
+<span class="n">CRAWLER_TMP_ROOT</span> <span class="o">=</span> <span class="s">&#39;tmp/&#39;</span>
+
+<span class="n">CONTENT_DIR</span> <span class="o">=</span> <span class="s">&#39;content/&#39;</span>
+<span class="n">LOG_DIR</span> <span class="o">=</span> <span class="s">&#39;logs/&#39;</span>
+<span class="n">TEMP_DIR</span> <span class="o">=</span> <span class="s">&#39;tmp/&#39;</span>
+<span class="n">DOMAIN</span> <span class="o">=</span> <span class="s">&#39;www.domain_name.org&#39;</span>
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">class</span> <span class="nc">TestPaths</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">test_domain_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_domain_path</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">),</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;content&#39;</span><span class="p">,</span> <span class="s">&#39;hello&#39;</span><span class="p">))</span>
 
-        <span class="k">def</span> <span class="nf">test_content_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_content_root</span><span class="p">(),</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="s">&#39;content&#39;</span><span class="p">))</span>
+        <span class="k">def</span> <span class="nf">test_get_db_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_dbpath</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">DB_PATH</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_sql_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_sqlpath</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">SQL_PATH</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_content_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_content_root</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">CONTENT_DIR</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_domain_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_domain_path</span><span class="p">(</span><span class="n">DOMAIN</span><span class="p">),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">CONTENT_DIR</span><span class="p">,</span> <span class="n">DOMAIN</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_archive_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_archive_root</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_log_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_log_dir</span><span class="p">(),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">LOG_DIR</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">test_get_temp_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get_temp_root</span><span class="p">(),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">TEMP_DIR</span><span class="p">))</span>
 
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>

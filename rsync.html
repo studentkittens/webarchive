@@ -65,16 +65,22 @@
 </div>
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="crawler.rsync.Rsync">
-<em class="property">class </em><tt class="descclassname">crawler.rsync.</tt><tt class="descname">Rsync</tt><big>(</big><em>src_path</em>, <em>dest_path</em><big>)</big><a class="reference internal" href="_modules/crawler/rsync.html#Rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.rsync.Rsync" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="crawler.rsync.Rsync.start_sync">
-<tt class="descname">start_sync</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/rsync.html#Rsync.start_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.rsync.Rsync.start_sync" title="Permalink to this definition">¶</a></dt>
+<p><tt class="docutils literal"><span class="pre">rsync()</span></tt> basically works like on the commandline:</p>
+<dl class="function">
+<dt id="crawler.rsync.rsync">
+<tt class="descclassname">crawler.rsync.</tt><tt class="descname">rsync</tt><big>(</big><em>src_path</em>, <em>dest_path</em><big>)</big><a class="reference internal" href="_modules/crawler/rsync.html#rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.rsync.rsync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the synchronization process,
 this function will block until finished</p>
-</dd></dl>
-
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Src_path :</th><td class="field-body">the directory/file to sync</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Dest_path :</th><td class="field-body">the directory to sync files to</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

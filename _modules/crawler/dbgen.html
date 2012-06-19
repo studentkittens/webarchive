@@ -64,10 +64,10 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
 <span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
 <span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_dbpath</span>
 <span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_archive_root</span>
+<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_sqlpath</span>
 
 
 <div class="viewcode-block" id="DBGenerator"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator">[docs]</a><span class="k">class</span> <span class="nc">DBGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -104,7 +104,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">statements</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;db.sqlSource&#39;</span><span class="p">),</span> <span class="s">&#39;*.sql&#39;</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_sqlpath</span><span class="p">(),</span> <span class="s">&#39;*.sql&#39;</span><span class="p">)):</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
                 <span class="n">source_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">source_base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.sql&#39;</span><span class="p">):</span>
