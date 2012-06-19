@@ -50,7 +50,7 @@ Implementation
 
 **Reading:**
 
-.. autoclass:: crawler.xmlreader.XMLReader
+.. autoclass:: crawler.xmlreader.XmlReader
   :members:
 
 ----------
