@@ -25,12 +25,19 @@ __author__ = 'Christopher Pahl'
 class Git(object):
     """A (overly-simple) Wrapper for the git binary"""
 
-    def __init__(self, domain):
+    def __init__(self, domain=None, abs_path=None):
         """Instance a new Git Wrapper for a certain domain
 
-        :param domain: A domain found in the archive
+        :domain: A domain found in the archive
+        :abs_path: If domain is not given you may pass an abs path to the repo
         """
-        self.__domain = paths.get_domain_path(domain)
+        if domain is not None:
+            self.__domain = paths.get_domain_path(domain)
+        elif abs_path is not None:
+            self.__domain = abs_path
+        else:
+            raise ValueError('Neither domain, nor abs_path passed')
+
         self.__gitdir = os.path.join(self.__domain, '.git')
         self.__empty = os.path.join(self.__domain, 'empty_file')
 
@@ -59,6 +66,16 @@ class Git(object):
         :returns: the new, converted string
         """
         return date_string.translate(str.maketrans({':': 'C', '-': 'H'}))
+
+    @classmethod
+    def convert_datestring(cls, branch_name):
+        """
+        Same as convert_branch_name(), but in the other direction
+
+        :branch_name: the string to convert
+        :returns: original string
+        """
+        return branch_name.translate(str.maketrans({'C': ':', 'H': '-'}))
 
     def __call_script(self, script):
         """
@@ -209,7 +226,8 @@ class Git(object):
         """
         branch_list = self.__list_data('branch')
         if branch_list is not None:
-            return list(filter(self.__branch_pattern.match, branch_list))
+            checked_branches = list(filter(self.__branch_pattern.match, branch_list))
+            return [Git.convert_datestring(conv) for conv in checked_branches]
         else:
             return None
 
@@ -232,44 +250,47 @@ class Git(object):
 
 if __name__ == '__main__':
     import unittest
+    import shutil
 
-    TEST_DIR = '/tmp/git_test/'
+    TEST_DIR = os.path.abspath('git_test/')
 
-    def add_file(name, mode):
+    # Note: This is partly tested by the javadapter already.
+
+    def add_file(name):
         'Util for several testcases'
-        with open(os.path.join(TEST_DIR, name), mode) as dummy:
+        with open(os.path.join(TEST_DIR, name), 'w') as dummy:
             dummy.write('Hello Kitteh!')
 
     class GitTest(unittest.TestCase):
         'Very basic testcases for this git wrapper'
         def setUp(self):
             'Set up a dir'
-            self.__repo = Git(TEST_DIR)
+            os.mkdir(TEST_DIR)
+            self.__repo = Git(abs_path=TEST_DIR)
             self.__repo.init()
 
         def test_commit(self):
             'Test ability to commit files initially'
-            add_file('file', 'w')
+            add_file('file')
             self.assertEqual(self.__repo.commit(message='init'), 0)
 
         def test_branch(self):
             'test branching of repo'
             # make empty master
-            add_file('empty', 'w')
+            add_file('empty')
             self.assertEqual(self.__repo.commit(), 0)
 
             # branch to a new branch and commit something
             self.assertEqual(self.__repo.branch('2405TT2323'), 0)
-            add_file('file_new', 'w')
+            add_file('file_new')
             self.assertEqual(self.__repo.commit(), 0)
 
             # change back to master
             self.assertEqual(self.__repo.checkout(), 0)
-            add_file('file_new', 'w')
+            add_file('file_new')
             self.assertEqual(self.__repo.commit(), 0)
 
         def tearDown(self):
-            'Clean again'
-            subprocess.call(['rm', '-rf', TEST_DIR])
+            shutil.rmtree(TEST_DIR, ignore_errors=True)
 
     unittest.main()

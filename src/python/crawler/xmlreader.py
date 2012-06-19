@@ -43,12 +43,7 @@ class XMLReader(object):
         return dict(metadict, **tagdict)
 
 
-def main():
-    """@todo: Docstring for main
-    :returns: @todo
-    """
+if __name__ == '__main__':
+    # tests for this are in xmlgen.py
     from pprint import pprint
     pprint(XMLReader('data.xml').parse())
-
-if __name__ == '__main__':
-    main()
