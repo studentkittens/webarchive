@@ -16,12 +16,12 @@ Implementation
 
 **Internal usage of the Crawljob:**
 
-.. autoclass:: cmanager.crawlmanager.CrawlerManager
+.. autoclass:: archive.cmanager.crawlmanager.CrawlerManager
   :members:
 
 
 
 **Internal usage of the Crawlmanager:**
 
-.. autoclass:: crawler.crawljob.CrawlJob 
+.. autoclass:: archive.crawler.crawljob.CrawlJob 
   :members:

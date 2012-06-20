@@ -58,18 +58,18 @@ Implementation
 
 **Actual functions to use:**
 
-.. autofunction:: dbrecover.recover.rebuild
+.. autofunction:: archive.dbrecover.recover.rebuild
 
-.. autofunction:: dbrecover.recover.remove
+.. autofunction:: archive.dbrecover.recover.remove
 
-.. autofunction:: dbrecover.repair.repair
+.. autofunction:: archive.dbrecover.repair.repair
 
 ----------------
 
-.. autoclass:: dbrecover.xml_recover.XMLDBRecover
+.. autoclass:: archive.dbrecover.xml_recover.XMLDBRecover
   :members:
 
 ----------------
 
-.. autoclass:: dbrecover.pickle_recover.PickleDBRecover
+.. autoclass:: archive.dbrecover.pickle_recover.PickleDBRecover
   :members:

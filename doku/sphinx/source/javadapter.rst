@@ -175,11 +175,11 @@ Implementation
 
 **Actual function to start the server:**
 
-.. autofunction:: javadapter.server.start
+.. autofunction:: archive.javadapter.server.start
 
 ---------
 
 **Convienience class to show a servershell:**
 
-.. autoclass:: javadapter.server.ServerShell
+.. autoclass:: archive.javadapter.server.ServerShell
   :members:
