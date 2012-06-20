@@ -57,14 +57,3 @@ class MetaData(dict):
         m['commitTime'] = commitTime
         m['title'] = extractor.get_title(abs_data_path, m['mimeType'])
         return m
-
-###########################################################################
-#                                unittest                                 #
-###########################################################################
-
-if __name__ == '__main__':
-    m = MetaData.build_metadata_from_file('/home/christoph/',
-            '/home/christoph/quickndirty/xml/meta.xml')
-    liste = ['url', 'domain', 'path', 'title', 'createtime', 'committime', 'mime']
-    for item in liste:
-        print(item + ': ' + m[item])

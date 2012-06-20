@@ -6,8 +6,12 @@ import unittest
 """
 Filelock module, with minor modification
 
-Code from: http://www.evanfosmark.com/2009/01/cross-platform-file-locking-support-in-python/
-BSD Licensed
+Code from:
+
+  http://www.evanfosmark.com/2009/01/cross-platform-file-locking-support-in-python/
+
+
+ -- BSD Licensed --
 """
 
 

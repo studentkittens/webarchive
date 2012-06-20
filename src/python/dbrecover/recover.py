@@ -46,13 +46,3 @@ def remove():
     """
     dbpath = get_dbpath()
     os.remove(dbpath)
-
-
-def main():
-    """
-    Starts rebuild - needed?
-    """
-    rebuild()
-
-if __name__ == '__main__':
-    main()

@@ -6,11 +6,13 @@ Title extractor module which makes possible to extract title names
 from various content files. Currently only text/html files are supported.
 """
 
+__author__ = 'Christoph Piechula'
 
 from bs4 import BeautifulSoup
 import logging
 import unittest
 import os
+
 
 def extract_html(file_path):
     """
@@ -55,16 +57,16 @@ def get_title(file_path, mime):
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-TESTDATA_PATH = '/home/christoph/devf/webarchive/src/python/testdata/html/'
+TESTDATA_PATH = 'testdata/html/'
 
 if __name__ == '__main__':
     class TestTitle(unittest.TestCase):
         def test_get_mime(self):
 
-            expectations = {'a.html': {'title' :'Golem.de: IT-News für Profis', 'mime':'text/html'},
-                            'b.html': {'title' :"heise online | IT-News, c't, iX, Technology Review, Telepolis", 'mime':'text/html'},
-                            'c.html': {'title' :'', 'mime':'text/plain'},
-                            'd.html': {'title' :'', 'mime':'application/octet-stream'}}
+            expectations = {'a.html': {'title': 'Golem.de: IT-News für Profis', 'mime': 'text/html'},
+                            'b.html': {'title': "heise online | IT-News, c't, iX, Technology Review, Telepolis", 'mime': 'text/html'},
+                            'c.html': {'title': '', 'mime': 'text/plain'},
+                            'd.html': {'title': '', 'mime': 'application/octet-stream'}}
 
             for key, value in expectations.items():
                 path = os.path.join(TESTDATA_PATH, key)

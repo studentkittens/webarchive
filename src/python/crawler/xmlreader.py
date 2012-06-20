@@ -51,9 +51,3 @@ class XmlReader(object):
                 tagdict = makecleandict(node.attrib)
 
         return dict(metadict, **tagdict)
-
-
-if __name__ == '__main__':
-    # tests for this are in xmlgen.py
-    from pprint import pprint
-    pprint(XmlReader('data.xml').parse())

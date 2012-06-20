@@ -6,7 +6,6 @@ Init module to initialize archive parms on first start
 """
 
 import os
-import os.path
 import shutil
 
 import init.default_cfg as default_cfg
@@ -22,15 +21,18 @@ def init_archive(init_path=os.getcwd()):
     base_path = os.path.join(init_path, 'archive')
     if not os.path.exists(base_path):
         try:
+            # Create top direcoty
             os.mkdir(base_path)
 
-            os.mkdir(os.path.join(base_path, 'content'))
-            os.mkdir(os.path.join(base_path, 'tmp'))
-            os.mkdir(os.path.join(base_path, 'filter'))
-            os.mkdir(os.path.join(base_path, 'logs'))
-            os.mkdir(os.path.join(base_path, 'pickle_cache'))
-            shutil.copytree('../sql', os.path.join(base_path,'sql'))
+            # Create base structure
+            for folder in ['content', 'tmp', 'filter', 'logs', 'pickle_cache']:
+                os.mkdir(os.path.join(base_path, folder))
 
+            # Copy SQL Statements to Archive. This invention was brought to you by:
+            #   Christoph Cwelich
+            shutil.copytree('../sql', os.path.join(base_path, 'sql'))
+
+            # Write a default config template... that's a bit ugly
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
                 cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
                     archive_path=base_path,
@@ -49,7 +51,7 @@ def init_archive(init_path=os.getcwd()):
                     server_port=config.get_default('server.port'),
                     notify_in_min=config.get_default('server.notify.interval'),
                     javadapter_port=config.get_default('javadapter.port')
-                    ))
+                ))
 
             print('Initialized new archive at', base_path)
         except OSError as err:
@@ -62,6 +64,9 @@ if __name__ == '__main__':
     import sys
 
     def main():
-        init_archive(sys.argv[1])
+        if len(sys.argv) > 1:
+            init_archive(sys.argv[1])
+        else:
+            print('Usage: init <folder>')
 
     main()

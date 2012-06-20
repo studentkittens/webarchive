@@ -39,7 +39,7 @@ class Cleaner:
         :file_name: name to content file itself
         """
         src_file = os.path.join(tmp_crawler_folder, file_name)
-        dest_file = os.path.join(tmp_crawler_folder, '____data')
+        dest_file = os.path.join(tmp_crawler_folder, '__data__')
 
         try:
             os.rename(src_file, dest_file)
@@ -117,7 +117,7 @@ if __name__ == '__main__':
             shutil.copytree(self.__raw_data, self.__restruct_test_data)
             # copying 'raw restructured' data for clean empty testing
             shutil.copytree(self.__clean_should_be, self.__clean_test_data)
-            self.__clean_test_dataer = Cleaner(self.__restruct_test_data)
+            self.__clean_test_data = Cleaner(self.__restruct_test_data)
 
         def compare_filetree(self, should_be, test_data):
             should_be = content_helper(should_be)
@@ -125,11 +125,11 @@ if __name__ == '__main__':
             self.assertEqual(should_be, really_is)
 
         def test_restructure(self):
-            self.__clean_test_dataer.restructure()
+            self.__clean_test_data.restructure()
             self.compare_filetree(self.__restruct_should_be, self.__restruct_test_data)
 
         def test_clean_empty(self):
-            self.__clean_test_dataer.clean_empty()
+            self.__clean_test_data.clean_empty()
             self.compare_filetree(self.__clean_should_be, self.__clean_test_data)
 
         def tearDown(self):

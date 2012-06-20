@@ -97,14 +97,3 @@ class Wget(object):
     def __del__(self):
         if self.__wget_logfile is not None:
             self.__wget_logfile.close()
-
-
-###########################################################################
-#                                unittest                                 #
-###########################################################################
-
-if __name__ == '__main__':
-    a = Wget('www.heise.de', '.')
-    a.start()
-    time.sleep(1)
-    a.stop()

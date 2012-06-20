@@ -118,11 +118,3 @@ class XMLDBRecover(object):
 
     def save(self, metalist):
         pass
-
-
-def main():
-    rec = XMLDBRecover()
-    rec.load()
-
-if __name__ == '__main__':
-    main()

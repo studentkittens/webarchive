@@ -120,7 +120,7 @@ class CrawlJob(object):
         Starts rsync procedure (rsync submodule) to mirror temporaray source
         to destination -> content archive path
         """
-        content_path = os.path.join(config.get('general.root'), 'content')
+        content_path = paths.get_content_root()
         itemlist = os.listdir(self.__path)
 
         for domain in itemlist:

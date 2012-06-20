@@ -180,9 +180,6 @@ class CrawlerShell(cmd.Cmd):
     # Commands:
 
     def do_start(self, arg):
-        """
-        Invokes start command
-        """
         'Starts crawljobs if stopped previously.'
         if self.__activeflag == False:
             self.__activeflag = True
@@ -192,25 +189,16 @@ class CrawlerShell(cmd.Cmd):
         return False
 
     def do_status(self, arg):
-        """
-        Invokes status command
-        """
         'Status of crawler an intervalmanager.'
         print(self.__imanager.status)
         return False
 
     def do_stop(self, arg):
-        """
-        Invokes stop command
-        """
         'Stopps self.__imanager.'
         self.__imanager.stop()
         return False
 
     def do_quit(self, arg):
-        """
-        Invokes quit command
-        """
         'Quits Intervalmanager, Crawljobs will still run until finished.'
         self.__cv.acquire()
         self.__quitflag = True
@@ -223,7 +211,3 @@ class CrawlerShell(cmd.Cmd):
         Invokes quit on EOF
         """
         return self.do_quit(arg)
-
-###########################################################################
-#                                unittest                                 #
-###########################################################################

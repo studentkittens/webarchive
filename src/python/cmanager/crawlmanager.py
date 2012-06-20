@@ -85,10 +85,3 @@ class CrawlerManager(object):
 
         self.__pool.close()
         self.__pool.join()
-
-###########################################################################
-#                                unittest                                 #
-###########################################################################
-
-if __name__ == '__main__':
-    cm = CrawlerManager(utl.unique_items_from_file('url.txt'))

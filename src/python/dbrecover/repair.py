@@ -14,6 +14,9 @@ import util.paths as paths
 import crawler.git as git
 
 
+__author__ = 'Christoph Piechula, Christopher Pahl'
+
+
 def clear_locks():
     """
     Searches for *.lock and tries to remove found filesystem locks
@@ -55,6 +58,3 @@ def repair():
         clear_locks()
     except OSError:
         logging.exception('Unable to repair archive')
-
-if __name__ == '__main__':
-    repair()

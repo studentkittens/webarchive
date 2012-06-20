@@ -11,6 +11,7 @@ import time
 import os
 import unittest
 
+
 def get_ctime(file_path):
     """
     gets ISO 8601 formated timestamp (create time) of a given file
@@ -50,19 +51,3 @@ def sec_to_timestamp(form, seconds):
 
     """
     return time.strftime(form.format(time.gmtime(seconds)))
-
-###########################################################################
-#                                unittest                                 #
-###########################################################################
-if __name__ == '__main__':
-    class TestTimes(unittest.TestCase):
-
-        def setUp(self):
-            os.system('touch testfile_for_timestamp')
-
-        # no useful possibilities
-
-        def tearDown(self):
-            os.remove('testfile_for_timestamp')
-
-    unittest.main()
