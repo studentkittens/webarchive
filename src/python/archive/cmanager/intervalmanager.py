@@ -93,7 +93,7 @@ class IntervalManager(object):
         """
         if self.status != 'stop':
             self.__set_status('ready')
-            current_time = util.times.get_localtime_sec()
+            current_time = times.get_localtime_sec()
             next_crawl_time = self.__start_time + self.__interval
 
             while next_crawl_time < current_time:

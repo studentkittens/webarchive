@@ -32,6 +32,10 @@ def init_archive(init_path=os.getcwd()):
             #   Christoph Cwelich
             shutil.copytree('../sql', os.path.join(base_path, 'sql'))
 
+            # Default url.txt
+            with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
+                urltxt.write('www.blendpolis.de')
+
             # Write a default config template... that's a bit ugly
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
                 cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(

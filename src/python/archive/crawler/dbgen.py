@@ -162,6 +162,8 @@ class DBGenerator(object):
                     item['title']
                     ))
             except KeyError:
+                print(self.__mdidlist)
+                print(self.__ctaglist)
                 logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
 
         self.execute_statement('insert_history', history)
@@ -203,7 +205,7 @@ if __name__ == '__main__':
     SAMPLE_DATA = [{
             'mimeType'   : 'application/png',
             'domain'     : 'www.heise.de',
-            'url'        : 'www.heise.de/news',
+            'url'        : 'www.heise.de/nöws',
             'path'       : '.',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634634',
@@ -212,7 +214,7 @@ if __name__ == '__main__':
         {
             'mimeType'   : 'application/jpeg',
             'domain'     : 'www.golem.de',
-            'url'        : 'www.golem.de/news',
+            'url'        : 'www.heise.de/&&&apple-touch-icon-72x72-precomposed.png/',
             'path'       : '..',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634637',

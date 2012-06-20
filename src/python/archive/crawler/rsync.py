@@ -19,7 +19,7 @@ def rsync(src_path, dest_path):
     :src_path: the directory/file to sync
     :dest_path: the directory to sync files to
     """
-    cmd = ['rsync', '-acP', src_path, dest_path]
+    cmd = ['rsync', '-ac', src_path, dest_path]
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
 

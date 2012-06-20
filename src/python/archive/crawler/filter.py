@@ -66,34 +66,35 @@ class FilterSystem(object):
         """
         decision = True
 
-        # All global variables seen inside the filter
-        # are defined as key: value pairs,
-        # for now we only have two of them
-        input_dict = {
-                'filter_input':  copy.deepcopy(meta_dict),
-                'filter_result': True
-        }
+        if len(self.__source_list) > 0:
+            # All global variables seen inside the filter
+            # are defined as key: value pairs,
+            # for now we only have two of them
+            input_dict = {
+                    'filter_input':  copy.deepcopy(meta_dict),
+                    'filter_result': True
+            }
 
-        # Try to execute the source
-        # and stop if any filter says no
-        for source in self.__source_list:
-            try:
-                print('Exec:', source)
-                exec(source[1], input_dict)
-            except:
-                # an error inside the filter happened,
-                # this is probably one of the few reasons where
-                # a catchall is fine. :)
-                logging.warn('Got Exception while executing the filter from:')
-                logging.warn(source[0])
-                traceback.print_exc()
+            # Try to execute the source
+            # and stop if any filter says no
+            for source in self.__source_list:
+                try:
+                    print('Exec:', source)
+                    exec(source[1], input_dict)
+                except:
+                    # an error inside the filter happened,
+                    # this is probably one of the few reasons where
+                    # a catchall is fine. :)
+                    logging.warn('Got Exception while executing the filter from:')
+                    logging.warn(source[0])
+                    traceback.print_exc()
 
-            try:
-                if input_dict['filter_result'] == False:
-                    decision = False
-                    break
-            except KeyError:
-                logging.warn('You deleted filter_result, filthy Bastard!')
+                try:
+                    if input_dict['filter_result'] == False:
+                        decision = False
+                        break
+                except KeyError:
+                    logging.warn('You deleted filter_result, filthy Bastard!')
 
         return decision
 
