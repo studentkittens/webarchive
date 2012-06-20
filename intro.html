@@ -36,9 +36,6 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="spec_diffs.html" title="Differences from Spec to actual Program"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -69,7 +66,9 @@ Both sides try to shed some light onto the internal stuff happening.</p>
 <li><tt class="docutils literal"><span class="pre">docopt</span></tt> - Intelligent argument Parsing</li>
 <li><tt class="docutils literal"><span class="pre">beautifulsoup4</span></tt> - Title Extraction from HTML</li>
 </ul>
-<p><strong>Listen and Repeat:</strong></p>
+</div>
+<div class="section" id="listen-and-repeat">
+<h2>Listen and Repeat<a class="headerlink" href="#listen-and-repeat" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>archive.py init /tmp         <span class="c"># Create a new Archive-Root</span>
 <span class="nv">$ </span><span class="nb">cd</span> /tmp/archive/             <span class="c"># cd to it, so it can find the config</span>
 <span class="nv">$ </span>archive.py crawler --start   <span class="c"># Start a crawl</span>
@@ -93,6 +92,33 @@ drwxr-xr-x www.hack.org
 </pre></div>
 </div>
 </div>
+<div class="section" id="more-notes">
+<h2>More Notes<a class="headerlink" href="#more-notes" title="Permalink to this headline">¶</a></h2>
+<p>Available commands in the crawlershell:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">start</span></tt></dt>
+<dd>Starts the Intervalmanager; does nothing if started already.
+Intervalmanager will start Crawlmanager repeatedly, while not stopped.</dd>
+<dt><tt class="docutils literal"><span class="pre">stop</span></tt></dt>
+<dd>Stop Intervalmanager softly - Wait for Crawljobs to finish.
+If you want to stop the Crawljobs immediately: Press <tt class="docutils literal"><span class="pre">CTRL-C</span></tt> in order to
+shutdown Crawljobs cleanly or let finished Crawljobs sync their data.
+Does nothing if no Intervalmanagers is started.</dd>
+<dt><tt class="docutils literal"><span class="pre">quit</span></tt></dt>
+<dd>Quit the Shell (Same as <tt class="docutils literal"><span class="pre">CTRL+D</span></tt>), will call <tt class="docutils literal"><span class="pre">stop</span></tt>!</dd>
+<dt><tt class="docutils literal"><span class="pre">status</span></tt></dt>
+<dd><dl class="first last docutils">
+<dt>Print current status of Intervalmanager. One of:</dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal"><span class="pre">ready</span></tt> - waits for you to type <tt class="docutils literal"><span class="pre">start</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">active</span></tt> - Crawling, <tt class="docutils literal"><span class="pre">stop</span></tt> will take effect.</li>
+<li><tt class="docutils literal"><span class="pre">stop`</span></tt>- Was stopped, will switch to <tt class="docutils literal"><span class="pre">ready</span></tt> when done.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
 </div>
 
 
@@ -106,6 +132,8 @@ drwxr-xr-x www.hack.org
 <li><a class="reference internal" href="#">Introduction</a><ul>
 <li><a class="reference internal" href="#welcome">Welcome.</a></li>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#listen-and-repeat">Listen and Repeat</a></li>
+<li><a class="reference internal" href="#more-notes">More Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -144,9 +172,6 @@ drwxr-xr-x www.hack.org
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li class="right" >
           <a href="spec_diffs.html" title="Differences from Spec to actual Program"
              >next</a> |</li>

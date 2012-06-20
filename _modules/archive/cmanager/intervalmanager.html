@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cmanager.intervalmanager &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.cmanager.intervalmanager &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for cmanager.intervalmanager</h1><div class="highlight"><pre>
+  <h1>Source code for archive.cmanager.intervalmanager</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -61,13 +61,14 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">cmd</span>
-<span class="kn">import</span> <span class="nn">cmanager.crawlmanager</span> <span class="kn">as</span> <span class="nn">c</span>
-<span class="kn">import</span> <span class="nn">util.files</span> <span class="kn">as</span> <span class="nn">utl</span>
-<span class="kn">import</span> <span class="nn">util.times</span>
-<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+
+<span class="kn">import</span> <span class="nn">archive.cmanager.crawlmanager</span> <span class="kn">as</span> <span class="nn">c</span>
+<span class="kn">import</span> <span class="nn">archive.util.files</span> <span class="kn">as</span> <span class="nn">utl</span>
+<span class="kn">import</span> <span class="nn">archive.util.times</span> <span class="kn">as</span> <span class="nn">times</span>
+<span class="kn">import</span> <span class="nn">archive.config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
 
 
-<div class="viewcode-block" id="IntervalManager"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager">[docs]</a><span class="k">class</span> <span class="nc">IntervalManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager">[docs]</a><span class="k">class</span> <span class="nc">IntervalManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    IntervalManager, manages crawling intervals including start, stop functionality</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -92,7 +93,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__status_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="IntervalManager.status"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager.status"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :returns: current system status</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -107,7 +108,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
 
-<div class="viewcode-block" id="IntervalManager.start"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_in_sec</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager.start"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_in_sec</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Starts the intervalmanager, which starts</span>
 <span class="sd">        the crawlmanager procedure with a given delay</span>
@@ -125,10 +126,8 @@
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay_in_sec</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s">&#39;stop&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__cmanager</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">CrawlerManager</span><span class="p">(</span>
-                    <span class="n">utl</span><span class="o">.</span><span class="n">unique_items_from_file</span><span class="p">(</span>
-                    <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;crawler.urllistpath&#39;</span><span class="p">)))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__start_time</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">get_localtime_sec</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cmanager</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">CrawlerManager</span><span class="p">(</span><span class="n">utl</span><span class="o">.</span><span class="n">unique_items_from_file</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__start_time</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">get_localtime_sec</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__cmanager</span><span class="o">.</span><span class="n">register_done</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crawling_done_callback</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;active&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__cmanager</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -136,7 +135,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;ready&#39;</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Interval Manager finished - current state set to ready.&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="IntervalManager.crawling_done_callback"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.crawling_done_callback">[docs]</a>    <span class="k">def</span> <span class="nf">crawling_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager.crawling_done_callback"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager.crawling_done_callback">[docs]</a>    <span class="k">def</span> <span class="nf">crawling_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers end time of last crawl and calculates</span>
 <span class="sd">        delay and starts next run</span>
@@ -144,7 +143,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s">&#39;stop&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;ready&#39;</span><span class="p">)</span>
-            <span class="n">current_time</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">get_localtime_sec</span><span class="p">()</span>
+            <span class="n">current_time</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">get_localtime_sec</span><span class="p">()</span>
             <span class="n">next_crawl_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__start_time</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__interval</span>
 
             <span class="k">while</span> <span class="n">next_crawl_time</span> <span class="o">&lt;</span> <span class="n">current_time</span><span class="p">:</span>
@@ -156,7 +155,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;ready&#39;</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Interval Manager finished - current state set to ready.&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="IntervalManager.stop"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager.stop"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stopps the interval manager</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -165,7 +164,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__set_status</span><span class="p">(</span><span class="s">&#39;stop&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="IntervalManager.kill"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.IntervalManager.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="IntervalManager.kill"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.IntervalManager.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Kills the system hard, like ctrl + c</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -176,7 +175,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__kill_mtx</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="CrawlerShell"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell">[docs]</a><span class="k">class</span> <span class="nc">CrawlerShell</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell">[docs]</a><span class="k">class</span> <span class="nc">CrawlerShell</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interactive command shell to start, stop, kill and quit crawling procedure</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -194,25 +193,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__activeflag</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__quitflag</span> <span class="o">=</span> <span class="bp">False</span>
 
-<div class="viewcode-block" id="CrawlerShell.set_quitflag"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.set_quitflag">[docs]</a>    <span class="k">def</span> <span class="nf">set_quitflag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell.set_quitflag"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.set_quitflag">[docs]</a>    <span class="k">def</span> <span class="nf">set_quitflag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Setting &#39;quit&#39; flag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__quitflag</span> <span class="o">=</span> <span class="n">state</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.set_activeflag"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.set_activeflag">[docs]</a>    <span class="k">def</span> <span class="nf">set_activeflag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell.set_activeflag"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.set_activeflag">[docs]</a>    <span class="k">def</span> <span class="nf">set_activeflag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Setting &#39;active&#39; flag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__activeflag</span> <span class="o">=</span> <span class="n">state</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.activeflag"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.activeflag">[docs]</a>    <span class="k">def</span> <span class="nf">activeflag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell.activeflag"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.activeflag">[docs]</a>    <span class="k">def</span> <span class="nf">activeflag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Getter for &#39;active&#39; flag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__activeflag</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.quitflag"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.quitflag">[docs]</a>    <span class="k">def</span> <span class="nf">quitflag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell.quitflag"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.quitflag">[docs]</a>    <span class="k">def</span> <span class="nf">quitflag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Getter for &#39;quit&#39; flag</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -229,10 +228,7 @@
 
     <span class="c"># Commands:</span>
 
-<div class="viewcode-block" id="CrawlerShell.do_start"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.do_start">[docs]</a>    <span class="k">def</span> <span class="nf">do_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Invokes start command</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CrawlerShell.do_start"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.do_start">[docs]</a>    <span class="k">def</span> <span class="nf">do_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="s">&#39;Starts crawljobs if stopped previously.&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__activeflag</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__activeflag</span> <span class="o">=</span> <span class="bp">True</span>
@@ -241,26 +237,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.do_status"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.do_status">[docs]</a>    <span class="k">def</span> <span class="nf">do_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Invokes status command</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CrawlerShell.do_status"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.do_status">[docs]</a>    <span class="k">def</span> <span class="nf">do_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="s">&#39;Status of crawler an intervalmanager.&#39;</span>
         <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__imanager</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.do_stop"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.do_stop">[docs]</a>    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Invokes stop command</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CrawlerShell.do_stop"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.do_stop">[docs]</a>    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="s">&#39;Stopps self.__imanager.&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__imanager</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.do_quit"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Invokes quit command</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CrawlerShell.do_quit"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.do_quit">[docs]</a>    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="s">&#39;Quits Intervalmanager, Crawljobs will still run until finished.&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__quitflag</span> <span class="o">=</span> <span class="bp">True</span>
@@ -268,15 +255,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="CrawlerShell.do_EOF"><a class="viewcode-back" href="../../intervalmanager.html#cmanager.intervalmanager.CrawlerShell.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+<div class="viewcode-block" id="CrawlerShell.do_EOF"><a class="viewcode-back" href="../../../intervalmanager.html#archive.cmanager.intervalmanager.CrawlerShell.do_EOF">[docs]</a>    <span class="k">def</span> <span class="nf">do_EOF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Invokes quit on EOF</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_quit</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-
-<span class="c">###########################################################################</span>
-<span class="c">#                                unittest                                 #</span>
-<span class="c">###########################################################################</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_quit</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -286,7 +269,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -305,13 +288,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

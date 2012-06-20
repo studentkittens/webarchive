@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>crawler.git &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.git &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for crawler.git</h1><div class="highlight"><pre>
+  <h1>Source code for archive.crawler.git</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -62,17 +62,18 @@
 <span class="sd">in this archive, less for general use.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
+
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
 <span class="kn">import</span> <span class="nn">shlex</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christopher Pahl&#39;</span>
+<span class="kn">import</span> <span class="nn">archive.util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
 
 
-<div class="viewcode-block" id="Git"><a class="viewcode-back" href="../../git.html#crawler.git.Git">[docs]</a><span class="k">class</span> <span class="nc">Git</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Git"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git">[docs]</a><span class="k">class</span> <span class="nc">Git</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A (overly-simple) Wrapper for the git binary&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">abs_path</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -100,12 +101,12 @@
                 <span class="n">gitcwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Git.domain"><a class="viewcode-back" href="../../git.html#crawler.git.Git.domain">[docs]</a>    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.domain"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.domain">[docs]</a>    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the domain, to which this wrapper belongs&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__domain</span>
 </div>
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Git.convert_branch_name"><a class="viewcode-back" href="../../git.html#crawler.git.Git.convert_branch_name">[docs]</a>    <span class="k">def</span> <span class="nf">convert_branch_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">date_string</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.convert_branch_name"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.convert_branch_name">[docs]</a>    <span class="k">def</span> <span class="nf">convert_branch_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">date_string</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert a datestring suitably to a branch name</span>
 
@@ -118,7 +119,7 @@
         <span class="k">return</span> <span class="n">date_string</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">({</span><span class="s">&#39;:&#39;</span><span class="p">:</span> <span class="s">&#39;C&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="s">&#39;H&#39;</span><span class="p">}))</span>
 </div>
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Git.convert_datestring"><a class="viewcode-back" href="../../git.html#crawler.git.Git.convert_datestring">[docs]</a>    <span class="k">def</span> <span class="nf">convert_datestring</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">branch_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.convert_datestring"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.convert_datestring">[docs]</a>    <span class="k">def</span> <span class="nf">convert_datestring</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">branch_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Same as convert_branch_name(), but in the other direction</span>
 
@@ -158,7 +159,7 @@
 
         <span class="k">return</span> <span class="n">rcode</span>
 
-<div class="viewcode-block" id="Git.init"><a class="viewcode-back" href="../../git.html#crawler.git.Git.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.init"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new archive at specified domain path</span>
 
@@ -191,7 +192,7 @@
 
         <span class="k">return</span> <span class="n">rcode</span>
 </div>
-<div class="viewcode-block" id="Git.checkout"><a class="viewcode-back" href="../../git.html#crawler.git.Git.checkout">[docs]</a>    <span class="k">def</span> <span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s">&#39;master&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.checkout"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.checkout">[docs]</a>    <span class="k">def</span> <span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s">&#39;master&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        checkout a certain point (tag, branch or commit)</span>
 
@@ -200,7 +201,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__call_script</span><span class="p">(</span><span class="s">&#39;checkout {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="Git.branch"><a class="viewcode-back" href="../../git.html#crawler.git.Git.branch">[docs]</a>    <span class="k">def</span> <span class="nf">branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_name</span><span class="o">=</span><span class="s">&#39;empty&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.branch"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.branch">[docs]</a>    <span class="k">def</span> <span class="nf">branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_name</span><span class="o">=</span><span class="s">&#39;empty&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create a new named branch</span>
 
@@ -219,7 +220,7 @@
 
         <span class="k">return</span> <span class="n">rcode</span>
 </div>
-<div class="viewcode-block" id="Git.commit"><a class="viewcode-back" href="../../git.html#crawler.git.Git.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&#39;edit&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.commit"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&#39;edit&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        commit any changes made</span>
 
@@ -234,7 +235,7 @@
                        <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__domain</span><span class="p">,</span>
                        <span class="n">msg</span><span class="o">=</span><span class="n">message</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="Git.recreate_master"><a class="viewcode-back" href="../../git.html#crawler.git.Git.recreate_master">[docs]</a>    <span class="k">def</span> <span class="nf">recreate_master</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.recreate_master"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.recreate_master">[docs]</a>    <span class="k">def</span> <span class="nf">recreate_master</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A very special helper.</span>
 
@@ -265,7 +266,7 @@
                 <span class="p">))</span>
             <span class="k">return</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="Git.list_branches"><a class="viewcode-back" href="../../git.html#crawler.git.Git.list_branches">[docs]</a>    <span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.list_branches"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.list_branches">[docs]</a>    <span class="k">def</span> <span class="nf">list_branches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        List all branches in this repo, which conform to the &#39;date&#39;-regex.</span>
 
@@ -281,7 +282,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Git.list_commits"><a class="viewcode-back" href="../../git.html#crawler.git.Git.list_commits">[docs]</a>    <span class="k">def</span> <span class="nf">list_commits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Git.list_commits"><a class="viewcode-back" href="../../../git.html#archive.crawler.git.Git.list_commits">[docs]</a>    <span class="k">def</span> <span class="nf">list_commits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        List all commits in this repo and branch</span>
 
@@ -353,7 +354,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -372,13 +373,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

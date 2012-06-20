@@ -17,7 +17,8 @@ Install the following modules from PyPI:
 - ``docopt`` - Intelligent argument Parsing
 - ``beautifulsoup4`` - Title Extraction from HTML
 
-**Listen and Repeat:**
+Listen and Repeat
+-----------------
 
 .. code-block:: bash
 
@@ -41,3 +42,24 @@ Install the following modules from PyPI:
   ...
   $ rm metadata.db               # Oops. This was an accident. I swear.
   $ archive.py db --rebuild      # But luckily we can just rebuild it.
+
+More Notes
+----------
+
+Available commands in the crawlershell:
+
+``start``
+  Starts the Intervalmanager; does nothing if started already.
+  Intervalmanager will start Crawlmanager repeatedly, while not stopped.
+``stop``
+  Stop Intervalmanager softly - Wait for Crawljobs to finish.
+  If you want to stop the Crawljobs immediately: Press ``CTRL-C`` in order to
+  shutdown Crawljobs cleanly or let finished Crawljobs sync their data.
+  Does nothing if no Intervalmanagers is started.
+``quit``
+  Quit the Shell (Same as ``CTRL+D``), will call ``stop``!
+``status``
+  Print current status of Intervalmanager. One of:
+    - ``ready`` - waits for you to type ``start``.
+    - ``active`` - Crawling, ``stop`` will take effect.
+    - ``stop```- Was stopped, will switch to ``ready`` when done.

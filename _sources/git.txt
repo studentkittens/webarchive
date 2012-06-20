@@ -97,5 +97,5 @@ Overview
 Implementation
 --------------
 
-.. automodule:: crawler.git
+.. automodule:: archive.crawler.git
     :members:

@@ -8,7 +8,7 @@ Rsync is used with the following parameters:
 
 .. code-block:: bash 
 
-  'rsync -acP <source> <dest>'
+  'rsync -ac <source> <dest>'
 
 For more information see :manpage:`rsync(1)`.
 
@@ -17,4 +17,4 @@ Implementation
 
 ``rsync()`` basically works like on the commandline:
 
-.. autofunction:: crawler.rsync.rsync
+.. autofunction:: archive.crawler.rsync.rsync

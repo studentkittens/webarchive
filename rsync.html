@@ -58,7 +58,7 @@
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Rsync is used with the following parameters:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="s1">&#39;rsync -acP &lt;source&gt; &lt;dest&gt;&#39;</span>
+<div class="highlight-bash"><div class="highlight"><pre><span class="s1">&#39;rsync -ac &lt;source&gt; &lt;dest&gt;&#39;</span>
 </pre></div>
 </div>
 <p>For more information see <em class="manpage">rsync(1)</em>.</p>
@@ -67,8 +67,8 @@
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p><tt class="docutils literal"><span class="pre">rsync()</span></tt> basically works like on the commandline:</p>
 <dl class="function">
-<dt id="crawler.rsync.rsync">
-<tt class="descclassname">crawler.rsync.</tt><tt class="descname">rsync</tt><big>(</big><em>src_path</em>, <em>dest_path</em><big>)</big><a class="reference internal" href="_modules/crawler/rsync.html#rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.rsync.rsync" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.rsync.rsync">
+<tt class="descclassname">archive.crawler.rsync.</tt><tt class="descname">rsync</tt><big>(</big><em>src_path</em>, <em>dest_path</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/rsync.html#rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.rsync.rsync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the synchronization process,
 this function will block until finished</p>
 <table class="docutils field-list" frame="void" rules="none">
