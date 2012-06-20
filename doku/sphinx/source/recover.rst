@@ -20,7 +20,7 @@ Currently, there are two strategies to re-generate the Database:
   *Advantages:*
     
     - Works always, unless the archive is not totally broken
-    - Also works for XML-Files that were modified somehow (also their baseattribs shouldn't)
+    - Also works for XML-Files that were modified somehow (although their baseattribs shouldn't)
   
   *Disadvantages:*
 

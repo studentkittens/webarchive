@@ -6,7 +6,8 @@
 Welcome to Webarchiv's documentation!
 =====================================
 
-Introduction:
+Introduction
+------------
 
 .. toctree:: 
    :maxdepth: 2
@@ -14,7 +15,8 @@ Introduction:
    intro
    spec_diffs
 
-External Documentation:
+External Documentation
+----------------------
 
 .. toctree::
    :maxdepth: 2
@@ -27,7 +29,8 @@ External Documentation:
    filter
    extractor
 
-Internal Documentation:
+Internal Documentation
+----------------------
 
 .. toctree::
    :maxdepth: 2

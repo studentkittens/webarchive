@@ -28,6 +28,7 @@ def get_ctime(file_path):
 def get_sys_time():
     """
     localtime as ISO 8601 timestamp
+
     :returns: ISO 8601 formated timestamp as string
     """
     return time.strftime("%Y-%m-%dT%H:%M:%S",
