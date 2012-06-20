@@ -17,4 +17,4 @@ Implementation
 
 ``rsync()`` basically works like on the commandline:
 
-.. autofunction:: crawler.rsync.rsync
+.. autofunction:: archive.crawler.rsync.rsync

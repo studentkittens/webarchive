@@ -37,5 +37,5 @@ Implementation
 
 **Internal usage of the Filtersystem:**
 
-.. autoclass:: crawler.filter.FilterSystem
+.. autoclass:: archive.crawler.filter.FilterSystem
   :members:

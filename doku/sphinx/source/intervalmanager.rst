@@ -25,12 +25,12 @@ Implementation
 
 **Internal usage of the Interval Manager:**
 
-.. autoclass:: cmanager.intervalmanager.IntervalManager
+.. autoclass:: archive.cmanager.intervalmanager.IntervalManager
   :members:
 
 
 
 **Internal usage of the Crawler Command Shell:**
 
-.. autoclass:: cmanager.intervalmanager.CrawlerShell
+.. autoclass:: archive.cmanager.intervalmanager.CrawlerShell
   :members:

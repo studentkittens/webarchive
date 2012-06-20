@@ -25,5 +25,5 @@ For more information see :manpage:`wget(1)`.
 Implementation
 --------------
 
-.. autoclass:: crawler.wget.Wget
+.. autoclass:: archive.crawler.wget.Wget
   :members:
