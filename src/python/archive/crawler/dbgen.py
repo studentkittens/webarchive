@@ -46,7 +46,7 @@ class DBGenerator(object):
         # statements are not
         self.__db_lock = lock.FileLock(file_name='db.lock',
                 folder=get_archive_root(),
-                timeout=100)
+                timeout=10000)
 
     def load_statements(self):
         """
@@ -139,7 +139,7 @@ class DBGenerator(object):
         self.execute_statement('insert_metadata', mdata)
         self.execute_statement('insert_committag', list(ctags))
 
-        self.__mdidlist = self.select('metaData', 'metaId', 'url')
+        self.__mdidlist = self.select('metaData', 'metaId', 'url', 'mimeId', 'path')
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')
 
     def insert_history(self):
@@ -150,9 +150,10 @@ class DBGenerator(object):
 
         for item in self.__metalist:
             ctag_tuple_key = (item['commitTime'], self.__domaindict[item['domain']])
+            metadata_tuple_key = (item['url'], self.__mimedict[item['mimeType']], item['path'])
 
             try:
-                metadata_id = self.__mdidlist[item['url']]
+                metadata_id = self.__mdidlist[metadata_tuple_key]
                 commitag_id = self.__ctaglist[ctag_tuple_key]
 
                 history.append((
@@ -162,9 +163,10 @@ class DBGenerator(object):
                     item['title']
                     ))
             except KeyError:
-                print(self.__mdidlist)
-                print(self.__ctaglist)
-                logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
+                #print(self.__mdidlist)
+                #print(self.__ctaglist)
+                #logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
+                logging.exception('DB ')
 
         self.execute_statement('insert_history', history)
 
@@ -212,13 +214,13 @@ if __name__ == '__main__':
             'title'      : 'news for professionals'
             },
         {
-            'mimeType'   : 'application/jpeg',
-            'domain'     : 'www.golem.de',
-            'url'        : 'www.heise.de/&&&apple-touch-icon-72x72-precomposed.png/',
-            'path'       : '..',
+            'mimeType'   : 'application/xml',
+            'domain'     : 'www.blendpolis.de',
+            'url'        : 'www.blendpolis.de/feed.php?mode=topics/',
+            'path'       : '/tmp/archive/tmp/www.blendpolis.de/www.blendpolis.de/feed.php?mode=topics/data',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634637',
-            'title'      : 'news for retards'
+            'title'      : ""
             }]
 
     class TestDBGen(unittest.TestCase):
