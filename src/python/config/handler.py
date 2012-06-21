@@ -7,7 +7,7 @@ import reader
 import writer
 
 def get(value):
-    return xmlreader.get_elemnt(value)
+    return reader.get(value)
 
 def get_default(value):
     return reader.get_default(value)

@@ -17,7 +17,7 @@ def get_default(value):
 
 def get(value):
     try:
-        return xmlreader.get_elemnt(value)
+        return xmlreader.get_element(value)
     except KeyError:
         return 'Wrong Item Name'
 
