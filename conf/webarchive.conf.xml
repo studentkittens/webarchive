@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <webarchive>
     <general>
         <root>/archive</root>
@@ -6,7 +7,7 @@
     <!-- modules -->	
     <crawler> 
         <depth>5</depth>
-        <tinterval>2:0:0</tinterval>
+        <interval>2:0:0</interval>
         <maxInst>10</maxInst>
         <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
         <tempRoot>tmp</tempRoot>

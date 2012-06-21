@@ -1,14 +1,20 @@
 from xml.etree.ElementTree import ElementTree
 
 tree = ElementTree()
+tree.parse('..\\..\\..\\conf\\webarchive.conf.xml')
 
 def get_element(value):
     value = changeinputstring(value)
-    tree.parse('..\\..\\..\\conf\\webarchive.conf.xml')
-    if value == ( 'crawler/tinterval' or 'server/notify/interval'):
-        return changeoutputstring(tree.findtext(value))
+    if value == ( 'crawler/interval' or 'server/notify/interval'):
+        try:
+            return changeoutputstring(tree.findtext(value))
+        except KeyError:
+            return ''
     else:
-        return tree.findtext(value)
+        try:
+            return tree.findtext(value)
+        except KeyError:
+            return ''
 
 def changeinputstring(value):
     index = 0
