@@ -68,6 +68,8 @@ class Cli(object):
         """
         self.__filelock = lock.FileLock(LOCKFILE, folder=config.get('general.root'), timeout=0.1)
         self.__arguments = docopt(__doc__, version='Archive 1.0')
+
+        targetmodule = 'none'
         submodules = {
                 'init': self.handle_init,
                 'crawler': self.handle_crawler,
@@ -77,31 +79,37 @@ class Cli(object):
                 'repair': self.handle_repair
                 }
 
-        try:
-            loglevel = self.__arguments['<severity>'].upper()
-            severity = getattr(logging, loglevel)
-        except KeyError:
-            severity = logging.INFO
-        except AttributeError:
-            print('Error: \"loglevel\" is not a valid severity level')
-            print(__doc__)
-            sys.exit(-1)
-
-        try:
-            logging.basicConfig(level=severity,
-                                filename=os.path.join(paths.get_log_dir(), 'archive.log'),
-                                format='%(asctime)s - %(levelname)s - %(message)s')
-        except IOError as err:
-            print('Cannot open log - file structure probably does not exist yet:', err)
-
         # iterating through arguments
         for module, handler in submodules.items():
             if self.__arguments[module]:
-                try:
-                    handler()
-                except lock.FileLockException:
-                    print("archive is currently locked with global.lock.")
-                    sys.exit(0)
+                targetmodule = self.__arguments[module]
+
+        try:
+            try:
+                # Try to convert string to loglevel enum..
+                loglevel = self.__arguments['<severity>'].upper()
+                severity = getattr(logging, loglevel)
+            except KeyError:
+                # Default Verbosity
+                severity = logging.INFO
+            except AttributeError:
+                # This means it's YOUR Fault.
+                print('Error: \"loglevel\" is not a valid severity level')
+                print(__doc__)
+                sys.exit(-2)
+
+            logging.basicConfig(level=severity,
+                                filename=os.path.join(paths.get_log_dir(), 'archive.log'),
+                                format='%(asctime)s - %(levelname)s - %(message)s')
+            handler()
+        except IOError as err:
+            if targetmodule != 'init':
+                print('Cannot open logfile:', err)
+            sys.exit(-1)
+        except lock.FileLockException:
+            print("archive is currently locked with global.lock.")
+            print("If you are sure no process is running, remove it.")
+            sys.exit(0)
 
     def handle_init(self):
         """

@@ -31,6 +31,7 @@ class DBGenerator(object):
 
         :meta_list: A list of MetaData Dictionaries
         """
+        print(meta_list)
         if abspath is None:
             self.__connection = sqlite3.connect(get_dbpath())
         else:
@@ -91,6 +92,8 @@ class DBGenerator(object):
             self.insert_mime_domain()
             self.insert_mdata_ctag()
             self.insert_history()
+            import time
+            time.sleep(100)
             self.__db_lock.release()
         except lock.FileLockException:
             logging.critical('File-lock timed out; no db update was done')
