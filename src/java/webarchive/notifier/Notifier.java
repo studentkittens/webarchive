@@ -79,13 +79,15 @@ public class Notifier extends Thread {
 		msg.setBroadCast();
 		
 		List<Connection> listConnection = sv.getObservers();
-		for ( Connection c : listConnection ) {
-		 	try {
-		 			c.send(msg); 
-		 		} catch (Exception e) {
-		 		 //ExceptionHandling
-		 		}
-		 }
+		synchronized (listConnection) {
+			for ( Connection c : listConnection ) {
+			 	try {
+			 			c.send(msg); 
+			 		} catch (Exception e) {
+			 		 //ExceptionHandling
+			 		}
+			}
+		}
 	}
 	
 	

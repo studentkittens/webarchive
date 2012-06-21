@@ -1,33 +1,71 @@
 <project>
-    <target name="clean" description="Clean temporary files">
-        <delete dir="build"/>
+
+<!-- properties -->	
+	<property name="src.dir"     value="src/java"/>
+
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+
+    <property name="main-class"  value="webarchive.Launcher"/>
+	<property name="main-class-xml"  value="webarchive.xml.TestXml"/>
+
+
+<!-- clean -->
+
+	<target name="clean">
+        <delete dir="${build.dir}"/>
     </target>
 
-    <!-- ////////////// -->
-
-    <target name="compile" description="Compile Project">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes"/>
-        <antcall target="jar"/>
+<!-- compile -->
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+    </target>
+	
+	<target name="compile-excludes">
+        <mkdir dir="${classes.dir}"/>
+		<javac destdir="${classes.dir}">
+			<src path="${src.dir}"/>
+			<fileset dir="${src.dir}" casesensitive="yes">
+  				<include name="**/*.java"/>
+				<exclude name="**/notifier/*;**/server/*"/>
+			</fileset>
+		</javac>
     </target>
 
-    <!-- ////////////// -->
 
-    <target name="jar" description="Pack .jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/Hello.jar" basedir="build/classes">
+<!-- jar -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
             <manifest>
-                <attribute name="Main-Class" value="pkgname.Hello"/>
+                <attribute name="Main-Class" value="${main-class}"/>
             </manifest>
         </jar>
     </target>
+
+<!-- run -->
+	<target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run"/>
+
     
-    <!-- ////////////// -->
+<!-- test -->
     
     <target name="test" description="Execute Tests (Requires JUnit)">
     </target>
-    
-    <!-- ////////////// -->
+
+    <target name="compile-xml">
+        <mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}/webarchive/xml" destdir="${classes.dir}/webarchive/xml"/>
+    </target>
+
+<!-- doc -->
     
     <target name="doc" description="Create Javadocs for the demo (Requires Javadoc 1.4+)">
         <mkdir dir="${basedir}/javadoc/"/>
@@ -36,9 +74,4 @@
         </javadoc>
     </target>
     
-    <!-- ////////////// -->
-    
-    <target name="run" description="Run Executable">
-        <java jar="build/jar/Hello.jar" fork="true"/>
-    </target>
 </project>

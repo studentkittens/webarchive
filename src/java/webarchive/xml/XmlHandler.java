@@ -1,18 +1,18 @@
 package webarchive.xml;
 
-import java.io.File;
 import java.io.IOException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-
-import webarchive.handler.Handler;
+import webarchive.transfer.FileDescriptor;
 
 /**
+ * Xml controller on the server side. It controlls the loading of
+ * webarchive-xml-files into dom-objects, validation and adding of new elements.
+ * Each XmlHandler has responsibility for one xml-file.
  *
  * @author ccwelich
  */
@@ -21,85 +21,81 @@ import webarchive.handler.Handler;
 //TODO javadoc
 public class XmlHandler {
 
-	private final AutoValidatingMode mode;
-
+	/**
+	 * the auto modi for validating the xml documents.
+	 */
 	public enum AutoValidatingMode {
 
-		NEVER, ALWAYS, AFTER_UPDATE, AFTER_BUILT_DOM;
+		/**
+		 * documents will never be validated.
+		 */
+		NEVER,
+		/**
+		 * documents will be validated after each change and when loaded.
+		 */
+		ALWAYS,
+		/**
+		 * documents will be validated after each changed.
+		 */
+		AFTER_UPDATE,
+		/**
+		 * documents will be validated after each built of the dom.
+		 */
+		AFTER_BUILT_DOM;
 	}
 	private final XmlConf conf;
 	private Document document;
-	private final Element data;
-	private final XmlValidator validator;
-	private final File xmlPath;
-	private final XmlErrorHandler err;
-	private final XmlDomWriter writer;
+	private Element data;
+	private final XmlIOHandler ioHandler;
 
 	public Document getDocument() {
 		return document;
 	}
 
-	public XmlHandler(File xmlPath, XmlErrorHandler err, XmlConf conf,
-		XmlValidator validator, XmlDomWriter writer) throws
-		ParserConfigurationException, SAXException, IOException {
-		// TODO FileHandler access
+	public XmlHandler(FileDescriptor xmlPath, XmlConf conf) throws
+		ParserConfigurationException, SAXException, IOException,
+		TransformerConfigurationException {
 		// preconditions
-		assert err != null;
 		assert xmlPath != null;
 		assert conf != null;
-		assert validator != null;
-		assert writer != null;
-		// set ErrorHandler and Path
-		this.err = err;
-		this.xmlPath = xmlPath;
+		this.conf = conf;
+
+		// set ioHandler
+		this.ioHandler = new XmlIOHandler(conf, xmlPath);
 
 		// build document
-		document = null;
 		buildDocument();
 
-		// other members
-		this.mode = conf.getAutoValidatingMode();
-		this.writer = writer;
-		this.validator = validator;
-		this.data = (Element) (document.getElementsByTagName(conf.getDataTag()).
-			item(0));
-		this.conf = conf;
+		
 	}
 
-	public void rebuildDocument() throws ParserConfigurationException,
-		IOException, SAXException {
-		buildDocument();
-
+	public XmlIOHandler getIoHandler() {
+		return ioHandler;
 	}
 
-	private void buildDocument() throws ParserConfigurationException,
+	public final void buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setValidating(false);
-		dbf.setIgnoringComments(true);
-		dbf.setIgnoringElementContentWhitespace(true);
-		dbf.setExpandEntityReferences(true);
-		dbf.setNamespaceAware(true);
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		db.setErrorHandler(err);
-		document = db.parse(xmlPath);
-		if (mode == AutoValidatingMode.ALWAYS || mode == AutoValidatingMode.AFTER_BUILT_DOM) {
+		document = ioHandler.buildDocument();
+		XmlHandler.AutoValidatingMode mode = conf.getAutoValidatingMode();
+		if (mode == XmlHandler.AutoValidatingMode.ALWAYS || mode == XmlHandler.AutoValidatingMode.AFTER_BUILT_DOM) {
 			validate();
 		}
+		this.data = (Element) (document.getElementsByTagName(conf.getDataTag()).item(0));
 	}
 
-	public XmlEditor getEditor() {
+	public XmlEditor newEditor() {
 		return new XmlEditor(document, conf);
 	}
 
 	public void validate() throws SAXException, IOException {
-		validator.validate(document);
+		conf.getXmlValidator().validate(document);
 	}
 
 	public void addDataElement(DataElement e) throws IllegalArgumentException,
-		SAXException, IOException, TransformerException {
+		SAXException, IOException, TransformerException,
+		ParserConfigurationException {
 		assert e != null;
-
+		buildDocument();
 		final String tagName = e.getDataElement().getTagName();
 		// checking for duplicate
 		if (data.getElementsByTagName(tagName).getLength() > 0) {
@@ -107,12 +103,13 @@ public class XmlHandler {
 				"element " + tagName + " already exists");
 		}
 		// append in sequence
-		data.appendChild(e.getDataElement());
+		data.appendChild(document.adoptNode(e.getDataElement()));
 		// validate
+		AutoValidatingMode mode = conf.getAutoValidatingMode();
 		if (mode == AutoValidatingMode.ALWAYS || mode == AutoValidatingMode.AFTER_UPDATE) {
 			validate();
 		}
 		// write to disk
-		writer.write(document);
+		ioHandler.write(document);
 	}
 }

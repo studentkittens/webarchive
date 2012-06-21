@@ -4,6 +4,8 @@
  */
 package webarchive.api.model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -13,6 +15,10 @@ import static org.junit.Assert.*;
  * @author ccwelich
  */
 public class TimeStampTest {
+	private TimeStamp tByStr;
+	private TimeStamp tByDate;
+	private Date date;
+	private String xmlFormat;
 	
 	public TimeStampTest() {
 	}
@@ -26,39 +32,74 @@ public class TimeStampTest {
 	}
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws ParseException {
+		DateFormat df = DateFormat.getDateTimeInstance();
+		xmlFormat = "2012-06-15T19:05:50";
+		tByStr = new TimeStamp(xmlFormat);
+		date = df.parse("15.06.2012 19:05:50");
+		tByDate = new TimeStamp(date);
 	}
 	
 	@After
 	public void tearDown() {
 	}
-
 	/**
-	 * Test of toString method, of class TimeStamp.
+	 * Test illegal init.
 	 */
 	@Test
-	public void testToString() {
-		System.out.println("toString");
-		TimeStamp instance = null;
-		String expResult = "";
-		String result = instance.toString();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+	public void testIllegalInit() {
+		System.out.println("illegalInit");
+		TimeStamp ts;
+		boolean thrown = false;
+		//null values
+		try {
+			ts = new TimeStamp((Date)null);
+		} catch (AssertionError exc) {
+			thrown = true;
+		}
+		assertTrue(thrown);
+		thrown = false;
+		try {
+			ts = new TimeStamp((String)null);
+		} catch (AssertionError exc) {
+			thrown = true;
+		} catch (ParseException exc) {
+			assert false;
+		}
+		assertTrue(thrown);
+		thrown = false;
+		try {
+			ts = new TimeStamp("2012-06-15 19:05:50");
+		} catch (ParseException exc) {
+			thrown = true;
+		}
+		assertTrue(thrown);
 	}
-
+	/**
+	 * Test equals and hash.
+	 */
+	@Test
+	public void testEqualsHash() {
+		System.out.println("equals and hash");
+		assertTrue(tByDate.equals(tByDate));
+		assertTrue(tByDate.equals(tByStr));
+		assertTrue(tByStr.equals(tByDate));
+		assertTrue(tByStr.equals(tByStr));
+		assertFalse(tByStr.equals(null));
+		assertEquals(tByDate.hashCode(), tByStr.hashCode());
+		TimeStamp tmp = new TimeStamp(new Date());
+		assertFalse(tByDate.equals(tmp));
+		assertFalse(tmp.equals(tByDate));
+		assertFalse(tmp.hashCode()==tByDate.hashCode());
+	}
 	/**
 	 * Test of getDate method, of class TimeStamp.
 	 */
 	@Test
 	public void testGetDate() {
 		System.out.println("getDate");
-		TimeStamp instance = null;
-		Date expResult = null;
-		Date result = instance.getDate();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		assertEquals(date, tByStr.getDate());
+		assertEquals(date, tByDate.getDate());
 	}
 
 	/**
@@ -67,11 +108,7 @@ public class TimeStampTest {
 	@Test
 	public void testGetXmlFormat() {
 		System.out.println("getXmlFormat");
-		TimeStamp instance = null;
-		String expResult = "";
-		String result = instance.getXmlFormat();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		assertEquals(xmlFormat, tByDate.getXmlFormat());
+		assertEquals(xmlFormat, tByStr.getXmlFormat());
 	}
 }

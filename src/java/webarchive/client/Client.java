@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Observable;
+
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
 import webarchive.handler.HandlerCollection;
@@ -15,8 +17,8 @@ public class Client implements NetworkModule  {
 	private String ip;
 	private int port;
 	private Connection c;
-	
 	private static Client cl=null;
+	private Observable observ;
 	public static Client getInstance() {
 		if(cl==null)
 			cl = new Client();
@@ -94,6 +96,14 @@ public class Client implements NetworkModule  {
 	public HandlerCollection getHandlers() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Observable getObservable() {
+		return observ;
+	}
+
+	public void setObservable(Observable observ) {
+		this.observ = observ;
 	}
 	
 }

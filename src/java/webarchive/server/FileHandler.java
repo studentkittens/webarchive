@@ -8,7 +8,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import webarchive.api.model.MetaData;
 import webarchive.handler.Handler;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
@@ -17,16 +20,6 @@ public class FileHandler extends Handler {
 
 	public static final int BUFFER_SIZE = 4096; 
 	
-	public void lock(FileDescriptor fd) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void unlock(FileDescriptor fd) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public FileBuffer read(FileDescriptor fd) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		BufferedInputStream bis =null;
@@ -68,7 +61,7 @@ public class FileHandler extends Handler {
 		File f = buf.getFd().getAbsolutePath();
 		
 		if(f.exists()) {
-			//NOOVERWRIGHT-EXCEPTION //TODO
+			//NOOVERWRITE-EXCEPTION //TODO
 		}
 		BufferedOutputStream bos = null; 
 		try {
@@ -91,6 +84,25 @@ public class FileHandler extends Handler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public List<File> getFileTree(MetaData meta) {
+		File root = meta.getPath();
+		List<File> list = new ArrayList<File>();
+		addSubDirectories(root,list);
+		
+		return list;
+	}
+	private void addSubDirectories(File current, List<File> list) {
+		if(current.isDirectory()) {
+			File[] subD = current.listFiles();
+			for(int i = 0; i<subD.length; i++) {
+				addSubDirectories(subD[i],list);
+			}
+		} else {
+			list.add(current);
+		}
+		
 	}
 	
 }

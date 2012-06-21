@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.MetaData;
-//TODO tests
 
 /**
  * Select-statement for MetaData-objects constrained by a given list of
@@ -51,24 +50,36 @@ public class SelectMetaByCommit extends Select<MetaData> {
 		super.getWhere()[2] = buildWhereHistory(commits, whereHistoryAdditional);
 	}
 
+	/**
+	 * get commitTag by its id
+	 *
+	 * @param id
+	 * @return commitTag with id, or null
+	 */
 	public CommitTag getCommit(int id) {
 		return commits.get(id);
 	}
 
 	private String buildWhereHistory(List<CommitTag> commits, String add) {
-		StringBuilder where = new StringBuilder("commitId IN (");
-		for (CommitTag tag : commits) {
-			final int id = tag.getId();
-			this.commits.put(id, tag);
-			where.append(id);
-			where.append(", ");
-		}
-		where.setLength(where.length() - 2);
-		where.append(')');
-		if (add != null) {
-			where.append(" AND (");
-			where.append(add);
+		StringBuilder where = new StringBuilder();
+		if (commits != null) {
+			where.append("commitId IN (");
+			for (CommitTag tag : commits) {
+				final int id = tag.getId();
+				this.commits.put(id, tag);
+				where.append(id);
+				where.append(", ");
+			}
+			where.setLength(where.length() - 2);
 			where.append(')');
+
+			if (add != null) {
+				where.append(" AND (");
+				where.append(add);
+				where.append(')');
+			}
+		} else if (add != null) {
+			where.append(add);
 		}
 		return where.toString();
 	}

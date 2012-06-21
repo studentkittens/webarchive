@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import webarchive.handler.Handler;
-//TODO Tests
 
 /**
  * Access class for SQL-Statements. accepts raw select-statements from
@@ -43,9 +42,9 @@ public class SqlHandler extends Handler {
 	 * @throws SQLException
 	 * @throws UnsupportedOperationException if select is not recognized or
 	 * added in list.
+	 * @throws Exception if select has failed
 	 */
-	public List select(webarchive.api.select.Select select) throws SQLException,
-		UnsupportedOperationException {
+	public List select(webarchive.api.select.Select select) throws Exception {
 		Select selectMethod = selectMethods.get(select.getClass().
 			getSimpleName());
 		if (selectMethod == null) {

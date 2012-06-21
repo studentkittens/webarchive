@@ -1,10 +1,9 @@
 package webarchive.api.model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
-//TODO tests
 
 /**
  * A wrapper class for a date like the ones contained in the webarchive database
@@ -13,7 +12,7 @@ import java.util.Objects;
  *
  * @author ccwelich
  */
-public class TimeStamp {
+public class TimeStamp implements Serializable {
 
 	/**
 	 * XML and database date-time formatstring
@@ -48,7 +47,7 @@ public class TimeStamp {
 	/**
 	 * create TimeStamp by a given Date.
 	 *
-	 * @param date assert not null
+	 * @param date asserted not null
 	 */
 	public TimeStamp(java.util.Date date) {
 		assert date != null;

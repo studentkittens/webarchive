@@ -2,6 +2,8 @@
 package webarchive.api;
 
 import java.util.List;
+import java.util.Observer;
+
 import webarchive.api.model.CommitTag;
 /**
  * Observes changes in webarchive.
@@ -11,7 +13,7 @@ import webarchive.api.model.CommitTag;
  * @author ccwelich
  * @version 1
  */
-public interface WebarchiveObserver {
+public interface WebarchiveObserver extends Observer {
 	/**
 	 * update called in case of changes in webarchive
 	 * @param client the broadcasting client

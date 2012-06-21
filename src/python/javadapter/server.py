@@ -22,6 +22,7 @@ import socket
 import socketserver
 import threading
 import sys
+import os
 import cmd
 
 # Locking
@@ -150,6 +151,10 @@ def checkout_handler(args):
        Note: You should always checkout master when you're done!
     """
     domain = args[0]
+    domain_path = paths.get_domain_path(domain)
+
+    if os.path.exists(domain_path) is False:
+        raise ProtocolError('Invalid Domain.')
 
     try:
         branch = args[1]
@@ -158,11 +163,14 @@ def checkout_handler(args):
 
     if branch is not None:
         wrapper = Git(domain)
+
+        try_lock_handler([domain])
         rcode = wrapper.checkout(branch)
+        unlock_handler([domain])
         if rcode is not 0:
             raise ProtocolError('checkout returned {rc}'.format(rc=rcode))
 
-    return paths.get_domain_path(domain) + '\n'
+    return domain_path + '\n'
 
 
 def commit_handler(args):
@@ -186,6 +194,46 @@ def commit_handler(args):
     rcode = wrapper.commit(message)
     if rcode is not 0:
         raise ProtocolError('commit returned {rc}'.format(rc=rcode))
+
+
+def list_branches_handler(args):
+    """
+    List all branches on a certain domain:
+
+        list_branches [domain]
+
+        * domain is e.g. www.heise.de
+        * Returns a newline seperated list of branchnames,
+          excluding 'master' and 'empty'
+    """
+    domain = args[0]
+
+    branch_list = Git(domain).list_branches()
+    print('--> ', branch_list)
+    if type(branch_list) is list:
+        print('it a list')
+        return '\n'.join(branch_list) + '\n'
+    else:
+        raise ProtocolError('Invalid Domain.')
+
+
+def list_commits_handler(args):
+    """
+    List all commits on a certain domain and its current branch:
+
+        list_commits [domain]
+
+        * domain is e.g. www.heise.de
+        * Returns a newline seperated list of commithashes
+    """
+    domain = args[0]
+
+    cmt_list = Git(domain).list_commits()
+    if type(cmt_list) is list:
+        return '\n'.join(cmt_list) + '\n'
+    else:
+        raise ProtocolError('Invalid Domain.')
+
 
 ###########################################################################
 #                              Protocolspec                               #
@@ -216,6 +264,14 @@ PROTOCOL = {
         'commit': {
             'takes': 1,
             'func': commit_handler
+            },
+        'list_branches': {
+            'takes': 1,
+            'func': list_branches_handler
+            },
+        'list_commits': {
+            'takes': 1,
+            'func': list_commits_handler
             }
         }
 
@@ -323,21 +379,45 @@ def start(host='localhost', port=config.get('javadapter.port')):
 
 
 class ServerShell(cmd.Cmd):
+    """
+    Command shell to manage javadapter
+    """
     intro = 'Javadapter Shell: Type help or ? to list commands\nUse Ctrl-P and Ctrl-N to repeat the last commands'
     prompt = '>>> '
 
-    def __init__(self, host='localhost', port='42421'):
+    def __init__(self, host='localhost', port='42421', server_instance=None):
         super(ServerShell, self).__init__()
         self.host = host
         self.port = port
+        self.server = server_instance
+
+    def do_start(self, arg):
+        'Start a server if not already active'
+        try:
+            self.server = start()
+        except socket.error as err:
+            print('Cannot start:', err)
+            self.server = None
+
+    def do_stop(self, arg):
+        'Stop a running Server'
+        if self.server is not None:
+            self.server.shutdown()
+            self.server = None
+        else:
+            self.do_status(None)
 
     def do_status(self, arg):
         'Print current status of the Server'
-        print('Server listening on', self.host, ':', self.port)
+        if self.server is not None:
+            print('Server listening on', self.host, ':', self.port)
+        else:
+            print('Server is not running')
         return False
 
     def do_quit(self, arg):
         'Quits the server'
+        self.do_stop(None)
         print('')
         return True
 
@@ -363,10 +443,6 @@ if __name__ == "__main__":
             server = start(host, port)
             ServerShell(host, port).cmdloop()
             server.shutdown()
-        except lock.FileLockException:
-            print('Server seems to be running already!')
-            print('Remove /your/archive/javadapter.lock if you')
-            print('are sure that it is not.')
         except KeyboardInterrupt:
             print('Quitting Server because of Ctrl-C')
         except socket.error as err:

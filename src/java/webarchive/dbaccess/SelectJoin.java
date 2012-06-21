@@ -2,7 +2,6 @@ package webarchive.dbaccess;
 
 import java.sql.SQLException;
 import java.util.List;
-//TODO Tests
 
 /**
  * Generic class to build and execute Select-statements. A SQL-template is built
@@ -53,7 +52,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 	 * @throws SQLException
 	 */
 	public List<Type> select(String[] where, String[] orderBy, Object arg) throws
-		SQLException {
+		Exception {
 		String s = insertWhere(where);
 		StringBuilder sql = new StringBuilder(s);
 		appendOrderBy(orderBy, sql);
@@ -63,7 +62,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 
 	@Override
 	public List<Type> select(webarchive.api.select.Select<Type> select) throws
-		SQLException {
+		Exception {
 
 		return select(select.getWhere(), select.getOrderBy(), select);
 	}

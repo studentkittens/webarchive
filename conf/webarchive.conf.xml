@@ -9,7 +9,7 @@
         <tinterval>2:0:0</tinterval>
         <maxInst>10</maxInst>
         <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
-        <tempRoot>/tmp</tmpRoot>
+        <tempRoot>tmp</tempRoot>
         <IgnoreRobots>true</IgnoreRobots>
     </crawler>
     <db> 

@@ -5,13 +5,10 @@
 package webarchive.api.select;
 
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.*;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.TimeStamp;
 
@@ -20,7 +17,17 @@ import webarchive.api.model.TimeStamp;
  * @author ccwelich
  */
 public class SelectMetaByCommitTest {
+
+	int N;
 	List<CommitTag> commits;
+	private Select[] inst;
+	private String whereHistory;
+	private String whereMime;
+	private String whereMeta;
+	private String[] orderBy;
+	private CommitTag ct1;
+	private CommitTag ct2;
+
 	public SelectMetaByCommitTest() {
 	}
 
@@ -31,21 +38,33 @@ public class SelectMetaByCommitTest {
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 	}
-	
+
 	@Before
-	public void setUp() {
-					commits = new LinkedList<>();
+	public void setUp() throws ParseException {
+		commits = new LinkedList<>();
+		ct1 = new CommitTag(1, new TimeStamp(
+			"2012-05-15T17:30:00"),
+			"www.heise.de");
+		commits.add(ct1);
+		ct2 = new CommitTag(2, new TimeStamp(
+			"2012-05-15T17:35:00"),
+			"www.wikipedia.de");
+		commits.add(ct2);
+		whereHistory = "history";
+		whereMime = "mime";
+		whereMeta = "meta";
+		orderBy = new String[]{"orderBy"};
+		inst = new Select[]{
+			new SelectMetaByCommit(commits, whereHistory, whereMime, whereMeta,
+			orderBy),
+			new SelectMetaByCommit(null, whereHistory, whereMime, whereMeta,
+			orderBy),
+			new SelectMetaByCommit(null, null, null, null)
+		};
+		int N = inst.length;
 
-		try {
-			commits.add(new CommitTag(1, new TimeStamp("2012-05-15T17:30:00"),  "www.heise.de"));
-			commits.add(new CommitTag(2, new TimeStamp("2012-05-15T17:35:00"),  "www.wikipedia.de"));
-		} catch (ParseException ex) {
-			Logger.getLogger(SelectMetaByCommitTest.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		
 	}
-	
+
 	@After
 	public void tearDown() {
 	}
@@ -55,23 +74,24 @@ public class SelectMetaByCommitTest {
 	 */
 	@Test
 	public void testGetCommit() {
-		System.out.println("getCommit");
-		
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		SelectMetaByCommit tmp = (SelectMetaByCommit) inst[0];
+		assertEquals(ct1, tmp.getCommit(1));
+		assertTrue(tmp.getCommit(42)==null);
 	}
+
 	/**
 	 * Test of getOrderBy method, of class Select.
 	 */
 	@Test
 	public void testGetOrderBy() {
 		System.out.println("getOrderBy");
-		Select instance = null;
-		String[] expResult = null;
-		String[] result = instance.getOrderBy();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		String[][] expResult = {
+			orderBy,
+			orderBy,
+			null,};
+		for (int i = 0; i < N; i++) {
+			assertArrayEquals(expResult[i], inst[i].getOrderBy());
+		}
 	}
 
 	/**
@@ -80,12 +100,15 @@ public class SelectMetaByCommitTest {
 	@Test
 	public void testGetWhere() {
 		System.out.println("getWhere");
-		Select instance = new SelectMetaByCommit(commits, "historyAdd", "mime", "meta", null);
-		System.out.println(Arrays.toString(instance.getWhere()));
-		String[] expResult = null;
-		String[] result = instance.getWhere();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		String commitIn = "commitId = IN(" + commits.get(0).getId() + ", " + commits.
+			get(0).getId() + ")";
+		String[][] expResult = {
+			new String[]{whereMime, whereMeta, commitIn+"AND ("+whereHistory+")"},
+			new String[]{whereMime, whereMeta, whereHistory},
+			new String[]{null, null, null},
+			new String[]{null, null, null}};
+		for (int i = 0; i < N; i++) {
+			assertArrayEquals(expResult[i], inst[i].getWhere());
+		}
 	}
 }

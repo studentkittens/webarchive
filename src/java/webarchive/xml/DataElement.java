@@ -6,50 +6,54 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * java representation of data-element in xml. New org.w3c.dom.Elements may be
- * added as children, but DataElement can only be stored if is not
- * write-protected, which is if canWrite() returns true. 
- * @see XmlEditor
+ * DataElement used in client.
  *
+ * @see webarchive.api.xml.DataElement for interface details.
  * @author ccwelich
  */
 //TODO tests
-public class DataElement {
+public class DataElement implements webarchive.api.xml.DataElement {
 
 	private Element dataElement;
 	private boolean canWrite;
 
-	DataElement(Element dataElement, boolean canWriteInto) {// package protected use only
+	/**
+	 * package protected use only
+	 *
+	 * @param dataElement the element to wrap as a dataElement
+	 * @param canWriteInto set false if this dataElement is write-protected
+	 */
+	DataElement(Element dataElement, boolean canWriteInto) {
 		assert dataElement != null;
 		this.dataElement = dataElement;
 		this.canWrite = canWriteInto;
 	}
 
-	/**
-	 * @see org.w3c.dom.Node#appendChild(org.w3c.dom.Node) 
-	 */
+	@Override
 	public Node appendChild(Node node) throws DOMException {
 		return dataElement.appendChild(node);
 	}
 
+	@Override
 	public boolean canWrite() {
 		return canWrite;
 	}
 
-	Element getDataElement() { // package protected use only
+	/**
+	 * package protected use only
+	 *
+	 * @return the wrapped dataElement
+	 */
+	Element getDataElement() {
 		return dataElement;
 	}
 
-	/**
-	 * @see org.w3c.dom.Node#getChildNodes() 
-	 */
+	@Override
 	public NodeList getChildNodes() {
 		return dataElement.getChildNodes();
 	}
 
-	/**
-	 * @see org.w3c.dom.Element#getElementsByTagName(java.lang.String) 
-	 */
+	@Override
 	public NodeList getElementsByTagName(String string) {
 		return dataElement.getElementsByTagName(string);
 	}

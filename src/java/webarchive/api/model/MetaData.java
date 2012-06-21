@@ -1,22 +1,23 @@
 package webarchive.api.model;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
-//TODO tests
 
 /**
  * Basic MetaData class in use with webarchive. It contains metadata of an
  * associated file, regarding its origin in the web and position in the archive.
  * The inner state is related to certain version by the commitTag. It is also
- * used as a key-object to read or extend the archives data.
+ * used as a key-object to read or extend the archives data. Equality is
+ * recognized by the url and the commitTag.
  *
  * @author ccwelich
  * @version 2
  */
-public class MetaData {
+public class MetaData implements Serializable {
 
-	private URL url;
+	private String url;
 	private String mimeType;
 	private String title;
 	private File path;
@@ -31,11 +32,12 @@ public class MetaData {
 	 * @param title generic title, depending on the mimeType of the file and
 	 * whether the origin file has a title. Asserted as either null or not
 	 * empty.
-	 * @param path the relative path inside the archive.
-	 * @param createTime the create time in archive.
-	 * @param commitTag the relating commitTag.
+	 * @param path the relative path inside the archive, asserted not null.
+	 * @param createTime the create time in archive, asserted not null.
+	 * @param commitTag the relating commitTag, asserted not null.
 	 */
-	public MetaData(URL url, String mimeType, String title, File path, TimeStamp createTime, CommitTag commitTag) {
+	public MetaData(String url, String mimeType, String title, File path,
+		TimeStamp createTime, CommitTag commitTag) {
 		assert url != null;
 		assert mimeType != null;
 		assert path != null;
@@ -65,12 +67,15 @@ public class MetaData {
 		if (obj == null) {
 			return false;
 		}
-		if(this==obj)return true;
+		if (this == obj) {
+			return true;
+		}
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		final MetaData other = (MetaData) obj;
-		return this.url.equals(other.url) && this.commitTag.equals(other.commitTag);
+		return this.url.equals(other.url) && this.commitTag.equals(
+			other.commitTag);
 	}
 
 	@Override
@@ -89,9 +94,10 @@ public class MetaData {
 
 	@Override
 	public String toString() {
-		return "MetaData{" + "url=" + url + ", mimeType=" + mimeType + ", title=" + title + ", path=" + path + ", createTime=" + createTime + ", commitTag=" + commitTag + '}';
+		return "MetaData{" + "url=" + url + ", mimeType=" 
+			+ mimeType + ", title=" + title + ", path=" 
+			+ path + ", createTime=" + createTime + ", commitTag=" + commitTag + '}';
 	}
-	
 
 	/**
 	 * get the relative path of the archive-folder in the archive
@@ -107,7 +113,7 @@ public class MetaData {
 	 *
 	 * @return origin url
 	 */
-	public URL getUrl() {
+	public String getUrl() {
 		return url;
 	}
 

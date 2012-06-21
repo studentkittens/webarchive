@@ -1,14 +1,16 @@
 package webarchive.api.model;
-//TODO tests
+
+import java.io.Serializable;
 
 /**
  * Represents a commitTag. A commitTag is related to a domain-folder in archive
  * and a commitTime. One commitTag can involve at least on File respectively its
  * MetaData, hence multiply MetaData can point to one commitTag-instance.
+ * Equality is recognized by the id.
  *
  * @author ccwelich
  */
-public class CommitTag {
+public class CommitTag implements Serializable {
 
 	private int id;
 	private TimeStamp commitTime;
@@ -22,18 +24,6 @@ public class CommitTag {
 	 */
 	public CommitTag(int id, TimeStamp commitTime, String domain) throws
 		IllegalArgumentException {
-		//		 * @throws IllegalArgumentException if one parameter has an illegal value.
-
-//		if (id < 1) {
-//			throw new IllegalArgumentException("id must be > 0, was " + id);
-//		}
-//		if (commitTime == null) {
-//			throw new IllegalArgumentException("commitTime is null");
-//		}
-//		if (domain == null || domain.isEmpty()) {
-//			throw new IllegalArgumentException(
-//				"domain has an illegal value: " + domain);
-//		}
 		assert id > 0;
 		assert commitTime != null;
 		assert domain != null && !domain.isEmpty();

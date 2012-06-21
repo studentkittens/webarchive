@@ -54,14 +54,14 @@ public class XmlHandlerTest {
 	}
 
 	/**
-	 * Test of getEditor method, of class XmlHandler.
+	 * Test of newEditor method, of class XmlHandler.
 	 */
 	@Test
 	public void testGetEditor() {
 		System.out.println("getEditor");
 		XmlHandler instance = null;
 		XmlEditor expResult = null;
-		XmlEditor result = instance.getEditor();
+		XmlEditor result = instance.newEditor();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");

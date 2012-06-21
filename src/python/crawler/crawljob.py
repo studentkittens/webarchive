@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Crawljob module, encapsulated "crawling thread" which is managed by
+the Crawl Manager
+"""
+
 __author__ = 'Christoph Piechula, Christopher Pahl'
 
 import os
@@ -12,16 +17,15 @@ import shutil
 import config.reader as config
 import crawler.wget as wget
 import util.paths as paths
-import util.files as ufile
 import crawler.cleaner as cleaner
 import crawler.xmlgen as xmlgen
-import crawler.rsync as rsync
 import util.filelock as lock
 import crawler.git as git
 import crawler.exceptions
 import crawler.dbgen
 
 from dbrecover.pickle_recover import PickleDBRecover
+from crawler.rsync import rsync
 
 
 class CrawlJob(object):
@@ -48,7 +52,7 @@ class CrawlJob(object):
         Starts the Crawljob procedure
         """
         try:
-            ufile.os.mkdir(self.__path)
+            os.mkdir(self.__path)
         except OSError:
             pass
 
@@ -95,8 +99,8 @@ class CrawlJob(object):
 
     def start_clean(self):
         """
-        Starts the cleaning procedure which kills
-        empty files and dirs and restructures dir hierarchy
+        Starts the cleaning procedure which kills empty files, dirs
+        and restructures the complete dir hierarchy downloaded by a crawljob
         """
         cleaner_proc = cleaner.Cleaner(self.__path)
         cleaner_proc.clean_empty()
@@ -106,14 +110,15 @@ class CrawlJob(object):
 
     def start_xml_gen(self):
         """
-        Dumps in-memory metadata list to xml files on disk
+        Dumps 'in-memory' metadata list to xml files on disk
         """
         xml_proc = xmlgen.XmlGenerator(self.__metalist)
         xml_proc.dump_all()
 
     def start_sync(self):
         """
-        Starts rsync procedure -> mirroring src to dest
+        Starts rsync procedure (rsync submodule) to mirror temporaray source
+        to destination -> content archive path
         """
         content_path = os.path.join(config.get('general.root'), 'content')
         itemlist = os.listdir(self.__path)
@@ -128,6 +133,7 @@ class CrawlJob(object):
                 os.mkdir(domain_path)
             except OSError:
                 # This is expected
+                # (I swear)
                 pass
 
             git_proc = git.Git(domain)
@@ -135,14 +141,23 @@ class CrawlJob(object):
             git_proc.checkout('empty')
             git_proc.branch(self.__metalist[0]['commitTime'])
 
-            rsync.Rsync(os.path.join(self.__path, domain), content_path).start_sync()
+            rsync(os.path.join(self.__path, domain), content_path)
 
             git_proc.commit('Site {domain_name} was crawled.'
                             .format(domain_name=domain))
             git_proc.recreate_master()
             fsmutex.release()
 
+# TODO: Lock should be released after db gen not before?
+#       crawl a sync -> lock release -> there is time span -> crawl a db gen.
+#       its possible that crawl b checks in and commits db
+#       within this time span, beforce crawl a db gen is started -> BAAAM ... invalid db structure?
+
     def start_dbgen(self):
+        """
+        Invokes DB generator submodule to create db statements from
+        metalist and 'commiting' to db
+        """
         db = crawler.dbgen.DBGenerator(self.__metalist)
         db.batch()
         db.close()

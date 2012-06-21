@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Init module to initialize archive parms on first start
+"""
+
 import os
 import os.path
+import shutil
 
 import init.default_cfg as default_cfg
 import config.reader as config
@@ -11,6 +16,9 @@ __author__ = 'Christopher Pahl'
 
 
 def init_archive(init_path=os.getcwd()):
+    """
+    Gets and sets parms at on the first start of archive
+    """
     base_path = os.path.join(init_path, 'archive')
     if not os.path.exists(base_path):
         try:
@@ -19,9 +27,11 @@ def init_archive(init_path=os.getcwd()):
             os.mkdir(os.path.join(base_path, 'content'))
             os.mkdir(os.path.join(base_path, 'tmp'))
             os.mkdir(os.path.join(base_path, 'filter'))
+            os.mkdir(os.path.join(base_path, 'logs'))
             os.mkdir(os.path.join(base_path, 'pickle_cache'))
+            shutil.copytree('../sql', os.path.join(base_path,'sql'))
 
-            with open(os.path.join(base_path, 'archive.cfg'), 'w') as cfg_handle:
+            with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
                 cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
                     archive_path=base_path,
                     filter_path=config.get_default('general.filterpath'),

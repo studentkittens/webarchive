@@ -1,6 +1,11 @@
 package webarchive.xml;
 
 import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+
+import webarchive.handler.Handler;
 import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
@@ -9,24 +14,56 @@ import webarchive.xml.XmlHandler.AutoValidatingMode;
  * @author ccwelich
  */
 //TODO tests
-public class XmlConf {
+public class XmlConf extends Handler {
 
 	private String namespace = "http://www.hof-university.de/webarchive";
 	private String prefix = "wa:";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
 	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
+	private final DocumentBuilderFactory documentBuilderFactory;
+	private ErrorHandler xmlErrorHandler;
+	private XmlValidator xmlValidator;
+
+	/**
+	 * @return the default DocumentBuilderFactory
+	 */
+	public DocumentBuilderFactory getDocumentBuilderFactory() {
+		return documentBuilderFactory;
+	}
 
 	/**
 	 * create XmlConf with default values
 	 */
-	public XmlConf() {
+	public XmlConf() throws SAXException {
+		// init DocumentBuilderFactory
+		documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setValidating(false);
+		documentBuilderFactory.setIgnoringComments(true);
+		documentBuilderFactory.setIgnoringElementContentWhitespace(true);
+		documentBuilderFactory.setExpandEntityReferences(true);
+		documentBuilderFactory.setNamespaceAware(true);
+		// init workers
+		xmlErrorHandler = null;// new XmlErrorHandler();
+		updateValidator();
+	}
+
+	public final void updateValidator() throws SAXException {
+		xmlValidator = new XmlValidator(this, xmlErrorHandler);
+	}
+
+	public ErrorHandler getXmlErrorHandler() {
+		return xmlErrorHandler;
+	}
+
+	public XmlValidator getXmlValidator() {
+		return xmlValidator;
 	}
 
 	/**
 	 * sets XmlHandler AutoValidatingMode. default: AFTER_UPDATE
 	 *
-	 * @see AutoValidatingMode
+	 * @see XmlConf.AutoValidatingMode
 	 * @param autoValidatingMode
 	 */
 	public void setAutoValidatingMode(AutoValidatingMode autoValidatingMode) {
@@ -81,7 +118,7 @@ public class XmlConf {
 	 * @return data-element name
 	 */
 	String getDataTag() {
-		return prefix(dataTag);
+		return addPrefixTo(dataTag);
 	}
 
 	/**
@@ -105,10 +142,10 @@ public class XmlConf {
 	}
 
 	/**
-	 * set the prefix of all XML-elements according to XML-Metafile. default:
+	 * set the addPrefixTo of all XML-elements according to XML-Metafile. default:
 	 * "wa:"
 	 *
-	 * @param prefix
+	 * @param addPrefixTo
 	 */
 	public void setPrefix(String prefix) {
 		assert prefix != null;
@@ -117,7 +154,7 @@ public class XmlConf {
 	}
 
 	/**
-	 * get the prefix of all XML-elements according to XML-Metafile.
+	 * get the addPrefixTo of all XML-elements according to XML-Metafile.
 	 *
 	 * @return
 	 */
@@ -126,14 +163,14 @@ public class XmlConf {
 	}
 
 	/**
-	 * prefixes a given string by the default prefix. If name has already a
+	 * adds a prefix to a given string by the default prefix. If name has already a
 	 * prefix, which is terminated by ':', then this prefix will be replaced by
 	 * the default prefix.
 	 *
-	 * @param name name to prefix
-	 * @return prefix+name
+	 * @param name name to addPrefixTo
+	 * @return addPrefixTo+name
 	 */
-	public String prefix(String name) {
+	public String addPrefixTo(String name) {
 		assert prefix.endsWith(":");
 		int i = name.indexOf(':');
 		return prefix + ((i != -1) ? name : name.substring(i + 1));

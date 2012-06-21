@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.List;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
+import webarchive.api.xml.XmlEditor;
 //TODO implementation by Eddy
 
 /**
@@ -71,14 +72,16 @@ public interface WebarchiveClient {
 	 * @return XMLEdit XML-editor for further operations.
 	 * @throws Exception
 	 */
-	public XmlEdit getXMLEdit(MetaData meta) throws Exception;
+	public XmlEditor getXMLEdit(MetaData meta) throws Exception;
 
 	/**
+	 * @throws Exception 
 	 * @see java.util.Observable
 	 */
-	public void addObserver(WebarchiveObserver o);
+	public void addObserver(WebarchiveObserver o) throws Exception;
 
 	/**
+	 * @throws Exception 
 	 * @see java.util.Observable
 	 */
 	public int countObservers();
@@ -86,7 +89,7 @@ public interface WebarchiveClient {
 	/**
 	 * @see java.util.Observable
 	 */
-	public void deleteObserver(WebarchiveObserver o);
+	public void deleteObserver(WebarchiveObserver o) throws Exception;
 
 	/**
 	 * @see java.util.Observable

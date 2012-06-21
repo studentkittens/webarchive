@@ -6,12 +6,40 @@
 Welcome to Webarchiv's documentation!
 =====================================
 
-Contents:
+Introduction:
+
+.. toctree:: 
+   :maxdepth: 2
+
+   intro
+   spec_diffs
+
+External Documentation:
 
 .. toctree::
    :maxdepth: 2
 
    cli 
+   config
+   javadapter
+   xml2metadata
+   intervalmanager
+   filter
+   extractor
+
+Internal Documentation:
+
+.. toctree::
+   :maxdepth: 2
+
+   wget
+   cleaner
+   rsync
+   recover
+   git
+   dbgen
+   crawlstuff
+   utils
 
 Indices and tables
 ==================

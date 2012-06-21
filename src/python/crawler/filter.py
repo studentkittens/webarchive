@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+"""
+Filter plugin system submodule
+"""
+
 __author__ = 'Christopher Pahl'
 
 import glob
@@ -12,13 +16,16 @@ import logging
 
 
 class FilterSystem(object):
+    """
+    Filtersystem submodule invoked by a crawljob
+    """
     def __init__(self, plugin_path=None):
         self.__source_list = []
         self.load(plugin_path)
 
     def load(self, plugin_path=None):
         """
-        Load a list of *.py files from a directory
+        Load a list of \*.py files from a directory
 
         The .py files are read in and stored in-memory
 
@@ -32,15 +39,11 @@ class FilterSystem(object):
         else:
             actual_path = plugin_path
 
-        print(actual_path)
-
         # Built a list of (path_to_filter, filter_source)
         for source in sorted(glob.glob(os.path.join(actual_path, '*.py'))):
             with open(source, 'r') as handle:
                 self.__source_list.append(
                     (source, handle.read() + '\n'))
-
-        print('LOADED: ', self.__source_list)
 
     def clear(self):
         """
@@ -74,6 +77,7 @@ class FilterSystem(object):
         # and stop if any filter says no
         for source in self.__source_list:
             try:
+                print('Exec:', source)
                 exec(source[1], input_dict)
             except:
                 # an error inside the filter happened,
@@ -97,21 +101,48 @@ class FilterSystem(object):
 ###########################################################################
 
 
-def main():
-    """
-    Tests
-    """
-    import os
-    os.system("""
-        mkdir -p /tmp/py_filter
-        echo 'print("a.py:", filter_input)\nfilter_result = True\ndel filter_result'  > /tmp/py_filter/a.py
-        echo 'print("b.py:", filter_input)\nfilter_result = False' > /tmp/py_filter/b.py
-        """)
-
-    f = FilterSystem('/tmp/py_filter')
-    print('=> ', f.check({'input': 42}))
-    f.clear()
-    print('=> ', f.check({'input': 21}))
-
 if __name__ == '__main__':
-    main()
+    import os
+    import shutil
+    import unittest
+
+    def sanitize_source(source):
+        return '\n'.join([line.strip() for line in source.splitlines()])
+
+    FILTER_TESTDIR = 'pyfilter_tests'
+    FILTER_SOURCES = {
+            'a.py': """
+                    filter_result = True
+                    del filter_result
+                    """,
+            'b.py': """
+                    if filter_input['test_input'] == 42: filter_result = False
+                    """
+    }
+
+    class TestFilter(unittest.TestCase):
+        def setUp(self):
+            # Write sources to disk
+            os.mkdir(FILTER_TESTDIR)
+            for name, source in FILTER_SOURCES.items():
+                with open(os.path.join(FILTER_TESTDIR, name), 'w') as test_source:
+                    test_source.write(sanitize_source(source))
+
+        def do_filtering_tests(self, fisys):
+            self.assertTrue(fisys.check({'test_input': 21}))
+            self.assertFalse(fisys.check({'test_input': 42}))
+
+        def test_filter(self):
+            fisys = FilterSystem(FILTER_TESTDIR)
+            self.do_filtering_tests(fisys)
+            fisys.clear()
+            fisys.load(plugin_path = FILTER_TESTDIR)
+            self.do_filtering_tests(fisys)
+            fisys.clear()
+            self.assertTrue(fisys.check({'test_input': 42}))
+
+        def tearDown(self):
+            shutil.rmtree(FILTER_TESTDIR)
+
+
+    unittest.main()
