@@ -3,7 +3,9 @@
 
 __author__ = 'Florian Bauer'
 
+import xmlreader
 import options
+
 
 def get_default(value):
     try:
@@ -11,14 +13,16 @@ def get_default(value):
     except KeyError:
         return 'Wrong Item Name'
 
+
 def get(value):
     try:
-        return options.actual_options[value]
+        return xmlreader.get_elemnt(value)
     except KeyError:
         return 'Wrong Item Name'
 
+
 def get_with_default(value):
     try:
-        return 'Actual: ' + str(options.actual_options[value]) + '   Default: ' + str(options.default_options[value])
+        return 'Actual: ' + get(value) + '   Default: ' + get_default(value)
     except KeyError:
         return 'Wrong Item Name'
