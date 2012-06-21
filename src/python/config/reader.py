@@ -12,7 +12,7 @@ def get_default(value):
     try:
         return options.default_options[value]
     except KeyError:
-        return 'Wrong Item Name'
+        return ''
 
 
 def get(value):
@@ -22,7 +22,7 @@ def get(value):
         else:
             return xmlreader.get_element(value)
     except KeyError:
-        return 'Wrong Item Name'
+        return ''
 
 
 def get_with_default(value):

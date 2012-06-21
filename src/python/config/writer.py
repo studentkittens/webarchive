@@ -3,9 +3,12 @@
 
 __author__ = 'Florian Bauer'
 
+from xml.etree.ElementTree import ElementTree
 import options
 import reader
 
+tree = ElementTree()
+    
 def set(value, st):
     if (value == ('crawler.depth' or 'crawler.maxInst' or 'server.port' or 
         'server.notify.interval' or 'javadapter.port')):

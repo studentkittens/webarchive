@@ -1,8 +1,9 @@
 from xml.etree.ElementTree import ElementTree
+from xml.etree.ElementTree import Element
 
 tree = ElementTree()
 tree.parse('..\\..\\..\\conf\\webarchive.conf.xml')
-
+    
 def get_element(value):
     value = changeinputstring(value)
     if value == ( 'crawler/interval' or 'server/notify/interval'):
