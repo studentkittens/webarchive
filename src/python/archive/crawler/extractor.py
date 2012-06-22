@@ -7,9 +7,9 @@ from various content files. Currently only text/html files are supported.
 """
 
 __author__ = 'Christoph Piechula'
+
 import re
 import logging
-import unittest
 import os
 import html.parser
 
@@ -27,6 +27,7 @@ def extract_html(file_path):
     title = ""
     with open(file_path, 'r') as html_file:
         raw = html_file.read()
+
     title = TITLE_REGEX.search(raw).groups()[0].strip()
     title = html.parser.HTMLParser().unescape(title)
     return title
@@ -52,8 +53,9 @@ def get_title(file_path, mime):
     if mime in EXTRACTORS:
         try:
             title = EXTRACTORS[mime](file_path)
-        except Exception:
-            pass
+        except Exception as err:
+            logging.debug('Unable to parse title: ' + str(err))
+
     return str(title)
 
 ###########################################################################
@@ -62,6 +64,8 @@ def get_title(file_path, mime):
 TESTDATA_PATH = 'archive/testdata/html/'
 
 if __name__ == '__main__':
+    import unittest
+
     class TestTitle(unittest.TestCase):
         def test_get_mime(self):
 
