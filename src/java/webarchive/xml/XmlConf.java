@@ -1,18 +1,7 @@
 package webarchive.xml;
 
 import java.io.File;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-
 import webarchive.handler.Handler;
-import webarchive.transfer.FileDescriptor;
-import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
  * Config class for all Xml-related classes.
@@ -21,64 +10,11 @@ import webarchive.xml.XmlHandler.AutoValidatingMode;
  */
 //TODO tests
 public class XmlConf extends Handler {
-
-	public synchronized XmlIOHandler getIOHandler(FileDescriptor xmlPath) throws TransformerConfigurationException {
-		return new XmlIOHandler(this, xmlPath);
-	}
-
+	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
 	private String namespace = "http://www.hof-university.de/webarchive";
 	private String prefix = "wa:";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
-	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
-	private final DocumentBuilderFactory documentBuilderFactory;
-	private ErrorHandler xmlErrorHandler;
-	//private XmlValidator xmlValidator;
-	private Schema schema;
-
-	/**
-	 * @return the default DocumentBuilderFactory
-	 */
-	public DocumentBuilderFactory getDocumentBuilderFactory() {
-		return documentBuilderFactory;
-	}
-
-	/**
-	 * create XmlConf with default values
-	 */
-	public XmlConf() throws SAXException, ParserConfigurationException {
-		// init DocumentBuilderFactory
-		documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setValidating(false);
-		documentBuilderFactory.setIgnoringComments(true);
-		documentBuilderFactory.setIgnoringElementContentWhitespace(true);
-		documentBuilderFactory.setExpandEntityReferences(true);
-		documentBuilderFactory.setNamespaceAware(true);
-		
-	}
-	
-	/**
-	 * get XmlErrorHandler
-	 * @return xmlErroHandler, default null
-	 */
-	public ErrorHandler getXmlErrorHandler() {
-		return xmlErrorHandler;
-	}
-	/**
-	 * set xmlErrorHandler
-	 * @param xmlErrorHandler 
-	 */
-	public void setXmlErrorHandler(ErrorHandler xmlErrorHandler) {
-		this.xmlErrorHandler = xmlErrorHandler;
-	}
-	
-	/**
-	 * get xmlValidator
-	 * @return xmlValidator
-	 */
-	public XmlValidator getXmlValidator() {
-		return xmlValidator;
-	}
 
 	/**
 	 * sets XmlHandler AutoValidatingMode. default: AFTER_UPDATE
@@ -120,7 +56,6 @@ public class XmlConf extends Handler {
 	public void setSchemaPath(File schemaPath) {
 		assert schemaPath != null;
 		this.schemaPath = schemaPath;
-		buildSchema();
 	}
 
 	/**
@@ -139,7 +74,7 @@ public class XmlConf extends Handler {
 	 * @return data-element name
 	 */
 	String getDataTag() {
-		return addPrefixTo(dataTag);
+		return dataTag;
 	}
 
 	/**
@@ -183,22 +118,6 @@ public class XmlConf extends Handler {
 		return prefix;
 	}
 
-	/**
-	 * adds a prefix to a given string by the default prefix. If name has already a
-	 * prefix, which is terminated by ':', then this prefix will be replaced by
-	 * the default prefix.
-	 *
-	 * @param name name to addPrefixTo
-	 * @return addPrefixTo+name
-	 */
-	public String addPrefixTo(String name) {
-		assert prefix.endsWith(":");
-		int i = name.indexOf(':');
-		return prefix + ((i != -1) ? name : name.substring(i + 1));
-	}
+	
 
-	private void buildSchema() throws SAXException {
-		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		schema = factory.newSchema(getSchemaPath());
-	}
 }

@@ -19,11 +19,11 @@ import webarchive.transfer.Message;
 //TODO tests
 public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
-
+	private final String dataTagName;
 	private Document document;
-	private Element data; 	// the data-node
-
-	private XmlConf conf;
+	private Element dataNode; 	// the data-node
+	private final String prefix;
+	private final String namespace;
 
 	/**
 	 * create XmlEditor
@@ -31,30 +31,38 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	 * @param document document used for editing
 	 * @param conf config data
 	 */
-	XmlEditor(Document document, XmlConf conf) {
+	XmlEditor(Document document) {
+		assert document != null;
+		final XmlConf conf = XmlMethodFactory.getInstance().getConf();
+		prefix = conf.getPrefix();
+		dataTagName = conf.getDataTag();
+		namespace = conf.getNamespace();
+		setDocument(document);
+	}
+
+	private void setDocument(Document document) {
 		this.document = document;
-		data = (Element) document.getElementsByTagName(
-			conf.addPrefixTo("data")).item(0);
-		this.conf = conf;
+		dataNode = (Element) document.getElementsByTagName(
+			addPrefixTo(dataTagName)).item(0);
 	}
 
 	@Override
 	public Element createElement(String tagName) {
-		tagName = conf.addPrefixTo(tagName);
-		return document.createElementNS(conf.getNamespace(), tagName);
+		tagName = addPrefixTo(tagName);
+		return document.createElementNS(namespace, tagName);
 	}
 
 	@Override
 	public DataElement createDataElement(String tagName) {
-		tagName = conf.addPrefixTo(tagName);
+		tagName = addPrefixTo(tagName);
 		return new DataElement(
-			document.createElementNS(conf.getNamespace(), tagName), true);
+			document.createElementNS(namespace, tagName), true);
 	}
 
 	@Override
 	public DataElement getDataElement(String tagName) {
-		tagName = conf.addPrefixTo(tagName);
-		NodeList list = data.getChildNodes();
+		tagName = addPrefixTo(tagName);
+		NodeList list = dataNode.getChildNodes();
 		final int length = list.getLength();
 		for (int i = 0; i < length; i++) {
 			if (list.item(i).getNodeName().equals(tagName)) {
@@ -66,7 +74,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
 	@Override
 	public void addDataElement(DataElement element) throws NullPointerException,
-		IllegalArgumentException, 
+		IllegalArgumentException,
 		Exception {
 		if (element == null) {
 			throw new NullPointerException();
@@ -77,15 +85,16 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 		// send element to XmlHandler in server
 		Client cl = Client.getInstance();
 		Connection c = cl.getConnection();
-		Message msg = new Message(Header.ADDXMLEDIT,element);
+		Message msg = new Message(Header.ADDXMLEDIT, element);
 		c.send(msg);
 		Message answer = c.waitForAnswer(msg);
-		document = (Document)answer.getData();
+		setDocument((Document) answer.getData());
 	}
 
 	@Override
-	public String addPrefixTo(String name) {
-		return conf.addPrefixTo(name);
+	public final String addPrefixTo(String name) {
+		assert prefix.endsWith(":");
+		int i = name.indexOf(':');
+		return prefix + ((i != -1) ? name : name.substring(i + 1));
 	}
-
 }

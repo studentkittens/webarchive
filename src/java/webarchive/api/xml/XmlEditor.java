@@ -60,11 +60,14 @@ public interface XmlEditor {
 	public DataElement createDataElement(String tagName);
 
 	/**
-	 * adds the webarchive namespace-prefix to name. If name already has a
-	 * prefix terminated with ':', the first prefix will be replaced.
+	 * adds a prefix to a given string by the default prefix. If name has already a
+	 * prefix, which is terminated by ':', then this prefix will be replaced by
+	 * the default prefix. <br/>
+	 * Note: use only if own prefixes are needed and add a template prefix at the beginning of the userdefined prefix.
+	 * The template prefix will then be overwritten.
 	 *
-	 * @param name
-	 * @return prefix + name in the format "<prefix>:<name>"
+	 * @param name name to addPrefixTo
+	 * @return addPrefixTo+name
 	 */
 	public String addPrefixTo(String name);
 	
