@@ -34,7 +34,12 @@ def init_archive(init_path=os.getcwd()):
 
             # Default url.txt
             with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
-                urltxt.write('www.blendpolis.de')
+                urltxt.write('\
+                        www.blendpolis.de\n \
+                        www.golem.de\n \
+                        www.heise.de\n \
+                        www.stackoverflow.com\n \
+                        ')
 
             # Write a default config template... that's a bit ugly
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:

@@ -92,7 +92,9 @@ class Cli(object):
                                 filename=os.path.join(paths.get_log_dir(), 'archive.log'),
                                 format='%(asctime)s - %(levelname)s - %(message)s')
         except IOError as err:
-            print('Cannot open log - file structure probably does not exist yet:', err)
+            # Disable warning for initialization
+            if self.__arguments['init'] is False:
+                print('Cannot open log - file structure probably does not exist yet:', err)
 
         # iterating through arguments
         for module, handler in submodules.items():
