@@ -1,11 +1,17 @@
 package webarchive.xml;
 
 import java.io.File;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 import webarchive.handler.Handler;
+import webarchive.transfer.FileDescriptor;
 import webarchive.xml.XmlHandler.AutoValidatingMode;
 
 /**
@@ -16,6 +22,10 @@ import webarchive.xml.XmlHandler.AutoValidatingMode;
 //TODO tests
 public class XmlConf extends Handler {
 
+	public synchronized XmlIOHandler getIOHandler(FileDescriptor xmlPath) throws TransformerConfigurationException {
+		return new XmlIOHandler(this, xmlPath);
+	}
+
 	private String namespace = "http://www.hof-university.de/webarchive";
 	private String prefix = "wa:";
 	private String dataTag = "data";
@@ -23,7 +33,8 @@ public class XmlConf extends Handler {
 	private XmlHandler.AutoValidatingMode autoValidatingMode = XmlHandler.AutoValidatingMode.AFTER_UPDATE;
 	private final DocumentBuilderFactory documentBuilderFactory;
 	private ErrorHandler xmlErrorHandler;
-	private XmlValidator xmlValidator;
+	//private XmlValidator xmlValidator;
+	private Schema schema;
 
 	/**
 	 * @return the default DocumentBuilderFactory
@@ -35,7 +46,7 @@ public class XmlConf extends Handler {
 	/**
 	 * create XmlConf with default values
 	 */
-	public XmlConf() throws SAXException {
+	public XmlConf() throws SAXException, ParserConfigurationException {
 		// init DocumentBuilderFactory
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(false);
@@ -43,19 +54,28 @@ public class XmlConf extends Handler {
 		documentBuilderFactory.setIgnoringElementContentWhitespace(true);
 		documentBuilderFactory.setExpandEntityReferences(true);
 		documentBuilderFactory.setNamespaceAware(true);
-		// init workers
-		xmlErrorHandler = null;// new XmlErrorHandler();
-		updateValidator();
+		
 	}
-
-	public final void updateValidator() throws SAXException {
-		xmlValidator = new XmlValidator(this, xmlErrorHandler);
-	}
-
+	
+	/**
+	 * get XmlErrorHandler
+	 * @return xmlErroHandler, default null
+	 */
 	public ErrorHandler getXmlErrorHandler() {
 		return xmlErrorHandler;
 	}
-
+	/**
+	 * set xmlErrorHandler
+	 * @param xmlErrorHandler 
+	 */
+	public void setXmlErrorHandler(ErrorHandler xmlErrorHandler) {
+		this.xmlErrorHandler = xmlErrorHandler;
+	}
+	
+	/**
+	 * get xmlValidator
+	 * @return xmlValidator
+	 */
 	public XmlValidator getXmlValidator() {
 		return xmlValidator;
 	}
@@ -100,6 +120,7 @@ public class XmlConf extends Handler {
 	public void setSchemaPath(File schemaPath) {
 		assert schemaPath != null;
 		this.schemaPath = schemaPath;
+		buildSchema();
 	}
 
 	/**
@@ -174,5 +195,10 @@ public class XmlConf extends Handler {
 		assert prefix.endsWith(":");
 		int i = name.indexOf(':');
 		return prefix + ((i != -1) ? name : name.substring(i + 1));
+	}
+
+	private void buildSchema() throws SAXException {
+		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		schema = factory.newSchema(getSchemaPath());
 	}
 }

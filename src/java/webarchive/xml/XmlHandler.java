@@ -61,10 +61,12 @@ public class XmlHandler {
 		this.conf = conf;
 
 		// set ioHandler
-		this.ioHandler = new XmlIOHandler(conf, xmlPath);
+		this.ioHandler = conf.getIOHandler(xmlPath);
 
 		// build document
+		ioHandler.checkout();
 		buildDocument();
+		ioHandler.unlock();
 
 		
 	}
@@ -73,7 +75,7 @@ public class XmlHandler {
 		return ioHandler;
 	}
 
-	public final void buildDocument() throws ParserConfigurationException,
+	private void buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
 		document = ioHandler.buildDocument();
 		XmlHandler.AutoValidatingMode mode = conf.getAutoValidatingMode();
@@ -87,7 +89,7 @@ public class XmlHandler {
 		return new XmlEditor(document, conf);
 	}
 
-	public void validate() throws SAXException, IOException {
+	private void validate() throws SAXException, IOException {
 		conf.getXmlValidator().validate(document);
 	}
 
@@ -95,6 +97,7 @@ public class XmlHandler {
 		SAXException, IOException, TransformerException,
 		ParserConfigurationException {
 		assert e != null;
+		ioHandler.checkout();
 		buildDocument();
 		final String tagName = e.getDataElement().getTagName();
 		// checking for duplicate
@@ -111,5 +114,6 @@ public class XmlHandler {
 		}
 		// write to disk
 		ioHandler.write(document);
+		ioHandler.unlock();
 	}
 }

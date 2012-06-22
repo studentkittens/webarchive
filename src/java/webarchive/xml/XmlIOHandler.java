@@ -23,50 +23,52 @@ public class XmlIOHandler {
 	private static TransformerFactory transformerFactory = TransformerFactory.
 		newInstance();
 	private final XmlConf conf;
-	private final FileDescriptor file;
+	private final FileDescriptor xmlFile;
 	private Transformer transformer;
 	private StreamResult streamResult;
-	private boolean debug;
 	private LockHandler locker;
-	public void setDebug(boolean debug) {
-		this.debug = debug;
+
+	public void checkout() {
+		locker.checkout(xmlFile);
 	}
+
+	public void lock() {
+		locker.lock(xmlFile);
+	}
+	
 
 	XmlIOHandler(XmlConf conf, FileDescriptor xmlPath) throws
 		TransformerConfigurationException {
 		assert conf != null;
 		assert xmlPath != null;
 		this.conf = conf;
-		this.file = xmlPath;
+		this.xmlFile = xmlPath;
 		transformer = transformerFactory.newTransformer();
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
 		
-		this.locker = (LockHandler)Server.getInstance().getHandlers().get("LockHandler");
+//		this.locker = (LockHandler)Server.getInstance().getHandlers().get("LockHandler");
 		
-		streamResult = new StreamResult(file.getAbsolutePath());
+		streamResult = new StreamResult(xmlFile.getAbsolutePath());
 	}
 
 	public Document buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
-		locker.lock(file);
 		DocumentBuilder db = conf.getDocumentBuilderFactory().newDocumentBuilder();
 		db.setErrorHandler(conf.getXmlErrorHandler());
-		Document document = db.parse(file.getAbsolutePath());
-		locker.unlock(file);
+		Document document = db.parse(xmlFile.getAbsolutePath());
 		return document;
 	}
 
 	public void write(Document document) throws TransformerException {
-		locker.checkout(file);
 		System.out.println("XmlIOHandler::write transformer props = " + transformer.
 			getOutputProperties());
 		DOMSource source = new DOMSource(document);
-		if (debug) {
-			streamResult = new StreamResult(System.out);
-		}
 		transformer.transform(source, streamResult);
-		locker.checkout(file);
 
+	}
+
+	public void unlock() {
+		locker.unlock(xmlFile);
 	}
 }

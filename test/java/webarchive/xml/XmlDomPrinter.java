@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
  *
  * @author ccwelich
  */
-public class XmlPrinter {
+public class XmlDomPrinter {
 	public static void printNodes(String indent, Node n) {
 		if(n==null) return;
 		System.out.println(indent+n+" type = "+getType(n)+ ", ns="+ n.getNamespaceURI());

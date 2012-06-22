@@ -17,8 +17,12 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import webarchive.xml.DataElement;
+import webarchive.xml.DataElement;
+import webarchive.xml.XmlConf;
 import webarchive.xml.XmlConf;
 import webarchive.xml.XmlEditor;
+import webarchive.xml.XmlEditor;
+import webarchive.xml.XmlHandler;
 import webarchive.xml.XmlHandler;
 
 /**
@@ -56,7 +60,7 @@ public class TestXml {
 		// init xml helper classes
 
 		XmlConf conf = new XmlConf();
-		conf.setAutoValidatingMode(XmlHandler.AutoValidatingMode.AFTER_BUILT_DOM);
+		conf.setAutoValidatingMode(XmlHandler.AutoValidatingMode.NEVER);
 		final File xsdFile = new File("test/xml/file.xsd");
 		System.out.println("xsd: " + xsdFile + ", exists" + xsdFile.exists());
 		Scanner scan = new Scanner(xsdFile);
@@ -69,24 +73,24 @@ public class TestXml {
 		// init XmlHandler
 		System.out.println("start XmlHandler");
 		XmlHandler h = new XmlHandler(fd, conf);
-		h.getIoHandler().setDebug(false);
 		// xml will be validated, since file is not manipulated
 		System.out.println("validate");
 
 		// start XmlEditor
 		XmlEditor edit = h.newEditor();
 
-		// get data element and add some content
-
+		// create data elements and add some content
+		DataElement de2 = edit.createDataElement("testData2");
+		Element sub2 = edit.createElement("content");
+		sub2.setTextContent("bla");
+		de2.appendChild(sub2);
+		
 		DataElement de1 = edit.createDataElement("testData1");
 		Element sub = edit.createElement("content");
 		sub.setTextContent("bla");
 		de1.appendChild(sub);
 
-		DataElement de2 = edit.createDataElement("testData2");
-		Element sub2 = edit.createElement("content");
-		sub2.setTextContent("bla");
-		de2.appendChild(sub2);
+		
 
 		// add the DataElement to the XML File
 		System.out.println("write data:");
