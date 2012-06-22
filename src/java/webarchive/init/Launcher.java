@@ -18,9 +18,15 @@ public class Launcher {
 				}
 			}
 		}));
-		
-			System.out.println("\nServer started!\n");
-			Server.getInstance().start();
+				
+
+		final Server server = Server.getInstance();
+		if(args!=null && args.length>0) {
+			server.setConfigPath(args[0]);
+		}  
+		server.start();
+		System.out.println("\nServer started!\n");
+
 		
 	}
 }

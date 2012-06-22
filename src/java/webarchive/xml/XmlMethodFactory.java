@@ -12,12 +12,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.w3c.dom.Document;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import webarchive.handler.Handler;
-import webarchive.server.IOHandler;
 import webarchive.server.LockHandler;
+import webarchive.server.LockHandlerImpl;
 import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
@@ -35,12 +34,10 @@ public class XmlMethodFactory extends Handler {
 		assert instance != null : "call init() first";
 		return instance;
 	}
-	public static void init(Document configDom) throws SAXException {
-		assert configDom != null;
-		XmlConf conf = XmlConfBuilder.buildConf(configDom);
-		instance = new XmlMethodFactory(conf, (LockHandler)Server.getInstance().getHandlers().get("LockHandler"));
-	}
+	
 	public static void init(XmlConf conf, LockHandler locker) throws SAXException { 
+		assert conf != null;
+		
 		instance = new XmlMethodFactory(conf, locker);
 	}
 	// member
@@ -49,7 +46,7 @@ public class XmlMethodFactory extends Handler {
 	private Schema schema;
 	private XmlConf conf;
 	private final TransformerFactory transformerFactory;
-	private LockHandler locker;
+	private LockHandlerImpl locker;
 
 	public XmlConf getConf() {
 		return conf;
@@ -70,7 +67,7 @@ public class XmlMethodFactory extends Handler {
 		//build transformer factory
 		transformerFactory = TransformerFactory.newInstance();
 		//build default locker
-		this.locker = (LockHandler)Server.getInstance().getHandlers().get("LockHandler");
+		this.locker = (LockHandlerImpl)Server.getInstance().getHandlers().get("LockHandler");
 	}
 	
 	

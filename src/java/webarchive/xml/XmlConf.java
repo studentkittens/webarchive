@@ -12,7 +12,7 @@ import webarchive.handler.Handler;
 public class XmlConf extends Handler {
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
 	private String namespace = "http://www.hof-university.de/webarchive";
-	private String prefix = "wa:";
+	private String prefix = "wa";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
 

@@ -10,7 +10,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import webarchive.server.LockHandler;
+import webarchive.server.LockHandlerImpl;
 import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
@@ -22,13 +22,13 @@ public class XmlIOHandler {
 
 	public Transformer transformer;
 	private final FileDescriptor xmlFile;
-	private LockHandler locker;
+	private LockHandlerImpl locker;
 
 	
 
 
 
-	XmlIOHandler(FileDescriptor xmlPath, Transformer transformer, LockHandler locker) throws TransformerConfigurationException {
+	XmlIOHandler(FileDescriptor xmlPath, Transformer transformer, LockHandlerImpl locker) throws TransformerConfigurationException {
 		assert xmlPath != null;	
 		assert transformer != null;
 		assert locker !=null;

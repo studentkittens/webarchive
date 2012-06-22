@@ -35,9 +35,17 @@ public class Server implements Runnable,NetworkModule {
     private Boolean running = false;
     
     private Thread thread;
+	private String configPath = "conf/webarchive.conf.xml";
     
     public Thread getThread() {
 		return thread;
+	}
+/**
+ * set before start()
+ * @param configPath path of configfile
+ */
+	public void setConfigPath(String configPath) {
+		this.configPath = configPath;
 	}
 
 
@@ -45,7 +53,7 @@ public class Server implements Runnable,NetworkModule {
 
     private Server() {
     	sv = this;
-    	getHandlers().add(new ConfigHandler());
+    	getHandlers().add(new ConfigHandler(configPath));
     	getHandlers().add(new SvConfigHandler());
     	getHandlers().add(new DbConfigHandler());
     	
@@ -56,7 +64,7 @@ public class Server implements Runnable,NetworkModule {
         
         getHandlers().add(new FileHandler());
         try {
-			getHandlers().add(new LockHandler(InetAddress.getLocalHost(),42421));
+			getHandlers().add(new LockHandlerImpl(InetAddress.getLocalHost(),42421));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

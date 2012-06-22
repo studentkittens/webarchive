@@ -17,8 +17,9 @@ public class ConfigHandler extends Handler {
 
 	private Document config;
 	private Node rootNode;
-	private static final String configPath="/path/to/webarchive.conf.xml";
-	public ConfigHandler() {
+	private String configPath;
+	public ConfigHandler(String configPath) {
+		this.configPath = configPath;
 		rebuild();
 	}
 	

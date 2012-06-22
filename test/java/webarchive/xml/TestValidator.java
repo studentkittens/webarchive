@@ -4,6 +4,7 @@
  */
 package webarchive.xml;
 
+import webarchive.server.LockHandlerMockup;
 import java.io.File;
 import java.io.IOException;
 import org.w3c.dom.Document;

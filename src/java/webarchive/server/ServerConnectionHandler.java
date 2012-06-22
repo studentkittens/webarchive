@@ -30,12 +30,12 @@ public class ServerConnectionHandler extends ConnectionHandler {
 
 	private FileHandler io;
 	private SqlHandler sql;
-	private LockHandler locker;
+	private LockHandlerImpl locker;
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
 		this.io = (FileHandler) netMod.getHandlers().get("FileHandler");
 		this.sql = (SqlHandler) netMod.getHandlers().get("SqlHandler");
-		this.locker = (LockHandler) netMod.getHandlers().get("LockHandler");
+		this.locker = (LockHandlerImpl) netMod.getHandlers().get("LockHandler");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

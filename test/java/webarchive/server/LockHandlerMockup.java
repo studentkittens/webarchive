@@ -1,5 +1,5 @@
 
-package webarchive.xml;
+package webarchive.server;
 
 import java.net.InetAddress;
 import webarchive.server.LockHandler;
@@ -9,7 +9,7 @@ import webarchive.transfer.FileDescriptor;
  *
  * @author ccwelich
  */
-public class LockHandlerMockup extends LockHandler {
+public class LockHandlerMockup implements LockHandler {
 	public enum StateType {
 		CHECKOUT,COMMIT,LOCK,RECONNECT,UNLOCK;
 	}
@@ -25,10 +25,7 @@ public class LockHandlerMockup extends LockHandler {
 	}
 	private State state;
 
-	public LockHandlerMockup() {
-		//TODO
-		super(ip, port);
-	}
+	
 	@Override
 	public void checkout(FileDescriptor fd) {
 		state = new State(StateType.CHECKOUT, fd);
@@ -59,7 +56,7 @@ public class LockHandlerMockup extends LockHandler {
 		return rc;
 	}
 	public static void main(String args) {
-		LockHandlerMockup l = new LockHandlerMockup(null, -1);
+		LockHandlerMockup l = new LockHandlerMockup();
 		l.lock(null);
 		LockHandlerMockup.State s = l.fetchState();
 		System.out.println("l state ="+s.stateType+", fd="+s.fd);
