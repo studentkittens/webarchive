@@ -14,8 +14,20 @@ Getting Started
 Install the following modules from PyPI:
 
 - ``filemagic`` - Determining MIME Type
-- ``docopt`` - Intelligent argument Parsing
-- ``beautifulsoup4`` - Title Extraction from HTML
+- ``docopt`` - Intelligent argument Parsing from Help Text
+
+You can do this via ``pip``, assuming you have Python 3.x installed:
+
+.. code-block:: bash
+
+  sudo pip install filemagic docopt
+    
+
+The program will most likely not work for Python 2.x; make sure you have a newer series installed:
+
+.. code-block:: bash
+
+   python --version
 
 Listen and Repeat
 -----------------
