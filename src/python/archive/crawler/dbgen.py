@@ -31,7 +31,6 @@ class DBGenerator(object):
 
         :meta_list: A list of MetaData Dictionaries
         """
-        print(meta_list)
         if abspath is None:
             self.__connection = sqlite3.connect(get_dbpath())
         else:
@@ -47,7 +46,7 @@ class DBGenerator(object):
         # statements are not
         self.__db_lock = lock.FileLock(file_name='db.lock',
                 folder=get_archive_root(),
-                timeout=10000)
+                timeout=100)
 
     def load_statements(self):
         """
@@ -92,8 +91,6 @@ class DBGenerator(object):
             self.insert_mime_domain()
             self.insert_mdata_ctag()
             self.insert_history()
-            import time
-            time.sleep(100)
             self.__db_lock.release()
         except lock.FileLockException:
             logging.critical('File-lock timed out; no db update was done')
@@ -142,7 +139,7 @@ class DBGenerator(object):
         self.execute_statement('insert_metadata', mdata)
         self.execute_statement('insert_committag', list(ctags))
 
-        self.__mdidlist = self.select('metaData', 'metaId', 'url', 'mimeId', 'path')
+        self.__mdidlist = self.select('metaData', 'metaId', 'url')
         self.__ctaglist = self.select('commitTag', 'commitId', 'commitTime', 'domainId')
 
     def insert_history(self):
@@ -153,10 +150,9 @@ class DBGenerator(object):
 
         for item in self.__metalist:
             ctag_tuple_key = (item['commitTime'], self.__domaindict[item['domain']])
-            metadata_tuple_key = (item['url'], self.__mimedict[item['mimeType']], item['path'])
 
             try:
-                metadata_id = self.__mdidlist[metadata_tuple_key]
+                metadata_id = self.__mdidlist[item['url']]
                 commitag_id = self.__ctaglist[ctag_tuple_key]
 
                 history.append((
@@ -166,10 +162,7 @@ class DBGenerator(object):
                     item['title']
                     ))
             except KeyError:
-                #print(self.__mdidlist)
-                #print(self.__ctaglist)
-                #logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
-                logging.exception('DB ')
+                logging.warning('Cannot find URL ' + item['url'] + ' in DB.')
 
         self.execute_statement('insert_history', history)
 
@@ -210,20 +203,20 @@ if __name__ == '__main__':
     SAMPLE_DATA = [{
             'mimeType'   : 'application/png',
             'domain'     : 'www.heise.de',
-            'url'        : 'www.heise.de/nöws',
+            'url'        : 'www.heise.de/news',
             'path'       : '.',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634634',
             'title'      : 'news for professionals'
             },
         {
-            'mimeType'   : 'application/xml',
-            'domain'     : 'www.blendpolis.de',
-            'url'        : 'www.blendpolis.de/feed.php?mode=topics/',
-            'path'       : '/tmp/archive/tmp/www.blendpolis.de/www.blendpolis.de/feed.php?mode=topics/data',
+            'mimeType'   : 'application/jpeg',
+            'domain'     : 'www.golem.de',
+            'url'        : 'www.golem.de/news',
+            'path'       : '..',
             'commitTime' : '23324534634634',
             'createTime' : '32535245634637',
-            'title'      : ""
+            'title'      : 'news for retards'
             }]
 
     class TestDBGen(unittest.TestCase):
@@ -260,7 +253,6 @@ if __name__ == '__main__':
                 dmmy_rows = set(dmmy.execute(sql))
                 real_rows = set(real.execute(sql))
                 self.assertEqual(dmmy_rows, real_rows)
-
 
             d = DBGenerator(SAMPLE_DATA, abspath=REAL_DB)
             d.batch()

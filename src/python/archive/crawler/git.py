@@ -149,7 +149,7 @@ class Git(object):
         :target: the target to visit
         :returns: 0 on success, another rcode on failure
         """
-        return self.__call_script('checkout {}'.format(target))
+        return self.__call_script('checkout {}'.format(Git.convert_branch_name(target)))
 
     def branch(self, branch_name='empty'):
         """

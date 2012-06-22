@@ -164,9 +164,7 @@ def checkout_handler(args):
     if branch is not None:
         wrapper = Git(domain)
 
-        try_lock_handler([domain])
         rcode = wrapper.checkout(branch)
-        unlock_handler([domain])
         if rcode is not 0:
             raise ProtocolError('checkout returned {rc}'.format(rc=rcode))
 

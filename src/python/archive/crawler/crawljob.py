@@ -14,7 +14,6 @@ import traceback
 import time
 import shutil
 
-import archive.config.reader as config
 import archive.crawler.wget as wget
 import archive.util.paths as paths
 import archive.crawler.cleaner as cleaner
@@ -125,7 +124,7 @@ class CrawlJob(object):
 
         for domain in itemlist:
             domain_path = paths.get_domain_path(domain)
-            fsmutex = lock.FileLock(domain, folder=content_path)
+            fsmutex = lock.FileLock(domain, folder=content_path, timeout=100)
             fsmutex.acquire()
 
             try:
