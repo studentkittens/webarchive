@@ -32,6 +32,15 @@ The program will most likely not work for Python 2.x; make sure you have a newer
 Listen and Repeat
 -----------------
 
+First, you have to install the backend:
+
+.. code-block:: bash
+
+  $ git clone git://github.com/studentkittens/webarchive.git
+  $ cd webarchive/src/python
+  $ sudo python setup.py install
+  $ # Done!
+
 .. code-block:: bash
 
   $ archive.py init /tmp         # Create a new Archive-Root
