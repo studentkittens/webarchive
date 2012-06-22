@@ -8,7 +8,7 @@ actual_options = {
         'general.filterpath': 'filter/',
         'crawler.depth': 1,
         'crawler.interval': 0.5,
-        'crawler.maxInst': 10,
+        'crawler.maxInst': 20,
         'crawler.userAgent': 'Mozilla/5.0 (X11; U; Linux i586; en-US; rv:1.7.3) Gecko/20040924 Epiphany/1.4.4 (Ubuntu)',
         #'webarchive/0.1 +https://github.com/studentkittens/webarchive',
         'crawler.tempRoot': 'tmp/',

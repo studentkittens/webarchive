@@ -90,7 +90,8 @@ class Cleaner:
         Removes empty files and folders
         """
         logging.debug("removing empty files and folders.")
-        subprocess.call(['find', self.__path, '-empty', '-delete'])
+        if os.path.exists(self.__path):
+            subprocess.call(['find', self.__path, '-empty', '-delete'])
 
 ###########################################################################
 #                                 content                                 #
