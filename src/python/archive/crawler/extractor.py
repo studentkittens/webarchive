@@ -8,10 +8,13 @@ from various content files. Currently only text/html files are supported.
 
 __author__ = 'Christoph Piechula'
 
-from bs4 import BeautifulSoup
+import re
 import logging
-import unittest
 import os
+import html.parser
+
+
+TITLE_REGEX = re.compile('<\s*title\s*>(.*)</\s*title\s*>')
 
 
 def extract_html(file_path):
@@ -20,16 +23,17 @@ def extract_html(file_path):
 
     :file_path: path to html file
     :returns: extracted title or empty string if no title is found
-
     """
-    doc = None
-
+    title = ""
     with open(file_path, 'r') as html_file:
-        doc = html_file.read()
-    soup = BeautifulSoup(doc)
-    return soup.title.string
+        raw = html_file.read()
 
-# extractor list, please add new extractor 'plugins' to this list
+    title = TITLE_REGEX.search(raw).groups()[0].strip()
+    title = html.parser.HTMLParser().unescape(title)
+    return title
+
+
+# EXTRACTOR LIST, please add new extractor 'plugins' to this list
 EXTRACTORS = {
         "text/html": extract_html
 }
@@ -44,22 +48,24 @@ def get_title(file_path, mime):
     :mime: mime type of that file to determinate extractor
     :returns: extracted title as string if extraction is successful
               else an empty string will be returned
-
     """
     title = ""
-    try:
-        title = EXTRACTORS[mime](file_path)
-    except IOError:
-        logging.exception('cannot read file.')
-    finally:
-        return str(title)
+    if mime in EXTRACTORS:
+        try:
+            title = EXTRACTORS[mime](file_path)
+        except Exception as err:
+            logging.debug('Unable to parse title: ' + str(err))
+
+    return str(title)
 
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-TESTDATA_PATH = 'testdata/html/'
+TESTDATA_PATH = 'archive/testdata/html/'
 
 if __name__ == '__main__':
+    import unittest
+
     class TestTitle(unittest.TestCase):
         def test_get_mime(self):
 
