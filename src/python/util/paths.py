@@ -19,11 +19,18 @@ def get_dbpath():
     return os.path.join(config.get('general.root'), config.get('db.path'))
 
 
+def get_sqlpath():
+    """
+    :returns: sql statements path
+    """
+    return os.path.join(config.get('general.root'), config.get('db.sqlSource'))
+
+
 def get_content_root():
     """
     :return: '{archive_root}/content/' path
     """
-    return os.path.join(config.get('general.root'), 'content')
+    return os.path.join(config.get('general.root'), 'content/')
 
 
 def get_domain_path(domain):
@@ -47,7 +54,7 @@ def get_log_dir():
     """
     :returns: log dir path
     """
-    return os.path.join(config.get('general.root'), 'logs')
+    return os.path.join(config.get('general.root'), 'logs/')
 
 
 def get_temp_root():
@@ -60,14 +67,42 @@ def get_temp_root():
 #                                unittest                                 #
 ###########################################################################
 
+# some predefined values to test with
+ROOT = config.get('general.root')
+SQL_PATH = 'sql/'
+DB_PATH = 'metadata.db'
+CRAWLER_TMP_ROOT = 'tmp/'
+
+CONTENT_DIR = 'content/'
+LOG_DIR = 'logs/'
+TEMP_DIR = 'tmp/'
+DOMAIN = 'www.domain_name.org'
+
 if __name__ == '__main__':
     class TestPaths(unittest.TestCase):
-        def test_domain_path(self):
-            self.assertEqual(get_domain_path('hello'),
-                os.path.join(config.get('general.root'), 'content', 'hello'))
 
-        def test_content_root(self):
-            self.assertEqual(get_content_root(),
-                os.path.join(config.get('general.root'), 'content'))
+        def test_get_db_path(self):
+            self.assertEqual(get_dbpath(), os.path.join(ROOT, DB_PATH))
+
+        def test_get_sql_path(self):
+            self.assertEqual(get_sqlpath(), os.path.join(ROOT, SQL_PATH))
+
+        def test_get_content_root(self):
+            self.assertEqual(get_content_root(), os.path.join(ROOT, CONTENT_DIR))
+
+        def test_get_domain_path(self):
+            self.assertEqual(get_domain_path(DOMAIN),
+                os.path.join(ROOT, CONTENT_DIR, DOMAIN))
+
+        def test_get_archive_root(self):
+            self.assertEqual(get_archive_root(), os.path.join(ROOT))
+
+        def test_get_log_dir(self):
+            self.assertEqual(get_log_dir(),
+                os.path.join(ROOT, LOG_DIR))
+
+        def test_get_temp_dir(self):
+            self.assertEqual(get_temp_root(),
+                os.path.join(ROOT, TEMP_DIR))
 
     unittest.main()

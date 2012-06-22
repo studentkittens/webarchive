@@ -9,7 +9,7 @@ __author__ = 'Christoph Piechula'
 
 import time
 import os
-
+import unittest
 
 def get_ctime(file_path):
     """
@@ -51,10 +51,18 @@ def sec_to_timestamp(form, seconds):
     """
     return time.strftime(form.format(time.gmtime(seconds)))
 
-
 ###########################################################################
 #                                unittest                                 #
 ###########################################################################
-
 if __name__ == '__main__':
-    print("times {0} und {1}", get_ctime('/dev/null'), get_sys_time())
+    class TestTimes(unittest.TestCase):
+
+        def setUp(self):
+            os.system('touch testfile_for_timestamp')
+
+        # no useful possibilities
+
+        def tearDown(self):
+            os.remove('testfile_for_timestamp')
+
+    unittest.main()
