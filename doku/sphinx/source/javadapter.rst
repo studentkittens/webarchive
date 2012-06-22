@@ -15,15 +15,15 @@ The Server may be started via:
 
   $ archive.py javadapter --start
   # This will enter a special shell.
-  # Use `help` to see what you can do there
+  # Use `help` to see what you can do there interactively
 
-List of commands
-----------------
+List of Protocol-Commands
+-------------------------
 
 **lock**
   *description:*
     Lock a domain and wait to a maximal time
-    of 5 minutes, will return a timeout then
+    of 5 minutes, will return a timeout then.
   *usage:*
     ``lock [domain]``
 
@@ -65,7 +65,7 @@ List of commands
 
 **unlock**
   *description:*
-    Unlock a previous lock
+    Unlock a previous lock.
   *usage:*
     ``unlock [domain]``
 
@@ -84,8 +84,8 @@ List of commands
 
 **checkout**
   *description:*
-    Checkout a certain branch (usually a commitTag or ``master``)
-    You do not need to manually set a lock for this.
+    Checkout a certain branch (usually a commitTag or ``master``).
+    This does *NOT* lock itself, you always should lock yourself before.
   *usage:*
        ``checkout [domain] {branch_name}``
 
@@ -98,9 +98,10 @@ List of commands
   *examples:*
     .. code-block:: bash 
 
-      $ checkout www.hack.org 2012H06H15T19C08C15
+      $ checkout www.hack.org 2012-06-15T19:08:15
       /tmp/archive/content/www.hack.org
       OK
+      # This domain does not exist (we do not have an adults-filter :-P)
       $ checkout www.youporn.com 
       ACK Invalid Domain.
       $ checkout www.hack.org no_branch_name
@@ -161,11 +162,11 @@ List of commands
     .. code-block:: bash 
 
        $ list_branches www.hack.org
-       2012H06H13T23C02C18
-       2012H06H15T19C07C46
-       2012H06H15T19C08C15
-       2012H06H15T21C57C35
-       2012H06H15T21C57C43
+       2012-06-13T23:02:18
+       2012-06-15T19:07:46
+       2012-06-15T19:08:15
+       2012-06-15T21:57:35
+       2012-06-15T21:57:43
        # (..snip..)
        OK
 
