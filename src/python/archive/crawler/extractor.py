@@ -24,6 +24,7 @@ def extract_html(file_path):
     :file_path: path to html file
     :returns: extracted title or empty string if no title is found
     """
+    title = ""
     with open(file_path, 'r') as html_file:
         raw = html_file.read()
     title = TITLE_REGEX.search(raw).groups()[0].strip()
@@ -48,13 +49,11 @@ def get_title(file_path, mime):
               else an empty string will be returned
     """
     title = ""
-    if mime not in EXTRACTORS:
-        logging.info("no extractor defined for " + mime)
-    else:
+    if mime in EXTRACTORS:
         try:
             title = EXTRACTORS[mime](file_path)
-        except Exception as err:
-            logging.exception(err)
+        except Exception:
+            pass
     return str(title)
 
 ###########################################################################
