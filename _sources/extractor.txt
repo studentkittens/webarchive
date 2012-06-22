@@ -19,5 +19,5 @@ but one may write an extractor function that will be called for a specific mimeT
 Implementation
 --------------
 
-.. automodule:: crawler.extractor
+.. automodule:: archive.crawler.extractor
   :members:

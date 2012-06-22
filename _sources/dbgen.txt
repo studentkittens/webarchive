@@ -26,5 +26,5 @@ with as simple select statements, instead of insert-statements with sub-selects.
 
 --------------
 
-.. automodule:: crawler.dbgen 
+.. automodule:: archive.crawler.dbgen 
    :members:

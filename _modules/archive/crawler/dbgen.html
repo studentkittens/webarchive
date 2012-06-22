@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>crawler.dbgen &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.dbgen &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for crawler.dbgen</h1><div class="highlight"><pre>
+  <h1>Source code for archive.crawler.dbgen</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -64,13 +64,13 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
-<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_dbpath</span>
-<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_archive_root</span>
-<span class="kn">from</span> <span class="nn">util.paths</span> <span class="kn">import</span> <span class="n">get_sqlpath</span>
+<span class="kn">import</span> <span class="nn">archive.util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_dbpath</span>
+<span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_archive_root</span>
+<span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_sqlpath</span>
 
 
-<div class="viewcode-block" id="DBGenerator"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator">[docs]</a><span class="k">class</span> <span class="nc">DBGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator">[docs]</a><span class="k">class</span> <span class="nc">DBGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DBGenerator module</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -98,7 +98,7 @@
                 <span class="n">folder</span><span class="o">=</span><span class="n">get_archive_root</span><span class="p">(),</span>
                 <span class="n">timeout</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DBGenerator.load_statements"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.load_statements">[docs]</a>    <span class="k">def</span> <span class="nf">load_statements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.load_statements"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.load_statements">[docs]</a>    <span class="k">def</span> <span class="nf">load_statements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        (Re-)Load Sql Files from Disk</span>
 
@@ -117,7 +117,7 @@
                 <span class="n">statements</span><span class="p">[</span><span class="n">source_base</span><span class="p">]</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">statements</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.execute_statement"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.execute_statement">[docs]</a>    <span class="k">def</span> <span class="nf">execute_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.execute_statement"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.execute_statement">[docs]</a>    <span class="k">def</span> <span class="nf">execute_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exececute a previously loaded statement by name</span>
 
@@ -130,7 +130,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.batch"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.batch">[docs]</a>    <span class="k">def</span> <span class="nf">batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.batch"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.batch">[docs]</a>    <span class="k">def</span> <span class="nf">batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start db creating procedure</span>
 
@@ -151,7 +151,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.insert_mime_domain"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_mime_domain">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mime_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.insert_mime_domain"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.insert_mime_domain">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mime_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill mimeType and domain table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -168,7 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__mimedict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;mimeType&#39;</span><span class="p">,</span> <span class="s">&#39;mimeID&#39;</span><span class="p">,</span> <span class="s">&#39;mimeName&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__domaindict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;domain&#39;</span><span class="p">,</span> <span class="s">&#39;domainID&#39;</span><span class="p">,</span> <span class="s">&#39;domainName&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.insert_mdata_ctag"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_mdata_ctag">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mdata_ctag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.insert_mdata_ctag"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.insert_mdata_ctag">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mdata_ctag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill metadata and committag table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -192,7 +192,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__mdidlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;metaData&#39;</span><span class="p">,</span> <span class="s">&#39;metaId&#39;</span><span class="p">,</span> <span class="s">&#39;url&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ctaglist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;commitTag&#39;</span><span class="p">,</span> <span class="s">&#39;commitId&#39;</span><span class="p">,</span> <span class="s">&#39;commitTime&#39;</span><span class="p">,</span> <span class="s">&#39;domainId&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.insert_history"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.insert_history">[docs]</a>    <span class="k">def</span> <span class="nf">insert_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.insert_history"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.insert_history">[docs]</a>    <span class="k">def</span> <span class="nf">insert_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill history table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -216,7 +216,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">execute_statement</span><span class="p">(</span><span class="s">&#39;insert_history&#39;</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.select"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.select"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="n">columns</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Internal helper for collecting data</span>
 
@@ -238,7 +238,7 @@
 
         <span class="k">return</span> <span class="n">row_dict</span>
 </div>
-<div class="viewcode-block" id="DBGenerator.close"><a class="viewcode-back" href="../../dbgen.html#crawler.dbgen.DBGenerator.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DBGenerator.close"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Close connection and commit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -304,7 +304,6 @@
                 <span class="n">real_rows</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">real</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dmmy_rows</span><span class="p">,</span> <span class="n">real_rows</span><span class="p">)</span>
 
-
             <span class="n">d</span> <span class="o">=</span> <span class="n">DBGenerator</span><span class="p">(</span><span class="n">SAMPLE_DATA</span><span class="p">,</span> <span class="n">abspath</span><span class="o">=</span><span class="n">REAL_DB</span><span class="p">)</span>
             <span class="n">d</span><span class="o">.</span><span class="n">batch</span><span class="p">()</span>
             <span class="n">d</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -333,7 +332,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -352,13 +351,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

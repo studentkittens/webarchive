@@ -141,8 +141,8 @@ Init -- ---- Kraul2 &lt;- branch <span class="s1">&#39;15052012T1232&#39;</span>
 </dd>
 </dl>
 </div>
-<div class="section" id="module-crawler.git">
-<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-crawler.git" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-archive.crawler.git">
+<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-archive.crawler.git" title="Permalink to this headline">¶</a></h2>
 <p>Wrapper for Git</p>
 <p>This is highly simplified, and may be replaced
 by a faster, native implementation using Dunwhich.
@@ -150,12 +150,12 @@ But that&#8217;s not on the plan due our limited time.</p>
 <p>Git commands (init e.g.) are tailored for use
 in this archive, less for general use.</p>
 <dl class="class">
-<dt id="crawler.git.Git">
-<em class="property">class </em><tt class="descclassname">crawler.git.</tt><tt class="descname">Git</tt><big>(</big><em>domain=None</em>, <em>abs_path=None</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git">
+<em class="property">class </em><tt class="descclassname">archive.crawler.git.</tt><tt class="descname">Git</tt><big>(</big><em>domain=None</em>, <em>abs_path=None</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git" title="Permalink to this definition">¶</a></dt>
 <dd><p>A (overly-simple) Wrapper for the git binary</p>
 <dl class="method">
-<dt id="crawler.git.Git.branch">
-<tt class="descname">branch</tt><big>(</big><em>branch_name='empty'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.branch" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.branch">
+<tt class="descname">branch</tt><big>(</big><em>branch_name='empty'</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.branch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.branch" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a new named branch</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -170,8 +170,8 @@ in this archive, less for general use.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.checkout">
-<tt class="descname">checkout</tt><big>(</big><em>target='master'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.checkout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.checkout" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.checkout">
+<tt class="descname">checkout</tt><big>(</big><em>target='master'</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.checkout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.checkout" title="Permalink to this definition">¶</a></dt>
 <dd><p>checkout a certain point (tag, branch or commit)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -186,8 +186,8 @@ in this archive, less for general use.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.commit">
-<tt class="descname">commit</tt><big>(</big><em>message='edit'</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.commit" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.commit">
+<tt class="descname">commit</tt><big>(</big><em>message='edit'</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.commit" title="Permalink to this definition">¶</a></dt>
 <dd><p>commit any changes made</p>
 <p>git add . and git commit -am &lt;message&gt; is done</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -203,8 +203,8 @@ in this archive, less for general use.</p>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="crawler.git.Git.convert_branch_name">
-<em class="property">classmethod </em><tt class="descname">convert_branch_name</tt><big>(</big><em>date_string</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.convert_branch_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.convert_branch_name" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.convert_branch_name">
+<em class="property">classmethod </em><tt class="descname">convert_branch_name</tt><big>(</big><em>date_string</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.convert_branch_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.convert_branch_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a datestring suitably to a branch name</p>
 <p>Git does not allow special characters such as : or -
 in branchnames for whatever reason</p>
@@ -221,8 +221,8 @@ in branchnames for whatever reason</p>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="crawler.git.Git.convert_datestring">
-<em class="property">classmethod </em><tt class="descname">convert_datestring</tt><big>(</big><em>branch_name</em><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.convert_datestring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.convert_datestring" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.convert_datestring">
+<em class="property">classmethod </em><tt class="descname">convert_datestring</tt><big>(</big><em>branch_name</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.convert_datestring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.convert_datestring" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as convert_branch_name(), but in the other direction</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -237,14 +237,14 @@ in branchnames for whatever reason</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="crawler.git.Git.domain">
-<tt class="descname">domain</tt><a class="reference internal" href="_modules/crawler/git.html#Git.domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.domain" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.domain">
+<tt class="descname">domain</tt><a class="reference internal" href="_modules/archive/crawler/git.html#Git.domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.domain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the domain, to which this wrapper belongs</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.init">
-<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.init" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.init">
+<tt class="descname">init</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new archive at specified domain path</p>
 <p>The target directory does not need to exit yet</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -258,8 +258,8 @@ in branchnames for whatever reason</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.list_branches">
-<tt class="descname">list_branches</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.list_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.list_branches" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.list_branches">
+<tt class="descname">list_branches</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.list_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.list_branches" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all branches in this repo, which conform to the &#8216;date&#8217;-regex.</p>
 <p>This means, Empty and master branch are not mentioned. If you want
 to checkout those, just checkout &#8216;empty&#8217; or &#8216;master&#8217;</p>
@@ -274,8 +274,8 @@ to checkout those, just checkout &#8216;empty&#8217; or &#8216;master&#8217;</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.list_commits">
-<tt class="descname">list_commits</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.list_commits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.list_commits" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.list_commits">
+<tt class="descname">list_commits</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.list_commits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.list_commits" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all commits in this repo and branch</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -288,8 +288,8 @@ to checkout those, just checkout &#8216;empty&#8217; or &#8216;master&#8217;</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.git.Git.recreate_master">
-<tt class="descname">recreate_master</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/git.html#Git.recreate_master"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.git.Git.recreate_master" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.git.Git.recreate_master">
+<tt class="descname">recreate_master</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/git.html#Git.recreate_master"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.git.Git.recreate_master" title="Permalink to this definition">¶</a></dt>
 <dd><p>A very special helper.</p>
 <p>It deletes the current master branch,
 and recreates it. So, the master always points
@@ -311,7 +311,7 @@ to the most recently created branch</p>
   <ul>
 <li><a class="reference internal" href="#">Git-Handling</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#module-crawler.git">Implementation</a></li>
+<li><a class="reference internal" href="#module-archive.crawler.git">Implementation</a></li>
 </ul>
 </li>
 </ul>

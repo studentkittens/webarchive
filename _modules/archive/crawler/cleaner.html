@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>crawler.cleaner &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.cleaner &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for crawler.cleaner</h1><div class="highlight"><pre>
+  <h1>Source code for archive.crawler.cleaner</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -64,12 +64,12 @@
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 
-<span class="kn">import</span> <span class="nn">util.times</span> <span class="kn">as</span> <span class="nn">times</span>
-<span class="kn">import</span> <span class="nn">crawler.filter</span> <span class="kn">as</span> <span class="nn">filter</span>
-<span class="kn">from</span> <span class="nn">crawler.metadata</span> <span class="kn">import</span> <span class="n">MetaData</span>
+<span class="kn">import</span> <span class="nn">archive.util.times</span> <span class="kn">as</span> <span class="nn">times</span>
+<span class="kn">import</span> <span class="nn">archive.crawler.filter</span> <span class="kn">as</span> <span class="nn">filter</span>
+<span class="kn">from</span> <span class="nn">archive.crawler.metadata</span> <span class="kn">import</span> <span class="n">MetaData</span>
 
 
-<div class="viewcode-block" id="Cleaner"><a class="viewcode-back" href="../../cleaner.html#crawler.cleaner.Cleaner">[docs]</a><span class="k">class</span> <span class="nc">Cleaner</span><span class="p">:</span>
+<div class="viewcode-block" id="Cleaner"><a class="viewcode-back" href="../../../cleaner.html#archive.crawler.cleaner.Cleaner">[docs]</a><span class="k">class</span> <span class="nc">Cleaner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cleaner submodule, walk dir tree, cleans and restructures</span>
 <span class="sd">    tmp_crawler_folder hierarchy and calls filter subsystem</span>
@@ -89,7 +89,7 @@
 <span class="sd">        :file_name: name to content file itself</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_crawler_folder</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
-        <span class="n">dest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_crawler_folder</span><span class="p">,</span> <span class="s">&#39;____data&#39;</span><span class="p">)</span>
+        <span class="n">dest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_crawler_folder</span><span class="p">,</span> <span class="s">&#39;__data__&#39;</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dest_file</span><span class="p">)</span>
@@ -115,13 +115,13 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dest_file</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Cleaner.meta_list"><a class="viewcode-back" href="../../cleaner.html#crawler.cleaner.Cleaner.meta_list">[docs]</a>    <span class="k">def</span> <span class="nf">meta_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cleaner.meta_list"><a class="viewcode-back" href="../../../cleaner.html#archive.crawler.cleaner.Cleaner.meta_list">[docs]</a>    <span class="k">def</span> <span class="nf">meta_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :returns: metalist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mdlist</span>
 </div>
-<div class="viewcode-block" id="Cleaner.restructure"><a class="viewcode-back" href="../../cleaner.html#crawler.cleaner.Cleaner.restructure">[docs]</a>    <span class="k">def</span> <span class="nf">restructure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cleaner.restructure"><a class="viewcode-back" href="../../../cleaner.html#archive.crawler.cleaner.Cleaner.restructure">[docs]</a>    <span class="k">def</span> <span class="nf">restructure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Walks through crawler temp folder hierarchy calling internal</span>
 <span class="sd">        restructure method to &#39;normalize&#39; file hierarchy</span>
@@ -135,7 +135,7 @@
         <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;cannot walk through dir structure.&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cleaner.clean_empty"><a class="viewcode-back" href="../../cleaner.html#crawler.cleaner.Cleaner.clean_empty">[docs]</a>    <span class="k">def</span> <span class="nf">clean_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cleaner.clean_empty"><a class="viewcode-back" href="../../../cleaner.html#archive.crawler.cleaner.Cleaner.clean_empty">[docs]</a>    <span class="k">def</span> <span class="nf">clean_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Removes empty files and folders</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -167,7 +167,7 @@
             <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__raw_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
             <span class="c"># copying &#39;raw restructured&#39; data for clean empty testing</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clean_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span> <span class="o">=</span> <span class="n">Cleaner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span> <span class="o">=</span> <span class="n">Cleaner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">should_be</span><span class="p">,</span> <span class="n">test_data</span><span class="p">):</span>
             <span class="n">should_be</span> <span class="o">=</span> <span class="n">content_helper</span><span class="p">(</span><span class="n">should_be</span><span class="p">)</span>
@@ -175,11 +175,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">should_be</span><span class="p">,</span> <span class="n">really_is</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">test_restructure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span><span class="o">.</span><span class="n">restructure</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="o">.</span><span class="n">restructure</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__restruct_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__restruct_test_data</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">test_clean_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_dataer</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="o">.</span><span class="n">clean_empty</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">compare_filetree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__clean_should_be</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clean_test_data</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -196,7 +196,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -215,13 +215,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

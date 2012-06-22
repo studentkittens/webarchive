@@ -78,7 +78,7 @@
 <blockquote>
 <div><ul class="simple">
 <li>Works always, unless the archive is not totally broken</li>
-<li>Also works for XML-Files that were modified somehow (also their baseattribs shouldn&#8217;t)</li>
+<li>Also works for XML-Files that were modified somehow (although their baseattribs shouldn&#8217;t)</li>
 </ul>
 </div></blockquote>
 <p><em>Disadvantages:</em></p>
@@ -123,31 +123,31 @@ is written to <tt class="docutils literal"><span class="pre">/archive-root/pickl
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p><strong>Actual functions to use:</strong></p>
 <dl class="function">
-<dt id="dbrecover.recover.rebuild">
-<tt class="descclassname">dbrecover.recover.</tt><tt class="descname">rebuild</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/recover.html#rebuild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.recover.rebuild" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.recover.rebuild">
+<tt class="descclassname">archive.dbrecover.recover.</tt><tt class="descname">rebuild</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/recover.html#rebuild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.recover.rebuild" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rebuilds the db either by using PickleDBRecover or XMLDBRecover</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="dbrecover.recover.remove">
-<tt class="descclassname">dbrecover.recover.</tt><tt class="descname">remove</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/recover.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.recover.remove" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.recover.remove">
+<tt class="descclassname">archive.dbrecover.recover.</tt><tt class="descname">remove</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/recover.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.recover.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes db</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="dbrecover.repair.repair">
-<tt class="descclassname">dbrecover.repair.</tt><tt class="descname">repair</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/repair.html#repair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.repair.repair" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.repair.repair">
+<tt class="descclassname">archive.dbrecover.repair.</tt><tt class="descname">repair</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/repair.html#repair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.repair.repair" title="Permalink to this definition">¶</a></dt>
 <dd><p>Walks through domain hierarchy invoking repair() and clear_locks()</p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="dbrecover.xml_recover.XMLDBRecover">
-<em class="property">class </em><tt class="descclassname">dbrecover.xml_recover.</tt><tt class="descname">XMLDBRecover</tt><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.xml_recover.XMLDBRecover">
+<em class="property">class </em><tt class="descclassname">archive.dbrecover.xml_recover.</tt><tt class="descname">XMLDBRecover</tt><a class="reference internal" href="_modules/archive/dbrecover/xml_recover.html#XMLDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.xml_recover.XMLDBRecover" title="Permalink to this definition">¶</a></dt>
 <dd><p>XMLDBRecover submodule class</p>
 <dl class="attribute">
-<dt id="dbrecover.xml_recover.XMLDBRecover.description">
-<tt class="descname">description</tt><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.description" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.xml_recover.XMLDBRecover.description">
+<tt class="descname">description</tt><a class="reference internal" href="_modules/archive/dbrecover/xml_recover.html#XMLDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.xml_recover.XMLDBRecover.description" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -159,14 +159,14 @@ is written to <tt class="docutils literal"><span class="pre">/archive-root/pickl
 </dd></dl>
 
 <dl class="method">
-<dt id="dbrecover.xml_recover.XMLDBRecover.load">
-<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.load" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.xml_recover.XMLDBRecover.load">
+<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/xml_recover.html#XMLDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.xml_recover.XMLDBRecover.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invokes threaded xml recovery</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="dbrecover.xml_recover.XMLDBRecover.recover_domain">
-<tt class="descname">recover_domain</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/dbrecover/xml_recover.html#XMLDBRecover.recover_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.xml_recover.XMLDBRecover.recover_domain" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.xml_recover.XMLDBRecover.recover_domain">
+<tt class="descname">recover_domain</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/xml_recover.html#XMLDBRecover.recover_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.xml_recover.XMLDBRecover.recover_domain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterates through given domain trying to recover metadata</p>
 </dd></dl>
 
@@ -174,12 +174,12 @@ is written to <tt class="docutils literal"><span class="pre">/archive-root/pickl
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="dbrecover.pickle_recover.PickleDBRecover">
-<em class="property">class </em><tt class="descclassname">dbrecover.pickle_recover.</tt><tt class="descname">PickleDBRecover</tt><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.pickle_recover.PickleDBRecover">
+<em class="property">class </em><tt class="descclassname">archive.dbrecover.pickle_recover.</tt><tt class="descname">PickleDBRecover</tt><a class="reference internal" href="_modules/archive/dbrecover/pickle_recover.html#PickleDBRecover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.pickle_recover.PickleDBRecover" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recovers database from previously generated pickle files</p>
 <dl class="attribute">
-<dt id="dbrecover.pickle_recover.PickleDBRecover.description">
-<tt class="descname">description</tt><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.description" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.pickle_recover.PickleDBRecover.description">
+<tt class="descname">description</tt><a class="reference internal" href="_modules/archive/dbrecover/pickle_recover.html#PickleDBRecover.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.pickle_recover.PickleDBRecover.description" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -191,8 +191,8 @@ is written to <tt class="docutils literal"><span class="pre">/archive-root/pickl
 </dd></dl>
 
 <dl class="method">
-<dt id="dbrecover.pickle_recover.PickleDBRecover.load">
-<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.load" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.pickle_recover.PickleDBRecover.load">
+<tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/pickle_recover.html#PickleDBRecover.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.pickle_recover.PickleDBRecover.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads pickle files and regenerates metalist</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -205,8 +205,8 @@ is written to <tt class="docutils literal"><span class="pre">/archive-root/pickl
 </dd></dl>
 
 <dl class="method">
-<dt id="dbrecover.pickle_recover.PickleDBRecover.save">
-<tt class="descname">save</tt><big>(</big><em>metalist</em><big>)</big><a class="reference internal" href="_modules/dbrecover/pickle_recover.html#PickleDBRecover.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dbrecover.pickle_recover.PickleDBRecover.save" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.dbrecover.pickle_recover.PickleDBRecover.save">
+<tt class="descname">save</tt><big>(</big><em>metalist</em><big>)</big><a class="reference internal" href="_modules/archive/dbrecover/pickle_recover.html#PickleDBRecover.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.dbrecover.pickle_recover.PickleDBRecover.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dumps given metalist as pickle file</p>
 </dd></dl>
 

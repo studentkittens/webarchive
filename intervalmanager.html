@@ -75,25 +75,25 @@ crawl manager is triggered.</p>
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p><strong>Internal usage of the Interval Manager:</strong></p>
 <dl class="class">
-<dt id="cmanager.intervalmanager.IntervalManager">
-<em class="property">class </em><tt class="descclassname">cmanager.intervalmanager.</tt><tt class="descname">IntervalManager</tt><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager">
+<em class="property">class </em><tt class="descclassname">archive.cmanager.intervalmanager.</tt><tt class="descname">IntervalManager</tt><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>IntervalManager, manages crawling intervals including start, stop functionality</p>
 <dl class="method">
-<dt id="cmanager.intervalmanager.IntervalManager.crawling_done_callback">
-<tt class="descname">crawling_done_callback</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager.crawling_done_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager.crawling_done_callback" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager.crawling_done_callback">
+<tt class="descname">crawling_done_callback</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager.crawling_done_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager.crawling_done_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers end time of last crawl and calculates
 delay and starts next run</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.IntervalManager.kill">
-<tt class="descname">kill</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager.kill" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager.kill">
+<tt class="descname">kill</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager.kill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kills the system hard, like ctrl + c</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.IntervalManager.start">
-<tt class="descname">start</tt><big>(</big><em>delay_in_sec=0</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager.start" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager.start">
+<tt class="descname">start</tt><big>(</big><em>delay_in_sec=0</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the intervalmanager, which starts
 the crawlmanager procedure with a given delay</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -107,8 +107,8 @@ the crawlmanager procedure with a given delay</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="cmanager.intervalmanager.IntervalManager.status">
-<tt class="descname">status</tt><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager.status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager.status" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager.status">
+<tt class="descname">status</tt><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager.status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager.status" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -120,8 +120,8 @@ the crawlmanager procedure with a given delay</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.IntervalManager.stop">
-<tt class="descname">stop</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#IntervalManager.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.IntervalManager.stop" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.IntervalManager.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#IntervalManager.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.IntervalManager.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stopps the interval manager</p>
 </dd></dl>
 
@@ -129,60 +129,60 @@ the crawlmanager procedure with a given delay</p>
 
 <p><strong>Internal usage of the Crawler Command Shell:</strong></p>
 <dl class="class">
-<dt id="cmanager.intervalmanager.CrawlerShell">
-<em class="property">class </em><tt class="descclassname">cmanager.intervalmanager.</tt><tt class="descname">CrawlerShell</tt><big>(</big><em>imanager</em>, <em>condvar</em>, <em>autostart=False</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell">
+<em class="property">class </em><tt class="descclassname">archive.cmanager.intervalmanager.</tt><tt class="descname">CrawlerShell</tt><big>(</big><em>imanager</em>, <em>condvar</em>, <em>autostart=False</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interactive command shell to start, stop, kill and quit crawling procedure</p>
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.activeflag">
-<tt class="descname">activeflag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.activeflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.activeflag" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.activeflag">
+<tt class="descname">activeflag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.activeflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.activeflag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for &#8216;active&#8217; flag</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.do_EOF">
-<tt class="descname">do_EOF</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.do_EOF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.do_EOF" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.do_EOF">
+<tt class="descname">do_EOF</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.do_EOF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.do_EOF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invokes quit on EOF</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.do_quit">
-<tt class="descname">do_quit</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.do_quit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.do_quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Invokes quit command</p>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.do_quit">
+<tt class="descname">do_quit</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.do_quit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.do_quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quits Intervalmanager, Crawljobs will still run until finished.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.do_start">
-<tt class="descname">do_start</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.do_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.do_start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Invokes start command</p>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.do_start">
+<tt class="descname">do_start</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.do_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.do_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts crawljobs if stopped previously.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.do_status">
-<tt class="descname">do_status</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.do_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.do_status" title="Permalink to this definition">¶</a></dt>
-<dd><p>Invokes status command</p>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.do_status">
+<tt class="descname">do_status</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.do_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.do_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status of crawler an intervalmanager.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.do_stop">
-<tt class="descname">do_stop</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.do_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.do_stop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Invokes stop command</p>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.do_stop">
+<tt class="descname">do_stop</tt><big>(</big><em>arg</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.do_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.do_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stopps self.__imanager.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.quitflag">
-<tt class="descname">quitflag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.quitflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.quitflag" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.quitflag">
+<tt class="descname">quitflag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.quitflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.quitflag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Getter for &#8216;quit&#8217; flag</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.set_activeflag">
-<tt class="descname">set_activeflag</tt><big>(</big><em>state</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.set_activeflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.set_activeflag" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.set_activeflag">
+<tt class="descname">set_activeflag</tt><big>(</big><em>state</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.set_activeflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.set_activeflag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setting &#8216;active&#8217; flag</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.intervalmanager.CrawlerShell.set_quitflag">
-<tt class="descname">set_quitflag</tt><big>(</big><em>state</em><big>)</big><a class="reference internal" href="_modules/cmanager/intervalmanager.html#CrawlerShell.set_quitflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.intervalmanager.CrawlerShell.set_quitflag" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.intervalmanager.CrawlerShell.set_quitflag">
+<tt class="descname">set_quitflag</tt><big>(</big><em>state</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/intervalmanager.html#CrawlerShell.set_quitflag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.intervalmanager.CrawlerShell.set_quitflag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setting &#8216;quit&#8217; flag</p>
 </dd></dl>
 

@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>crawler.filter &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.filter &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for crawler.filter</h1><div class="highlight"><pre>
+  <h1>Source code for archive.crawler.filter</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -61,11 +61,12 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
-<span class="kn">import</span> <span class="nn">config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">archive.config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
 
-<div class="viewcode-block" id="FilterSystem"><a class="viewcode-back" href="../../filter.html#crawler.filter.FilterSystem">[docs]</a><span class="k">class</span> <span class="nc">FilterSystem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FilterSystem"><a class="viewcode-back" href="../../../filter.html#archive.crawler.filter.FilterSystem">[docs]</a><span class="k">class</span> <span class="nc">FilterSystem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filtersystem submodule invoked by a crawljob</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -73,7 +74,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">plugin_path</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FilterSystem.load"><a class="viewcode-back" href="../../filter.html#crawler.filter.FilterSystem.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_path</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterSystem.load"><a class="viewcode-back" href="../../../filter.html#archive.crawler.filter.FilterSystem.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_path</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load a list of \*.py files from a directory</span>
 
@@ -95,7 +96,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="FilterSystem.clear"><a class="viewcode-back" href="../../filter.html#crawler.filter.FilterSystem.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterSystem.clear"><a class="viewcode-back" href="../../../filter.html#archive.crawler.filter.FilterSystem.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clears loaded filters</span>
 
@@ -103,7 +104,7 @@
         <span class="c"># Clear list by unreferencing old items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span> <span class="o">=</span> <span class="p">[]</span>
 </div>
-<div class="viewcode-block" id="FilterSystem.check"><a class="viewcode-back" href="../../filter.html#crawler.filter.FilterSystem.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterSystem.check"><a class="viewcode-back" href="../../../filter.html#archive.crawler.filter.FilterSystem.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform the actual filtering</span>
 
@@ -115,34 +116,35 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">decision</span> <span class="o">=</span> <span class="bp">True</span>
 
-        <span class="c"># All global variables seen inside the filter</span>
-        <span class="c"># are defined as key: value pairs,</span>
-        <span class="c"># for now we only have two of them</span>
-        <span class="n">input_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s">&#39;filter_input&#39;</span><span class="p">:</span>  <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">meta_dict</span><span class="p">),</span>
-                <span class="s">&#39;filter_result&#39;</span><span class="p">:</span> <span class="bp">True</span>
-        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># All global variables seen inside the filter</span>
+            <span class="c"># are defined as key: value pairs,</span>
+            <span class="c"># for now we only have two of them</span>
+            <span class="n">input_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;filter_input&#39;</span><span class="p">:</span>  <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">meta_dict</span><span class="p">),</span>
+                    <span class="s">&#39;filter_result&#39;</span><span class="p">:</span> <span class="bp">True</span>
+            <span class="p">}</span>
 
-        <span class="c"># Try to execute the source</span>
-        <span class="c"># and stop if any filter says no</span>
-        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Exec:&#39;</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
-                <span class="k">exec</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_dict</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="c"># an error inside the filter happened,</span>
-                <span class="c"># this is probably one of the few reasons where</span>
-                <span class="c"># a catchall is fine. :)</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Got Exception while executing the filter from:&#39;</span><span class="p">)</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="c"># Try to execute the source</span>
+            <span class="c"># and stop if any filter says no</span>
+            <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__source_list</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Exec:&#39;</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+                    <span class="k">exec</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_dict</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="c"># an error inside the filter happened,</span>
+                    <span class="c"># this is probably one of the few reasons where</span>
+                    <span class="c"># a catchall is fine. :)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Got Exception while executing the filter from:&#39;</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
 
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">input_dict</span><span class="p">[</span><span class="s">&#39;filter_result&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
-                    <span class="n">decision</span> <span class="o">=</span> <span class="bp">False</span>
-                    <span class="k">break</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;You deleted filter_result, filthy Bastard!&#39;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">input_dict</span><span class="p">[</span><span class="s">&#39;filter_result&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                        <span class="n">decision</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;You deleted filter_result, filthy Bastard!&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">decision</span>
 
@@ -205,7 +207,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -224,13 +226,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

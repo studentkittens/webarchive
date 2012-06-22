@@ -74,15 +74,15 @@ iterating over all data in the internal metadata-list and builiding SQL Statemen
 <p>For Peformance-reasons only very simple insert-statements are used in combination
 with as simple select statements, instead of insert-statements with sub-selects.</p>
 <hr class="docutils" />
-<span class="target" id="module-crawler.dbgen"></span><p>DBGenerator is capable of generating an sqlite database
+<span class="target" id="module-archive.crawler.dbgen"></span><p>DBGenerator is capable of generating an sqlite database
 from a list of metadictionaries.</p>
 <dl class="class">
-<dt id="crawler.dbgen.DBGenerator">
-<em class="property">class </em><tt class="descclassname">crawler.dbgen.</tt><tt class="descname">DBGenerator</tt><big>(</big><em>meta_list=None</em>, <em>abspath=None</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator">
+<em class="property">class </em><tt class="descclassname">archive.crawler.dbgen.</tt><tt class="descname">DBGenerator</tt><big>(</big><em>meta_list=None</em>, <em>abspath=None</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>DBGenerator module</p>
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.batch">
-<tt class="descname">batch</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.batch" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.batch">
+<tt class="descname">batch</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start db creating procedure</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -95,14 +95,14 @@ from a list of metadictionaries.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.close">
-<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.close" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close connection and commit.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.execute_statement">
-<tt class="descname">execute_statement</tt><big>(</big><em>source_name</em>, <em>arglist=None</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.execute_statement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.execute_statement" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.execute_statement">
+<tt class="descname">execute_statement</tt><big>(</big><em>source_name</em>, <em>arglist=None</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.execute_statement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.execute_statement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exececute a previously loaded statement by name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,26 +117,26 @@ from a list of metadictionaries.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.insert_history">
-<tt class="descname">insert_history</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_history" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.insert_history">
+<tt class="descname">insert_history</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.insert_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.insert_history" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill history table</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.insert_mdata_ctag">
-<tt class="descname">insert_mdata_ctag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_mdata_ctag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_mdata_ctag" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.insert_mdata_ctag">
+<tt class="descname">insert_mdata_ctag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.insert_mdata_ctag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.insert_mdata_ctag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill metadata and committag table</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.insert_mime_domain">
-<tt class="descname">insert_mime_domain</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.insert_mime_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.insert_mime_domain" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.insert_mime_domain">
+<tt class="descname">insert_mime_domain</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.insert_mime_domain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.insert_mime_domain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill mimeType and domain table</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.load_statements">
-<tt class="descname">load_statements</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.load_statements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.load_statements" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.load_statements">
+<tt class="descname">load_statements</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.load_statements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.load_statements" title="Permalink to this definition">¶</a></dt>
 <dd><p>(Re-)Load Sql Files from Disk</p>
 <p>This is already called in init</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -150,8 +150,8 @@ from a list of metadictionaries.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.dbgen.DBGenerator.select">
-<tt class="descname">select</tt><big>(</big><em>table</em>, <em>*columns</em><big>)</big><a class="reference internal" href="_modules/crawler/dbgen.html#DBGenerator.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.dbgen.DBGenerator.select" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.dbgen.DBGenerator.select">
+<tt class="descname">select</tt><big>(</big><em>table</em>, <em>*columns</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/dbgen.html#DBGenerator.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.dbgen.DBGenerator.select" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal helper for collecting data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

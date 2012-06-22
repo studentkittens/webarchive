@@ -67,13 +67,13 @@ but one may write an extractor function that will be called for a specific mimeT
 </pre></div>
 </div>
 </div>
-<div class="section" id="module-crawler.extractor">
-<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-crawler.extractor" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-archive.crawler.extractor">
+<span id="implementation"></span><h2>Implementation<a class="headerlink" href="#module-archive.crawler.extractor" title="Permalink to this headline">¶</a></h2>
 <p>Title extractor module which makes possible to extract title names
 from various content files. Currently only text/html files are supported.</p>
 <dl class="function">
-<dt id="crawler.extractor.extract_html">
-<tt class="descclassname">crawler.extractor.</tt><tt class="descname">extract_html</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="_modules/crawler/extractor.html#extract_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.extractor.extract_html" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.extractor.extract_html">
+<tt class="descclassname">archive.crawler.extractor.</tt><tt class="descname">extract_html</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/extractor.html#extract_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.extractor.extract_html" title="Permalink to this definition">¶</a></dt>
 <dd><p>Title extractor for text/html files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -88,8 +88,8 @@ from various content files. Currently only text/html files are supported.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="crawler.extractor.get_title">
-<tt class="descclassname">crawler.extractor.</tt><tt class="descname">get_title</tt><big>(</big><em>file_path</em>, <em>mime</em><big>)</big><a class="reference internal" href="_modules/crawler/extractor.html#get_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.extractor.get_title" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.extractor.get_title">
+<tt class="descclassname">archive.crawler.extractor.</tt><tt class="descname">get_title</tt><big>(</big><em>file_path</em>, <em>mime</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/extractor.html#get_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.extractor.get_title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extractor &#8216;interface&#8217; to delegate file by
 mime type</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -120,7 +120,7 @@ else an empty string will be returned</td>
   <ul>
 <li><a class="reference internal" href="#">Extracting data from crawled content</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#module-crawler.extractor">Implementation</a></li>
+<li><a class="reference internal" href="#module-archive.crawler.extractor">Implementation</a></li>
 </ul>
 </li>
 </ul>

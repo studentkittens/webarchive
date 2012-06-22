@@ -7,38 +7,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dbrecover.xml_recover &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.dbrecover.xml_recover &mdash; Webarchiv 1.0 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
+        URL_ROOT:    '../../../',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -47,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for dbrecover.xml_recover</h1><div class="highlight"><pre>
+  <h1>Source code for archive.dbrecover.xml_recover</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># encoding: utf-8</span>
 
@@ -61,16 +61,16 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">fnmatch</span>
-<span class="kn">import</span> <span class="nn">crawler.git</span> <span class="kn">as</span> <span class="nn">git</span>
-<span class="kn">import</span> <span class="nn">util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">threading</span>
-
-<span class="kn">from</span> <span class="nn">crawler.xmlreader</span> <span class="kn">import</span> <span class="n">XmlReader</span>
 <span class="kn">from</span> <span class="nn">multiprocessing.pool</span> <span class="kn">import</span> <span class="n">ThreadPool</span>
 
+<span class="kn">from</span> <span class="nn">archive.crawler.xmlreader</span> <span class="kn">import</span> <span class="n">XmlReader</span>
+<span class="kn">import</span> <span class="nn">archive.crawler.git</span> <span class="kn">as</span> <span class="nn">git</span>
+<span class="kn">import</span> <span class="nn">archive.util.paths</span> <span class="kn">as</span> <span class="nn">paths</span>
 
-<div class="viewcode-block" id="XMLDBRecover"><a class="viewcode-back" href="../../recover.html#dbrecover.xml_recover.XMLDBRecover">[docs]</a><span class="k">class</span> <span class="nc">XMLDBRecover</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="XMLDBRecover"><a class="viewcode-back" href="../../../recover.html#archive.dbrecover.xml_recover.XMLDBRecover">[docs]</a><span class="k">class</span> <span class="nc">XMLDBRecover</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    XMLDBRecover submodule class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -83,7 +83,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__shutdown</span> <span class="o">=</span> <span class="bp">False</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="XMLDBRecover.description"><a class="viewcode-back" href="../../recover.html#dbrecover.xml_recover.XMLDBRecover.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="XMLDBRecover.description"><a class="viewcode-back" href="../../../recover.html#archive.dbrecover.xml_recover.XMLDBRecover.description">[docs]</a>    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :returns: module description</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -133,7 +133,7 @@
             <span class="n">wrapper</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__iterate_commits</span><span class="p">(</span><span class="n">wrapper</span><span class="p">)</span>
 
-<div class="viewcode-block" id="XMLDBRecover.recover_domain"><a class="viewcode-back" href="../../recover.html#dbrecover.xml_recover.XMLDBRecover.recover_domain">[docs]</a>    <span class="k">def</span> <span class="nf">recover_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+<div class="viewcode-block" id="XMLDBRecover.recover_domain"><a class="viewcode-back" href="../../../recover.html#archive.dbrecover.xml_recover.XMLDBRecover.recover_domain">[docs]</a>    <span class="k">def</span> <span class="nf">recover_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterates through given domain trying to recover metadata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -145,7 +145,7 @@
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">wrapper</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s">&#39;master&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="XMLDBRecover.load"><a class="viewcode-back" href="../../recover.html#dbrecover.xml_recover.XMLDBRecover.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="XMLDBRecover.load"><a class="viewcode-back" href="../../../recover.html#archive.dbrecover.xml_recover.XMLDBRecover.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Invokes threaded xml recovery</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -167,15 +167,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span>
 </div>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalist</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-</div>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">rec</span> <span class="o">=</span> <span class="n">XMLDBRecover</span><span class="p">()</span>
-    <span class="n">rec</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+        <span class="k">pass</span></div>
 </pre></div>
 
           </div>
@@ -185,7 +177,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -204,13 +196,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

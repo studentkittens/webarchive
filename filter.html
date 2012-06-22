@@ -87,12 +87,12 @@ and no other filters will be called. By default this is on <strong>True</strong>
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p><strong>Internal usage of the Filtersystem:</strong></p>
 <dl class="class">
-<dt id="crawler.filter.FilterSystem">
-<em class="property">class </em><tt class="descclassname">crawler.filter.</tt><tt class="descname">FilterSystem</tt><big>(</big><em>plugin_path=None</em><big>)</big><a class="reference internal" href="_modules/crawler/filter.html#FilterSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.filter.FilterSystem" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.filter.FilterSystem">
+<em class="property">class </em><tt class="descclassname">archive.crawler.filter.</tt><tt class="descname">FilterSystem</tt><big>(</big><em>plugin_path=None</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/filter.html#FilterSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.filter.FilterSystem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filtersystem submodule invoked by a crawljob</p>
 <dl class="method">
-<dt id="crawler.filter.FilterSystem.check">
-<tt class="descname">check</tt><big>(</big><em>meta_dict</em><big>)</big><a class="reference internal" href="_modules/crawler/filter.html#FilterSystem.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.filter.FilterSystem.check" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.filter.FilterSystem.check">
+<tt class="descname">check</tt><big>(</big><em>meta_dict</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/filter.html#FilterSystem.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.filter.FilterSystem.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform the actual filtering</p>
 <p>Iterate over all loaded filters, and exec() them</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -109,14 +109,14 @@ as a &#8216;filter_input&#8217; global var</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.filter.FilterSystem.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/filter.html#FilterSystem.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.filter.FilterSystem.clear" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.filter.FilterSystem.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/filter.html#FilterSystem.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.filter.FilterSystem.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears loaded filters</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.filter.FilterSystem.load">
-<tt class="descname">load</tt><big>(</big><em>plugin_path=None</em><big>)</big><a class="reference internal" href="_modules/crawler/filter.html#FilterSystem.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.filter.FilterSystem.load" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.filter.FilterSystem.load">
+<tt class="descname">load</tt><big>(</big><em>plugin_path=None</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/filter.html#FilterSystem.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.filter.FilterSystem.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a list of *.py files from a directory</p>
 <p>The .py files are read in and stored in-memory</p>
 <table class="docutils field-list" frame="void" rules="none">

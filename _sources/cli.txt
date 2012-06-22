@@ -57,5 +57,5 @@ Additional Notes
 Implementation
 --------------
 
-.. autoclass:: cli.cmdparser.Cli
+.. autoclass:: archive.cli.cmdparser.Cli
    :members:

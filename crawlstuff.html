@@ -69,27 +69,27 @@ implementation.</p>
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p><strong>Internal usage of the Crawljob:</strong></p>
 <dl class="class">
-<dt id="cmanager.crawlmanager.CrawlerManager">
-<em class="property">class </em><tt class="descclassname">cmanager.crawlmanager.</tt><tt class="descname">CrawlerManager</tt><big>(</big><em>urls</em><big>)</big><a class="reference internal" href="_modules/cmanager/crawlmanager.html#CrawlerManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.crawlmanager.CrawlerManager" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.crawlmanager.CrawlerManager">
+<em class="property">class </em><tt class="descclassname">archive.cmanager.crawlmanager.</tt><tt class="descname">CrawlerManager</tt><big>(</big><em>urls</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/crawlmanager.html#CrawlerManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.crawlmanager.CrawlerManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crawljob manager, threadpool which launches a pool of
 threads</p>
 <dl class="method">
-<dt id="cmanager.crawlmanager.CrawlerManager.register_done">
-<tt class="descname">register_done</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/cmanager/crawlmanager.html#CrawlerManager.register_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.crawlmanager.CrawlerManager.register_done" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.crawlmanager.CrawlerManager.register_done">
+<tt class="descname">register_done</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/archive/cmanager/crawlmanager.html#CrawlerManager.register_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.crawlmanager.CrawlerManager.register_done" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register method for callback function which is
 triggered after work is done</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.crawlmanager.CrawlerManager.shutdown">
-<tt class="descname">shutdown</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/crawlmanager.html#CrawlerManager.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.crawlmanager.CrawlerManager.shutdown" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.crawlmanager.CrawlerManager.shutdown">
+<tt class="descname">shutdown</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/crawlmanager.html#CrawlerManager.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.crawlmanager.CrawlerManager.shutdown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shuts down all currently running crawljobs
 and joins/closes the pool</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="cmanager.crawlmanager.CrawlerManager.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cmanager/crawlmanager.html#CrawlerManager.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cmanager.crawlmanager.CrawlerManager.start" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.cmanager.crawlmanager.CrawlerManager.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/cmanager/crawlmanager.html#CrawlerManager.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.cmanager.crawlmanager.CrawlerManager.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts threadpool with max number of instances</p>
 </dd></dl>
 
@@ -97,52 +97,52 @@ and joins/closes the pool</p>
 
 <p><strong>Internal usage of the Crawlmanager:</strong></p>
 <dl class="class">
-<dt id="crawler.crawljob.CrawlJob">
-<em class="property">class </em><tt class="descclassname">crawler.crawljob.</tt><tt class="descname">CrawlJob</tt><big>(</big><em>ident</em>, <em>url</em><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob">
+<em class="property">class </em><tt class="descclassname">archive.crawler.crawljob.</tt><tt class="descname">CrawlJob</tt><big>(</big><em>ident</em>, <em>url</em><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob" title="Permalink to this definition">¶</a></dt>
 <dd><p>A CrawlJob Process that starts with crawling
 and ends with db commit.</p>
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.run" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the Crawljob procedure</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.shutdown">
-<tt class="descname">shutdown</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.shutdown" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.shutdown">
+<tt class="descname">shutdown</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.shutdown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shutdown flag for &#8216;hard&#8217;-way shutdown</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.start_clean">
-<tt class="descname">start_clean</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.start_clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.start_clean" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.start_clean">
+<tt class="descname">start_clean</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.start_clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.start_clean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the cleaning procedure which kills empty files, dirs
 and restructures the complete dir hierarchy downloaded by a crawljob</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.start_crawl">
-<tt class="descname">start_crawl</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.start_crawl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.start_crawl" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.start_crawl">
+<tt class="descname">start_crawl</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.start_crawl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.start_crawl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the wget module to download specific website</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.start_dbgen">
-<tt class="descname">start_dbgen</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.start_dbgen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.start_dbgen" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.start_dbgen">
+<tt class="descname">start_dbgen</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.start_dbgen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.start_dbgen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invokes DB generator submodule to create db statements from
 metalist and &#8216;commiting&#8217; to db</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.start_sync">
-<tt class="descname">start_sync</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.start_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.start_sync" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.start_sync">
+<tt class="descname">start_sync</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.start_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.start_sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts rsync procedure (rsync submodule) to mirror temporaray source
 to destination -&gt; content archive path</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="crawler.crawljob.CrawlJob.start_xml_gen">
-<tt class="descname">start_xml_gen</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/crawler/crawljob.html#CrawlJob.start_xml_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#crawler.crawljob.CrawlJob.start_xml_gen" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.crawler.crawljob.CrawlJob.start_xml_gen">
+<tt class="descname">start_xml_gen</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/crawler/crawljob.html#CrawlJob.start_xml_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.crawler.crawljob.CrawlJob.start_xml_gen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dumps &#8216;in-memory&#8217; metadata list to xml files on disk</p>
 </dd></dl>
 

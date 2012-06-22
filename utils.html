@@ -56,15 +56,15 @@
   <div class="section" id="util-functions-internal-use-only">
 <h1>Util Functions (Internal Use only)<a class="headerlink" href="#util-functions-internal-use-only" title="Permalink to this headline">¶</a></h1>
 <p><strong>FS Mutexes:</strong></p>
-<span class="target" id="module-util.filelock"></span><dl class="class">
-<dt id="util.filelock.FileLock">
-<em class="property">class </em><tt class="descclassname">util.filelock.</tt><tt class="descname">FileLock</tt><big>(</big><em>file_name</em>, <em>folder='/home/chris/dev/webarchive/doku/sphinx'</em>, <em>timeout=10</em>, <em>delay=0.05</em>, <em>destroy=True</em><big>)</big><a class="reference internal" href="_modules/util/filelock.html#FileLock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.filelock.FileLock" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-archive.util.filelock"></span><dl class="class">
+<dt id="archive.util.filelock.FileLock">
+<em class="property">class </em><tt class="descclassname">archive.util.filelock.</tt><tt class="descname">FileLock</tt><big>(</big><em>file_name</em>, <em>folder='/home/chris/dev/webarchive/doku/sphinx'</em>, <em>timeout=10</em>, <em>delay=0.05</em>, <em>destroy=True</em><big>)</big><a class="reference internal" href="_modules/archive/util/filelock.html#FileLock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.filelock.FileLock" title="Permalink to this definition">¶</a></dt>
 <dd><p>A file locking mechanism that has context-manager support so
 you can use it in a with statement. This should be relatively cross
 compatible as it doesn&#8217;t rely on msvcrt or fcntl for the locking.</p>
 <dl class="method">
-<dt id="util.filelock.FileLock.acquire">
-<tt class="descname">acquire</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/filelock.html#FileLock.acquire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.filelock.FileLock.acquire" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.filelock.FileLock.acquire">
+<tt class="descname">acquire</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/filelock.html#FileLock.acquire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.filelock.FileLock.acquire" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acquire the lock, if possible. If the lock is in use, it check again
 every <cite>wait</cite> seconds. It does this until it either gets the lock or
 exceeds <cite>timeout</cite> number of seconds, in which case it throws
@@ -72,8 +72,8 @@ an exception.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="util.filelock.FileLock.release">
-<tt class="descname">release</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/filelock.html#FileLock.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.filelock.FileLock.release" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.filelock.FileLock.release">
+<tt class="descname">release</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/filelock.html#FileLock.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.filelock.FileLock.release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get rid of the lock by deleting the lockfile.
 When working in a <cite>with</cite> statement, this gets automatically
 called at the end.</p>
@@ -83,10 +83,10 @@ called at the end.</p>
 
 <hr class="docutils" />
 <p><strong>File Handling:</strong></p>
-<span class="target" id="module-util.files"></span><p>Helper module for url.txt</p>
+<span class="target" id="module-archive.util.files"></span><p>Helper module for url.txt</p>
 <dl class="function">
-<dt id="util.files.unique_items_from_file">
-<tt class="descclassname">util.files.</tt><tt class="descname">unique_items_from_file</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/util/files.html#unique_items_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.files.unique_items_from_file" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.files.unique_items_from_file">
+<tt class="descclassname">archive.util.files.</tt><tt class="descname">unique_items_from_file</tt><big>(</big><em>path='/tmp/archive/url.txt'</em><big>)</big><a class="reference internal" href="_modules/archive/util/files.html#unique_items_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.files.unique_items_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a unique set with urls from a given file
 commented urls &#8216;#&#8217; are ignored</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -101,10 +101,10 @@ commented urls &#8216;#&#8217; are ignored</p>
 
 <hr class="docutils" />
 <p><strong>Often used paths:</strong></p>
-<span class="target" id="module-util.paths"></span><p>Path helper module</p>
+<span class="target" id="module-archive.util.paths"></span><p>Path helper module</p>
 <dl class="function">
-<dt id="util.paths.get_archive_root">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_archive_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_archive_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_archive_root" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_archive_root">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_archive_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_archive_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_archive_root" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -116,8 +116,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_content_root">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_content_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_content_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_content_root" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_content_root">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_content_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_content_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_content_root" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -129,8 +129,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_dbpath">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_dbpath</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_dbpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_dbpath" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_dbpath">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_dbpath</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_dbpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_dbpath" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -142,8 +142,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_domain_path">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_domain_path</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_domain_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_domain_path" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_domain_path">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_domain_path</tt><big>(</big><em>domain</em><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_domain_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_domain_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates domain path from archive path an given domain</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -158,8 +158,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_log_dir">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_log_dir</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_log_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_log_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_log_dir">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_log_dir</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_log_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_log_dir" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -171,8 +171,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_sqlpath">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_sqlpath</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_sqlpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_sqlpath" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_sqlpath">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_sqlpath</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_sqlpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_sqlpath" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -184,8 +184,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.paths.get_temp_root">
-<tt class="descclassname">util.paths.</tt><tt class="descname">get_temp_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/paths.html#get_temp_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.paths.get_temp_root" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.paths.get_temp_root">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_temp_root</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_temp_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_temp_root" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -196,12 +196,25 @@ commented urls &#8216;#&#8217; are ignored</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="archive.util.paths.get_urllist_path">
+<tt class="descclassname">archive.util.paths.</tt><tt class="descname">get_urllist_path</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/paths.html#get_urllist_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.paths.get_urllist_path" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">return path to url.txt</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <hr class="docutils" />
 <p><strong>Often used Time-Helpers:</strong></p>
-<span class="target" id="module-util.times"></span><p>Time helper module</p>
+<span class="target" id="module-archive.util.times"></span><p>Time helper module</p>
 <dl class="function">
-<dt id="util.times.get_ctime">
-<tt class="descclassname">util.times.</tt><tt class="descname">get_ctime</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="_modules/util/times.html#get_ctime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.times.get_ctime" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.times.get_ctime">
+<tt class="descclassname">archive.util.times.</tt><tt class="descname">get_ctime</tt><big>(</big><em>file_path</em><big>)</big><a class="reference internal" href="_modules/archive/util/times.html#get_ctime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.times.get_ctime" title="Permalink to this definition">¶</a></dt>
 <dd><p>gets ISO 8601 formated timestamp (create time) of a given file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -216,8 +229,8 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.times.get_localtime_sec">
-<tt class="descclassname">util.times.</tt><tt class="descname">get_localtime_sec</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/times.html#get_localtime_sec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.times.get_localtime_sec" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.times.get_localtime_sec">
+<tt class="descclassname">archive.util.times.</tt><tt class="descname">get_localtime_sec</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/times.html#get_localtime_sec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.times.get_localtime_sec" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -229,15 +242,22 @@ commented urls &#8216;#&#8217; are ignored</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.times.get_sys_time">
-<tt class="descclassname">util.times.</tt><tt class="descname">get_sys_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/util/times.html#get_sys_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.times.get_sys_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>localtime as ISO 8601 timestamp
-:returns: ISO 8601 formated timestamp as string</p>
+<dt id="archive.util.times.get_sys_time">
+<tt class="descclassname">archive.util.times.</tt><tt class="descname">get_sys_time</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/archive/util/times.html#get_sys_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.times.get_sys_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>localtime as ISO 8601 timestamp</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ISO 8601 formated timestamp as string</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="util.times.sec_to_timestamp">
-<tt class="descclassname">util.times.</tt><tt class="descname">sec_to_timestamp</tt><big>(</big><em>form</em>, <em>seconds</em><big>)</big><a class="reference internal" href="_modules/util/times.html#sec_to_timestamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.times.sec_to_timestamp" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.util.times.sec_to_timestamp">
+<tt class="descclassname">archive.util.times.</tt><tt class="descname">sec_to_timestamp</tt><big>(</big><em>form</em>, <em>seconds</em><big>)</big><a class="reference internal" href="_modules/archive/util/times.html#sec_to_timestamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.util.times.sec_to_timestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts seconds to a timestamp defined by form</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
