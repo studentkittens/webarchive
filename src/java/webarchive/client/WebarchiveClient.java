@@ -25,7 +25,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 		con = cl.getConnection();
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<MetaData> select(Select select) throws Exception {
 		Object answer = queryServer(Header.SQL,select);
@@ -58,7 +58,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 
 
 	public XmlEditor getXMLEdit(MetaData meta) throws Exception {
-		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,null //TODO));
+		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,meta.getPath()));
 		assert answer instanceof XmlEditor;
 		return (XmlEditor) answer;
 	}

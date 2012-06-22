@@ -2,12 +2,13 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
+import webarchive.dbaccess.DbConfigHandler;
 import webarchive.dbaccess.SqlHandler;
 import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.HandlerCollection;
+import webarchive.init.ConfigHandler;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-import webarchive.xml.XmlConf;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,11 +22,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xml.sax.SAXException;
 
 public class Server implements Runnable,NetworkModule {
 
-    private static final int DEFAULT_PORT = 21000;
 
     private int listenPort;
     private ServerSocket svSock;
@@ -37,14 +36,24 @@ public class Server implements Runnable,NetworkModule {
     
     private Thread thread;
     
-    private static Server sv=null;
+    public Thread getThread() {
+		return thread;
+	}
+
+
+	private static Server sv=null;
 
     private Server() {
-    	this.listenPort = DEFAULT_PORT;
-        
+    	sv = this;
+    	getHandlers().add(new ConfigHandler());
+    	getHandlers().add(new SvConfigHandler());
+    	getHandlers().add(new DbConfigHandler());
+    	
+    	this.listenPort = new Integer(((SvConfigHandler)getHandlers().get("SvConfigHandler")).getValue("port"));
+    	
         this.cList = new ArrayList<Connection>();
         this.observers = new ArrayList<Connection>();
-        sv = this;
+        
         getHandlers().add(new FileHandler());
         try {
 			getHandlers().add(new LockHandler(InetAddress.getLocalHost(),42421));
@@ -52,13 +61,13 @@ public class Server implements Runnable,NetworkModule {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        try {
-			getHandlers().add(new XmlConf()); //TODO
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        getHandlers().add(new SqlHandler( new SqliteAccess(new File ("bla"))));
+//        try {
+//			getHandlers().add(new XmlConf()); //TODO
+//		} catch (SAXException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+        getHandlers().add( new SqlHandler( new SqliteAccess( new File(((DbConfigHandler)getHandlers().get("DbConfigHandler")).getValue("path")))));
     }
     
     public static Server getInstance() {
@@ -88,11 +97,10 @@ public class Server implements Runnable,NetworkModule {
 	    		System.out.println("closing svSock");
 				svSock.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
 
 			}
     	}
-    	thread = null;
     	return true;
     }
     
@@ -104,7 +112,9 @@ public class Server implements Runnable,NetworkModule {
 			if(isRunning())
 				return;
 			setRunning(true);
+		}
 			accept();
+		synchronized (running) {
 			setRunning(false);
 		}
 	}
@@ -119,20 +129,18 @@ public class Server implements Runnable,NetworkModule {
     }
     
     private void disconnectClients() {
-    	System.out.println("disconnecting Clients");
+    	System.out.println("disconnecting Clients " + cList.size());
     	synchronized (cList) {
 	    	for(Connection c : cList) {
-	    		
-				try {
-					c.getSocket().close();
-					
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+					try {
+						c.getSocket().close();
+						
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	    	}
-	    	cList.clear();
+		    cList.clear();
     	}
     	System.out.println("Clients disconnected");
     }

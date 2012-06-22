@@ -26,6 +26,5 @@
         <notify>
             <interval>1:0:0</interval>
         </notify>
-
     </server>
 </webarchive>

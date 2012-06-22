@@ -21,12 +21,13 @@ public class LockHandler extends Handler {
 	public LockHandler(InetAddress ip, int port) {
 		this.ip = ip;
 		this.port=port;
+		
 		reconnect();
 		
 	}
 	
 	public void reconnect() {
-		if(!sock.isClosed()) {
+		if(sock != null && !sock.isClosed()) {
 			try {
 				sock.close();
 			} catch (IOException e) {
@@ -63,9 +64,11 @@ public class LockHandler extends Handler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		checkout(fd);
 	}
 
 	public void unlock(FileDescriptor fd) {
+		commit(fd);
 		String domain = fd.getMetaData().getCommitTag().getDomain();
 		out.write("unlock "+ domain+"\n");
 		out.flush();

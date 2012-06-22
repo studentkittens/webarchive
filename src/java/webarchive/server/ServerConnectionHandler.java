@@ -38,6 +38,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		this.locker = (LockHandler) netMod.getHandlers().get("LockHandler");
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void handle(Message msg) {
 
@@ -80,9 +81,9 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			case WRITEFILE:
 			{
 				FileBuffer buf = (FileBuffer)msg.getData();
-				locker.checkout(buf.getFd());
+				locker.lock(buf.getFd());
 				io.write(buf);
-				locker.commit(buf.getFd());
+				locker.unlock(buf.getFd());
 				Message answer = new Message(msg,null);
 				answer.setHeader(Header.SUCCESS);
 				try {
@@ -97,6 +98,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			case READFILE:
 			{
 				FileDescriptor fd = (FileDescriptor)msg.getData();
+				
 				locker.lock(fd);
 				FileBuffer buf = io.read(fd);
 				locker.unlock(fd);

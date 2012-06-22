@@ -12,7 +12,7 @@ import webarchive.connection.NetworkModule;
 import webarchive.handler.HandlerCollection;
 
 public class Client implements NetworkModule  {
-	public static final int DEFAULT_PORT = 21000;
+	public static final int DEFAULT_PORT = 42420;
 
 	private String ip;
 	private int port;
