@@ -11,7 +11,6 @@ import org.w3c.dom.NodeList;
  * @see webarchive.api.xml.DataElement for interface details.
  * @author ccwelich
  */
-//TODO tests
 public class DataElement implements webarchive.api.xml.DataElement {
 
 	private Element dataElement;

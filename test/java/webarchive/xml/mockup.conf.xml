@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webarchive>
+	<general>
+		<root>/archive</root>
+		<filterpath>/filterpath/</filterpath>
+	</general>
+    <!-- modules -->	
+	<crawler> 
+		<depth>5</depth>
+		<interval>2:0:0</interval>
+		<maxInst>10</maxInst>
+		<userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
+		<tempRoot>tmp</tempRoot>
+		<IgnoreRobots>true</IgnoreRobots>
+	</crawler>
+	<db> 
+		<path>db/metadata.db</path>
+		<sqlSource>/some/path</sqlSource>
+	</db>
+	<xml>
+		<autoValidatingMode>always</autoValidatingMode>
+		<namespace>http://www.hof-university.de/webarchive</namespace>
+		<prefix>wa</prefix>
+		<schemaPath>test/xml/file.xsd</schemaPath>
+	</xml>
+	<server>
+		<port>42420</port>
+		<host>webarchive-server</host>
+		<notify>
+			<interval>1:0:0</interval>
+		</notify>
+	</server> 
+</webarchive>

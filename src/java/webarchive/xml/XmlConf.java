@@ -22,9 +22,10 @@ public class XmlConf extends Handler {
 	private String prefix = "wa";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
-	
+
 	public XmlConf() throws IllegalArgumentException {
-		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).getConfig();
+		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).
+			getConfig();
 		Element xmlRoot = (Element) dom.getElementsByTagName("xml").item(0);
 		buildConf(xmlRoot);
 	}
@@ -86,7 +87,11 @@ public class XmlConf extends Handler {
 				throw new IllegalArgumentException(
 					"value is empty: " + tagName + "=" + val);
 			}
+			System.out.println(
+				"XmlConf::buildConf tagName=" + tagName + ", val=" + val);
 			switch (tagName) {
+				case "#text":
+					break;
 				case "autoValidatingMode":
 					autoValidatingMode = mode(val);
 					break;
@@ -108,8 +113,6 @@ public class XmlConf extends Handler {
 			}
 		}
 	}
-
-	
 
 	private AutoValidatingMode mode(String val) {
 		val = val.toUpperCase();

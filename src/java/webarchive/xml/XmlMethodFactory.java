@@ -34,7 +34,7 @@ public class XmlMethodFactory extends Handler {
 	private final TransformerFactory transformerFactory;
 	private LockHandlerImpl locker;
 
-	private XmlMethodFactory(LockHandler locker) throws SAXException {
+	public XmlMethodFactory(LockHandler locker) throws SAXException {
 		buildSchema();
 		xmlErrorHandler=null;
 		//build final documentBuilderFactory

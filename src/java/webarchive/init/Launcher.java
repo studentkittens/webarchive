@@ -17,6 +17,7 @@ import webarchive.server.LockHandlerImpl;
 import webarchive.server.Server;
 import webarchive.server.SvConfigHandler;
 import webarchive.xml.XmlConf;
+import webarchive.xml.XmlMethodFactory;
 
 public class Launcher {
 
@@ -75,6 +76,9 @@ public class Launcher {
 			get(DbConfigHandler.class)).getValue("path")))));
 		Handlers.add(new XmlConf());
 		Handlers.add(new FileHandler());
-		Handlers.add(new LockHandlerImpl(InetAddress.getLocalHost(), 42421));
+		final LockHandlerImpl lockHandler = new LockHandlerImpl(InetAddress.getLocalHost(), 42421);
+		Handlers.add(lockHandler);
+		Handlers.add(new XmlMethodFactory(lockHandler));
+
 	}
 }
