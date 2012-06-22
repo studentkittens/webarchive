@@ -3,6 +3,8 @@ build/*
 nbproject/*
 javadoc/*
 *.doctree
+doku/sphinx/build/*
+test/xml/example.xml
 
 #-- vim files
 *.vim
