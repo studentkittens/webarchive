@@ -21,5 +21,7 @@ public interface LockHandler {
 	void reconnect();
 
 	void unlock(FileDescriptor fd);
+
+	public void checkoutMaster();
 	
 }

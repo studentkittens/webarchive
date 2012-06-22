@@ -15,6 +15,7 @@ import javax.xml.validation.Validator;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import webarchive.handler.Handler;
+import webarchive.handler.Handlers;
 import webarchive.server.LockHandler;
 import webarchive.server.LockHandlerImpl;
 import webarchive.server.Server;
@@ -27,34 +28,13 @@ import webarchive.transfer.FileDescriptor;
  */
 //TODO tests
 public class XmlMethodFactory extends Handler {
-	// static -- singleton
-	private static XmlMethodFactory instance;
-	
-	public static XmlMethodFactory getInstance() {
-		assert instance != null : "call init() first";
-		return instance;
-	}
-	
-	public static void init(XmlConf conf, LockHandler locker) throws SAXException { 
-		assert conf != null;
-		
-		instance = new XmlMethodFactory(conf, locker);
-	}
-	// member
 	private final DocumentBuilderFactory documentBuilderFactory;
 	private ErrorHandler xmlErrorHandler;
 	private Schema schema;
-	private XmlConf conf;
 	private final TransformerFactory transformerFactory;
 	private LockHandlerImpl locker;
 
-	public XmlConf getConf() {
-		return conf;
-	}
-
-	
-	private XmlMethodFactory(XmlConf conf, LockHandler locker) throws SAXException {
-		this.conf = conf;
+	private XmlMethodFactory(LockHandler locker) throws SAXException {
 		buildSchema();
 		xmlErrorHandler=null;
 		//build final documentBuilderFactory
@@ -66,8 +46,6 @@ public class XmlMethodFactory extends Handler {
 		documentBuilderFactory.setNamespaceAware(true);
 		//build transformer factory
 		transformerFactory = TransformerFactory.newInstance();
-		//build default locker
-		this.locker = (LockHandlerImpl)Server.getInstance().getHandlers().get("LockHandler");
 	}
 	
 	
@@ -123,9 +101,9 @@ public class XmlMethodFactory extends Handler {
 		return v;
 	}
 
-
 	private void buildSchema() throws SAXException {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		XmlConf conf = (XmlConf) Handlers.get(XmlConf.class);
 		schema = factory.newSchema(conf.getSchemaPath());
 	}
 

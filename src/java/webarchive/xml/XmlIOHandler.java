@@ -9,6 +9,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import webarchive.handler.Handlers;
+import webarchive.server.LockHandler;
 
 import webarchive.server.LockHandlerImpl;
 import webarchive.server.Server;
@@ -22,7 +24,7 @@ public class XmlIOHandler {
 
 	public Transformer transformer;
 	private final FileDescriptor xmlFile;
-	private LockHandlerImpl locker;
+	private LockHandler locker;
 
 	
 
@@ -40,7 +42,7 @@ public class XmlIOHandler {
 
 	public Document buildDocument() throws ParserConfigurationException,
 		IOException, SAXException {
-		DocumentBuilder db = XmlMethodFactory.getInstance().newDocumentBuilder();
+		DocumentBuilder db = ((XmlMethodFactory) Handlers.get(XmlMethodFactory.class)).newDocumentBuilder();
 		Document document = db.parse(xmlFile.getAbsolutePath());
 		return document;
 	}
@@ -58,6 +60,7 @@ public class XmlIOHandler {
 	}
 	public void unlock() {
 		//TODO
+		locker.checkoutMaster();
 		locker.unlock(xmlFile);
 	}
 }

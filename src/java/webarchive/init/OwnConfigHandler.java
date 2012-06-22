@@ -3,11 +3,12 @@ package webarchive.init;
 import org.w3c.dom.NodeList;
 
 import webarchive.handler.Handler;
+import webarchive.handler.Handlers;
 import webarchive.server.Server;
 
 public abstract class OwnConfigHandler extends Handler {
 
-	protected ConfigHandler cfgHandler = (ConfigHandler) Server.getInstance().getHandlers().get("ConfigHandler");
+	protected ConfigHandler cfgHandler = (ConfigHandler) Handlers.get(ConfigHandler.class);
 	protected NodeList nodeL;
 	
 	protected abstract void setNodeList();

@@ -1,6 +1,7 @@
 package webarchive.xml;
 
 import java.io.IOException;
+import java.util.logging.Handler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -10,6 +11,7 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import webarchive.handler.Handlers;
 import webarchive.transfer.FileDescriptor;
 
 /**
@@ -39,7 +41,7 @@ public class XmlHandler {
 		assert ioHandler != null;
 		
 		this.ioHandler = ioHandler;
-		this.mode = XmlMethodFactory.getInstance().getConf().getAutoValidatingMode();
+		this.mode = ((XmlConf)Handlers.get(XmlConf.class)).getAutoValidatingMode();
 		
 		// build document
 		ioHandler.lock();
@@ -59,7 +61,7 @@ public class XmlHandler {
 		if (mode == AutoValidatingMode.ALWAYS || mode == AutoValidatingMode.AFTER_BUILT_DOM) {
 			validate();
 		}
-		final String dataTag = XmlMethodFactory.getInstance().getConf().getDataTag();
+		final String dataTag = ((XmlConf)Handlers.get(XmlConf.class)).getDataTag();
 		this.data = (Element) (document.getElementsByTagName(dataTag).item(0));
 	}
 
@@ -68,7 +70,7 @@ public class XmlHandler {
 	}
 
 	private void validate() throws SAXException, IOException {
-		Validator v = XmlMethodFactory.getInstance().newXmlValidator();
+		Validator v = ((XmlMethodFactory)Handlers.get(XmlMethodFactory.class)).newXmlValidator();
 		v.validate(new DOMSource(document));
 	}
 

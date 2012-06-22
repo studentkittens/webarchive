@@ -139,5 +139,9 @@ public class LockHandlerImpl extends Handler implements LockHandler {
 			return;
 		throw new Exception(answer.substring(4));
 	}
+
+	public void checkoutMaster() {
+		//TODO
+	}
 	
 }

@@ -1,10 +1,10 @@
 package webarchive.connection;
 
-import webarchive.handler.HandlerCollection;
+import webarchive.handler.Handlers;
 
 public interface NetworkModule {
 
 	public void removeConnection(Connection c);
-	public HandlerCollection getHandlers();
+	//public Handlers getHandlers();
 	
 }

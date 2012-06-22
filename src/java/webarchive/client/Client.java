@@ -9,7 +9,7 @@ import java.util.Observable;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
-import webarchive.handler.HandlerCollection;
+import webarchive.handler.Handlers;
 
 public class Client implements NetworkModule  {
 	public static final int DEFAULT_PORT = 42420;
@@ -90,12 +90,6 @@ public class Client implements NetworkModule  {
 		Client cl = new Client();
 		cl.setIp("localhost");
 		cl.connectToServer();
-	}
-
-	@Override
-	public HandlerCollection getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public Observable getObservable() {

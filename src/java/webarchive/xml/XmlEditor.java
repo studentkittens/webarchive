@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import webarchive.client.Client;
 import webarchive.connection.Connection;
+import webarchive.handler.Handlers;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
@@ -22,7 +23,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	private final String dataTagName;
 	private Document document;
 	private Element dataNode; 	// the data-node
-	private final String prefix;
+	private String prefix;
 	private final String namespace;
 
 	/**
@@ -33,8 +34,8 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	 */
 	XmlEditor(Document document) {
 		assert document != null;
-		final XmlConf conf = XmlMethodFactory.getInstance().getConf();
-		prefix = conf.getPrefix();
+		final XmlConf conf = (XmlConf) Handlers.get(XmlConf.class);
+		setPrefix(conf.getPrefix());
 		dataTagName = conf.getDataTag();
 		namespace = conf.getNamespace();
 		setDocument(document);
@@ -96,5 +97,9 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 		assert prefix.endsWith(":");
 		int i = name.indexOf(':');
 		return prefix + ((i != -1) ? name : name.substring(i + 1));
+	}
+
+	private void setPrefix(String prefix) {
+		this.prefix = (prefix.endsWith(":")) ? prefix : prefix+':';
 	}
 }

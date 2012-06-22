@@ -1,5 +1,6 @@
 package webarchive.init;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,26 +18,19 @@ public class ConfigHandler extends Handler {
 
 	private Document config;
 	private Node rootNode;
-	private String configPath;
-	public ConfigHandler(String configPath) {
+	private File configPath;
+	public ConfigHandler(File configPath) throws ParserConfigurationException, SAXException, IOException {
 		this.configPath = configPath;
 		rebuild();
 	}
 	
-	protected void rebuild() {
-		DocumentBuilder builder=null;
-		try {
-			 builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			setConfig(builder.parse(configPath));
-		} catch (SAXException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected void rebuild() throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setValidating(false);
+		dbf.setIgnoringComments(true);
+		dbf.setIgnoringElementContentWhitespace(true);
+		DocumentBuilder builder=dbf.newDocumentBuilder();
+		setConfig(builder.parse(configPath));
 		rootNode = config.getChildNodes().item(0);
 	}
 

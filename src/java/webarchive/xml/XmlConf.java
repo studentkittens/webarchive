@@ -1,7 +1,13 @@
 package webarchive.xml;
 
 import java.io.File;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import webarchive.handler.Handler;
+import webarchive.handler.Handlers;
+import webarchive.init.ConfigHandler;
 
 /**
  * Config class for all Xml-related classes.
@@ -10,21 +16,17 @@ import webarchive.handler.Handler;
  */
 //TODO tests
 public class XmlConf extends Handler {
+
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
 	private String namespace = "http://www.hof-university.de/webarchive";
 	private String prefix = "wa";
 	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
-
-	/**
-	 * sets XmlHandler AutoValidatingMode. default: AFTER_UPDATE
-	 *
-	 * @see XmlConf.AutoValidatingMode
-	 * @param autoValidatingMode
-	 */
-	public void setAutoValidatingMode(AutoValidatingMode autoValidatingMode) {
-		assert autoValidatingMode != null;
-		this.autoValidatingMode = autoValidatingMode;
+	
+	public XmlConf() throws IllegalArgumentException {
+		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).getConfig();
+		Element xmlRoot = (Element) dom.getElementsByTagName("xml").item(0);
+		buildConf(xmlRoot);
 	}
 
 	/**
@@ -48,27 +50,6 @@ public class XmlConf extends Handler {
 	}
 
 	/**
-	 * set schema path. default: xml/file.xsd the schema is used for
-	 * XML-Metafile validation.
-	 *
-	 * @param schemaPath
-	 */
-	public void setSchemaPath(File schemaPath) {
-		assert schemaPath != null;
-		this.schemaPath = schemaPath;
-	}
-
-	/**
-	 * set the name of the data element according to XML-Metafile. default: data
-	 *
-	 * @param dataTag
-	 */
-	public void setDataTag(String dataTag) {
-		assert dataTag != null;
-		this.dataTag = dataTag;
-	}
-
-	/**
 	 * get the name of the data element according to XML-Metafile.
 	 *
 	 * @return data-element name
@@ -87,29 +68,6 @@ public class XmlConf extends Handler {
 	}
 
 	/**
-	 * set the namespace of all XML-elements according to XML-Metafile. default:
-	 * http://www.hof-university.de/webarchive
-	 *
-	 * @return namespace
-	 */
-	public void setNamespace(String namespace) {
-		assert namespace != null;
-		this.namespace = namespace;
-	}
-
-	/**
-	 * set the addPrefixTo of all XML-elements according to XML-Metafile. default:
-	 * "wa:"
-	 *
-	 * @param addPrefixTo
-	 */
-	public void setPrefix(String prefix) {
-		assert prefix != null;
-		assert !prefix.equals("");
-		this.prefix = (prefix.endsWith(":")) ? prefix : prefix + ':';
-	}
-
-	/**
 	 * get the addPrefixTo of all XML-elements according to XML-Metafile.
 	 *
 	 * @return
@@ -118,6 +76,44 @@ public class XmlConf extends Handler {
 		return prefix;
 	}
 
+	private void buildConf(Node xmlRoot) throws IllegalArgumentException {
+		NodeList items = xmlRoot.getChildNodes();
+		for (int i = 0; i < items.getLength(); i++) {
+			Node n = items.item(i);
+			final String tagName = n.getNodeName();
+			String val = n.getTextContent();
+			if (val == null || val.equals("")) {
+				throw new IllegalArgumentException(
+					"value is empty: " + tagName + "=" + val);
+			}
+			switch (tagName) {
+				case "autoValidatingMode":
+					autoValidatingMode = mode(val);
+					break;
+				case "namespace":
+					namespace = val;
+					break;
+				case "prefix":
+					prefix = val;
+					break;
+				case "dataTag":
+					dataTag = val;
+					break;
+				case "schemaPath":
+					schemaPath = new File(val);
+					break;
+				default:
+					throw new IllegalArgumentException(
+						"unsupported attribute: " + tagName + "=" + val);
+			}
+		}
+	}
+
 	
 
+	private AutoValidatingMode mode(String val) {
+		val = val.toUpperCase();
+		val = val.replace(' ', '_');
+		return AutoValidatingMode.valueOf(val);
+	}
 }
