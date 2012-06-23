@@ -55,10 +55,9 @@ from dbrecover.repair import repair
 
 import cmanager.intervalmanager as imgur
 import javadapter.server as javadapter
-import config.reader as config
+import config.handler as config
 import util.filelock as lock
 import util.paths as paths
-
 
 LOCKFILE = 'global'
 
