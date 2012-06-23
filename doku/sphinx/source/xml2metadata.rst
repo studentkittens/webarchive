@@ -50,12 +50,12 @@ Implementation
 
 **Reading:**
 
-.. autoclass:: crawler.xmlreader.XMLReader
+.. autoclass:: archive.crawler.xmlreader.XmlReader
   :members:
 
 ----------
 
 **Writing:**
 
-.. autoclass:: crawler.xmlgen.XmlGenerator
+.. autoclass:: archive.crawler.xmlgen.XmlGenerator
   :members:

@@ -54,6 +54,6 @@ Additional Notes:
 Implementation
 --------------
 
-.. autofunction:: config.reader.get
+.. autofunction:: archive.config.reader.get
 
-.. autofunction:: config.reader.get_default
+.. autofunction:: archive.config.reader.get_default
