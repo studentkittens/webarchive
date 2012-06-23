@@ -18,6 +18,8 @@ public class HandlerBuiltMockup {
 		SAXException, IOException, IllegalArgumentException {
 		Handlers.add(new ConfigHandler(new File("test/java/webarchive/xml/mockup.conf.xml")));
 		Handlers.add(new XmlConf());
-		Handlers.add(new LockHandlerMockup());
+		final LockHandlerMockup lockHandler = new LockHandlerMockup();
+		Handlers.add(lockHandler);
+		Handlers.add(new XmlMethodFactory(lockHandler));
 	}
 }

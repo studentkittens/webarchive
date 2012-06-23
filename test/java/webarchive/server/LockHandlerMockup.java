@@ -1,6 +1,8 @@
 package webarchive.server;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 import webarchive.handler.Handler;
@@ -35,6 +37,10 @@ public class LockHandlerMockup extends Handler implements LockHandler {
 		}
 	}
 	private Queue<State> states;
+
+	public LockHandlerMockup() {
+		this.states = new LinkedList<>();
+	}
 
 	@Override
 	public void checkout(FileDescriptor fd) {

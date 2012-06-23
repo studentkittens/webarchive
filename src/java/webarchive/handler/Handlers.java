@@ -13,8 +13,8 @@ public class Handlers {
 		assert pre==null;
 	}
 	
-	public static synchronized Handler get(Class<? extends Handler> name) {
-		return handlers.get(name);
+	public static synchronized  <T extends Handler> T get(Class<T> name) {
+		return (T) handlers.get(name);
 	}
 
 	public static void clear() {

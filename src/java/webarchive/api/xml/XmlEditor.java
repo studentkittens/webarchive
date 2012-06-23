@@ -24,7 +24,7 @@ public interface XmlEditor {
 	 * Note: all tagnames are internally prefixed. See {@link #addPrefixTo(java.lang.String) } if own prefixes are used.
 	 * @return the element, or null if there was no element with tagName
 	 */
-	public DataElement getDataElement(String tagName);
+	public DataElement getDataElement(TagName tagName);
 
 	/**
 	 * add a DataElement. The method adds an element to first level of the data
@@ -45,7 +45,7 @@ public interface XmlEditor {
 	 * Note: all tagnames are internally prefixed. See {@link #addPrefixTo(java.lang.String) } if own prefixes are used.
 	 * @return
 	 */
-	public Element createElement(String tagName);
+	public Element createElement(TagName tagName);
 
 	/**
 	 * creates a new empty DataElement. The element can be filled with
@@ -57,19 +57,9 @@ public interface XmlEditor {
 	 * to add the correct prefix.
 	 * @return dataElement whith name "<prefix>tagName"
 	 */
-	public DataElement createDataElement(String tagName);
+	public DataElement createDataElement(TagName tagName);
 
-	/**
-	 * adds a prefix to a given string by the default prefix. If name has already a
-	 * prefix, which is terminated by ':', then this prefix will be replaced by
-	 * the default prefix. <br/>
-	 * Note: use only if own prefixes are needed and add a template prefix at the beginning of the userdefined prefix.
-	 * The template prefix will then be overwritten.
-	 *
-	 * @param name name to addPrefixTo
-	 * @return addPrefixTo+name
-	 */
-	public String addPrefixTo(String name);
+	
 	
 	
 	

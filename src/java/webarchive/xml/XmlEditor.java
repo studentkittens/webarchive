@@ -1,9 +1,11 @@
 package webarchive.xml;
 
+import java.io.File;
 import java.io.Serializable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import webarchive.api.xml.TagName;
 import webarchive.client.Client;
 import webarchive.connection.Connection;
 import webarchive.handler.Handlers;
@@ -20,11 +22,8 @@ import webarchive.transfer.Message;
 //TODO tests
 public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
-	private final String dataTagName;
 	private Document document;
-	private Element dataNode; 	// the data-node
-	private String prefix;
-	private final String namespace;
+	private Element dataNode; 
 
 	/**
 	 * create XmlEditor
@@ -32,41 +31,37 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	 * @param document document used for editing
 	 * @param conf config data
 	 */
-	XmlEditor(Document document) {
+	XmlEditor(org.w3c.dom.Document document, org.w3c.dom.Element dataNode) {
 		assert document != null;
-		final XmlConf conf = (XmlConf) Handlers.get(XmlConf.class);
-		setPrefix(conf.getPrefix());
-		dataTagName = conf.getDataTag();
-		namespace = conf.getNamespace();
-		setDocument(document);
+		assert dataNode!=null;
+		this.document = document;
+		this.dataNode = dataNode;
 	}
 
-	private void setDocument(Document document) {
+
+	private void updateDocument(Document document) {
 		this.document = document;
 		dataNode = (Element) document.getElementsByTagName(
-			addPrefixTo(dataTagName)).item(0);
+			TagName.NAMESPACE.toString()).item(0);
 	}
 
 	@Override
-	public Element createElement(String tagName) {
-		tagName = addPrefixTo(tagName);
-		return document.createElementNS(namespace, tagName);
+	public Element createElement(TagName tagName) {
+		return document.createElementNS(TagName.NAMESPACE, tagName.getName());
 	}
 
 	@Override
-	public DataElement createDataElement(String tagName) {
-		tagName = addPrefixTo(tagName);
+	public DataElement createDataElement(TagName tagName) {
 		return new DataElement(
-			document.createElementNS(namespace, tagName), true);
+			document.createElementNS(TagName.NAMESPACE.toString(), tagName.getName()), true);
 	}
 
 	@Override
-	public DataElement getDataElement(String tagName) {
-		tagName = addPrefixTo(tagName);
+	public DataElement getDataElement(TagName tagName) {
 		NodeList list = dataNode.getChildNodes();
 		final int length = list.getLength();
 		for (int i = 0; i < length; i++) {
-			if (list.item(i).getNodeName().equals(tagName)) {
+			if (list.item(i).getNodeName().equals(tagName.getName())) {
 				return new DataElement((Element) list.item(i), false);
 			}
 		}
@@ -89,17 +84,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 		Message msg = new Message(Header.ADDXMLEDIT, element);
 		c.send(msg);
 		Message answer = c.waitForAnswer(msg);
-		setDocument((Document) answer.getData());
+		updateDocument((Document) answer.getData());
 	}
 
-	@Override
-	public final String addPrefixTo(String name) {
-		assert prefix.endsWith(":");
-		int i = name.indexOf(':');
-		return prefix + ((i != -1) ? name : name.substring(i + 1));
-	}
-
-	private void setPrefix(String prefix) {
-		this.prefix = (prefix.endsWith(":")) ? prefix : prefix+':';
-	}
 }

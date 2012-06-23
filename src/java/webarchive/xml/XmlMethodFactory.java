@@ -1,6 +1,8 @@
 package webarchive.xml;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,17 +28,16 @@ import webarchive.transfer.FileDescriptor;
  *
  * @author ccwelich
  */
-//TODO tests
 public class XmlMethodFactory extends Handler {
 	private final DocumentBuilderFactory documentBuilderFactory;
 	private ErrorHandler xmlErrorHandler;
 	private Schema schema;
 	private final TransformerFactory transformerFactory;
-	private LockHandlerImpl locker;
+	private LockHandler locker;
 
-	public XmlMethodFactory(LockHandler locker) throws SAXException {
+	public XmlMethodFactory(LockHandler locker) {
+		xmlErrorHandler=null; // not used
 		buildSchema();
-		xmlErrorHandler=null;
 		//build final documentBuilderFactory
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(false);
@@ -46,19 +47,25 @@ public class XmlMethodFactory extends Handler {
 		documentBuilderFactory.setNamespaceAware(true);
 		//build transformer factory
 		transformerFactory = TransformerFactory.newInstance();
+		this.locker = locker;
 	}
 	
 	
-	public XmlHandler newHandler(FileDescriptor xmlPath) throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException {
-		XmlIOHandler ioHandler = new XmlIOHandler(xmlPath, newTransformer(), locker);
+	public XmlHandler newXmlHandler(FileDescriptor xmlPath) throws SAXException {
+		XmlIOHandler ioHandler = null;
+		ioHandler = new XmlIOHandler(xmlPath, newTransformer(), locker);
 		return new XmlHandler(ioHandler);
-		
 	}
 	
-	Transformer newTransformer() throws TransformerConfigurationException {
-		Transformer transformer;
+	Transformer newTransformer() {
+		Transformer transformer = null;
 		synchronized(transformerFactory) {
-			transformer = transformerFactory.newTransformer();
+			try {
+				transformer = transformerFactory.newTransformer();
+			} catch (TransformerConfigurationException ex) {
+				Logger.getLogger(XmlMethodFactory.class.getName()).
+					log(Level.SEVERE, null, ex);
+			}
 		}
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
@@ -88,6 +95,7 @@ public class XmlMethodFactory extends Handler {
 	 */
 	public void setXmlErrorHandler(ErrorHandler xmlErrorHandler) {
 		this.xmlErrorHandler = xmlErrorHandler;
+		buildSchema();
 	}
 	
 	/**
@@ -101,10 +109,16 @@ public class XmlMethodFactory extends Handler {
 		return v;
 	}
 
-	private void buildSchema() throws SAXException {
+	private void buildSchema()  {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		XmlConf conf = (XmlConf) Handlers.get(XmlConf.class);
-		schema = factory.newSchema(conf.getSchemaPath());
+		factory.setErrorHandler(xmlErrorHandler);
+		XmlConf conf = Handlers.get(XmlConf.class);
+		try {
+			schema = factory.newSchema(conf.getSchemaPath());
+		} catch (SAXException ex) {
+			Logger.getLogger(XmlMethodFactory.class.getName()).
+				log(Level.SEVERE, null, ex);
+		}
 	}
 
 	

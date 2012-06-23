@@ -198,7 +198,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		XmlHandler xmlH = null;
 		try {
 			xmlH = ((XmlMethodFactory) Handlers.get(
-				XmlMethodFactory.class)).newHandler(fd);
+				XmlMethodFactory.class)).newXmlHandler(fd);
 		} catch (ParserConfigurationException |
 			SAXException |
 			IOException |

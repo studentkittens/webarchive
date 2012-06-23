@@ -78,7 +78,9 @@ public class Launcher {
 		Handlers.add(new FileHandler());
 		final LockHandlerImpl lockHandler = new LockHandlerImpl(InetAddress.getLocalHost(), 42421);
 		Handlers.add(lockHandler);
-		Handlers.add(new XmlMethodFactory(lockHandler));
+		final XmlMethodFactory xmlMethodFactory = new XmlMethodFactory(lockHandler);
+		xmlMethodFactory.setXmlErrorHandler(null); // XmlErrorHandler not used!
+		Handlers.add(xmlMethodFactory);
 
 	}
 }
