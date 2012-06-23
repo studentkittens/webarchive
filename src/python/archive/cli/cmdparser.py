@@ -91,18 +91,19 @@ class Cli(object):
 
         try:
             logging.basicConfig(level=severity,
-                                filename=os.path.join(paths.get_log_dir(), 'archive.log'),
+                    filename=os.path.join(paths.get_log_dir(), 'archive.log'),
                                 format='%(asctime)s - %(levelname)s - %(message)s')
+            pass
         except IOError as err:
             # Disable warning for initialization
             if self._args['init'] is False:
                 print('Cannot open log - file structure probably does not exist yet:', err)
 
         # Set up config to another file if desired
-        if self._args['--config']:
-            config.load(os.paths.abspath(self._args['<path>']))
-        else:
-            config.load('webarchive.conf.xml')
+        #if self._args['init'] is False and self._args['--config']:
+        #    config.load(os.paths.abspath(self._args['<path>']))
+        #elif self._args['init'] is False:
+        #    config.load('webarchive.conf.xml')
 
         # iterating through arguments
         for module, handler in submodules.items():

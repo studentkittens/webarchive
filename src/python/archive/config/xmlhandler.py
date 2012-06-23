@@ -5,8 +5,6 @@ __author__ = 'Florian Bauer'
 
 from xml.etree.ElementTree import ElementTree
 
-import logging
-
 tree = ElementTree()
 
 gConfigPath = 'webarchive.conf.xml'
@@ -33,7 +31,8 @@ def write_file():
     try:
         tree.write(gConfigPath)
     except:
-        logging.exception('Writing file failed')
+        pass
+    #logging.exception('Writing file failed')
 
 
 def get_element(value):
@@ -41,7 +40,7 @@ def get_element(value):
     try:
         return tree.findtext(xpath)
     except:
-        logging.info('Tagname not found')
+        #logging.info('Tagname not found')
         return ''
 
 

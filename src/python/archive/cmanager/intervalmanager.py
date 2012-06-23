@@ -67,6 +67,7 @@ class IntervalManager(object):
         """
         # fetch interval from config in seconds
         self.__interval = float(config.get('crawler.interval')) * 60
+        #self.__interval = 60
 
         # delay before next crawl
         if delay_in_sec != 0:

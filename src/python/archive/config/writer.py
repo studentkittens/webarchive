@@ -7,8 +7,8 @@ import archive.config.reader as reader
 import archive.config.xmlhandler as xmlhandler
 
 
-def set_value(tagname, str):
-    xmlhandler.set_element(tagname, str)
+def set_value(tagname, value):
+    xmlhandler.set_element(tagname, value)
 
 
 def set_default(value):

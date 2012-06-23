@@ -28,6 +28,7 @@ def crawljob(ident, url):
     :url: url to crawl
     """
     try:
+        logging.warning('GHA!')
         logging.info('Job #{cid} ({curl}) started.'.format(cid=ident, curl=url))
         j = job.CrawlJob(ident, url)
         running_mtx.acquire()
@@ -64,7 +65,9 @@ class CrawlerManager(object):
         self.__pool.close()
         self.__pool.join()
 
-        self.__done_callback()
+        if self.__done_callback is not None:
+            self.__done_callback()
+
         self.__done_callback = None
 
     def register_done(self, func):

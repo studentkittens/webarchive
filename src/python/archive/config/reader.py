@@ -3,7 +3,6 @@
 
 __author__ = 'Florian Bauer'
 
-import logging
 import archive.config.xmlhandler as xmlhandler
 import archive.config.options as options
 
@@ -12,7 +11,6 @@ def get_default(value):
     try:
         return options.default_options[value]
     except KeyError:
-        logging.info('No default found')
         return ''
 
 

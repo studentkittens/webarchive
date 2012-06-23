@@ -17,12 +17,8 @@ if __name__ == '__main__':
                     'archive.dbrecover',
                     'archive.init'
                     ],
+        data_files=[('/usr/bin', ['archive.py'])],
         url = "www.github.com/studentkittens/webarchive",
         author = "Christopher Pahl, Christoph Piechula",
         author_email = "cpahl@hof-university.de, cpiechula@hof-university.de"
         )
-
-    # This is a quick hack, as I couldn't find any nicer way
-    # Check if we are the root user
-    if os.getuid() != 0:
-        copyfile('archive.py', '/usr/bin/archive.py')

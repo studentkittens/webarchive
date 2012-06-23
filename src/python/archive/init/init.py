@@ -71,11 +71,12 @@ def init_archive(init_path=os.getcwd()):
 
 if __name__ == '__main__':
     import sys
+    import logging
 
     def main():
         if len(sys.argv) > 1:
             init_archive(sys.argv[1])
         else:
-            print('Usage: init <folder>')
+            logging.warn('Usage: init <folder>')
 
     main()
