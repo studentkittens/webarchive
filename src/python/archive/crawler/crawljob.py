@@ -70,6 +70,8 @@ class CrawlJob(object):
             rec = PickleDBRecover()
             rec.save(self.__metalist)
             logging.info('--> Done')
+        except OSError:
+            shutil.rmtree(self.__path, ignore_errors=True)
         except exceptions.ShutdownException:
             logging.info('Job #{cid} ({curl}) stopped.'
                   .format(cid=self.__ident, curl=self.__url))
@@ -121,7 +123,6 @@ class CrawlJob(object):
         """
         content_path = paths.get_content_root()
         itemlist = os.listdir(self.__path)
-
         for domain in itemlist:
             domain_path = paths.get_domain_path(domain)
             fsmutex = lock.FileLock(domain, folder=content_path, timeout=100)

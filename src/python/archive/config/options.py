@@ -3,6 +3,7 @@
 
 __author__ = 'Florian Bauer'
 
+
 default_options = {
         'general.root': '/tmp/archive/',
         'general.filterpath': 'filter/',
