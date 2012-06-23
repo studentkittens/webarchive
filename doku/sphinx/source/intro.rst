@@ -14,10 +14,32 @@ Getting Started
 Install the following modules from PyPI:
 
 - ``filemagic`` - Determining MIME Type
-- ``docopt`` - Intelligent argument Parsing
-- ``beautifulsoup4`` - Title Extraction from HTML
+- ``docopt`` - Intelligent argument Parsing from Help Text
 
-**Listen and Repeat:**
+You can do this via ``pip``, assuming you have Python 3.x installed:
+
+.. code-block:: bash
+
+  sudo pip install filemagic docopt
+    
+
+The program will most likely not work for Python 2.x; make sure you have a newer series installed:
+
+.. code-block:: bash
+
+   python --version
+
+Listen and Repeat
+-----------------
+
+First, you have to install the backend:
+
+.. code-block:: bash
+
+  $ git clone git://github.com/studentkittens/webarchive.git
+  $ cd webarchive/src/python
+  $ sudo python setup.py install
+  $ # Done!
 
 .. code-block:: bash
 
@@ -41,3 +63,24 @@ Install the following modules from PyPI:
   ...
   $ rm metadata.db               # Oops. This was an accident. I swear.
   $ archive.py db --rebuild      # But luckily we can just rebuild it.
+
+More Notes
+----------
+
+Available commands in the crawlershell:
+
+``start``
+  Starts the Intervalmanager; does nothing if started already.
+  Intervalmanager will start Crawlmanager repeatedly, while not stopped.
+``stop``
+  Stop Intervalmanager softly - Wait for Crawljobs to finish.
+  If you want to stop the Crawljobs immediately: Press ``CTRL-C`` in order to
+  shutdown Crawljobs cleanly or let finished Crawljobs sync their data.
+  Does nothing if no Intervalmanagers is started.
+``quit``
+  Quit the Shell (Same as ``CTRL+D``), will call ``stop``!
+``status``
+  Print current status of Intervalmanager. One of:
+    - ``ready`` - waits for you to type ``start``.
+    - ``active`` - Crawling, ``stop`` will take effect.
+    - ``stop```- Was stopped, will switch to ``ready`` when done.

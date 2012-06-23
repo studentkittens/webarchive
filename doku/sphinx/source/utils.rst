@@ -3,26 +3,26 @@ Util Functions (Internal Use only)
 
 **FS Mutexes:**
 
-.. automodule:: util.filelock
+.. automodule:: archive.util.filelock
   :members:
 
 ----------
 
 **File Handling:**
 
-.. automodule:: util.files
+.. automodule:: archive.util.files
   :members:
 
 ----------
 
 **Often used paths:**
 
-.. automodule:: util.paths
+.. automodule:: archive.util.paths
   :members:
 
 ----------
 
 **Often used Time-Helpers:**
 
-.. automodule:: util.times
+.. automodule:: archive.util.times
   :members:

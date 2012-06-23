@@ -48,5 +48,5 @@ Implementation
 
 **Internal usage of the Cleaner:**
 
-.. autoclass:: crawler.cleaner.Cleaner
+.. autoclass:: archive.crawler.cleaner.Cleaner
   :members:
