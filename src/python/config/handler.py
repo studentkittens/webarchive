@@ -5,6 +5,7 @@ __author__ = 'Florian Bauer'
 
 import reader
 import writer
+import xmlhandler
 
 def get(value):
     return reader.get(value)
@@ -14,6 +15,9 @@ def get_default(value):
 
 def get_with_default(value):
     return reader.get_with_default(value)
+
+def get_path():
+    return xmlhandler.configPath
 
 def set(tagname, str):
     return writer.set_value(tagname, str)

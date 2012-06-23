@@ -28,11 +28,16 @@ DB Options:
 
 Config Options:
   --set=<confurl><value>   Set a Value in the config permanently.
+  --setdefault=<confurl>   Set Value back to Default.
+  --setpath=<configpath>   Set the Path for the Config file to configpath.
   --get=<confurl>          Acquire a Value in the config by it's url.
+  --getdefault=<confurl>   Acquire Default value for url.
+  --getboth=<confurl>      Returns actual and Default of url.
+  --getpath                Returns path of Config file.
 
 """
 
-__author__ = 'Christopher Pahl, Christoph Piechula'
+__author__ = 'Christopher Pahl, Christoph Piechula, Florian Bauer'
 
 import threading
 import logging
@@ -185,9 +190,21 @@ class Cli(object):
         """
         if self.__arguments['--get']:
             print(config.get(self.__arguments['<confurl>']))
-        elif self.__arguments['--set']:
-            pass
-            # TODO: Wait for config implementation.
+        if self.__arguments['--getdefault']:
+            print(config.get_default(self.__arguments['<confurl>']))
+        if self.__arguments['--getboth']:
+            print(config.get_with_default(self.__arguments['<confurl>']))
+        if self.__arguments['--getpath']:
+            print('Config File Path: ' + config.get_path())
+        if self.__arguments['--set']:
+            config.set(self.__arguments['<confurl>, <value>'])
+            print('<confurl> set to <value>')
+        if self.__arguments['--setdefault']:
+            config.set_default(self.__arguments['<confurl>'])
+            print ('<confurl> set to ' + config.get_default(self.__arguments['<confurl>']))
+        if self.__arguments['--setpath']:
+            config.set_path(self.__arguments['<configpath>'])
+            print('Config File Path set to <configpath>')
 
     def handle_repair(self):
         """
