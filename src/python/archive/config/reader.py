@@ -3,7 +3,8 @@
 
 __author__ = 'Florian Bauer'
 
-
+import logging
+import archive.config.xmlhandler as xmlhandler
 import archive.config.options as options
 
 
@@ -11,18 +12,23 @@ def get_default(value):
     try:
         return options.default_options[value]
     except KeyError:
+        logging.info('No default found')
         return ''
 
 
 def get(value):
     try:
-        return options.actual_options[value]
+        ret = xmlhandler.get_element(value)
+        if ret == '':
+            return get_default(value)
+        else:
+            return ret
     except KeyError:
         return ''
 
 
 def get_with_default(value):
     try:
-        return 'Actual: ' + str(options.actual_options[value]) + '   Default: ' + str(options.default_options[value])
+        return 'Actual: ' + str(get(value)) + '   Default: ' + str(get_default(value))
     except KeyError:
         return 'Wrong Item Name'
