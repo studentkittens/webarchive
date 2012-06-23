@@ -10,7 +10,7 @@ Usage:
   archive.py [--loglevel=<severity>] javadapter [--start]
   archive.py [--loglevel=<severity>] db (--rebuild|--remove)
   archive.py [--loglevel=<severity>] repair
-  archive.py config (--get=<confurl>|--set=<confurl><arg>)
+  archive.py config (--get=<confurl>|--set=<confurl> <value>|--default=<confurl>)
   archive.py -h | --help
   archive.py --version
 
@@ -29,6 +29,7 @@ DB Options:
 Config Options:
   --set=<confurl><value>   Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
+  --default=<confurl>      Acquire the Default-Value of this url.
 
 """
 
@@ -186,8 +187,9 @@ class Cli(object):
         if self.__arguments['--get']:
             print(config.get(self.__arguments['--get']))
         elif self.__arguments['--set']:
-            pass
-            # TODO: Wait for config implementation.
+            config.set(self.__arguments['--set'], self.__arguments['--value'])
+        elif self.__arguments['--default']:
+            print(config.get_default(self.__arguments['--default']))
 
     def handle_repair(self):
         """
