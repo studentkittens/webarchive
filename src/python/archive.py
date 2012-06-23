@@ -1,2 +1,3 @@
 #!/bin/sh
-env python -m archive --version
+# Just forward commands to python -m archive
+env python -m archive $*
