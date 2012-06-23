@@ -3,9 +3,9 @@
 
 __author__ = 'Florian Bauer'
 
-import reader
-import writer
-import xmlhandler
+import config.reader as reader
+import config.writer as writer
+import config.xmlhandler as xmlhandler
 
 def get(value):
     return reader.get(value)

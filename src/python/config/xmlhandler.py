@@ -5,7 +5,7 @@ __author__ = 'Florian Bauer'
 
 from xml.etree.ElementTree import ElementTree
 
-import options
+import config.options as options
 import logging
 
 tree = ElementTree()

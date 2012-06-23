@@ -3,8 +3,8 @@
 
 __author__ = 'Florian Bauer'
 
-import reader
-import xmlhandler
+import config.reader as reader
+import config.xmlhandler as xmlhandler
 import logging
 
 def set_value(tagname, str):

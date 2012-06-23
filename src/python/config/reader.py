@@ -4,8 +4,8 @@
 __author__ = 'Florian Bauer'
 
 import logging
-import xmlhandler
-import options
+import config.xmlhandler
+import config.options
 
 
 def get_default(value):
