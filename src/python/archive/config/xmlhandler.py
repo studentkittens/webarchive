@@ -9,44 +9,41 @@ import logging
 
 tree = ElementTree()
 
-configPath = '../../../conf/webarchive.conf.xml'
+gConfigPath = 'webarchive.conf.xml'
 
 
-def parse():
-    try:
-        tree.parse(configPath)
-    except KeyError:
-        logging.exception('Config File not found')
+def load(configPath):
+    global gConfigPath
+    gConfigPath = configPath
+    tree.parse(configPath)
 
 
 def set_element(tagname, value):
-    tagname = changeinputstring(tagname)
-    tree.find(tagname).text = value
-    write_file()
+    tagname = url_to_xpath(tagname)
+    try:
+        tree.find(tagname).text = value
+    except AttributeError:
+        return False
+    else:
+        write_file()
+        return True
 
 
 def write_file():
     try:
-        tree.write(configPath)
+        tree.write(gConfigPath)
     except:
         logging.exception('Writing file failed')
 
 
 def get_element(value):
-    value = changeinputstring(value)
+    xpath = url_to_xpath(value)
     try:
-        parse()
-        return tree.findtext(value)
+        return tree.findtext(xpath)
     except:
         logging.info('Tagname not found')
         return ''
 
 
-def changeinputstring(value):
-    index = 0
-    end = len(value)
-    while index < end:
-        if value[index] == ".":
-            value = value[0:index] + '/' + value[index + 1:end]
-        index += 1
-    return value
+def url_to_xpath(url):
+    return url.strip().replace('.', '/')

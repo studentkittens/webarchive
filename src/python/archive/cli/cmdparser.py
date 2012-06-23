@@ -6,11 +6,11 @@
 
 Usage:
   archive.py [--loglevel=<severity>] init [<path>]
-  archive.py [--loglevel=<severity>] crawler [--start]
-  archive.py [--loglevel=<severity>] javadapter [--start]
-  archive.py [--loglevel=<severity>] db (--rebuild|--remove)
-  archive.py [--loglevel=<severity>] repair
-  archive.py config (--get=<confurl>|--set=<confurl> <value>|--default=<confurl>)
+  archive.py [--config=<path>] [--loglevel=<severity>] crawler [--start]
+  archive.py [--config=<path>] [--loglevel=<severity>] javadapter [--start]
+  archive.py [--config=<path>] [--loglevel=<severity>] db (--rebuild|--remove)
+  archive.py [--config=<path>] [--loglevel=<severity>] repair
+  archive.py [--config=<path>] config (--get=<confurl>|--set=<confurl> <value>|--default=<confurl>)
   archive.py -h | --help
   archive.py --version
 
@@ -27,7 +27,8 @@ DB Options:
   --remove                 Remove the Database completely.
 
 Config Options:
-  --set=<confurl><value>   Set a Value in the config permanently.
+  --config=<path>
+  --set=<confurl> <value>   Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
   --default=<confurl>      Acquire the Default-Value of this url.
 
@@ -51,7 +52,7 @@ from archive.dbrecover.repair import repair
 
 import archive.cmanager.intervalmanager as imgur
 import archive.javadapter.server as javadapter
-import archive.config.reader as config
+import archive.config.handler as config
 import archive.util.filelock as lock
 import archive.util.paths as paths
 
@@ -68,7 +69,7 @@ class Cli(object):
         Collected arguments
         """
         self.__filelock = lock.FileLock(LOCKFILE, folder=config.get('general.root'), timeout=0.1)
-        self.__arguments = docopt(__doc__, version='Archive 1.0')
+        self._args = docopt(__doc__, version='Archive 1.0')
         submodules = {
                 'init': self.handle_init,
                 'crawler': self.handle_crawler,
@@ -79,12 +80,12 @@ class Cli(object):
                 }
 
         try:
-            loglevel = self.__arguments['<severity>'].upper()
+            loglevel = self._args['<severity>'].upper()
             severity = getattr(logging, loglevel)
         except KeyError:
             severity = logging.INFO
         except AttributeError:
-            print('Error: \"loglevel\" is not a valid severity level')
+            print('Error: \"loglevel\" is not valid severity level')
             print(__doc__)
             sys.exit(-1)
 
@@ -94,12 +95,18 @@ class Cli(object):
                                 format='%(asctime)s - %(levelname)s - %(message)s')
         except IOError as err:
             # Disable warning for initialization
-            if self.__arguments['init'] is False:
+            if self._args['init'] is False:
                 print('Cannot open log - file structure probably does not exist yet:', err)
+
+        # Set up config to another file if desired
+        if self._args['--config']:
+            config.load(os.paths.abspath(self._args['<path>']))
+        else:
+            config.load('webarchive.conf.xml')
 
         # iterating through arguments
         for module, handler in submodules.items():
-            if self.__arguments[module]:
+            if self._args[module]:
                 try:
                     handler()
                 except lock.FileLockException:
@@ -110,7 +117,7 @@ class Cli(object):
         """
         Initializes archive paths
         """
-        path = self.__arguments['<path>']
+        path = self._args['<path>']
         if path is not None:
             init_archive(path)
         else:
@@ -132,7 +139,7 @@ class Cli(object):
         im = imgur.IntervalManager()
 
         do_autostart = False
-        if self.__arguments['--start']:
+        if self._args['--start']:
             print('Note: Will start automatically')
             do_autostart = True
 
@@ -155,7 +162,7 @@ class Cli(object):
         Starts javadapter commandline
         """
         server = None
-        if self.__arguments['--start']:
+        if self._args['--start']:
             try:
                 server = javadapter.start('localhost')
             except socket.error as err:
@@ -164,15 +171,15 @@ class Cli(object):
 
         javadapter.ServerShell(server_instance=server).cmdloop()
 
-        if self.__arguments['--start']:
+        if self._args['--start']:
             server.shutdown()
 
     def handle_db(self):
         'Handle "db" submodule'
-        if self.__arguments['--rebuild']:
+        if self._args['--rebuild']:
             self.__filelock.acquire()
             rebuild()
-        elif self.__arguments['--remove']:
+        elif self._args['--remove']:
             try:
                 self.__filelock.acquire()
                 remove()
@@ -184,12 +191,12 @@ class Cli(object):
         """
         Invokes Config Handler operations
         """
-        if self.__arguments['--get']:
-            print(config.get(self.__arguments['--get']))
-        elif self.__arguments['--set']:
-            config.set(self.__arguments['--set'], self.__arguments['--value'])
-        elif self.__arguments['--default']:
-            print(config.get_default(self.__arguments['--default']))
+        if self._args['--get']:
+            print(config.get(self._args['--get']))
+        elif self._args['--set']:
+            config.set(self._args['--set'], self._args['<value>'])
+        elif self._args['--default']:
+            print(config.get_default(self._args['--default']))
 
     def handle_repair(self):
         """

@@ -9,11 +9,10 @@ __author__ = 'Christoph Piechula'
 
 import subprocess
 import os
-import time
 import shlex
 import logging
 
-import archive.config.reader as config
+import archive.config.handler as config
 import archive.util.files as files
 import archive.util.paths as paths
 

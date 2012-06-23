@@ -15,7 +15,7 @@ import cmd
 import archive.cmanager.crawlmanager as c
 import archive.util.files as utl
 import archive.util.times as times
-import archive.config.reader as config
+import archive.config.handler as config
 
 
 class IntervalManager(object):

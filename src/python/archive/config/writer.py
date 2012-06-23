@@ -11,10 +11,6 @@ def set_value(tagname, str):
     xmlhandler.set_element(tagname, str)
 
 
-def set_configPath(value):
-    xmlhandler.configPath = value
-
-
 def set_default(value):
     default = reader.get_default(value)
     if default == '':

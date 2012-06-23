@@ -25,10 +25,3 @@ def get(value):
             return ret
     except KeyError:
         return ''
-
-
-def get_with_default(value):
-    try:
-        return 'Actual: ' + str(get(value)) + '   Default: ' + str(get_default(value))
-    except KeyError:
-        return 'Wrong Item Name'

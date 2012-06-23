@@ -8,20 +8,21 @@ import archive.config.writer as writer
 import archive.config.xmlhandler as xmlhandler
 
 
+# Convert string to int,
+# if it's a numerical string
+def _as_int(value):
+    if type(value) is str and value.isnumeric():
+        return int(value)
+    else:
+        return value
+
+
 def get(value):
-    return reader.get(value)
+    return _as_int(reader.get(value))
 
 
 def get_default(value):
-    return reader.get_default(value)
-
-
-def get_with_default(value):
-    return reader.get_with_default(value)
-
-
-def get_path():
-    return xmlhandler.configPath
+    return _as_int(reader.get_default(value))
 
 
 def set(tagname, str):
@@ -32,5 +33,5 @@ def set_default(value):
     return writer.set_default(value)
 
 
-def set_configPath(value):
-    return writer.set_configPath(value)
+def load(path):
+    return xmlhandler.load(path)

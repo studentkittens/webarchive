@@ -8,8 +8,7 @@ Crawl Manager module to manage running crawljob instances
 __author__ = 'Christoph Piechula'
 
 import multiprocessing.pool as mpool
-import archive.util.files as utl
-import archive.config.reader as config
+import archive.config.handler as config
 import archive.crawler.crawljob as job
 
 import threading
@@ -35,7 +34,7 @@ def crawljob(ident, url):
         running.append(j)
         running_mtx.release()
         j.run()
-    except Exception as err:
+    except Exception:
         logging.exception("error during starting crawljob pool")
     return ident
 
@@ -57,7 +56,6 @@ class CrawlerManager(object):
     def start(self):
         """
         Starts threadpool with max number of instances
-
         """
         results = [self.__pool.apply_async(crawljob, i)
                 for i in enumerate(self.__urls)]

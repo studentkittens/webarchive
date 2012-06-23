@@ -9,7 +9,7 @@ import os
 import shutil
 
 import archive.init.default_cfg as default_cfg
-import archive.config.reader as config
+import archive.config.handler as config
 
 __author__ = 'Christopher Pahl'
 

@@ -31,7 +31,7 @@ import archive.util.paths as paths
 
 # Git Interaction
 from archive.crawler.git import Git
-import archive.config.reader as config
+import archive.config.handler as config
 
 ###########################################################################
 #                             Error Handling                              #

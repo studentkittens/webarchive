@@ -13,7 +13,7 @@ import pickle
 import glob
 import uuid
 
-import archive.config.reader as config
+import archive.config.handler as config
 import archive.util.times as times
 
 __author__ = 'Christopher Pahl'

@@ -1,21 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <webarchive>
 	<general>
-		<root>/archive</root>
-		<filterpath>/filterpath/</filterpath>
+        <root>/tmp/archive</root>
+		<filterpath>filter/</filterpath>
 	</general>
-    <!-- modules -->	
     <crawler> 
-        <depth>5</depth>
-        <tinterval>2:0:0</tinterval>
+        <depth>1</depth>
+        <!-- in minutes -->
+        <interval>1</interval>
         <maxInst>20</maxInst>
         <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
         <tempRoot>tmp</tempRoot>
-        <IgnoreRobots>true</IgnoreRobots>
+        <ignoreRobots>true</ignoreRobots>
     </crawler>
     <db> 
-        <path>db/metadata.db</path>
-        <sqlSource>/some/path</sqlSource>
+        <path>metadata.db</path>
+        <sqlSource>sql/</sqlSource>
     </db>
     <xml>
 		<autoValidatingMode>after update</autoValidatingMode>
@@ -30,6 +29,5 @@
         <notify>
             <interval>1:0:0</interval>
         </notify>
-
     </server>
 </webarchive>

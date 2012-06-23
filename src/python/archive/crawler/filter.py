@@ -13,7 +13,7 @@ import os.path
 import traceback
 import logging
 
-import archive.config.reader as config
+import archive.config.handler as config
 
 
 class FilterSystem(object):
@@ -138,13 +138,12 @@ if __name__ == '__main__':
             fisys = FilterSystem(FILTER_TESTDIR)
             self.do_filtering_tests(fisys)
             fisys.clear()
-            fisys.load(plugin_path = FILTER_TESTDIR)
+            fisys.load(plugin_path=FILTER_TESTDIR)
             self.do_filtering_tests(fisys)
             fisys.clear()
             self.assertTrue(fisys.check({'test_input': 42}))
 
         def tearDown(self):
             shutil.rmtree(FILTER_TESTDIR)
-
 
     unittest.main()
