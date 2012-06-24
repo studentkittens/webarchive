@@ -28,11 +28,7 @@ def set_element(tagname, value):
 
 
 def write_file():
-    try:
-        tree.write(gConfigPath)
-    except:
-        pass
-    #logging.exception('Writing file failed')
+    tree.write(gConfigPath)
 
 
 def get_element(value):
@@ -40,7 +36,6 @@ def get_element(value):
     try:
         return tree.findtext(xpath)
     except:
-        #logging.info('Tagname not found')
         return ''
 
 

@@ -6,12 +6,18 @@ Init module to initialize archive parms on first start
 """
 
 import os
-import shutil
 
 import archive.init.default_cfg as default_cfg
 import archive.config.handler as config
 
 __author__ = 'Christopher Pahl'
+
+DEFAULT_URLS = """
+www.blendpolis.de
+www.golem.de
+www.heise.de
+www.stackoverflow.com
+"""
 
 
 def init_archive(init_path=os.getcwd()):
@@ -28,18 +34,9 @@ def init_archive(init_path=os.getcwd()):
             for folder in ['content', 'tmp', 'filter', 'logs', 'pickle_cache']:
                 os.mkdir(os.path.join(base_path, folder))
 
-            # Copy SQL Statements to Archive. This invention was brought to you by:
-            #   Christoph Cwelich
-            shutil.copytree('../sql', os.path.join(base_path, 'sql'))
-
             # Default url.txt
             with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
-                urltxt.write('\
-                        www.blendpolis.de\n \
-                        www.golem.de\n \
-                        www.heise.de\n \
-                        www.stackoverflow.com\n \
-                        ')
+                urltxt.write(DEFAULT_URLS)
 
             # Write a default config template... that's a bit ugly
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
@@ -56,7 +53,6 @@ def init_archive(init_path=os.getcwd()):
                     custom_wget=config.get_default('crawler.customWgetParms'),
                     db_file=config.get_default('db.path'),
                     sql_source=config.get_default('db.sqlSource'),
-                    schema_path=config.get_default('xml.schemaPath'),
                     server_port=config.get_default('server.port'),
                     notify_in_min=config.get_default('server.notify.interval'),
                     javadapter_port=config.get_default('javadapter.port')

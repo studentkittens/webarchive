@@ -28,7 +28,6 @@ def crawljob(ident, url):
     :url: url to crawl
     """
     try:
-        logging.warning('GHA!')
         logging.info('Job #{cid} ({curl}) started.'.format(cid=ident, curl=url))
         j = job.CrawlJob(ident, url)
         running_mtx.acquire()
