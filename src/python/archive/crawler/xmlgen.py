@@ -9,6 +9,7 @@ __author__ = 'Christoph Piechula'
 
 import os
 import logging
+
 from xml.sax.saxutils import quoteattr
 
 
@@ -42,7 +43,7 @@ class XmlGenerator(object):
     XmlGenerator, generates xml file from meta nodelist
 
     """
-    SCHEMA = 'file:/home/ccwelich/git/webarchive/xml/file.xsd'
+    SCHEMA = 'file:xml/file.xsd'
 
     def __init__(self, meta_obj_list=None, schema_path=SCHEMA):
         """

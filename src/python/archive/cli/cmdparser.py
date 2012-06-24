@@ -28,7 +28,7 @@ DB Options:
 
 Config Options:
   --config=<path>
-  --set=<confurl> <value>   Set a Value in the config permanently.
+  --set=<confurl> <value>  Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
   --default=<confurl>      Acquire the Default-Value of this url.
 
@@ -100,10 +100,14 @@ class Cli(object):
                 print('Cannot open log - file structure probably does not exist yet:', err)
 
         # Set up config to another file if desired
-        if self._args['init'] is False and self._args['--config']:
-            config.load(os.paths.abspath(self._args['<path>']))
-        elif self._args['init'] is False:
-            config.load('webarchive.conf.xml')
+        try:
+            if self._args['init'] is False and self._args['--config']:
+                config.load(os.paths.abspath(self._args['<path>']))
+            elif self._args['init'] is False:
+                config.load('webarchive.conf.xml')
+        except IOError as err:
+            print('FATAL: Unable to locate config:', err)
+            sys.exit(-4)
 
         # iterating through arguments
         for module, handler in submodules.items():

@@ -17,7 +17,6 @@ default_options = {
         'crawler.customWgetParms': '',
         'db.path': 'metadata.db',
         'db.sqlSource': 'sql/',
-        'xml.schemaPath': 'xml/',
         'server.port': 42420,
         'server.notify.interval': 15,
         'javadapter.port': 42421
