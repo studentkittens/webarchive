@@ -12,6 +12,13 @@ import archive.config.handler as config
 
 __author__ = 'Christopher Pahl'
 
+DEFAULT_URLS = """
+www.blendpolis.de
+www.golem.de
+www.heise.de
+www.stackoverflow.com
+"""
+
 
 def init_archive(init_path=os.getcwd()):
     """
@@ -29,12 +36,7 @@ def init_archive(init_path=os.getcwd()):
 
             # Default url.txt
             with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
-                urltxt.write('\
-                        www.blendpolis.de\n \
-                        www.golem.de\n \
-                        www.heise.de\n \
-                        www.stackoverflow.com\n \
-                        ')
+                urltxt.write(DEFAULT_URLS)
 
             # Write a default config template... that's a bit ugly
             with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
