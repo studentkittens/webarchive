@@ -9,6 +9,7 @@ __author__ = 'Christoph Piechula'
 
 import os
 import logging
+
 from xml.sax.saxutils import quoteattr
 
 

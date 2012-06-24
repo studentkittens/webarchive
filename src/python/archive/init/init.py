@@ -6,7 +6,6 @@ Init module to initialize archive parms on first start
 """
 
 import os
-import shutil
 
 import archive.init.default_cfg as default_cfg
 import archive.config.handler as config
@@ -27,10 +26,6 @@ def init_archive(init_path=os.getcwd()):
             # Create base structure
             for folder in ['content', 'tmp', 'filter', 'logs', 'pickle_cache']:
                 os.mkdir(os.path.join(base_path, folder))
-
-            # Copy SQL Statements to Archive. This invention was brought to you by:
-            #   Christoph Cwelich
-            shutil.copytree('../sql', os.path.join(base_path, 'sql'))
 
             # Default url.txt
             with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
@@ -56,7 +51,6 @@ def init_archive(init_path=os.getcwd()):
                     custom_wget=config.get_default('crawler.customWgetParms'),
                     db_file=config.get_default('db.path'),
                     sql_source=config.get_default('db.sqlSource'),
-                    schema_path=config.get_default('xml.schemaPath'),
                     server_port=config.get_default('server.port'),
                     notify_in_min=config.get_default('server.notify.interval'),
                     javadapter_port=config.get_default('javadapter.port')

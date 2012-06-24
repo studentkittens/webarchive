@@ -13,7 +13,7 @@ CONFIG_TEMPLATE = """
         <interval>{interval_in_min}</interval>
         <maxInst>{max_inst}</maxInst>
         <userAgent>{user_agent}</userAgent>
-        <tempRoot>{temp_dir}</tmpRoot>
+        <tempRoot>{temp_dir}</tempRoot>
         <ignoreRobots>{robots}</ignoreRobots>
         <urllistpath>{url_path}</urllistpath>
         <customWgetParms>{custom_wget}</customWgetParms>
@@ -22,9 +22,6 @@ CONFIG_TEMPLATE = """
         <path>{db_file}</path>
         <sqlSource>{sql_source}</sqlSource>
     </db>
-    <xml>
-        <schemaPath>{schema_path}</schemaPath>
-    </xml>
     <server>
         <port>{server_port}</port>
         <notify>
