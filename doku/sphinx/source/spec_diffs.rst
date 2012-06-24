@@ -17,4 +17,5 @@ Notes
 - ``Git`` has more methods like ``list_branches`` and ``list_commits`` (which are needed for XML-Recover)
 - Recovering is also possible with pickled metalists.
 - Javadapter protocol has been a little streamlined.
+- No sql subfolder anymore, sql statements were moved directly to backend (crawler/statements.py) and frontend 
 

@@ -64,6 +64,10 @@ First, you have to install the backend:
   $ rm metadata.db               # Oops. This was an accident. I swear.
   $ archive.py db --rebuild      # But luckily we can just rebuild it.
 
+Hence, it is possible to create several ,,archives'' at different locations.
+To do this, just create a new archive root using ,,init'' on a different path.
+
+
 More Notes
 ----------
 
