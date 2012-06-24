@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package webarchive.xml;
 
 /**
  * the auto modi for validating the xml documents.
+ * Determines the time when Dom-documents will be validated
  *
  * @author ccwelich
  */

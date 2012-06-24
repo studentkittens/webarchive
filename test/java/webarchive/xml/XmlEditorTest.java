@@ -10,8 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
-import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.*;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import webarchive.api.xml.TagName;
@@ -22,6 +22,7 @@ import webarchive.handler.Handlers;
  * @author ccwelich
  */
 public class XmlEditorTest {
+
 	private XmlEditor instance;
 	
 	public XmlEditorTest() {
@@ -29,23 +30,22 @@ public class XmlEditorTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		HandlerBuiltMockup.builtHandlers();
-			// restore init conditions
-		File src = new File("test/xml/example.backup.xml"),
-			dest = new File("test/xml/example.xml");
-		Files.copy(src.toPath(), dest.toPath(),	StandardCopyOption.REPLACE_EXISTING);
+		XmlPrepare.builtHandlers();
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		XmlPrepare.killHandlers();
 	}
 	
 	@Before
 	public void setUp() throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException {
+				XmlPrepare.restoreFiles();
+
 		XmlMethodFactory fac = Handlers.get(XmlMethodFactory.class);
-		XmlHandler hdl = fac.newXmlHandler(new FileDescriptorMockup(new File(
-			"test/xml/example.xml")));
+		XmlHandler hdl = fac.newXmlHandler(new FileDescriptorMockup(XmlPrepare.XML_TARGET));
 		instance = hdl.newEditor();
+		instance.setClient(new ClientAdapterMockup(hdl));
 	}
 	
 	@After
@@ -76,33 +76,82 @@ public class XmlEditorTest {
 		assertEquals("wa:testData1", result.getDataElement().getTagName());
 	}
 
-	
 
 	/**
-	 * Test of addDataElement method, of class XmlEditor.
+	 * Test of add- and getDataElement method, of class XmlEditor.
 	 */
 	@Test
-	public void testAddDataElement() throws Exception {
-		//TODO inside client
+	public void testAddGetDataElement() throws Exception {
 		System.out.println("addDataElement");
-		TagName tagName = new TagName("testData1");
-		DataElement dataElement = instance.createDataElement(tagName);
-		tagName = new TagName("content");
-		Element element = instance.createElement(tagName);
+		TagName tagNameDE = new TagName("testData1");
+		DataElement dataElement = instance.createDataElement(tagNameDE);
+		TagName tagNameCo = new TagName("content");
+		Element element = instance.createElement(tagNameCo);
 		element.setTextContent("bla");
 		dataElement.appendChild(element);
+		DataElement expected = instance.getDataElement(tagNameDE);
+		assertTrue(expected==null);
 		instance.addDataElement(dataElement);
-		tagName = new TagName("testData2");
-		dataElement = instance.createDataElement(tagName);
-		tagName = new TagName("content");
-		element = instance.createElement(tagName);
+		expected = instance.getDataElement(tagNameDE);
+		assertFalse(expected.canWrite());
+		assertTrue(dataElement.isEqualNode(expected));
+
+		tagNameDE = new TagName("testData2");
+		dataElement = instance.createDataElement(tagNameDE);
+		element = instance.createElement(tagNameCo);
 		element.setTextContent("bla");
 		dataElement.appendChild(element);
+		
 		instance.addDataElement(dataElement);
+				expected = instance.getDataElement(tagNameDE);
+				assertTrue(dataElement.isEqualNode(expected));
+
+
+		
+		//illegal access
+		//dublicate
+		boolean hasThrown = false;
+		try {
+			instance.addDataElement(dataElement);
+		} catch (IllegalArgumentException e) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+		//null
+		hasThrown = false;
+		try {
+			instance.addDataElement(null);
+		} catch (NullPointerException e) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+		//writeprotected
+		hasThrown = false;
+		dataElement = instance.getDataElement(tagNameDE);
+		try{
+			instance.addDataElement(dataElement);
+		} catch (IllegalArgumentException e) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+		//not valid
+		tagNameDE = new TagName("testData3"); // name not in xsd
+		dataElement = instance.createDataElement(tagNameDE);
+		element = instance.createElement(tagNameCo);
+		element.setTextContent("bla");
+		dataElement.appendChild(element);
+		try{
+			instance.addDataElement(dataElement);
+		} catch (SAXException e) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
+		
+		// element not in file
+		TagName tagName = new TagName("testData4");
+		assertTrue(instance.getDataElement(tagName)==null);
+		
 	}
-
-	
-
 	
 
 	

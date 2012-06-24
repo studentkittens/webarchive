@@ -12,10 +12,7 @@ import webarchive.dbaccess.DbConfigHandler;
 import webarchive.dbaccess.SqlHandler;
 import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
-import webarchive.server.FileHandler;
-import webarchive.server.LockHandlerImpl;
-import webarchive.server.Server;
-import webarchive.server.SvConfigHandler;
+import webarchive.server.*;
 import webarchive.xml.XmlConf;
 import webarchive.xml.XmlMethodFactory;
 
@@ -77,7 +74,7 @@ public class Launcher {
 		Handlers.add(new XmlConf());
 		Handlers.add(new FileHandler());
 		final LockHandlerImpl lockHandler = new LockHandlerImpl(InetAddress.getLocalHost(), 42421);
-		Handlers.add(lockHandler);
+		Handlers.add(LockHandler.class, lockHandler);
 		final XmlMethodFactory xmlMethodFactory = new XmlMethodFactory(lockHandler);
 		xmlMethodFactory.setXmlErrorHandler(null); // XmlErrorHandler not used!
 		Handlers.add(xmlMethodFactory);

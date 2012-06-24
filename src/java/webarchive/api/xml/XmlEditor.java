@@ -1,17 +1,18 @@
 package webarchive.api.xml;
 
 import org.w3c.dom.Element;
-import webarchive.xml.DataElement;
 
 /**
  * XmlEditor is used to read and add DataElements from or to the webarchive xml-Files.
  * DataElements are the uppermost nodes in the data-node of the webarchive xml-file.
- * Existing DataElements may be read by using {@link #addDataElement(webarchive.xml.DataElement) }.
- * New DataElements may be added by using {@link #createDataElement(java.lang.String) } in order to initialize new
- * DataElements. Via {@link #createElement(java.lang.String) } new w3c.dom.Elements may be added to the
+ * Existing DataElements may be read by using getDataElement().
+ * New DataElements may be added by using createDataElement() in order to initialize new
+ * DataElements. Via createElement() new w3c.dom.Elements may be added to the
  * thus created DataElement (according to xsd-schema definition).
- * Note that existing DataElements are write-protected.
+ * Note that existing DataElements are write-protected. <br/>
+ * All changes have to match with the file.xsd schema.
  * @see DataElement
+ * @see TagName
  * @author ccwelich
  */
 public interface XmlEditor {
@@ -21,7 +22,6 @@ public interface XmlEditor {
 	 * returns a write-protected DataElement.
 	 *
 	 * @param tagName key to find element. 
-	 * Note: all tagnames are internally prefixed. See {@link #addPrefixTo(java.lang.String) } if own prefixes are used.
 	 * @return the element, or null if there was no element with tagName
 	 */
 	public DataElement getDataElement(TagName tagName);
@@ -38,12 +38,10 @@ public interface XmlEditor {
 	public void addDataElement(DataElement e) throws Exception;
 
 	/**
-	 * creates a new empty Element. The prefix is automatically added by
-	 * prefix()-method.
+	 * creates a new empty Element. 
 	 *
-	 * @param tagName tagName of element.
-	 * Note: all tagnames are internally prefixed. See {@link #addPrefixTo(java.lang.String) } if own prefixes are used.
-	 * @return
+	 * @param tagName tagName of the new element.
+	 * @return new Element with tagName
 	 */
 	public Element createElement(TagName tagName);
 
@@ -52,9 +50,7 @@ public interface XmlEditor {
 	 * additional org.w3c.dom.Elements-trees. The prefix is automatically added
 	 * by prefix()-method.
 	 *
-	 * @param tagName key to add element.
-	 * Note: all tagnames are prefixed, use {@link #addPrefixTo(java.lang.String) }
-	 * to add the correct prefix.
+	 * @param tagName tagName of the new element, also key to add element.
 	 * @return dataElement whith name "<prefix>tagName"
 	 */
 	public DataElement createDataElement(TagName tagName);

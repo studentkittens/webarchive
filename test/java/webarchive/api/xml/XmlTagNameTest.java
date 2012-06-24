@@ -73,13 +73,13 @@ public class XmlTagNameTest {
 	}
 
 	/**
-	 * Test of getName method, of class TagName.
+	 * Test of getAbsoluteName method, of class TagName.
 	 */
 	@Test
 	public void testGetName() {
 		System.out.println("getName: like toString");
 		String expResult = "wa:testTag";
-		String result = instance.getName();
+		String result = instance.getAbsoluteName();
 		assertEquals(expResult, result);
 	}
 

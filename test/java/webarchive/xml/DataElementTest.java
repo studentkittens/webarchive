@@ -6,12 +6,12 @@ package webarchive.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.*;
+import org.junit.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,34 +24,37 @@ import webarchive.handler.Handlers;
  * @author ccwelich
  */
 public class DataElementTest {
-	private DataElement instance;
-	
+
+	private DataElement instWP;
+	private XmlEditor editor;
+	private DataElement instW;
+
 	public DataElementTest() {
 	}
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		HandlerBuiltMockup.builtHandlers();
-			// restore init conditions
-		File src = new File("test/xml/example.backup.xml"),
-			dest = new File("test/xml/example.xml");
-		Files.copy(src.toPath(), dest.toPath(),	StandardCopyOption.REPLACE_EXISTING);
+		XmlPrepare.builtHandlers();
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		XmlPrepare.killHandlers();
 	}
-	
+
 	@Before
-	public void setUp() throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException {
+	public void setUp() throws ParserConfigurationException, SAXException,
+		IOException, TransformerConfigurationException {
 		XmlMethodFactory fac = Handlers.get(XmlMethodFactory.class);
 		XmlHandler hdl = fac.newXmlHandler(
 			new FileDescriptorMockup(new File(
 			"test/xml/example.expected.xml")));
-		XmlEditor editor = hdl.newEditor();
-		instance = editor.getDataElement(new TagName("testData1"));
+		editor = hdl.newEditor();
+		instWP = editor.getDataElement(new TagName("testData1"));
+		instW = editor.createDataElement(new TagName("wprotected"));
+
 	}
-	
+
 	@After
 	public void tearDown() {
 	}
@@ -62,13 +65,20 @@ public class DataElementTest {
 	@Test
 	public void testAppendChild() {
 		System.out.println("appendChild");
-		Node node = null;
-		DataElement instance = null;
-		Node expResult = null;
-		Node result = instance.appendChild(node);
+		Node node = editor.createElement(new TagName("bla"));
+		Node expResult = node;
+		Node result = instW.appendChild(node);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		// write protected
+		boolean hasThrown = false;
+		try {
+			DataElement wprotected = editor.getDataElement(new TagName(
+				"testData1"));
+			wprotected.appendChild(editor.createElement(new TagName("someNode")));
+		} catch (IllegalArgumentException e) {
+			hasThrown = true;
+		}
+		assertTrue(hasThrown);
 	}
 
 	/**
@@ -77,12 +87,8 @@ public class DataElementTest {
 	@Test
 	public void testCanWrite() {
 		System.out.println("canWrite");
-		DataElement instance = null;
-		boolean expResult = false;
-		boolean result = instance.canWrite();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		assertFalse(instWP.canWrite());
+		assertTrue(instW.canWrite());
 	}
 
 	/**
@@ -91,12 +97,8 @@ public class DataElementTest {
 	@Test
 	public void testGetDataElement() {
 		System.out.println("getDataElement");
-		DataElement instance = null;
-		Element expResult = null;
-		Element result = instance.getDataElement();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		Element result = instWP.getDataElement();
+		assertTrue(result != null);
 	}
 
 	/**
@@ -105,12 +107,8 @@ public class DataElementTest {
 	@Test
 	public void testGetChildNodes() {
 		System.out.println("getChildNodes");
-		DataElement instance = null;
-		NodeList expResult = null;
-		NodeList result = instance.getChildNodes();
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		NodeList result = instWP.getChildNodes();
+		assertTrue(result != null);
 	}
 
 	/**
@@ -119,12 +117,10 @@ public class DataElementTest {
 	@Test
 	public void testGetElementsByTagName() {
 		System.out.println("getElementsByTagName");
-		String string = "";
-		DataElement instance = null;
-		NodeList expResult = null;
-		NodeList result = instance.getElementsByTagName(string);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		NodeList result = instWP.getElementsByTagName(new TagName("content").
+			getAbsoluteName());
+		assertTrue(result.getLength()==1);
+		result = instWP.getElementsByTagName(new TagName("testData3").getAbsoluteName());
+		assertTrue(result.getLength() == 0);
 	}
 }

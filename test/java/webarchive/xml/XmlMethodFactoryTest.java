@@ -28,11 +28,13 @@ public class XmlMethodFactoryTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		HandlerBuiltMockup.builtHandlers();
+		XmlPrepare.builtHandlers();
+		XmlPrepare.restoreFiles();
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		XmlPrepare.killHandlers();
 	}
 
 	@Before

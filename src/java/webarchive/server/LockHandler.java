@@ -4,24 +4,25 @@
  */
 package webarchive.server;
 
+import webarchive.handler.Handler;
 import webarchive.transfer.FileDescriptor;
 
 /**
  *
  * @author ccwelich
  */
-public interface LockHandler {
+public abstract class LockHandler extends Handler {
 
-	void checkout(FileDescriptor fd);
+	public abstract void checkout(FileDescriptor fd);
 
-	void commit(FileDescriptor fd);
+	public abstract void commit(FileDescriptor fd);
 
-	void lock(FileDescriptor fd);
+	public abstract void lock(FileDescriptor fd);
 
-	void reconnect();
+	public abstract void reconnect();
 
-	void unlock(FileDescriptor fd);
+	public abstract void unlock(FileDescriptor fd);
 
-	public void checkoutMaster();
+	public abstract void checkoutMaster();
 	
 }
