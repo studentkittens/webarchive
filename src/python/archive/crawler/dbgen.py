@@ -11,13 +11,12 @@ __author__ = 'Christopher Pahl'
 import logging
 import traceback
 import sqlite3
-import glob
 import os
 
 import archive.util.filelock as lock
+import archive.crawler.statements as sqlsource
 from archive.util.paths import get_dbpath
 from archive.util.paths import get_archive_root
-from archive.util.paths import get_sqlpath
 
 
 class DBGenerator(object):
@@ -37,8 +36,7 @@ class DBGenerator(object):
             self.__connection = sqlite3.connect(abspath)
 
         self.__cursor = self.__connection.cursor()
-        self.__statements = self.load_statements()
-        self.__cursor.executescript(self.__statements['create'])
+        self.__cursor.executescript(sqlsource.statements['create'])
         self.__metalist = meta_list
 
         # We have to maintain a seperate lock for the db,
@@ -48,25 +46,6 @@ class DBGenerator(object):
                 folder=get_archive_root(),
                 timeout=100)
 
-    def load_statements(self):
-        """
-        (Re-)Load Sql Files from Disk
-
-        This is already called in init
-
-        :returns: a dictionary with statements, indexed by name (e.g. 'create')
-        """
-        self.__statements = []
-        statements = dict()
-        for source in glob.glob(os.path.join(get_sqlpath(), '*.sql')):
-            with open(source, 'r') as fd:
-                source_base = os.path.basename(source)
-                if source_base.endswith('.sql'):
-                    source_base = source_base[:-4]
-
-                statements[source_base] = fd.read()
-        return statements
-
     def execute_statement(self, source_name, arglist=None):
         """
         Exececute a previously loaded statement by name
@@ -74,7 +53,7 @@ class DBGenerator(object):
         :source_name: Sourcename to execute (e.g. 'create')
         :arglist: You may pass an additional list of variable elements
         """
-        source = self.__statements[source_name]
+        source = sqlsource.statements[source_name]
         if arglist is not None:
             self.__cursor.executemany(source, arglist)
         else:
