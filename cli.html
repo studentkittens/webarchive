@@ -58,27 +58,32 @@
 <div class="section" id="quick-reference">
 <h2>Quick-Reference<a class="headerlink" href="#quick-reference" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><pre>Usage:
-  archive.py [--loglevel=&lt;severity&gt;] init [&lt;path&gt;]
-  archive.py [--loglevel=&lt;severity&gt;] crawler
-  archive.py [--loglevel=&lt;severity&gt;] javadapter
-  archive.py [--loglevel=&lt;severity&gt;] db (--rebuild|--remove)
-  archive.py [--loglevel=&lt;severity&gt;] repair
-  archive.py config (--get=&lt;confurl&gt;|--set=&lt;confurl&gt;&lt;arg&gt;)
-  archive.py -h | --help
-  archive.py --version
+archive.py [--loglevel=&lt;severity&gt;] init [&lt;path&gt;]
+archive.py [--config=&lt;path&gt;] [--loglevel=&lt;severity&gt;] crawler [--start]
+archive.py [--config=&lt;path&gt;] [--loglevel=&lt;severity&gt;] javadapter [--start]
+archive.py [--config=&lt;path&gt;] [--loglevel=&lt;severity&gt;] db (--rebuild|--remove)
+archive.py [--config=&lt;path&gt;] [--loglevel=&lt;severity&gt;] repair
+archive.py [--config=&lt;path&gt;] config (--get=&lt;confurl&gt;|--set=&lt;confurl&gt; &lt;value&gt;|--default=&lt;confurl&gt;)
+archive.py -h | --help
+archive.py --version
 
 General Options:
-  -h --help                Show this screen.
-  --version                Show version.
-  --loglevel=&lt;loglevel&gt;    Set the loglevel to any of debug, info, warning, error, critical.
+-h --help                Show this screen.
+--version                Show version.
+--loglevel=&lt;loglevel&gt;    Set the loglevel to any of debug, info, warning, error, critical.
+
+Service Options:
+--start                  Start service automatically and enter shell.
 
 DB Options:
-  --rebuild                Rebuild Databse completely from XML Data.
-  --remove                 Remove the Database completely.
+--rebuild                Rebuild Databse completely from XML Data.
+--remove                 Remove the Database completely.
 
 Config Options:
-  --set=&lt;confurl&gt;&lt;value&gt;   Set a Value in the config permanently.
-  --get=&lt;confurl&gt;          Acquire a Value in the config by it&#x27;s url.</pre>
+--config=&lt;path&gt;
+--set=&lt;confurl&gt; &lt;value&gt;  Set a Value in the config permanently.
+--get=&lt;confurl&gt;          Acquire a Value in the config by it&#x27;s url.
+--default=&lt;confurl&gt;      Acquire the Default-Value of this url.</pre>
 </div>
 </div>
 <div class="section" id="additional-notes">
