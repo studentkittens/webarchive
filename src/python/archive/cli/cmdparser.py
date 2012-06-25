@@ -32,6 +32,9 @@ Config Options:
   --get=<confurl>          Acquire a Value in the config by it's url.
   --default=<confurl>      Acquire the Default-Value of this url.
 
+Log Options:
+  --severity               Set severity for Logging.
+
 """
 
 __author__ = 'Christopher Pahl, Christoph Piechula'
@@ -55,6 +58,7 @@ import archive.javadapter.server as javadapter
 import archive.config.handler as config
 import archive.util.filelock as lock
 import archive.util.paths as paths
+import archive.logger.loghandler as log
 
 
 LOCKFILE = 'global'
@@ -202,6 +206,11 @@ class Cli(object):
             config.set(self._args['--set'], self._args['<value>'])
         elif self._args['--default']:
             print(config.get_default(self._args['--default']))
+
+    def handle_log(self):
+        if self._args['--severity']:
+            log.severity(self._args['--severity'])
+            
 
     def handle_repair(self):
         """
