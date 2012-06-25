@@ -4,6 +4,7 @@
 __author__ = 'Florian Bauer'
 
 from time import *
+import archive.config.handler as config
 
 debug = 1
 info = 2
@@ -15,33 +16,33 @@ loglevel = 3
 logfile = 'log.txt'
 
 #   Set Path for Log File
-def log_file(path):
+def file(path):
     global logfile
     logfile = path
 
 #    Set loglebel
-def log_severity(value):
+def severity(value):
     global loglevel
     loglevel = value
 
 #   Log Debug message
-def log_debug(message):
+def debug(message):
     log_print(' Debug: ', message, 1)
 
 #   Log Info message
-def log_info(message):
+def info(message):
     log_print(' Info: ', message, 2)
 
 #   Log Warning message
-def log_warning(message):
+def warning(message):
     log_print(' Warning: ', message, 3)
 
 #   Log Error message
-def log_error(message):
+def error(message):
     log_print(' Error: ', message, 4)
 
 #   Log Critical message
-def log_critical(message):
+def critical(message):
     log_print(' Critical: ', message, 5)
 
 #   Print Log message to shell

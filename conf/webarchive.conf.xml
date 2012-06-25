@@ -28,7 +28,4 @@
             <interval>1:0:0</interval>
         </notify>
     </server>
-    <log>
-         <path>log.txt</path>
-    </log>
 </webarchive>

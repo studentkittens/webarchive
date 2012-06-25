@@ -6,7 +6,6 @@ __author__ = 'Florian Bauer'
 import archive.config.reader as reader
 import archive.config.writer as writer
 import archive.config.xmlhandler as xmlhandler
-import archive.logger.loghandler as log
 
 
 # Convert string to int,
@@ -38,10 +37,3 @@ def set_default(url):
 def load(path):
     return xmlhandler.load(path)
 
-#   Set Path for Log File
-def log(path):
-    return log.log_file(path)
-
-#   Set Loglevel
-def severity(value):
-    return log.log_severity(value)
