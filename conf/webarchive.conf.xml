@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <webarchive>
 	<general>
         <root>/tmp/archive</root>
@@ -27,4 +28,7 @@
             <interval>1:0:0</interval>
         </notify>
     </server>
+    <log>
+         <path>log.txt</path>
+    </log>
 </webarchive>

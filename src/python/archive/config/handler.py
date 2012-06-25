@@ -6,32 +6,42 @@ __author__ = 'Florian Bauer'
 import archive.config.reader as reader
 import archive.config.writer as writer
 import archive.config.xmlhandler as xmlhandler
+import archive.logger.loghandler as log
 
 
 # Convert string to int,
 # if it's a numerical string
-def _as_int(value):
-    if type(value) is str and value.isnumeric():
+def _as_int(url):
+    if type(url) is str and value.isnumeric():
         return int(value)
     else:
         return value
 
+#   Returns actual value for url.
+#   If not found, it returns default value.
+def get(url):
+    return _as_int(reader.get(url))
 
-def get(value):
-    return _as_int(reader.get(value))
+#   Returns default value for url.
+def get_default(url):
+    return _as_int(reader.get_default(url))
 
+#   Sets value of url to str.
+def set(url, str):
+    return writer.set_value(url, str)
 
-def get_default(value):
-    return _as_int(reader.get_default(value))
+#   Sets value of url back to default value.
+def set_default(url):
+    return writer.set_default(url)
 
-
-def set(tagname, str):
-    return writer.set_value(tagname, str)
-
-
-def set_default(value):
-    return writer.set_default(value)
-
-
+#   Load xml file with given path
 def load(path):
     return xmlhandler.load(path)
+
+#   Set Path for Log File
+def log(path):
+    return log.log_file(path)
+
+#   Set Loglevel
+def severity(value):
+    return log.log_severity(value)

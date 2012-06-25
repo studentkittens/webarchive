@@ -20,4 +20,5 @@ default_options = {
         'server.port': 42420,
         'server.notify.interval': 15,
         'javadapter.port': 42421
+        'log.root': 'log.txt'
         }
