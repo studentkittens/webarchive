@@ -35,7 +35,7 @@ List of Protocol-Commands
       $ lock www.heise.de
       OK
       $ lock www.heise.de
-      (... will timeout after 5 mins ...)
+      # (... will timeout after 5 mins ...)
       ACK Timeout occured.
       $ unlock www.heise.de
       OK 
