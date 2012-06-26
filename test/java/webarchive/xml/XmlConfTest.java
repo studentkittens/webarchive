@@ -21,16 +21,18 @@ public class XmlConfTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		HandlerBuiltMockup.builtHandlers();
+		XmlPrepare.builtHandlers();
+		XmlPrepare.restoreFiles();
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		XmlPrepare.killHandlers();
 	}
 	
 	@Before
 	public void setUp() {
-		instance = (XmlConf) Handlers.get(XmlConf.class);
+		instance = Handlers.get(XmlConf.class);
 	}
 	
 	@After
@@ -58,36 +60,5 @@ public class XmlConfTest {
 		File result = instance.getSchemaPath();
 		assertEquals(expResult, result);
 	}
-	/**
-	 * Test of getDataTag method, of class XmlConf.
-	 */
-	@Test
-	public void testGetDataTag() {
-		System.out.println("getDataTag");
-		String expResult = "data";
-		String result = instance.getDataTag();
-		assertEquals(expResult, result);
-	}
 
-	/**
-	 * Test of getNamespace method, of class XmlConf.
-	 */
-	@Test
-	public void testGetNamespace() {
-		System.out.println("getNamespace");
-		String expResult = "http://www.hof-university.de/webarchive";
-		String result = instance.getNamespace();
-		assertEquals(expResult, result);
-	}
-
-	/**
-	 * Test of getPrefix method, of class XmlConf.
-	 */
-	@Test
-	public void testGetPrefix() {
-		System.out.println("getPrefix");
-		String expResult = "wa";
-		String result = instance.getPrefix();
-		assertEquals(expResult, result);
-	}
 }

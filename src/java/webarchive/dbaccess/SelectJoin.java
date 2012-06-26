@@ -88,7 +88,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 		String rc;
 		int i = 0;
 		for (; i < maxWhere; i++) {
-			where[i] = (where[i] == null) ? "" : "WHERE " + where[i];
+			where[i] = (where[i] == null) ? "" : " WHERE " + where[i];
 		}
 
 		rc = String.format(sqlTemplate, where);
@@ -122,7 +122,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 			bld.append(")");
 		}
 
-		bld.append(" %");
+		bld.append("%");
 		bld.append(index + 1);
 		bld.append("$s");
 	}

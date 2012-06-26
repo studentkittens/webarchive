@@ -6,7 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * DataElement used in client.
+ * DataElement implementation used in client.
  *
  * @see webarchive.api.xml.DataElement for interface details.
  * @author ccwelich
@@ -29,8 +29,40 @@ public class DataElement implements webarchive.api.xml.DataElement {
 	}
 
 	@Override
-	public Node appendChild(Node node) throws DOMException {
+	public Node appendChild(Node node) throws DOMException,
+		IllegalArgumentException {
+		if (!canWrite) {
+			throw new IllegalArgumentException("write protected");
+		}
 		return dataElement.appendChild(node);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final DataElement other = (DataElement) obj;
+		if (!isEqualNode(other)) {
+			return false;
+		}
+		if (this.canWrite != other.canWrite) {
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public boolean isEqualNode(DataElement e) {
+		if (e == null) {
+			return false;
+		}
+		return dataElement.isEqualNode(e.dataElement);
 	}
 
 	@Override

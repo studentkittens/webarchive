@@ -9,7 +9,7 @@ import java.util.Scanner;
 import webarchive.handler.Handler;
 import webarchive.transfer.FileDescriptor;
 
-public class LockHandlerImpl extends Handler implements LockHandler {
+public class LockHandlerImpl extends LockHandler {
 
 	private PrintWriter out = null;
 	private Scanner in = null;

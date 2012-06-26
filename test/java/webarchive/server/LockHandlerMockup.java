@@ -1,17 +1,16 @@
 package webarchive.server;
 
 import java.net.InetAddress;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 import webarchive.handler.Handler;
 import webarchive.server.LockHandler;
 import webarchive.transfer.FileDescriptor;
 
 /**
- *
+ * used to bypass LockHandlerImpl
  * @author ccwelich
  */
-public class LockHandlerMockup extends Handler implements LockHandler {
+public class LockHandlerMockup extends LockHandler {
 
 	
 
@@ -30,39 +29,48 @@ public class LockHandlerMockup extends Handler implements LockHandler {
 			this.fd = fd;
 		}
 
+		@Override
+		public String toString() {
+			return "State{" + "stateType=" + stateType + ", fd=" + fd + '}';
+		}
+
 		private State(StateType stateType) {
 			this(stateType, null);
 		}
 	}
 	private Queue<State> states;
 
+	public LockHandlerMockup() {
+		this.states = new LinkedList<>();
+	}
+
 	@Override
 	public void checkout(FileDescriptor fd) {
-		states.add(new State(StateType.CHECKOUT, fd));
+		states.offer(new State(StateType.CHECKOUT, fd));
 	}
 
 	@Override
 	public void commit(FileDescriptor fd) {
-		states.add(new State(StateType.COMMIT, fd));
+		states.offer(new State(StateType.COMMIT, fd));
 	}
 
 	@Override
 	public void lock(FileDescriptor fd) {
-		states.add(new State(StateType.LOCK, fd));
+		states.offer(new State(StateType.LOCK, fd));
 	}
 
 	@Override
 	public void reconnect() {
-		states.add(new State(StateType.RECONNECT, null));
+		states.offer(new State(StateType.RECONNECT, null));
 	}
 
 	@Override
 	public void unlock(FileDescriptor fd) {
-		states.add(new State(StateType.UNLOCK, fd));
+		states.offer(new State(StateType.UNLOCK, fd));
 	}
 	@Override
 	public void checkoutMaster() {
-		states.add(new State(StateType.CHECKOUT_MASTER));
+		states.offer(new State(StateType.CHECKOUT_MASTER));
 	}
 
 	public State[] fetchStates() {

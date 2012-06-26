@@ -20,7 +20,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({webarchive.dbaccess.SelectMetaDataTest.class,
 	webarchive.dbaccess.SelectCommitTagTest.class,
 	webarchive.dbaccess.SqlHandlerTest.class,
-	webarchive.dbaccess.SelectMetaByCommitTest.class})
+	webarchive.dbaccess.SelectMetaByCommitTest.class,
+	SelectJoinTest.class})
 public class DbAccessTestSuite {
 
 	@BeforeClass

@@ -19,8 +19,6 @@
 	</db>
 	<xml>
 		<autoValidatingMode>always</autoValidatingMode>
-		<namespace>http://www.hof-university.de/webarchive</namespace>
-		<prefix>wa</prefix>
 		<schemaPath>test/xml/file.xsd</schemaPath>
 	</xml>
 	<server>

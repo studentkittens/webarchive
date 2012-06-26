@@ -65,7 +65,10 @@ public class HandlersTest {
 		Handler h1 = new TestHandler1(1), h2 = new TestHandler2(2);
 		Handlers.add(h1);
 		Handlers.add(h2);
-
+		//test generic cast
+		TestHandler1 h11 = Handlers.get(TestHandler1.class);
+		assertEquals(h11,h1);
+		
 		System.out.println("get");
 		assertTrue(h1 == Handlers.get(TestHandler1.class));
 		assertTrue(h2 == Handlers.get(TestHandler2.class));
@@ -79,12 +82,14 @@ public class HandlersTest {
 	public void testIllegal() {
 		System.out.println("illegal");
 		boolean thrown = false;
+		//add null
 		try {
 			Handlers.add(null);
 		} catch (AssertionError ex) {
 			thrown = true;
 		}
 		assertTrue(thrown);
+		// add dublicate
 		thrown = false;
 		Handler h1 = new TestHandler1(1);
 		Handlers.add(h1);
@@ -94,5 +99,6 @@ public class HandlersTest {
 			thrown = true;
 		}
 		assertTrue(thrown);
+		
 	}
 }

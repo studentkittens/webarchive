@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <webarchive>
 	<general>
         <root>/tmp/archive</root>
@@ -18,9 +19,6 @@
     </db>
     <xml>
 		<autoValidatingMode>after update</autoValidatingMode>
-		<namespace>http://www.hof-university.de/webarchive</namespace>
-		<prefix>wa</prefix>
-		<dataTag>data</dataTag>
 		<schemaPath>xml/file.xsd</schemaPath>
     </xml>
     <server>

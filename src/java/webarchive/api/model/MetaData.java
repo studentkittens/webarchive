@@ -2,18 +2,16 @@ package webarchive.api.model;
 
 import java.io.File;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Objects;
 
 /**
  * Basic MetaData class in use with webarchive. It contains metadata of an
  * associated file, regarding its origin in the web and position in the archive.
- * The inner state is related to certain version by the commitTag. It is also
+ * The inner values are related to certain a version of the file associated by the commitTag. It is also
  * used as a key-object to read or extend the archives data. Equality is
  * recognized by the url and the commitTag.
  *
  * @author ccwelich
- * @version 2
  */
 public class MetaData implements Serializable {
 

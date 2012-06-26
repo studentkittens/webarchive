@@ -10,19 +10,22 @@ import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
 
 /**
- * Config class for all Xml-related classes.
+ * Config class for all Xml-related classes. Extracts config-values from xml
+ * node in config-file.
  *
  * @author ccwelich
  */
-//TODO tests
 public class XmlConf extends Handler {
 
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
-	private String namespace = "http://www.hof-university.de/webarchive";
-	private String prefix = "wa";
-	private String dataTag = "data";
 	private File schemaPath = new File("xml/file.xsd");
 
+	/**
+	 * Default constructor
+	 *
+	 * @throws IllegalArgumentException if there are illegal values in config
+	 * file
+	 */
 	public XmlConf() throws IllegalArgumentException {
 		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).
 			getConfig();
@@ -31,11 +34,11 @@ public class XmlConf extends Handler {
 	}
 
 	/**
-	 * get XmlHandler AutoValidatingMode.
+	 * get XmlHandler AutoValidatingMode. determines the timing of XML-Dom
+	 * validation.
 	 *
 	 * @see AutoValidatingMode
 	 * @return the current autovalidating mode
-	 * @param autoValidatingMode
 	 */
 	public AutoValidatingMode getAutoValidatingMode() {
 		return autoValidatingMode;
@@ -50,33 +53,6 @@ public class XmlConf extends Handler {
 		return schemaPath;
 	}
 
-	/**
-	 * get the name of the data element according to XML-Metafile.
-	 *
-	 * @return data-element name
-	 */
-	String getDataTag() {
-		return dataTag;
-	}
-
-	/**
-	 * get the namespace of all XML-elements according to XML-Metafile.
-	 *
-	 * @return namespace
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
-
-	/**
-	 * get the addPrefixTo of all XML-elements according to XML-Metafile.
-	 *
-	 * @return
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
 	private void buildConf(Node xmlRoot) throws IllegalArgumentException {
 		NodeList items = xmlRoot.getChildNodes();
 		for (int i = 0; i < items.getLength(); i++) {
@@ -87,22 +63,11 @@ public class XmlConf extends Handler {
 				throw new IllegalArgumentException(
 					"value is empty: " + tagName + "=" + val);
 			}
-			System.out.println(
-				"XmlConf::buildConf tagName=" + tagName + ", val=" + val);
 			switch (tagName) {
 				case "#text":
 					break;
 				case "autoValidatingMode":
 					autoValidatingMode = mode(val);
-					break;
-				case "namespace":
-					namespace = val;
-					break;
-				case "prefix":
-					prefix = val;
-					break;
-				case "dataTag":
-					dataTag = val;
 					break;
 				case "schemaPath":
 					schemaPath = new File(val);

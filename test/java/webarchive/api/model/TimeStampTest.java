@@ -7,19 +7,20 @@ package webarchive.api.model;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
-import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.*;
 
 /**
  *
  * @author ccwelich
  */
 public class TimeStampTest {
+
 	private TimeStamp tByStr;
 	private TimeStamp tByDate;
 	private Date date;
 	private String xmlFormat;
-	
+
 	public TimeStampTest() {
 	}
 
@@ -30,7 +31,7 @@ public class TimeStampTest {
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 	}
-	
+
 	@Before
 	public void setUp() throws ParseException {
 		DateFormat df = DateFormat.getDateTimeInstance();
@@ -39,42 +40,44 @@ public class TimeStampTest {
 		date = df.parse("15.06.2012 19:05:50");
 		tByDate = new TimeStamp(date);
 	}
-	
+
 	@After
 	public void tearDown() {
 	}
+
 	/**
 	 * Test illegal init.
 	 */
 	@Test
-	public void testIllegalInit() {
+	public void testIllegalAccess() {
 		System.out.println("illegalInit");
 		TimeStamp ts;
 		boolean thrown = false;
 		//null values
 		try {
-			ts = new TimeStamp((Date)null);
+			ts = new TimeStamp((Date) null);
 		} catch (AssertionError exc) {
 			thrown = true;
 		}
 		assertTrue(thrown);
 		thrown = false;
 		try {
-			ts = new TimeStamp((String)null);
+			ts = new TimeStamp((String) null);
 		} catch (AssertionError exc) {
 			thrown = true;
-		} catch (ParseException exc) {
-			assert false;
 		}
 		assertTrue(thrown);
 		thrown = false;
+		ts = new TimeStamp("2012-06-15 19:05:50");
+
 		try {
-			ts = new TimeStamp("2012-06-15 19:05:50");
+			ts.getDate();
 		} catch (ParseException exc) {
 			thrown = true;
 		}
 		assertTrue(thrown);
 	}
+
 	/**
 	 * Test equals and hash.
 	 */
@@ -90,13 +93,14 @@ public class TimeStampTest {
 		TimeStamp tmp = new TimeStamp(new Date());
 		assertFalse(tByDate.equals(tmp));
 		assertFalse(tmp.equals(tByDate));
-		assertFalse(tmp.hashCode()==tByDate.hashCode());
+		assertFalse(tmp.hashCode() == tByDate.hashCode());
 	}
+
 	/**
 	 * Test of getDate method, of class TimeStamp.
 	 */
 	@Test
-	public void testGetDate() {
+	public void testGetDate() throws ParseException {
 		System.out.println("getDate");
 		assertEquals(date, tByStr.getDate());
 		assertEquals(date, tByDate.getDate());

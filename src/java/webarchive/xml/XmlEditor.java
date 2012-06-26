@@ -1,30 +1,28 @@
 package webarchive.xml;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import webarchive.api.xml.TagName;
 import webarchive.client.Client;
 import webarchive.connection.Connection;
-import webarchive.handler.Handlers;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
 /**
  * XmlEditor is used on client-side to read and add DataElements.
- *
+ * usually XmlEditor is created by {@link XmlHandler}
  * @see webarchive.api.xml.XmlEditor for interface details
  * @author ccwelich
  */
-//TODO finish implementation
-//TODO tests
 public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
-	private final String dataTagName;
 	private Document document;
-	private Element dataNode; 	// the data-node
-	private String prefix;
-	private final String namespace;
+	private Element dataNode;
+	private ClientAdapter client;
 
 	/**
 	 * create XmlEditor
@@ -32,41 +30,48 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	 * @param document document used for editing
 	 * @param conf config data
 	 */
-	XmlEditor(Document document) {
+	XmlEditor(org.w3c.dom.Document document, org.w3c.dom.Element dataNode) {
 		assert document != null;
-		final XmlConf conf = (XmlConf) Handlers.get(XmlConf.class);
-		setPrefix(conf.getPrefix());
-		dataTagName = conf.getDataTag();
-		namespace = conf.getNamespace();
-		setDocument(document);
+		assert dataNode != null;
+		this.document = document;
+		this.dataNode = dataNode;
+		this.client = new DefaultClientAdapter();
 	}
 
-	private void setDocument(Document document) {
+	/**
+	 * sets the clientAdapter. Usage: testing.
+	 *
+	 * @param client
+	 */
+	void setClient(ClientAdapter client) {
+		this.client = client;
+	}
+
+	private void updateDocument(Document document) {
 		this.document = document;
 		dataNode = (Element) document.getElementsByTagName(
-			addPrefixTo(dataTagName)).item(0);
+			TagName.DATA_TAG.toString()).item(0);
 	}
 
 	@Override
-	public Element createElement(String tagName) {
-		tagName = addPrefixTo(tagName);
-		return document.createElementNS(namespace, tagName);
+	public Element createElement(TagName tagName) {
+		return document.createElementNS(TagName.NAMESPACE, tagName.
+			getAbsoluteName());
 	}
 
 	@Override
-	public DataElement createDataElement(String tagName) {
-		tagName = addPrefixTo(tagName);
+	public DataElement createDataElement(TagName tagName) {
 		return new DataElement(
-			document.createElementNS(namespace, tagName), true);
+			document.createElementNS(TagName.NAMESPACE.toString(), tagName.
+			getAbsoluteName()), true);
 	}
 
 	@Override
-	public DataElement getDataElement(String tagName) {
-		tagName = addPrefixTo(tagName);
+	public DataElement getDataElement(TagName tagName) {
 		NodeList list = dataNode.getChildNodes();
 		final int length = list.getLength();
 		for (int i = 0; i < length; i++) {
-			if (list.item(i).getNodeName().equals(tagName)) {
+			if (list.item(i).getNodeName().equals(tagName.getAbsoluteName())) {
 				return new DataElement((Element) list.item(i), false);
 			}
 		}
@@ -74,7 +79,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	}
 
 	@Override
-	public void addDataElement(DataElement element) throws NullPointerException,
+	public void addDataElement(webarchive.api.xml.DataElement element) throws NullPointerException,
 		IllegalArgumentException,
 		Exception {
 		if (element == null) {
@@ -84,22 +89,28 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 			throw new IllegalArgumentException("write protected");
 		}
 		// send element to XmlHandler in server
-		Client cl = Client.getInstance();
-		Connection c = cl.getConnection();
-		Message msg = new Message(Header.ADDXMLEDIT, element);
-		c.send(msg);
-		Message answer = c.waitForAnswer(msg);
-		setDocument((Document) answer.getData());
+		updateDocument(client.syncDocument(element));
 	}
 
-	@Override
-	public final String addPrefixTo(String name) {
-		assert prefix.endsWith(":");
-		int i = name.indexOf(':');
-		return prefix + ((i != -1) ? name : name.substring(i + 1));
-	}
+	/**
+	 * The default ClientAdapter. connects with webarchive.client.Client
+	 * singleton.
+	 */
+	class DefaultClientAdapter implements ClientAdapter {
 
-	private void setPrefix(String prefix) {
-		this.prefix = (prefix.endsWith(":")) ? prefix : prefix+':';
+		@Override
+		public Document syncDocument(webarchive.api.xml.DataElement element) {
+			Client cl = Client.getInstance();
+			Connection c = cl.getConnection();
+			Message msg = new Message(Header.ADDXMLEDIT, element);
+			try {
+				c.send(msg);
+			} catch (Exception ex) {
+				Logger.getLogger(XmlEditor.class.getName()).
+					log(Level.SEVERE, null, ex);
+			}
+			Message answer = c.waitForAnswer(msg);
+			return (Document) answer.getData();
+		}
 	}
 }
