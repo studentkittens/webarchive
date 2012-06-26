@@ -10,8 +10,8 @@ import archive.config.xmlhandler as xmlhandler
 
 # Convert string to int,
 # if it's a numerical string
-def _as_int(url):
-    if type(url) is str and value.isnumeric():
+def _as_int(value):
+    if type(value) is str and value.isnumeric():
         return int(value)
     else:
         return value

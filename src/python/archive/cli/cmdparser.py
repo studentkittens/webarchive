@@ -58,7 +58,6 @@ import archive.javadapter.server as javadapter
 import archive.config.handler as config
 import archive.util.filelock as lock
 import archive.util.paths as paths
-import archive.logger.loghandler as log
 
 
 LOCKFILE = 'global'
@@ -210,7 +209,7 @@ class Cli(object):
     def handle_log(self):
         if self._args['--severity']:
             log.severity(self._args['--severity'])
-            
+
 
     def handle_repair(self):
         """
