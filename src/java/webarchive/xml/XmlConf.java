@@ -18,7 +18,7 @@ import webarchive.init.ConfigHandler;
 public class XmlConf extends Handler {
 
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
-	private File schemaPath = new File("xml/file.xsd");
+	private File schemaPath = new File("src/xml/file.xsd");
 
 	/**
 	 * Default constructor
