@@ -31,22 +31,22 @@ import webarchive.xml.XmlHandler;
 import webarchive.xml.XmlMethodFactory;
 
 public class ServerConnectionHandler extends ConnectionHandler {
-
+	
 	private FileHandler io;
 	private SqlHandler sql;
 	private LockHandler locker;
-
+	
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
 		this.io = (FileHandler) Handlers.get(FileHandler.class);
 		this.sql = (SqlHandler) Handlers.get(SqlHandler.class);
 		this.locker = (LockHandlerImpl) Handlers.get(LockHandlerImpl.class);
 	}
-
+	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void handle(Message msg) {
-
+		
 		switch (msg.getHeader()) {
 			case SUCCESS:
 			case HANDSHAKE: {
@@ -92,12 +92,12 @@ public class ServerConnectionHandler extends ConnectionHandler {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				
 			}
 			break;
 			case READFILE: {
 				FileDescriptor fd = (FileDescriptor) msg.getData();
-
+				
 				locker.lock(fd);
 				FileBuffer buf = io.read(fd);
 				locker.unlock(fd);
@@ -112,35 +112,47 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			break;
 			case GETXMLEDIT: {
 				FileDescriptor fd = (FileDescriptor) msg.getData();
-				XmlHandler xmlH = getXmlHandler(fd);
-				XmlEditor xmlEd = xmlH.newEditor();
-				Message answer = new Message(msg, xmlEd);
+				XmlHandler xmlH;
+				Message answer;
+				try {
+					xmlH = getXmlHandler(fd);
+					XmlEditor xmlEd = xmlH.newEditor();
+					answer = new Message(msg, xmlEd);
+					answer.setHeader(Header.GETXMLEDIT);
+					
+				} catch (SAXException ex) {
+					answer = new Message(msg, ex);
+					answer.setHeader(Header.EXCEPTION);
+				}
+				
 				try {
 					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (Exception ex) {
+					Logger.getLogger(ServerConnectionHandler.class.getName()).
+						log(Level.SEVERE, null, ex);
 				}
 			}
 			break;
 			case ADDXMLEDIT: {
 				DataElement element = (DataElement) msg.getData();
 				FileDescriptor fd = (FileDescriptor) msg.getData();
-				XmlHandler xmlH = getXmlHandler(fd);
-				try {
+				Message answer;
+				try {					
+					XmlHandler xmlH = getXmlHandler(fd);
 					xmlH.addDataElement(element);
-				} catch (	IllegalArgumentException | SAXException | IOException | TransformerException | ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					answer = new Message(msg, xmlH.getDocument());
+					answer.setHeader(Header.ADDXMLEDIT);
+				} catch (Exception ex) {
+					answer = new Message(msg, ex);
+					answer.setHeader(Header.EXCEPTION);
 				}
-				Message answer = new Message(msg, xmlH.getDocument());
-				answer.setHeader(Header.ADDXMLEDIT);
 				try {
 					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (Exception ex) {
+					Logger.getLogger(ServerConnectionHandler.class.getName()).
+						log(Level.SEVERE, null, ex);
 				}
+				
 			}
 			break;
 			case LS: {
@@ -193,22 +205,15 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				break;
 		}
 	}
-
-	private XmlHandler getXmlHandler(FileDescriptor fd) {
+	
+	private XmlHandler getXmlHandler(FileDescriptor fd) throws SAXException {
 		XmlHandler xmlH = null;
-		try {
-			xmlH = ((XmlMethodFactory) Handlers.get(
-				XmlMethodFactory.class)).newXmlHandler(fd);
-		} catch (ParserConfigurationException |
-			SAXException |
-			IOException |
-			TransformerConfigurationException ex) {
-			Logger.getLogger(ServerConnectionHandler.class.getName()).
-				log(Level.SEVERE, null, ex);
-		}
+		xmlH = ((XmlMethodFactory) Handlers.get(
+			XmlMethodFactory.class)).newXmlHandler(fd);
+		
 		return xmlH;
 	}
-
+	
 	@Override
 	public void send(Message msg) throws Exception {
 		c.send(msg);

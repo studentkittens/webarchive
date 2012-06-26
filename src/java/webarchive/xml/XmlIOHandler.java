@@ -12,18 +12,28 @@ import org.xml.sax.SAXException;
 import webarchive.handler.Handlers;
 import webarchive.server.LockHandler;
 import webarchive.transfer.FileDescriptor;
-//TODO Tests, javadoc
 
 /**
+ * Mid-level controller, used to access XML-files. XmlIOHandler builds
+ * w3c.dom.Document objects from XML-files and writes them back vice versa. It
+ * has also access methods for file-locking. Usually new XmlIOHandlers are
+ * created via {@link XmlMethodFactory}
  *
  * @author ccwelich
  */
 public class XmlIOHandler {
 
-	public Transformer transformer;
+	private Transformer transformer;
 	private final FileDescriptor xmlFile;
 	private LockHandler locker;
 
+	/**
+	 * create new XmlIOHandler
+	 *
+	 * @param xmlPath XML-path in archive
+	 * @param transformer transformer, used for Dom-output
+	 * @param locker locker, used for file locking operations
+	 */
 	XmlIOHandler(FileDescriptor xmlPath, Transformer transformer,
 		LockHandler locker) {
 		assert xmlPath != null;
@@ -35,7 +45,15 @@ public class XmlIOHandler {
 
 	}
 
-	public Document buildDocument() throws ParserConfigurationException,
+	/**
+	 * build new Document
+	 *
+	 * @return document
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	Document buildDocument() throws ParserConfigurationException,
 		SAXException, IOException {
 		DocumentBuilder db = Handlers.get(XmlMethodFactory.class).
 			newDocumentBuilder();
@@ -43,20 +61,33 @@ public class XmlIOHandler {
 		return document;
 	}
 
+	/**
+	 * write dom-object to disc
+	 *
+	 * @param document
+	 * @throws TransformerException
+	 */
 	public void write(Document document) throws TransformerException {
 		DOMSource source = new DOMSource(document);
 		StreamResult streamResult = new StreamResult(xmlFile.getAbsolutePath());
 		transformer.transform(source, streamResult);
 	}
 
+	/**
+	 * macro-operation for file-locking, includes checkout
+	 */
 	public void lock() {
-		//TODO 
+		//TODO check correctness
 		locker.lock(xmlFile);
 		locker.checkout(xmlFile);
 	}
 
+	/**
+	 * macro-operation for file-unlocking, includes commit and checkout
+	 */
 	public void unlock() {
-		//TODO
+		//TODO check correctness
+		locker.commit(xmlFile);
 		locker.checkoutMaster();
 		locker.unlock(xmlFile);
 	}

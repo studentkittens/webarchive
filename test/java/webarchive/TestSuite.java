@@ -13,13 +13,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import webarchive.api.ApiTestSuite;
 import webarchive.dbaccess.DbAccessTestSuite;
+import webarchive.xml.XmlTestSuite;
 
 /**
  *
  * @author ccwelich
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ApiTestSuite.class, DbAccessTestSuite.class})
+@Suite.SuiteClasses({ApiTestSuite.class, DbAccessTestSuite.class, XmlTestSuite.class})
 public class TestSuite {
 
 	@BeforeClass

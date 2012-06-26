@@ -7,11 +7,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- *
+ * Currently not used
  * @author ccwelich
  */
-//TODO Tests
-//TODO javadoc
 
 public class XmlErrorHandler implements ErrorHandler {
 	

@@ -57,7 +57,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	}
 
 
-	public XmlEditor getXMLEdit(MetaData meta) throws Exception {
+	public XmlEditor getXMLEditor(MetaData meta) throws Exception {
 		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,meta.getPath()));
 		assert answer instanceof XmlEditor;
 		return (XmlEditor) answer;

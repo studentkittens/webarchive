@@ -2,11 +2,10 @@
 package webarchive.xml;
 
 import java.io.File;
-import webarchive.api.model.MetaData;
 import webarchive.transfer.FileDescriptor;
 
 /**
- *
+ * used to simplify tests
  * @author ccwelich
  */
 public class FileDescriptorMockup extends FileDescriptor {

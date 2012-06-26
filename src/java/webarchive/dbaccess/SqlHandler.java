@@ -37,7 +37,7 @@ public class SqlHandler extends Handler {
 
 	/**
 	 *
-	 * @param select, see api
+	 * @param select see api
 	 * @return List of selected objects
 	 * @throws SQLException
 	 * @throws UnsupportedOperationException if select is not recognized or

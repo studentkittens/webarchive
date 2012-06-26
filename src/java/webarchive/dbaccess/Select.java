@@ -26,7 +26,7 @@ public abstract class Select<Type> {
 	/**
 	 * @param rs current row of resultset
 	 * @param arg optional parameter, provided by executeSelect
-	 * @return one Object of this
+	 * @return one Object of Type
 	 * @throws SQLException
 	 */
 	protected abstract Type fromResultSet(ResultSet rs, Object arg) throws
@@ -65,7 +65,7 @@ public abstract class Select<Type> {
 	 * @param orderBy
 	 * @param sql
 	 */
-	protected void appendOrderBy(String[] orderBy, StringBuilder sql) {
+	protected final void appendOrderBy(String[] orderBy, StringBuilder sql) {
 		if (orderBy != null && orderBy.length > 0) {
 			sql.append(" ORDER BY ");
 			for (String val : orderBy) {

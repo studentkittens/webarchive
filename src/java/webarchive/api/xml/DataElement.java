@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
  * nodes in the data-node of the webarchive xml-file. New org.w3c.dom.Elements
  * may be added as children, but DataElement can only be stored back if it is not
  * write-protected, which is if canWrite() returns true.
+ * Equality is checked by the content and by writeprotection.
  * @see XmlEditor
  * @author ccwelich
  */
@@ -21,23 +22,28 @@ public interface DataElement {
 	/**
 	 * @see org.w3c.dom.Node#appendChild(org.w3c.dom.Node)
 	 */
-	Node appendChild(Node node) throws DOMException;
+	public Node appendChild(Node node) throws DOMException;
 
 	/**
 	 * check if DataElement is write protected
 	 *
 	 * @return true if DataElement is not write-protected, else false
 	 */
-	boolean canWrite();
+	public boolean canWrite();
 
 	/**
 	 * @see org.w3c.dom.Node#getChildNodes()
 	 */
-	NodeList getChildNodes();
+	public NodeList getChildNodes();
 
 	/**
 	 * @see org.w3c.dom.Element#getElementsByTagName(java.lang.String)
 	 */
-	NodeList getElementsByTagName(String string);
+	public NodeList getElementsByTagName(String string);
+
+	/**
+	 * @see org.w3c.dom.Node#isEqualNode(org.w3c.dom.Node) 
+	 */
+	public boolean isEqualNode(webarchive.xml.DataElement other);
 	
 }

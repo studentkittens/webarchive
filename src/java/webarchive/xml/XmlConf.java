@@ -10,16 +10,22 @@ import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
 
 /**
- * Config class for all Xml-related classes.
+ * Config class for all Xml-related classes. Extracts config-values from xml
+ * node in config-file.
  *
  * @author ccwelich
  */
-//TODO tests
 public class XmlConf extends Handler {
 
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
 	private File schemaPath = new File("xml/file.xsd");
 
+	/**
+	 * Default constructor
+	 *
+	 * @throws IllegalArgumentException if there are illegal values in config
+	 * file
+	 */
 	public XmlConf() throws IllegalArgumentException {
 		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).
 			getConfig();
@@ -28,11 +34,11 @@ public class XmlConf extends Handler {
 	}
 
 	/**
-	 * get XmlHandler AutoValidatingMode.
+	 * get XmlHandler AutoValidatingMode. determines the timing of XML-Dom
+	 * validation.
 	 *
 	 * @see AutoValidatingMode
 	 * @return the current autovalidating mode
-	 * @param autoValidatingMode
 	 */
 	public AutoValidatingMode getAutoValidatingMode() {
 		return autoValidatingMode;
@@ -47,7 +53,6 @@ public class XmlConf extends Handler {
 		return schemaPath;
 	}
 
-	
 	private void buildConf(Node xmlRoot) throws IllegalArgumentException {
 		NodeList items = xmlRoot.getChildNodes();
 		for (int i = 0; i < items.getLength(); i++) {

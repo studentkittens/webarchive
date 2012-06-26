@@ -1,6 +1,5 @@
 package webarchive.xml;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.XMLConstants;
@@ -19,12 +18,10 @@ import org.xml.sax.SAXException;
 import webarchive.handler.Handler;
 import webarchive.handler.Handlers;
 import webarchive.server.LockHandler;
-import webarchive.server.LockHandlerImpl;
-import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
 /**
- * Config class for all Xml-related classes.
+ * Factory class for all Xml-Helper and controllers.
  *
  * @author ccwelich
  */
@@ -34,7 +31,10 @@ public class XmlMethodFactory extends Handler {
 	private Schema schema;
 	private final TransformerFactory transformerFactory;
 	private LockHandler locker;
-
+	/**
+	 * create new XmlMethodFactory
+	 * @param locker used for file locking {@link webarchive.server.LockHandler}
+	 */
 	public XmlMethodFactory(LockHandler locker) {
 		xmlErrorHandler=null; // not used
 		buildSchema();
@@ -50,10 +50,14 @@ public class XmlMethodFactory extends Handler {
 		this.locker = locker;
 	}
 	
-	
+	/**
+	 * create new XmlHandler
+	 * @param xmlPath path of xml-file
+	 * @return new XmlHandler
+	 * @throws SAXException 
+	 */
 	public XmlHandler newXmlHandler(FileDescriptor xmlPath) throws SAXException {
-		XmlIOHandler ioHandler = null;
-		ioHandler = new XmlIOHandler(xmlPath, newTransformer(), locker);
+		XmlIOHandler ioHandler = newXmlIOHandler(xmlPath);
 		return new XmlHandler(ioHandler);
 	}
 	
@@ -86,11 +90,12 @@ public class XmlMethodFactory extends Handler {
 	 * get XmlErrorHandler
 	 * @return xmlErroHandler, default null
 	 */
-	public ErrorHandler getXmlErrorHandler() {
+	ErrorHandler getXmlErrorHandler() {
 		return xmlErrorHandler;
 	}
 	/**
-	 * set xmlErrorHandler
+	 * set ErrorHandler.
+	 * the error Handler is null by default.
 	 * @param xmlErrorHandler 
 	 */
 	public void setXmlErrorHandler(ErrorHandler xmlErrorHandler) {
@@ -102,7 +107,7 @@ public class XmlMethodFactory extends Handler {
 	 * get xmlValidator
 	 * @return xmlValidator
 	 */
-	public Validator newXmlValidator() {
+	Validator newXmlValidator() {
 		// schema is threadsafe
 		Validator v = schema.newValidator();
 		v.setErrorHandler(xmlErrorHandler);
@@ -119,6 +124,10 @@ public class XmlMethodFactory extends Handler {
 			Logger.getLogger(XmlMethodFactory.class.getName()).
 				log(Level.SEVERE, null, ex);
 		}
+	}
+
+	XmlIOHandler newXmlIOHandler(FileDescriptor xmlPath) {
+		return new XmlIOHandler(xmlPath, newTransformer(), locker);
 	}
 
 	

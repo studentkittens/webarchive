@@ -1,4 +1,4 @@
-package webarchive.dbaccess;
+package webarchive.xml;
 
 /*
  * To change this template, choose Tools | Templates
@@ -17,12 +17,14 @@ import org.junit.runners.Suite;
  * @author ccwelich
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({webarchive.dbaccess.SelectMetaDataTest.class,
-	webarchive.dbaccess.SelectCommitTagTest.class,
-	webarchive.dbaccess.SqlHandlerTest.class,
-	webarchive.dbaccess.SelectMetaByCommitTest.class,
-	SelectJoinTest.class})
-public class DbAccessTestSuite {
+@Suite.SuiteClasses({
+	webarchive.xml.XmlMethodFactoryTest.class,
+	webarchive.xml.XmlIOHandlerTest.class,
+	webarchive.xml.XmlConfTest.class,
+	webarchive.xml.XmlHandlerTest.class, 
+	webarchive.xml.DataElementTest.class,
+	webarchive.xml.XmlEditorTest.class})
+public class XmlTestSuite {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
