@@ -102,7 +102,7 @@ class Cli(object):
         # Set up config to another file if desired
         try:
             if self._args['init'] is False and self._args['--config']:
-                config.load(os.paths.abspath(self._args['<path>']))
+                config.load(os.path.abspath(self._args['--config']))
             elif self._args['init'] is False:
                 config.load('webarchive.conf.xml')
         except IOError as err:
