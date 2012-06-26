@@ -24,7 +24,7 @@ def init_archive(init_path=os.getcwd()):
     """
     Gets and sets parms at on the first start of archive
     """
-    base_path = os.path.join(init_path, 'archive')
+    base_path = os.path.abspath(os.path.join(init_path, 'archive'))
     if not os.path.exists(base_path):
         try:
             # Create top direcoty
