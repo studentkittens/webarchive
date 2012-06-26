@@ -27,8 +27,11 @@ CONFIG_TEMPLATE = """
         <notify>
             <interval>{notify_in_min}</interval>
         </notify>
-
     </server>
+    <xml>
+        <autoValidatingMode>after update</autoValidatingMode>update
+        <schemaPath>xml/file.xsd</schemaPath>
+    </xml>
     <javadapter>
         <port>{javadapter_port}</port>
     </javadapter>
