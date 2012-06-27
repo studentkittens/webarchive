@@ -69,8 +69,10 @@ public abstract class Select<Type> {
 		if (orderBy != null && orderBy.length > 0) {
 			sql.append(" ORDER BY ");
 			for (String val : orderBy) {
-				assert val != null;
-				sql.append(val);
+				if(val==null) continue;
+				String tmp = truncSemiColon(val);
+				if(tmp.isEmpty()) continue;
+				sql.append(tmp);
 				sql.append(", ");
 			}
 			sql.setLength(sql.length() - 2);
@@ -78,4 +80,9 @@ public abstract class Select<Type> {
 	}
 
 	abstract List<Type> select(webarchive.api.select.Select<Type> select) throws Exception;
+
+	protected String truncSemiColon(String string) {
+		int i = string.indexOf(';');
+		return (i > -1) ? string.substring(0,i) : string;
+	}
 }

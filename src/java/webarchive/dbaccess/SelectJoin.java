@@ -88,11 +88,10 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 		String rc;
 		int i = 0;
 		for (; i < maxWhere; i++) {
-			where[i] = (where[i] == null) ? "" : " WHERE " + where[i];
+			String tmp = where[i];
+			where[i] = (tmp == null) ? "" : " WHERE " + truncSemiColon(tmp);
 		}
-
-		rc = String.format(sqlTemplate, where);
-		return rc;
+		return String.format(sqlTemplate, where);
 	}
 
 	private static String buildSqlTemplate(String[] tables, String[] using) {
