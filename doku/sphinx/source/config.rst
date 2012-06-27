@@ -16,44 +16,51 @@ Additional Notes:
 
 .. code-block:: xml 
 
-  <webarchive>
-      <general>
-          <root>/tmp/archive</root>
-          <filterpath>filter/</filterpath>
-      </general>
-      <!-- modules -->
-      <crawler>
-          <depth>1</depth>
-          <interval>0.5</interval>
-          <maxInst>10</maxInst>
-          <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
-          <tempRoot>tmp/</tmpRoot>
-          <ignoreRobots>true</ignoreRobots>
-          <urllistpath>url.txt</urllistpath>
-          <customWgetParms></customWgetParms>
-      </crawler>
-      <db>
-          <path>metadata.db</path>
-          <sqlSource>../sql/</sqlSource>
-      </db>
-      <xml>
-          <schemaPath>xml/</schemaPath>
-      </xml>
-      <server>
-          <port>42420</port>
-          <notify>
-              <interval>15</interval>
-          </notify>
-      </server>
-      <javadapter>
-        <port>42421</port>
-      </javadapter>
-  </webarchive>
-
+    <webarchive>
+        <general>
+            <root>/tmp/archive</root>
+            <filterpath>filter/</filterpath>
+        </general>
+        <!-- modules -->
+        <crawler>
+            <depth>1</depth>
+            <interval>1</interval>
+            <maxInst>10</maxInst>
+            <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
+            <tempRoot>tmp/</tempRoot>
+            <ignoreRobots>true</ignoreRobots>
+            <urllistpath>url.txt</urllistpath>
+            <customWgetParms></customWgetParms>
+        </crawler>
+        <db>
+            <path>metadata.db</path>
+        </db>
+        <server>
+            <port>42420</port>
+            <notify>
+                <interval>15</interval>
+            </notify>
+        </server>
+        <xml>
+            <autoValidatingMode>after update</autoValidatingMode>update
+            <schemaPath>xml/file.xsd</schemaPath>
+        </xml>
+        <javadapter>
+            <port>42421</port>
+        </javadapter>
+    </webarchive>
 
 Implementation
 --------------
 
-.. autofunction:: archive.config.reader.get
+Acquiring:
 
-.. autofunction:: archive.config.reader.get_default
+.. autofunction:: archive.config.handler.get
+
+Acquiring Defaults:
+
+.. autofunction:: archive.config.handler.get_default
+
+Setting Values:
+
+.. autofunction:: archive.config.handler.set
