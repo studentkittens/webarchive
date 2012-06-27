@@ -7,6 +7,8 @@ Metadata object module
 
 __author__ = 'Christoph Piechula'
 
+import os
+
 import archive.util.times as utl
 import archive.crawler.extractor as extractor
 import archive.util.mimextractor as mime
@@ -34,6 +36,15 @@ class MetaData(dict):
         """
         return post_path[:-len('data')]
 
+    def get_content_path_from_tmp(tmp_path, domain):
+        """
+        /tmp/archive/tmp/www.golem.de/www.golem.de/...
+        =>
+        /tmp/archive/content/www.golem.de/...
+        """
+        return tmp_path.replace(os.path.join('tmp', domain), 'content')
+
+
     def build_metadata_from_file(tmp_crawler_folder, abs_data_path, commitTime):
         """
         Retrieves metadata and returns object
@@ -52,7 +63,8 @@ class MetaData(dict):
         m['mimeType'] = mime.get_mime(abs_data_path)
         m['url'] = MetaData.get_url_from_path(post_path)
         m['domain'] = MetaData.get_domain_from_path(post_path)
-        m['path'] = abs_data_path
+        m['path'] = MetaData.get_content_path_from_tmp(abs_data_path, m['domain'])
+        m['tmpPath'] = abs_data_path
         m['createTime'] = utl.get_ctime(abs_data_path)
         m['commitTime'] = commitTime
         m['title'] = extractor.get_title(abs_data_path, m['mimeType'])

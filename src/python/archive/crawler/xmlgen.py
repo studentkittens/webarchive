@@ -68,7 +68,7 @@ class XmlGenerator(object):
 
             xml_node = (XML_TEMPLATE.format(schema_path=self.__schema_path,
                                             meta=metadict),
-                                            item['path'][:-4])
+                                            item['tmpPath'][:-4])
 
             self.__xml_list.append(xml_node)
 
