@@ -21,6 +21,7 @@ __author__ = 'Christopher Pahl'
 import socket
 import socketserver
 import threading
+import logging 
 import sys
 import os
 import cmd
@@ -58,7 +59,7 @@ class ProtocolError(Exception):
 
 # The Lock that can be set via lock and unlock
 # It is global for sake of simplicity - there may not be more than one
-GLOBAL_LOCK = None
+GLOBAL_LOCK_TABLE = {}
 
 
 def lock_domain(domain, lock_timeout=300, wait=True):
@@ -66,27 +67,33 @@ def lock_domain(domain, lock_timeout=300, wait=True):
     Implementation for lock/try_lock, very common
     and therefore in an own function
     """
-    global GLOBAL_LOCK
-    try:
-        if GLOBAL_LOCK is None:
-            # Create a new lock
-            GLOBAL_LOCK = lock.FileLock(
-                    file_name=domain,
-                    folder=paths.get_content_root(),
-                    timeout=lock_timeout)
-        else:
-            # We do not want to wait, so raise a ProtocolError immediately
-            if GLOBAL_LOCK.is_locked and wait is False:
-                raise ProtocolError('Already locked.')
+    global GLOBAL_LOCK_TABLE
+    thread_name = threading.current_thread().name
 
-        # Wait.
-        GLOBAL_LOCK.acquire()
+    try:
+        # We do not want to wait, so raise a ProtocolError immediately
+        if GLOBAL_LOCK_TABLE[thread_name].is_locked and wait is False:
+           raise ProtocolError('Already locked.')
+    except KeyError:
+        # No lock created
+        pass
+
+
+    try:
+        # Create a new lock
+        GLOBAL_LOCK_TABLE[thread_name] = lock.FileLock(
+                file_name=domain,
+                folder=paths.get_content_root(),
+                timeout=lock_timeout)
+
+        # Lock, or wait for lock.
+        GLOBAL_LOCK_TABLE[thread_name].acquire()
 
     # Convert other exceptions to a ProtocolError
     except lock.FileLockException as err:
         raise ProtocolError(str(err))
     except OSError as err:
-        GLOBAL_LOCK = None
+        del GLOBAL_LOCK_TABLE[thread_name]
         raise ProtocolError(str(err))
 
 
@@ -124,15 +131,16 @@ def unlock_handler(args):
        * domain is e.g. www.heise.de
        * Returns nothing (but OK or ACK ...)
     """
-    global GLOBAL_LOCK
+    global GLOBAL_LOCK_TABLE
+    thread_name = threading.current_thread().name
 
-    if GLOBAL_LOCK is None:
-        raise ProtocolError('No previous lock.')
-    else:
-        GLOBAL_LOCK.release()
-        if GLOBAL_LOCK.is_locked:
+    try:
+        GLOBAL_LOCK_TABLE[thread_name].release()
+        if GLOBAL_LOCK_TABLE[thread_name].is_locked:
             raise ProtocolError('Unlocking failed.')
-        GLOBAL_LOCK = None
+        del GLOBAL_LOCK_TABLE[thread_name]
+    except KeyError:
+        raise ProtocolError('No previous lock.')
 
 
 def checkout_handler(args):
@@ -310,7 +318,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
             # an empty string is used as response instead
             response = bytes(handler['func'](self.__arg) or '', 'UTF-8')
 
-        except KeyError:
+        except KeyError as err:
             raise ProtocolError('Unknown command: ' + self.__cmd)
         else:
             return response
@@ -329,7 +337,7 @@ class AdapterHandler(socketserver.StreamRequestHandler):
 
             # Got EOF, so we better quit
             if len(line) == 0:
-                print('Quitting connection "%s" to client' %
+                logging.info('Quitting connection "%s" to client' %
                         threading.current_thread().name)
                 return
 

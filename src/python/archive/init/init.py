@@ -13,6 +13,7 @@ import archive.config.handler as config
 __author__ = 'Christopher Pahl'
 
 DEFAULT_URLS = """
+www.hack.org
 www.blendpolis.de
 www.golem.de
 www.heise.de

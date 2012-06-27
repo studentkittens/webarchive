@@ -31,10 +31,6 @@ Config Options:
   --set=<confurl> <value>  Set a Value in the config permanently.
   --get=<confurl>          Acquire a Value in the config by it's url.
   --default=<confurl>      Acquire the Default-Value of this url.
-
-Log Options:
-  --severity               Set severity for Logging.
-
 """
 
 __author__ = 'Christopher Pahl, Christoph Piechula'
@@ -177,7 +173,10 @@ class Cli(object):
                 print('Cannot start javadapter:', err)
                 sys.exit(-2)
 
-        javadapter.ServerShell(server_instance=server).cmdloop()
+        try:
+            javadapter.ServerShell(server_instance=server).cmdloop()
+        except KeyboardInterrupt:
+             print('Interrupted.')
 
         if self._args['--start']:
             server.shutdown()
