@@ -45,6 +45,15 @@ Internal Documentation
    utils
    testing
 
+
+
+.. image:: vim.png
+    :height: 128px
+    :width: 128 px
+    :scale: 60 %
+    :alt: proudly coded in gVim
+    :align: right
+
 Indices and tables
 ==================
 
