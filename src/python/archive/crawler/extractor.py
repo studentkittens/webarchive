@@ -14,7 +14,7 @@ import os
 import html.parser
 
 
-TITLE_REGEX = re.compile('<\s*title\s*>(.*)</\s*title\s*>')
+TITLE_REGEX = re.compile('<\s*title\s*>(.*)</\s*title\s*>', re.IGNORECASE)
 
 
 def extract_html(file_path):
