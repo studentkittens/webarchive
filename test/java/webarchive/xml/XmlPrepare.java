@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
+import webarchive.server.LockHandler;
 import webarchive.server.LockHandlerMockup;
 
 /**
@@ -18,19 +19,19 @@ import webarchive.server.LockHandlerMockup;
  * @author ccwelich
  */
 public class XmlPrepare {
-
+	public static XmlMethodFactory factory;
+	public static XmlConf xmlConf;
+	public static LockHandler lockHandler;
 	public static final File XML_BACKUP = new File("test/xml/example.backup.xml"),
 		XML_TARGET = new File("test/xml/example.xml"),
 		XML_EXPECTED = new File("test/xml/example.expected.xml");
 
 	public static void builtHandlers() throws ParserConfigurationException,
 		SAXException, IOException, IllegalArgumentException {
-		Handlers.add(new ConfigHandler(new File(
-			"test/java/webarchive/xml/mockup.conf.xml")));
-		Handlers.add(new XmlConf());
-		final LockHandlerMockup lockHandler = new LockHandlerMockup();
-		Handlers.add(lockHandler);
-		Handlers.add(new XmlMethodFactory(lockHandler));
+		ConfigHandler conf = new ConfigHandler(new File("test/java/webarchive/xml/mockup.conf.xml"));
+		xmlConf = new XmlConf(conf);
+		lockHandler = new LockHandlerMockup();
+		factory = new XmlMethodFactory(lockHandler,xmlConf);
 	}
 
 	static void restoreFiles() {
@@ -48,8 +49,8 @@ public class XmlPrepare {
 		}
 	}
 
-	static void killHandlers() {
-		Handlers.clear();
+	static void shutDownFactory() {
+		factory = null;
 	}
 
 }

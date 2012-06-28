@@ -38,8 +38,11 @@ public class XmlMethodFactory extends Handler {
 	 * @param locker used for file locking {@link webarchive.server.LockHandler}
 	 */
 	public XmlMethodFactory(LockHandler locker, XmlConf conf) {
+		assert locker != null;
+		assert conf != null;
+		this.locker = locker;
+		this.conf = conf;
 		xmlErrorHandler=null; // not used
-		buildSchema();
 		//build final documentBuilderFactory
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(false);
@@ -49,8 +52,8 @@ public class XmlMethodFactory extends Handler {
 		documentBuilderFactory.setNamespaceAware(true);
 		//build transformer factory
 		transformerFactory = TransformerFactory.newInstance();
-		this.locker = locker;
-		this.conf = conf;
+		buildSchema();
+
 	}
 	
 	/**

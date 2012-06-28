@@ -27,9 +27,9 @@ public class XmlConf extends Handler {
 	 * @throws IllegalArgumentException if there are illegal values in config
 	 * file
 	 */
-	public XmlConf() throws IllegalArgumentException {
-		Document dom = Server.getInstance().getCollection().get(ConfigHandler.class).getConfig();
-		Element xmlRoot = (Element) dom.getElementsByTagName("xml").item(0);
+	public XmlConf(ConfigHandler conf) throws IllegalArgumentException {
+		Document confDom = conf.getConfig();
+		Element xmlRoot = (Element) confDom.getElementsByTagName("xml").item(0);
 		buildConf(xmlRoot);
 	}
 

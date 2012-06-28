@@ -4,10 +4,7 @@
  */
 package webarchive.xml;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import static org.junit.Assert.*;
@@ -15,7 +12,6 @@ import org.junit.*;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import webarchive.api.xml.TagName;
-import webarchive.handler.Handlers;
 
 /**
  *
@@ -35,14 +31,14 @@ public class XmlEditorTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 	
 	@Before
 	public void setUp() throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException {
 				XmlPrepare.restoreFiles();
 
-		XmlMethodFactory fac = Handlers.get(XmlMethodFactory.class);
+		XmlMethodFactory fac = XmlPrepare.factory;
 		XmlHandler hdl = fac.newXmlHandler(new FileDescriptorMockup(XmlPrepare.XML_TARGET));
 		instance = hdl.newEditor();
 		instance.setClient(new ClientAdapterMockup(hdl));

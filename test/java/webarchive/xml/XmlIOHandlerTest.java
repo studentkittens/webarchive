@@ -38,7 +38,7 @@ public class XmlIOHandlerTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 	
 	@Before
@@ -47,10 +47,8 @@ public class XmlIOHandlerTest {
 		targetFile = new File("test/xml/example.xml");
 		size0 = Files.size(targetFile.toPath());
 		FileDescriptorMockup target = new FileDescriptorMockup(targetFile);
-		locker = Handlers.get(LockHandlerMockup.class);
-		
-		instance = Handlers.get(XmlMethodFactory.class).newXmlIOHandler(target);
-		
+		instance = XmlPrepare.factory.newXmlIOHandler(target);
+		locker = (LockHandlerMockup) XmlPrepare.lockHandler;
 	}
 	
 	@After
@@ -91,7 +89,7 @@ public class XmlIOHandlerTest {
 		instance.lock();
 		State[] state = locker.fetchStates();
 		assertEquals(StateType.LOCK, state[0].stateType);
-		assertEquals(StateType.CHECKOUT, state[1].stateType);
+
 
 	}
 
@@ -103,8 +101,6 @@ public class XmlIOHandlerTest {
 		System.out.println("unlock");
 		instance.unlock();
 		State[] state = locker.fetchStates();
-		assertEquals(StateType.COMMIT,state[0].stateType);
-		assertEquals(StateType.CHECKOUT_MASTER,state[1].stateType);
-		assertEquals(StateType.UNLOCK,state[2].stateType);
+		assertEquals(StateType.UNLOCK,state[0].stateType);
 	}
 }

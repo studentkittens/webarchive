@@ -39,13 +39,13 @@ public class DataElementTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 
 	@Before
 	public void setUp() throws ParserConfigurationException, SAXException,
 		IOException, TransformerConfigurationException {
-		XmlMethodFactory fac = Handlers.get(XmlMethodFactory.class);
+		XmlMethodFactory fac = XmlPrepare.factory;
 		XmlHandler hdl = fac.newXmlHandler(
 			new FileDescriptorMockup(new File(
 			"test/xml/example.expected.xml")));

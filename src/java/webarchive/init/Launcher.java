@@ -89,8 +89,9 @@ public class Launcher {
 	 */
 	private static void buildHandlers(File configPath, Handlers col) throws ParserConfigurationException,
 		SAXException, IOException, IllegalArgumentException {
-		col.add(new ConfigHandler(configPath));
-		col.add(new XmlConf());
+		final ConfigHandler configHandler = new ConfigHandler(configPath);
+		col.add(configHandler);
+		col.add(new XmlConf(configHandler));
 		col.add(new webarchive.server.FileHandler());
 
 	}

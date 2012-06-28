@@ -40,7 +40,7 @@ public class XmlHandlerTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 
 	@Before
@@ -48,7 +48,7 @@ public class XmlHandlerTest {
 		IOException, TransformerConfigurationException {
 		XmlPrepare.restoreFiles();
 
-		XmlMethodFactory factory = Handlers.get(XmlMethodFactory.class);
+		XmlMethodFactory factory = XmlPrepare.factory;
 		target = new File("test/xml/example.xml");
 		instance = factory.newXmlHandler(new FileDescriptorMockup(target));
 		resultinst = factory.newXmlHandler(new FileDescriptorMockup(new File(
@@ -112,7 +112,7 @@ public class XmlHandlerTest {
 		dataElement.appendChild(element);
 		instance.addDataElement(dataElement);
 		
-		instance = Handlers.get(XmlMethodFactory.class).newXmlHandler(new FileDescriptorMockup(
+		instance = XmlPrepare.factory.newXmlHandler(new FileDescriptorMockup(
 			target));
 		NodeList expected = resultinst.getDocument().getElementsByTagName(TagName.DATA_TAG.
 			getAbsoluteName()).item(0).getChildNodes();

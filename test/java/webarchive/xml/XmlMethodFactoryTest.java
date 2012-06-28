@@ -34,12 +34,12 @@ public class XmlMethodFactoryTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 
 	@Before
 	public void setUp() {
-		instance = (XmlMethodFactory) Handlers.get(XmlMethodFactory.class);
+		instance = XmlPrepare.factory;
 		xmlPath = new FileDescriptorMockup(new File(
 			"test/xml/example.backup.xml"));
 	}

@@ -27,12 +27,12 @@ public class XmlConfTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		XmlPrepare.killHandlers();
+		XmlPrepare.shutDownFactory();
 	}
 	
 	@Before
 	public void setUp() {
-		instance = Handlers.get(XmlConf.class);
+		instance = XmlPrepare.xmlConf;
 	}
 	
 	@After

@@ -68,10 +68,6 @@ public class LockHandlerMockup extends LockHandler {
 	public void unlock(FileDescriptor fd) {
 		states.offer(new State(StateType.UNLOCK, fd));
 	}
-	@Override
-	public void checkoutMaster() {
-		states.offer(new State(StateType.CHECKOUT_MASTER));
-	}
 
 	public State[] fetchStates() {
 		State[] rc = new State[states.size()];

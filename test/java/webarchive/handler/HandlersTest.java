@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
  * @author ccwelich
  */
 public class HandlersTest {
+	private Handlers instance;
 
 	class TestHandler extends Handler {
 
@@ -49,7 +50,7 @@ public class HandlersTest {
 
 	@Before
 	public void setUp() {
-		Handlers.clear();
+		instance = new Handlers();
 	}
 
 	@After
@@ -63,20 +64,20 @@ public class HandlersTest {
 	public void testAddGet() {
 		System.out.println("add");
 		Handler h1 = new TestHandler1(1), h2 = new TestHandler2(2);
-		Handlers.add(h1);
-		Handlers.add(h2);
+		instance.add(h1);
+		instance.add(h2);
 		//test generic cast
-		TestHandler1 h11 = Handlers.get(TestHandler1.class);
+		TestHandler1 h11 = instance.get(TestHandler1.class);
 		assertEquals(h11,h1);
 		
 		System.out.println("get");
-		assertTrue(h1 == Handlers.get(TestHandler1.class));
-		assertTrue(h2 == Handlers.get(TestHandler2.class));
-		assertTrue(Handlers.get(TestHandler.class)==null);
+		assertTrue(h1 == instance.get(TestHandler1.class));
+		assertTrue(h2 == instance.get(TestHandler2.class));
+		assertTrue(instance.get(TestHandler.class)==null);
 	
 	}
 	/**
-	 * Test of add and get method, of class Handlers.
+	 * Test of add and get method, of class instance.
 	 */
 	@Test
 	public void testIllegal() {
@@ -84,7 +85,7 @@ public class HandlersTest {
 		boolean thrown = false;
 		//add null
 		try {
-			Handlers.add(null);
+			instance.add(null);
 		} catch (AssertionError ex) {
 			thrown = true;
 		}
@@ -92,9 +93,9 @@ public class HandlersTest {
 		// add dublicate
 		thrown = false;
 		Handler h1 = new TestHandler1(1);
-		Handlers.add(h1);
+		instance.add(h1);
 		try {
-			Handlers.add(h1);
+			instance.add(h1);
 		} catch (AssertionError ex) {
 			thrown = true;
 		}
