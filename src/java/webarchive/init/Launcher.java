@@ -74,6 +74,11 @@ public class Launcher {
 		System.out.println("\nServer started!\n");
 
 		// TODO start notifier
+		/*
+		 * Notifier notifier = new Notifier(3600000);// 1 hour; 43200000 for 12 hours
+		 * notifier.run();
+		 * System.out.println("\nNotifier started!\n");
+		 */
 
 
 	}
