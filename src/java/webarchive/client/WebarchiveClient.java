@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Observable;
 
@@ -20,9 +21,10 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Client cl;
 	private Connection con;
 	
-	protected WebarchiveClient() {
+	public WebarchiveClient(InetAddress server, int port) {
 		cl = Client.getInstance();
 		con = cl.getConnection();
+		cl.connectToServer();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -53,7 +55,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	@Override
 	public OutputStream getOutputStream(MetaData meta, File file)
 			throws Exception {
-		return new MyBAOS(new FileBuffer(new FileDescriptor(meta,file)),(ClientConnectionHandler) con.getConHandler());
+		return new BAOS(new FileBuffer(new FileDescriptor(meta,file)),(ClientConnectionHandler) con.getConHandler());
 	}
 
 
@@ -103,7 +105,10 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);
 		con.send(msg);
-		return  con.waitForAnswer(msg).getData();
+		Message answer = (Message) con.waitForAnswer(msg);
+		if(answer.getHeader() == Header.EXCEPTION)
+			throw (Exception) answer.getData();
+		return  answer.getData();
 	}
 
 }

@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import webarchive.client.ClientConnectionHandler;
 
-public class MyBAOS extends ByteArrayOutputStream {
+public class BAOS extends ByteArrayOutputStream {
 	
 	private FileBuffer buf;
 	private ClientConnectionHandler cH;
-	public MyBAOS (FileBuffer buf, ClientConnectionHandler cH) {
+	public BAOS (FileBuffer buf, ClientConnectionHandler cH) {
 		this.buf=buf;
 		this.cH=cH;
 	}

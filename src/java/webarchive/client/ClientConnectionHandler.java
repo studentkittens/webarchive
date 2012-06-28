@@ -8,14 +8,28 @@ import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
 import webarchive.transfer.Message;
 
+/**
+ * The Class ClientConnectionHandler is primarily responsible for handling Handshakes, Notifications and Exceptions.
+ * All other Messages are redirected to the querying Threads by using the super-type ConnectionHandler's wakeUp() method;
+ * 
+ * @author Schneider
+ */
 public class ClientConnectionHandler extends ConnectionHandler {
 
 
+	/**
+	 * Instantiates a new client connection handler.
+	 *
+	 * @param c the Connection
+	 * @param netMod the Client-NetworkModule
+	 */
 	public ClientConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
-		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see webarchive.connection.ConnectionHandler#handle(webarchive.transfer.Message)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void handle(Message msg) {
@@ -42,10 +56,6 @@ public class ClientConnectionHandler extends ConnectionHandler {
 			break;
 		}
 		case EXCEPTION:
-		{
-			//TODO
-			break;
-		}
 		case SUCCESS:
 		case SQL:
 		case WRITEFILE:
@@ -58,6 +68,9 @@ public class ClientConnectionHandler extends ConnectionHandler {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see webarchive.connection.ConnectionHandler#send(webarchive.transfer.Message)
+	 */
 	@Override
 	public void send(Message msg) throws Exception {
 		c.send(msg);		

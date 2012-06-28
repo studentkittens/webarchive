@@ -23,6 +23,5 @@ public abstract class LockHandler extends Handler {
 
 	public abstract void unlock(FileDescriptor fd);
 
-	public abstract void checkoutMaster();
 	
 }

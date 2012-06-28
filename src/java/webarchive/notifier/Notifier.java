@@ -17,7 +17,7 @@ import webarchive.transfer.Message;
 /**
  * Simple Notifier, which is written like the documentation told.
  * Todo: api.odel.TimeStamp...
- * @author ccwelich
+ * @author sabrina
  */
 public class Notifier extends Thread {	
 	private TimeStamp lastSearch; 

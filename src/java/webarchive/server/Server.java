@@ -2,23 +2,17 @@ package webarchive.server;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
-import webarchive.dbaccess.DbConfigHandler;
-import webarchive.dbaccess.SqlHandler;
-import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,25 +28,32 @@ public class Server implements Runnable, NetworkModule {
 	private Boolean running = false;
 	private Thread thread;
 
+	private Handlers collection;
+	
+	public Handlers getCollection() {
+		return collection;
+	}
+
 	public Thread getThread() {
 		return thread;
 	}
 
 	private Server() {
 
-		this.listenPort = new Integer(((SvConfigHandler) Handlers.get(
-			SvConfigHandler.class)).getValue("port"));
+		this.listenPort = new Integer(((ConfigHandler) collection.get(
+			ConfigHandler.class)).getValue("webarchive.server.port"));
 		this.cList = new ArrayList<>();
 		this.observers = new ArrayList<>();
 
 	}
 
 	public static Server getInstance() {
-		if (sv == null) {
-			sv = new Server();
-		}
 		return sv;
 
+	}
+	public static void init(Handlers col) {
+		sv = new Server();
+		sv.collection = col;
 	}
 
 	public boolean start() {
@@ -84,7 +85,7 @@ public class Server implements Runnable, NetworkModule {
 
 	@Override
 	public void run() {
-
+//TODO fix synchronization on old reference
 
 		synchronized (running) {
 			if (isRunning()) {
@@ -137,13 +138,13 @@ public class Server implements Runnable, NetworkModule {
 				System.out.println("awaiting incomming connection");
 				sock = svSock.accept();
 			} catch (SocketException e) {
-				//TODO
+				Logger.getLogger(Server.class.getName()).log(Level.INFO, null,
+						e);
 				disconnectClients();
 				break;
 
 			} catch (IOException ex) {
-				// TODO Auto-generated catch block
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null,
+				Logger.getLogger(Server.class.getName()).log(Level.INFO, null,
 					ex);
 				continue;
 			}
@@ -155,11 +156,10 @@ public class Server implements Runnable, NetworkModule {
 				oos = new ObjectOutputStream(sock.getOutputStream());
 				ois = new ObjectInputStream(sock.getInputStream());
 			} catch (Exception ex) {
-				// TODO Auto-generated catch block
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null,
 					ex);
+				continue;
 			}
-			System.out.println("trying to safe connection");
 			Connection c = new Connection(sock, oos, ois);
 			c.setConHandler(new ServerConnectionHandler(c, this));
 
@@ -173,8 +173,7 @@ public class Server implements Runnable, NetworkModule {
 				try {
 					sock.close();
 				} catch (IOException ex) {
-					// TODO Auto-generated catch block
-					Logger.getLogger(Server.class.getName()).log(Level.SEVERE,
+					Logger.getLogger(Server.class.getName()).log(Level.WARNING,
 						null, ex);
 				}
 				continue;

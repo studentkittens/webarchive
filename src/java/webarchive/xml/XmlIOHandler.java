@@ -26,7 +26,7 @@ public class XmlIOHandler {
 	private Transformer transformer;
 	private final FileDescriptor xmlFile;
 	private LockHandler locker;
-
+	private XmlMethodFactory xmlMethFac;
 	/**
 	 * create new XmlIOHandler
 	 *
@@ -35,13 +35,15 @@ public class XmlIOHandler {
 	 * @param locker locker, used for file locking operations
 	 */
 	XmlIOHandler(FileDescriptor xmlPath, Transformer transformer,
-		LockHandler locker) {
+		LockHandler locker, XmlMethodFactory xmlMethFac) {
 		assert xmlPath != null;
 		assert transformer != null;
 		assert locker != null;
+		assert xmlMethFac != null;
 		this.xmlFile = xmlPath;
 		this.transformer = transformer;
 		this.locker = locker;
+		this.xmlMethFac = xmlMethFac;
 
 	}
 
@@ -55,8 +57,7 @@ public class XmlIOHandler {
 	 */
 	Document buildDocument() throws ParserConfigurationException,
 		SAXException, IOException {
-		DocumentBuilder db = Handlers.get(XmlMethodFactory.class).
-			newDocumentBuilder();
+		DocumentBuilder db = xmlMethFac.newDocumentBuilder();
 		Document document = db.parse(xmlFile.getAbsolutePath());
 		return document;
 	}
@@ -77,18 +78,13 @@ public class XmlIOHandler {
 	 * macro-operation for file-locking, includes checkout
 	 */
 	public void lock() {
-		//TODO check correctness
 		locker.lock(xmlFile);
-		locker.checkout(xmlFile);
 	}
 
 	/**
 	 * macro-operation for file-unlocking, includes commit and checkout
 	 */
 	public void unlock() {
-		//TODO check correctness
-		locker.commit(xmlFile);
-		locker.checkoutMaster();
 		locker.unlock(xmlFile);
 	}
 }

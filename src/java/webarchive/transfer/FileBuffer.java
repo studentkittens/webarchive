@@ -27,7 +27,7 @@ public class FileBuffer {
 		return data;
 	}
 
-	void finish(MyBAOS baos) {
+	void finish(BAOS baos) {
 		 this.data = baos.toByteArray();
 	}
 

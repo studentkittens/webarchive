@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import webarchive.handler.Handler;
 import webarchive.handler.Handlers;
 import webarchive.server.LockHandler;
+import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
 /**
@@ -31,11 +32,12 @@ public class XmlMethodFactory extends Handler {
 	private Schema schema;
 	private final TransformerFactory transformerFactory;
 	private LockHandler locker;
+	private XmlConf conf;
 	/**
 	 * create new XmlMethodFactory
 	 * @param locker used for file locking {@link webarchive.server.LockHandler}
 	 */
-	public XmlMethodFactory(LockHandler locker) {
+	public XmlMethodFactory(LockHandler locker, XmlConf conf) {
 		xmlErrorHandler=null; // not used
 		buildSchema();
 		//build final documentBuilderFactory
@@ -48,6 +50,7 @@ public class XmlMethodFactory extends Handler {
 		//build transformer factory
 		transformerFactory = TransformerFactory.newInstance();
 		this.locker = locker;
+		this.conf = conf;
 	}
 	
 	/**
@@ -58,7 +61,7 @@ public class XmlMethodFactory extends Handler {
 	 */
 	public XmlHandler newXmlHandler(FileDescriptor xmlPath) throws SAXException {
 		XmlIOHandler ioHandler = newXmlIOHandler(xmlPath);
-		return new XmlHandler(ioHandler);
+		return new XmlHandler(this, ioHandler, conf.getAutoValidatingMode());
 	}
 	
 	Transformer newTransformer() {
@@ -117,7 +120,6 @@ public class XmlMethodFactory extends Handler {
 	private void buildSchema()  {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		factory.setErrorHandler(xmlErrorHandler);
-		XmlConf conf = Handlers.get(XmlConf.class);
 		try {
 			schema = factory.newSchema(conf.getSchemaPath());
 		} catch (SAXException ex) {
@@ -127,7 +129,7 @@ public class XmlMethodFactory extends Handler {
 	}
 
 	XmlIOHandler newXmlIOHandler(FileDescriptor xmlPath) {
-		return new XmlIOHandler(xmlPath, newTransformer(), locker);
+		return new XmlIOHandler(xmlPath, newTransformer(), locker, this);
 	}
 
 	

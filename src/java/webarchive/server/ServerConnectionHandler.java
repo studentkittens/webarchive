@@ -1,15 +1,12 @@
 package webarchive.server;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
@@ -21,7 +18,9 @@ import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
 import webarchive.dbaccess.SqlHandler;
+import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
+import webarchive.init.ConfigHandler;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Header;
@@ -34,13 +33,23 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	
 	private FileHandler io;
 	private SqlHandler sql;
+	private XmlMethodFactory xmlMeth;
 	private LockHandler locker;
 	
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
-		this.io = (FileHandler) Handlers.get(FileHandler.class);
-		this.sql = (SqlHandler) Handlers.get(SqlHandler.class);
-		this.locker = (LockHandlerImpl) Handlers.get(LockHandlerImpl.class);
+		Handlers col = ((Server)netMod).getCollection();
+		this.io = col.get(FileHandler.class);
+		this.sql = new SqlHandler(new SqliteAccess(new File(
+				FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path"))));
+		
+		try {
+			this.locker = new LockHandlerImpl(InetAddress.getLocalHost(), 
+					new Integer(col.get(ConfigHandler.class).getValue("webarchive.javadapter.port")));
+		} catch (NumberFormatException | UnknownHostException e) {
+			Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, e);
+		}
+		this.xmlMeth = new XmlMethodFactory(this.locker,col.get(XmlConf.class));
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -110,7 +119,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				}
 			}
 			break;
-			case GETXMLEDIT: {
+			case GETXMLEDIT: { //TODO ROOT SETZEN
 				FileDescriptor fd = (FileDescriptor) msg.getData();
 				XmlHandler xmlH;
 				Message answer;
@@ -208,9 +217,8 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	
 	private XmlHandler getXmlHandler(FileDescriptor fd) throws SAXException {
 		XmlHandler xmlH = null;
-		xmlH = ((XmlMethodFactory) Handlers.get(
-			XmlMethodFactory.class)).newXmlHandler(fd);
-		
+		xmlH = xmlMeth.newXmlHandler(fd);
+
 		return xmlH;
 	}
 	

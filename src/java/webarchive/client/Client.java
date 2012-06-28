@@ -9,50 +9,100 @@ import java.util.Observable;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
-import webarchive.handler.Handlers;
 
+/**
+ * Client is a NetworkModule holding the Connection to the Server NetworkModule and can be used as an Observable.
+ * 
+ * It is a Singleton Object and should not be instantiated manually. Instead use the WebarchiveClientFactory to generate a WebarchiveClient-Object which holds a Client Object.
+ * 
+ * @author Schneider
+ */
 public class Client implements NetworkModule  {
+	
+	/** The Constant DEFAULT_PORT. */
 	public static final int DEFAULT_PORT = 42420;
 
 	private String ip;
+	
 	private int port;
+	
 	private Connection c;
+	
 	private static Client cl=null;
+	
 	private Observable observ;
+	
+	/**
+	 * Gets the single instance of Client.
+	 *
+	 * @return single instance of Client
+	 */
 	public static Client getInstance() {
 		if(cl==null)
 			cl = new Client();
 		return cl;
 	}
 	
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection
+	 */
 	public Connection getConnection() {
 		return c;
 	}
 
+	/**
+	 * Instantiates a new client.
+	 */
 	private Client()
 	{
 		this.port = DEFAULT_PORT;
 	}
 
+	/**
+	 * Gets the ip.
+	 *
+	 * @return the ip
+	 */
 	public String getIp() {
 		return ip;
 	}
 
+	/**
+	 * Sets the ip.
+	 *
+	 * @param ip the new ip
+	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
 
+	/**
+	 * Gets the port.
+	 *
+	 * @return the port
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * Sets the port.
+	 *
+	 * @param port the new port
+	 */
 	public void setPort(int port) {
 		this.port = port;
 	}
 	
 	
+	/**
+	 * Connect to server.
+	 */
 	public void connectToServer()
 	{
+		//TODO
 		if(ip==null)
 		{
 			throw new NullPointerException();
@@ -60,6 +110,12 @@ public class Client implements NetworkModule  {
 		this.connectToServer(ip,port);
 	}
 	
+	/**
+	 * Connect to server.
+	 *
+	 * @param ip the ip
+	 * @param port the port
+	 */
 	public void connectToServer(String ip, int port)
 	{
 		
@@ -80,22 +136,28 @@ public class Client implements NetworkModule  {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see webarchive.connection.NetworkModule#removeConnection(webarchive.connection.Connection)
+	 */
 	@Override
 	public void removeConnection(Connection c) {
-		// TODO Auto-generated method stub
-		
+		//DONOTIN
 	}
 	
-	public static void main(String args[]) {
-		Client cl = new Client();
-		cl.setIp("localhost");
-		cl.connectToServer();
-	}
-
+	/**
+	 * Gets the observable.
+	 *
+	 * @return the observable
+	 */
 	public Observable getObservable() {
 		return observ;
 	}
 
+	/**
+	 * Sets the observable.
+	 *
+	 * @param observ the new observable
+	 */
 	public void setObservable(Observable observ) {
 		this.observ = observ;
 	}

@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 import webarchive.handler.Handler;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
+import webarchive.server.Server;
 
 /**
  * Config class for all Xml-related classes. Extracts config-values from xml
@@ -18,7 +19,7 @@ import webarchive.init.ConfigHandler;
 public class XmlConf extends Handler {
 
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
-	private File schemaPath = new File("src/xml/file.xsd");
+	private File schemaPath = new File("xml/file.xsd");
 
 	/**
 	 * Default constructor
@@ -27,8 +28,7 @@ public class XmlConf extends Handler {
 	 * file
 	 */
 	public XmlConf() throws IllegalArgumentException {
-		Document dom = ((ConfigHandler) Handlers.get(ConfigHandler.class)).
-			getConfig();
+		Document dom = Server.getInstance().getCollection().get(ConfigHandler.class).getConfig();
 		Element xmlRoot = (Element) dom.getElementsByTagName("xml").item(0);
 		buildConf(xmlRoot);
 	}

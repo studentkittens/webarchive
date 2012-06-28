@@ -29,7 +29,7 @@ import webarchive.handler.Handlers;
  * @author ccwelich
  */
 public class XmlHandler {
-
+	private XmlMethodFactory xmlMeth;
 	private Document document;
 	private Element dataNode;
 	private final XmlIOHandler ioHandler;
@@ -41,13 +41,14 @@ public class XmlHandler {
 	 * @param ioHandler encapsules the build, write and lock operations.
 	 * @throws SAXException in case of invalid xml
 	 */
-	XmlHandler(XmlIOHandler ioHandler) throws SAXException {
+	XmlHandler(XmlMethodFactory xmlMeth, XmlIOHandler ioHandler, AutoValidatingMode mode) throws SAXException {
 		// preconditions
 		assert ioHandler != null;
-
+		assert mode != null;
+		assert xmlMeth != null;
+		this.xmlMeth = xmlMeth;
+		this.mode = mode;
 		this.ioHandler = ioHandler;
-		XmlConf conf = Handlers.get(XmlConf.class);
-		this.mode = conf.getAutoValidatingMode();
 		//lazy document binding
 		document = null;
 	}
@@ -107,8 +108,7 @@ public class XmlHandler {
 	}
 
 	private void validate() throws SAXException {
-		Validator v = ((XmlMethodFactory) Handlers.get(XmlMethodFactory.class)).
-			newXmlValidator();
+		Validator v = xmlMeth.newXmlValidator();
 		try {
 			v.validate(new DOMSource(document));
 		} catch (IOException ex) {

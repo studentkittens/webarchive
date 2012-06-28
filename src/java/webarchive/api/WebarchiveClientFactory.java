@@ -2,6 +2,8 @@
 package webarchive.api;
 
 import java.net.InetAddress;
+
+import webarchive.client.Client;
 //TODO implementation by Eddy
 //TODO tests
 /**
@@ -17,8 +19,10 @@ public class WebarchiveClientFactory {
 		this.server = server;
 		this.port = port;
 	}
+	public WebarchiveClientFactory(InetAddress server) {
+		this(server,Client.DEFAULT_PORT);
+	}
 	public WebarchiveClient getInstance() {
-		//TODO
-		return null;
+		return new webarchive.client.WebarchiveClient(server,port);
 	}
 }

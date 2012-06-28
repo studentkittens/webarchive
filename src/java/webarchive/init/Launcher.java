@@ -2,23 +2,57 @@ package webarchive.init;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.XMLFormatter;
+
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import webarchive.dbaccess.DbConfigHandler;
-import webarchive.dbaccess.SqlHandler;
-import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
 import webarchive.server.*;
 import webarchive.xml.XmlConf;
-import webarchive.xml.XmlMethodFactory;
 
+/**
+ * The Class Launcher is responsible for starting the whole project and shutting it down softly.
+ * 'Softly' means, right before the JVM terminates it will try to close all open Connections and stop running threads that should not just be killed.
+ * 
+ * This way the Python-Part of the webarchive can just start the server like any other Java-Application and stop it by simply killing the started process.
+ *
+ * @author ccwelich,eschneider
+ */
 public class Launcher {
 
 	public static void main(String args[]) {
+		Handlers col = new Handlers();
+		File configPath = new File(
+				(args != null && args.length > 0)
+				? args[0]
+				: "conf/webarchive.conf.xml"
+			);
+			if(!configPath.exists()) {
+				System.out.println("config file path does not exist: "+configPath.getAbsolutePath());
+				System.exit(-1);
+			}
+			try {
+				buildHandlers(configPath,col);
+			} catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException ex) {
+				Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
+					ex);
+				System.out.println("error: cannot build Handlers");
+				System.exit(-1);
+			}		
+		System.out.println("built handlers");
+		try {
+			buildLogger(col.get(ConfigHandler.class));
+		} catch (IOException e) {
+			System.err.println("error: could not initialize the logger subsystem!");
+			System.err.println(e);
+		}
+		Server.init(col); //call once
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
@@ -35,28 +69,8 @@ public class Launcher {
 			}
 		}));
 
-
-		final Server server = Server.getInstance();
 		
-		File configPath = new File(
-			(args != null && args.length > 0)
-			? args[0]
-			: "conf/webarchive.conf.xml"
-		);
-		if(!configPath.exists()) {
-			System.out.println("config file path does not exist: "+configPath.getAbsolutePath());
-			System.exit(-1);
-		}
-		try {
-			builtHandlers(configPath);
-		} catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException ex) {
-			Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
-				ex);
-			System.out.println("error: cannot build Handlers");
-			System.exit(-1);
-		}
-		System.out.println("built handlers");
-		server.start();
+		Server.getInstance().start();
 		System.out.println("\nServer started!\n");
 
 		// TODO start notifier
@@ -64,20 +78,36 @@ public class Launcher {
 
 	}
 
-	private static void builtHandlers(File configPath) throws ParserConfigurationException,
+	/**
+	 * Built handlers.
+	 *
+	 * @param configPath the config path
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the sAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
+	private static void buildHandlers(File configPath, Handlers col) throws ParserConfigurationException,
 		SAXException, IOException, IllegalArgumentException {
-		Handlers.add(new ConfigHandler(configPath));
-		Handlers.add(new SvConfigHandler());
-		Handlers.add(new DbConfigHandler());
-		Handlers.add(new SqlHandler(new SqliteAccess(new File(((DbConfigHandler) Handlers.
-			get(DbConfigHandler.class)).getValue("path")))));
-		Handlers.add(new XmlConf());
-		Handlers.add(new FileHandler());
-		final LockHandlerImpl lockHandler = new LockHandlerImpl(InetAddress.getLocalHost(), 42421);
-		Handlers.add(LockHandler.class, lockHandler);
-		final XmlMethodFactory xmlMethodFactory = new XmlMethodFactory(lockHandler);
-		xmlMethodFactory.setXmlErrorHandler(null); // XmlErrorHandler not used!
-		Handlers.add(xmlMethodFactory);
+		col.add(new ConfigHandler(configPath));
+		col.add(new XmlConf());
+		col.add(new webarchive.server.FileHandler());
 
+	}
+	private static void buildLogger(ConfigHandler cfgH) throws IOException {
+		Logger logger = Logger.getLogger("webarchive");
+		Handler handler = null;
+		try {
+			handler = new FileHandler(cfgH.getValue("webarchive.general.root")+"/logs/java/webarchive.log");
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Formatter formatter = new SimpleFormatter();
+		handler.setFormatter(formatter);
+		logger.addHandler(handler);
 	}
 }

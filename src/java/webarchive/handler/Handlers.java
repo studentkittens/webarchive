@@ -10,8 +10,7 @@ import java.util.Map;
  * @author ccwelich
  */
 public class Handlers {
-
-	private static Map<Class<? extends Handler>, Handler> handlers = new HashMap<>();
+	private  Map<Class<? extends Handler>, Handler> handlers = new HashMap<>();
 
 	/**
 	 * adds a Handler to the handlers map. The handler is accessable by its
@@ -19,7 +18,7 @@ public class Handlers {
 	 *
 	 * @param handler handler to add
 	 */
-	public static void add(Handler handler) {
+	public void add(Handler handler) {
 		assert handler != null;
 		add(handler.getClass(), handler);
 	}
@@ -30,7 +29,7 @@ public class Handlers {
 	 * @param key
 	 * @param handler
 	 */
-	public static void add(Class<? extends Handler> key, Handler handler) {
+	public void add(Class<? extends Handler> key, Handler handler) {
 		assert handler != null;
 		assert key != null;
 		Handler pre = handlers.put(key, handler);
@@ -43,14 +42,15 @@ public class Handlers {
 	 * @param key key to find handler
 	 * @return the associated handler to key, or null if there is no handler for key.
 	 */
-	public static synchronized <T extends Handler> T get(Class<T> key) {
+	@SuppressWarnings("unchecked")
+	public <T extends Handler> T get(Class<T> key) {
 		return (T) handlers.get(key);
 	}
 
 	/**
 	 * removes all handlers and resets the map.
 	 */
-	public static void clear() {
+	public void clear() {
 		handlers = new HashMap<>();
 	}
 }

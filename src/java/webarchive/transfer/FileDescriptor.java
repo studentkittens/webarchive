@@ -8,7 +8,7 @@ public class FileDescriptor {
 	
 	private MetaData meta;
 	private File file;
-	private File absPath;
+	public static String root;
 	
 	public FileDescriptor(MetaData meta, File file) {
 		super();
@@ -27,10 +27,7 @@ public class FileDescriptor {
 		this.meta = meta;
 	}
 	public File getAbsolutePath() {
-		return absPath;
-	}
-	public void setRootPath(String root) {
-		this.absPath = new File(root+getFile().getPath());
+		return new File(meta.getPath(),file.toString());
 	}
 	public void setFile(File file) {
 		this.file = file;

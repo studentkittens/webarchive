@@ -1,4 +1,4 @@
-/*
+/**
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -36,12 +36,12 @@ FileReader r;
 		
 		for(int i=1; i<10000; i++)    {
 			try {
-			final File file = new File("nothing");
-			
-			r = new FileReader(file);
-		} catch (FileNotFoundException ex) {
-			Logger.getLogger(name).log(Level.SEVERE, "File not Found", ex);
-		}
+				final File file = new File("nothing");
+				
+				r = new FileReader(file);
+			} catch (FileNotFoundException ex) {
+				Logger.getLogger(name).log(Level.SEVERE, "File not Found", ex);
+			}
 	
 		}
 		
