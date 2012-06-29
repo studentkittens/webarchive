@@ -78,8 +78,12 @@ class XmlGenerator(object):
         """
         if len(self.__xml_list) > 0 and self.__meta_list is not None:
             for item in self.__xml_list:
-                with open(os.path.join(item[1], 'data.xml'), 'w') as f:
-                    f.write(str(item[0]))
+                try:
+                    with open(os.path.join(item[1], 'data.xml'), 'w') as f:
+                        f.write(str(item[0]))
+                except:
+                    # if something goes wrong
+                    pass
         else:
             logging.warn("nothing to dump - Go eat something.")
 

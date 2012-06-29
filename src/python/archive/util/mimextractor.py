@@ -22,8 +22,12 @@ def get_mime(filepath):
 
     """
     result = "application/octet-stream"
-    with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
-        result = m.id_filename(filepath)
+    try:
+        with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
+            result = m.id_filename(filepath)
+    except:
+        # something may go wrong
+        pass
     return result
 
 ###########################################################################
