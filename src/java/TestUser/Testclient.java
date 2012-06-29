@@ -1,125 +1,118 @@
+package test;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import webarchive.api.*;
 
+import webarchive.api.model.MetaData;
+import webarchive.api.model.TimeStamp;
+import webarchive.api.select.SelectCommitTag;
+import webarchive.api.xml.DataElement;
+import webarchive.api.xml.TagName;
+import webarchive.api.WebarchiveClient;
+import webarchive.api.WebarchiveObserver;
 
-/*
- * TODO Check declarations; 
- */
-
-
-public class Testclient<c> {
-	private List<Metadata> metaList;
+public class Testclient {
+	private List<MetaData> metaList;
 	private List<File> FileList; 
-	private metadata meta;
+	private MetaData meta;
 	private File file;
-	private Byte reciveFile;
-	private InputStreamReader save;
+	private InputStream save;
 	private String text;
 	private int counter;
-	FileWriter writer;
-	  File countFile;
+	private FileWriter writer;
+	private File countFile;
+	private WebarchiveClient client; 
 	
-	
-	Testclient(){
+Testclient() throws Exception{		
 		test();
 	}
 	
-private void test(){
-	connect();
-	select();
-	dataSelect();
-	filewrite();
-	upload();
-	editXML();
+	private void test() throws Exception{
+		connect();
+		select();
+		dataSelect();
+		filewrite();
+		upload();
+		editXML();	
+		}	
 	
-	
-}	
-	
-private void connect() {
-		
-		WebarchiveClient client=webarchiv.api.WebarchiveClientFactory.getInstance(); 
-		
-	}
-private void select(){
-	metaList = new webarchiv.api.WebarchiveClient.select(Select); //add select, TestData needed
-	int i=0;
-	int var=-1;
-	for ( metadata c : metaList ) {System.out.println(i+". "+c);}
-	
-	Scanner kbReader = new Scanner(System.in);
-
-	while(true){
-				
-				try{
-					
-				System.out.println("gib zahl ein");
-				var = kbReader.nextInt() ;
-				if(var<0||var>metaList.size()-1){continue;}
-				else{break;}
-				
-				}catch(Exception e){}
-				String errStr = kbReader.next();
-				
-			}
-		
-	 meta= 	metaList.get(var);
-	FileList = getFileList(meta);
-	file= 	FileList.get(0);
-	
-}
-
-private void dataSelect(){
-	char i;
-	int  lenght;
-	save = webarchiv.api.getInputStream( meta, file);
-	if (save!=null){
-	text = save.getEncoding();
-	lenght=text.length();
-		for(int a=0;  a<=text.length();a++){
-			i=text.charAt(a);
-			if(i==32){counter++;}
-			
+	private void connect() throws Exception {
+		WebarchiveObserver observer = (WebarchiveObserver) this;	
+		client.addObserver(observer);	
 		}
 	
-	}
-	
-}
-	
-	private void filewrite(){
-	
-		countFile = new File("wordcounted.txt");
-		try {
-		      
-		       writer = new FileWriter(countFile ,true);
-		       writer.write(""+counter+" words");
-		       writer.flush();
-		       writer.close();
-		    } catch (IOException e) {}
+	@SuppressWarnings("unchecked")
+	private void select() throws Exception{
+		int i=0;
+		int var=-1;
+		TimeStamp date = new TimeStamp(new Date ());
 		
+		String where = "commitTime > " + date.getXmlFormat(); 
+		String orderBy = "commitTime ASC";
+		metaList =client.select(new SelectCommitTag(where, null, orderBy));
+		
+		for ( MetaData c : metaList ) {System.out.println(i+". "+c);}
+		Scanner kbReader = new Scanner(System.in);
+		while(true){			
+					try{					
+					System.out.println("gib zahl ein");
+					var = kbReader.nextInt() ;
+					if(var<0||var>metaList.size()-1){continue;}
+					else{break;}			
+					}catch(Exception e){}
+					kbReader.next();				
+				}		
+		 meta= 	metaList.get(var);	
+		 FileList = client.getFileList(meta);
+		 file= 	FileList.get(0);	
 	}
 	
-private void upload(){
-	Object answer;
-	new webarchiv.api.WebarchiveClient.getOutputStream(meta, countFile);
+	private void dataSelect() throws Exception{
+		char i;
+		
+		save = client.getInputStream( meta, file);
+		if (save!=null){
+		text = save.toString();
+			for(int a=0;  a<=text.length();a++){
+				i=text.charAt(a);
+				if(i==32){counter++;}
+				// vom stream -> string
+			}	
+		}	
+	}
+		
+	private void filewrite(){
+		
+			countFile = new File("wordcounted.txt");
+			try {
+			      
+			       writer = new FileWriter(countFile ,true);
+			       writer.write(""+counter+" words");
+			       writer.flush();
+			       writer.close();
+			    } catch (IOException e) {}
+			
+		}
+		
+	private void upload() throws Exception{
+		client.getOutputStream(meta, countFile);	
+	}
 	
-}
-
-private void editXML(){
-	String name ="Words"; 
-	String tagName;
+	private void editXML() throws Exception{
+		String name ="X:Count:Words"+counter;
+		TagName tagName;
+		DataElement element;
+		
+		api.xml.XmlEditor test = client.getXMLEditor(meta);
+		tagName = new api.xml.TagName(name);
+		element = test.createDataElement(tagName);
+		test.createElement(tagName);
+		test.addDataElement(element);
 	
-	tagName = meta.addPrefixTo(name);
-	webarchiv.api.meta.createElement(tagName);
-	
-	webarchiv.api.XmlEditor.addDataElement(webarchiv.api.meta.createDataElement(tagName));
-	
-	
-}
-	
-	
-	
+	}
+			
 }
