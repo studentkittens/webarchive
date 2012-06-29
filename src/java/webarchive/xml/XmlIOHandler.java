@@ -1,6 +1,8 @@
 package webarchive.xml;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -86,5 +88,9 @@ public class XmlIOHandler {
 	 */
 	public void unlock() {
 		locker.unlock(xmlFile);
+	}
+
+	String getFileName() {
+		return xmlFile.getAbsolutePath().toString();
 	}
 }

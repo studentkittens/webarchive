@@ -1,5 +1,6 @@
 package webarchive.xml;
 
+import java.util.Objects;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,6 +58,16 @@ public class DataElement implements webarchive.api.xml.DataElement {
 		}
 		return true;
 	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 73 * hash + Objects.hashCode(this.dataElement);
+		hash = 73 * hash + (this.canWrite ? 1 : 0);
+		return hash;
+	}
+
+	
 	@Override
 	public boolean isEqualNode(DataElement e) {
 		if (e == null) {

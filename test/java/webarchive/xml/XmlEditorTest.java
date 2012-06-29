@@ -109,7 +109,7 @@ public class XmlEditorTest {
 		boolean hasThrown = false;
 		try {
 			instance.addDataElement(dataElement);
-		} catch (IllegalArgumentException e) {
+		} catch (SAXException e) {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);
@@ -117,7 +117,7 @@ public class XmlEditorTest {
 		hasThrown = false;
 		try {
 			instance.addDataElement(null);
-		} catch (NullPointerException e) {
+		} catch (SAXException e) {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);
@@ -126,7 +126,7 @@ public class XmlEditorTest {
 		dataElement = instance.getDataElement(tagNameDE);
 		try{
 			instance.addDataElement(dataElement);
-		} catch (IllegalArgumentException e) {
+		} catch (SAXException e) {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);

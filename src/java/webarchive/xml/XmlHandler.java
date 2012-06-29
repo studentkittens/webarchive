@@ -12,7 +12,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import webarchive.api.xml.TagName;
-import webarchive.handler.Handlers;
 
 /**
  * Top-Level Xml-controller on the server side. The usage is asserted as one
@@ -114,7 +113,12 @@ public class XmlHandler {
 		} catch (IOException ex) {
 			Logger.getLogger(XmlHandler.class.getName()).log(Level.SEVERE, null,
 				ex);
+		} catch (SAXException ex) {
+			Logger.getLogger(XmlHandler.class.getName()).log(Level.SEVERE, null,
+				ex);
+			throw ex;
 		}
+		Logger.getLogger(XmlHandler.class.getName()).log(Level.INFO, "document {0} validates",ioHandler.getFileName());
 	}
 
 	/**
@@ -128,7 +132,11 @@ public class XmlHandler {
 	 */
 	public void addDataElement(DataElement dataElement) throws SAXException,
 		IllegalArgumentException {
-		assert dataElement != null;
+		if(dataElement==null)
+			throw new SAXException("dataElement is null");
+		if (!dataElement.canWrite()) {
+			throw new SAXException("write protected");
+		}
 		final String tagName = dataElement.getDataElement().getTagName();
 
 		// BEGIN CRITICAL SECTION
@@ -140,7 +148,7 @@ public class XmlHandler {
 		final int length = dataNodes.getLength();
 		for (int i = 0; i < length; i++) {
 			if (dataNodes.item(i).getNodeName().equals(tagName)) {
-				throw new IllegalArgumentException(
+				throw new SAXException(
 					"element " + tagName + " already exists");
 			}
 		}
@@ -150,6 +158,8 @@ public class XmlHandler {
 		try {
 			// write to disk
 			ioHandler.write(document);
+			Logger.getLogger(getClass().getName()).log(Level.INFO, "changed DOM-document written to {0}", ioHandler.getFileName());
+
 		} catch (TransformerException ex) {
 			Logger.getLogger(XmlHandler.class.getName()).log(Level.SEVERE, null,
 				ex);

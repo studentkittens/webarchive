@@ -82,12 +82,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	public void addDataElement(webarchive.api.xml.DataElement element) throws NullPointerException,
 		IllegalArgumentException,
 		Exception {
-		if (element == null) {
-			throw new NullPointerException();
-		}
-		if (!element.canWrite()) {
-			throw new IllegalArgumentException("write protected");
-		}
+		
 		// send element to XmlHandler in server
 		updateDocument(client.syncDocument(element));
 	}

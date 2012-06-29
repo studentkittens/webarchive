@@ -16,9 +16,7 @@ import javax.xml.validation.Validator;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import webarchive.handler.Handler;
-import webarchive.handler.Handlers;
 import webarchive.server.LockHandler;
-import webarchive.server.Server;
 import webarchive.transfer.FileDescriptor;
 
 /**
@@ -69,14 +67,14 @@ public class XmlMethodFactory extends Handler {
 	
 	Transformer newTransformer() {
 		Transformer transformer = null;
-		synchronized(transformerFactory) {
+	
 			try {
 				transformer = transformerFactory.newTransformer();
 			} catch (TransformerConfigurationException ex) {
 				Logger.getLogger(XmlMethodFactory.class.getName()).
 					log(Level.SEVERE, null, ex);
 			}
-		}
+		
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 		transformer.setOutputProperty(OutputKeys.INDENT, "no");
 		return transformer;
@@ -84,9 +82,9 @@ public class XmlMethodFactory extends Handler {
 	
 	DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilder rc;
-		synchronized(documentBuilderFactory){
+		
 			rc = documentBuilderFactory.newDocumentBuilder();
-		}
+	
 		assert rc!=null;
 		rc.setErrorHandler(xmlErrorHandler);
 		return rc;
