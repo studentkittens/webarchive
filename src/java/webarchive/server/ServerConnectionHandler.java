@@ -3,17 +3,13 @@ package webarchive.server;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.SQLException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.xml.sax.SAXException;
 
-import webarchive.api.model.MetaData;
-import webarchive.api.select.Select;
-import webarchive.xml.DataElement;
-import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
@@ -21,9 +17,7 @@ import webarchive.dbaccess.SqlHandler;
 import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
-import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
-import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 import webarchive.xml.XmlConf;
 import webarchive.xml.XmlHandler;
@@ -31,17 +25,30 @@ import webarchive.xml.XmlMethodFactory;
 
 public class ServerConnectionHandler extends ConnectionHandler {
 	
+	//Handlers
 	private FileHandler io;
 	private SqlHandler sql;
 	private XmlMethodFactory xmlMeth;
 	private LockHandler locker;
 	
+	//Processors
+	private Map<String,MessageProcessor> processors;
+	
+	private static final String SQL = "Sql";
+	private static final String ADDXML = "AddXml";
+	private static final String GETXML = "GetXml";
+	private static final String LS = "Ls";
+	private static final String READ = "Read";
+	private static final String WRITE = "Write";
+	private static final String REGISTER = "ResgisterObserver";
+	private static final String DELETE = "DeleteObserver";
+
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
 		Handlers col = ((Server)netMod).getCollection();
 		this.io = col.get(FileHandler.class);
-		this.sql = new SqlHandler(new SqliteAccess(new File(
-				FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path"))));
+		this.sql = (new SqlHandler(new SqliteAccess(new File(
+				FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path")))));
 		
 		try {
 			this.locker = new LockHandlerImpl(InetAddress.getLocalHost(), 
@@ -50,9 +57,20 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, e);
 		}
 		this.xmlMeth = new XmlMethodFactory(this.locker,col.get(XmlConf.class));
+		
+		this.processors=new HashMap<String,MessageProcessor>();
+		
+		processors.put(SQL, new SqlProcessor());
+		processors.put(ADDXML, new AddXmlProcessor());
+		processors.put(GETXML, new GetXmlProcessor());
+		processors.put(LS, new LsProcessor());
+		processors.put(READ, new ReadProcessor());
+		processors.put(WRITE, new WriteProcessor());
+		processors.put(REGISTER, new RegisterObserverProcessor());
+		processors.put(DELETE, new DeleteObserverProcessor());
+		
 	}
 	
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void handle(Message msg) {
 		
@@ -66,148 +84,35 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			}
 			break;
 			case SQL: {
-				List<MetaData> list = null;
-				try {
-					list = sql.select((Select) msg.getData());
-				} catch (UnsupportedOperationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Message answer = new Message(msg, list);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				processors.get(SQL).process(msg, this);
 			}
 			break;
 			case WRITEFILE: {
-				FileBuffer buf = (FileBuffer) msg.getData();
-				locker.lock(buf.getFd());
-				io.write(buf);
-				locker.unlock(buf.getFd());
-				Message answer = new Message(msg, null);
-				answer.setHeader(Header.SUCCESS);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+				processors.get(WRITE).process(msg, this);
 			}
 			break;
 			case READFILE: {
-				FileDescriptor fd = (FileDescriptor) msg.getData();
-				
-				locker.lock(fd);
-				FileBuffer buf = io.read(fd);
-				locker.unlock(fd);
-				Message answer = new Message(msg, buf);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				processors.get(READ).process(msg, this);
 			}
 			break;
-			case GETXMLEDIT: { //TODO ROOT SETZEN
-				FileDescriptor fd = (FileDescriptor) msg.getData();
-				XmlHandler xmlH;
-				Message answer;
-				try {
-					xmlH = getXmlHandler(fd);
-					XmlEditor xmlEd = xmlH.newEditor();
-					answer = new Message(msg, xmlEd);
-					answer.setHeader(Header.GETXMLEDIT);
-					
-				} catch (SAXException ex) {
-					answer = new Message(msg, ex);
-					answer.setHeader(Header.EXCEPTION);
-				}
-				
-				try {
-					send(answer);
-				} catch (Exception ex) {
-					Logger.getLogger(ServerConnectionHandler.class.getName()).
-						log(Level.SEVERE, null, ex);
-				}
+			case GETXMLEDIT: {
+				processors.get(GETXML).process(msg, this);
 			}
 			break;
 			case ADDXMLEDIT: {
-				DataElement element = (DataElement) msg.getData();
-				FileDescriptor fd = (FileDescriptor) msg.getData();
-				Message answer;
-				try {					
-					XmlHandler xmlH = getXmlHandler(fd);
-					xmlH.addDataElement(element);
-					answer = new Message(msg, xmlH.getDocument());
-					answer.setHeader(Header.ADDXMLEDIT);
-				} catch (Exception ex) {
-					answer = new Message(msg, ex);
-					answer.setHeader(Header.EXCEPTION);
-				}
-				try {
-					send(answer);
-				} catch (Exception ex) {
-					Logger.getLogger(ServerConnectionHandler.class.getName()).
-						log(Level.SEVERE, null, ex);
-				}
-				
+				processors.get(ADDXML).process(msg, this);
 			}
 			break;
 			case LS: {
-				MetaData meta = (MetaData) msg.getData();
-				FileDescriptor tmp = new FileDescriptor(meta, null);
-				locker.lock(tmp);
-				List<File> list = io.getFileTree(meta);
-				locker.unlock(tmp);
-				Message answer = new Message(msg, list);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				processors.get(LS).process(msg, this);
 			}
 			break;
 			case REGISTER_OBSERVER: {
-				List<Connection> l = Server.getInstance().getObservers();
-				synchronized (l) {
-					l.remove(c);
-					l.add(c);
-				}
-				Message answer = new Message(msg, null);
-				answer.setHeader(Header.SUCCESS);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				processors.get(REGISTER).process(msg, this);
 			}
 			break;
 			case DELETE_OBSERVER: {
-				List<Connection> l = Server.getInstance().getObservers();
-				synchronized (l) {
-					l.remove(c);
-				}
-				Message answer = new Message(msg, null);
-				answer.setHeader(Header.SUCCESS);
-				try {
-					send(answer);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				processors.get(DELETE).process(msg, this);
 			}
 			break;
 			default:
@@ -215,7 +120,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		}
 	}
 	
-	private XmlHandler getXmlHandler(FileDescriptor fd) throws SAXException {
+	XmlHandler getXmlHandler(FileDescriptor fd) throws SAXException {
 		XmlHandler xmlH = null;
 		xmlH = xmlMeth.newXmlHandler(fd);
 
@@ -225,5 +130,18 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	@Override
 	public void send(Message msg) throws Exception {
 		c.send(msg);
+	}
+
+	public SqlHandler getSql() {
+		return sql;
+	}
+	public LockHandler getLocker() {
+		return locker;
+	}
+	public XmlMethodFactory getXmlMeth() {
+		return xmlMeth;
+	}
+	public FileHandler getIo() {
+		return io;
 	}
 }

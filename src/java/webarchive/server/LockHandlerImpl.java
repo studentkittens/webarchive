@@ -128,6 +128,7 @@ public class LockHandlerImpl extends LockHandler   {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean tryLockDomain(String domain) {
 		out.write("try_lock "+ domain+"\n");
 		out.flush();
