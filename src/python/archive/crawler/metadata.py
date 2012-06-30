@@ -34,7 +34,10 @@ class MetaData(dict):
         """
         Cuts path to reterive content url
         """
-        return post_path[:-len('data')]
+        url_start = post_path[:-len('data')]
+        if url_start.endswith('/'):
+            url_start = url_start[:-1]
+        return url_start
 
     def get_content_path_from_tmp(tmp_path, domain):
         """
