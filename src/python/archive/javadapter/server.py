@@ -21,7 +21,7 @@ __author__ = 'Christopher Pahl'
 import socket
 import socketserver
 import threading
-import logging 
+import logging
 import sys
 import os
 import cmd
@@ -57,8 +57,6 @@ class ProtocolError(Exception):
 #            Actual Handlers that do something with the input             #
 ###########################################################################
 
-# The Lock that can be set via lock and unlock
-# It is global for sake of simplicity - there may not be more than one
 GLOBAL_LOCK_TABLE = {}
 
 
@@ -68,32 +66,29 @@ def lock_domain(domain, lock_timeout=300, wait=True):
     and therefore in an own function
     """
     global GLOBAL_LOCK_TABLE
-    thread_name = threading.current_thread().name
 
-    try:
+    if domain in GLOBAL_LOCK_TABLE:
         # We do not want to wait, so raise a ProtocolError immediately
-        if GLOBAL_LOCK_TABLE[thread_name].is_locked and wait is False:
+        if GLOBAL_LOCK_TABLE[domain].is_locked and wait is False:
            raise ProtocolError('Already locked.')
-    except KeyError:
-        # No lock created
-        pass
-
 
     try:
+        #if thread_name not in thread_name:
         # Create a new lock
-        GLOBAL_LOCK_TABLE[thread_name] = lock.FileLock(
-                file_name=domain,
-                folder=paths.get_content_root(),
-                timeout=lock_timeout)
+        if domain not in GLOBAL_LOCK_TABLE:
+            GLOBAL_LOCK_TABLE[domain] = lock.FileLock(
+                    file_name=domain,
+                    folder=paths.get_content_root(),
+                    timeout=lock_timeout)
 
         # Lock, or wait for lock.
-        GLOBAL_LOCK_TABLE[thread_name].acquire()
+        GLOBAL_LOCK_TABLE[domain].acquire()
 
     # Convert other exceptions to a ProtocolError
     except lock.FileLockException as err:
         raise ProtocolError(str(err))
     except OSError as err:
-        del GLOBAL_LOCK_TABLE[thread_name]
+        del GLOBAL_LOCK_TABLE[domain]
         raise ProtocolError(str(err))
 
 
@@ -132,15 +127,14 @@ def unlock_handler(args):
        * Returns nothing (but OK or ACK ...)
     """
     global GLOBAL_LOCK_TABLE
-    thread_name = threading.current_thread().name
+    domain = args[0]
 
-    try:
-        GLOBAL_LOCK_TABLE[thread_name].release()
-        if GLOBAL_LOCK_TABLE[thread_name].is_locked:
-            raise ProtocolError('Unlocking failed.')
-        del GLOBAL_LOCK_TABLE[thread_name]
-    except KeyError:
+    if GLOBAL_LOCK_TABLE[domain].is_locked is False:
         raise ProtocolError('No previous lock.')
+
+    GLOBAL_LOCK_TABLE[domain].release()
+    if GLOBAL_LOCK_TABLE[domain].is_locked:
+        raise ProtocolError('Unlocking failed.')
 
 
 def checkout_handler(args):
