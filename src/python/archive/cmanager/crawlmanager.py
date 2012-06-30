@@ -15,6 +15,7 @@ import threading
 import logging
 
 
+has_been_stopped = False
 running = []
 running_mtx = threading.Lock()
 
@@ -27,6 +28,9 @@ def crawljob(ident, url):
     :ident: identifier given by threadpool
     :url: url to crawl
     """
+    if has_been_stopped:
+        return -1
+
     try:
         logging.info('Job #{cid} ({curl}) started.'.format(cid=ident, curl=url))
         j = job.CrawlJob(ident, url)
@@ -48,6 +52,7 @@ class CrawlerManager(object):
         """
         :urls: set of urls that will be crawled
         """
+        self.__die = False
         if len(urls) > 0:
             self.__done_callback = None
             self.__urls = list(urls)
@@ -57,8 +62,8 @@ class CrawlerManager(object):
         """
         Starts threadpool with max number of instances
         """
-        results = [self.__pool.apply_async(crawljob, i)
-                for i in enumerate(self.__urls)]
+        results = [self.__pool.apply_async(crawljob, url)
+                for url in enumerate(self.__urls)]
 
         # Now wait till all jobs finished
         self.__pool.close()
@@ -81,8 +86,15 @@ class CrawlerManager(object):
         Shuts down all currently running crawljobs
         and joins/closes the pool
         """
+        # This is necessary to stop jobs, that
+        # was started because others were interrupted by shutdown()
+        global has_been_stopped
+        has_been_stopped = True
         for job in running:
             job.shutdown()
 
         self.__pool.close()
         self.__pool.join()
+
+        # It's okay to start threads now
+        has_been_stopped = False
