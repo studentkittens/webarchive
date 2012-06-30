@@ -8,7 +8,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import webarchive.api.xml.TagName;
 import webarchive.client.Client;
+import webarchive.client.ClientConnectionHandler;
 import webarchive.connection.Connection;
+import webarchive.transfer.DataElementContainer;
+import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
@@ -23,18 +26,23 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	private Document document;
 	private Element dataNode;
 	private ClientAdapter client;
+	private ClientConnectionHandler connection;
+	private FileDescriptor xmlFile;
 
 	/**
 	 * create XmlEditor
+	 * @param fileDescriptor 
 	 *
 	 * @param document document used for editing
 	 * @param conf config data
 	 */
-	XmlEditor(org.w3c.dom.Document document, org.w3c.dom.Element dataNode) {
+	XmlEditor(FileDescriptor fileDescriptor, org.w3c.dom.Document document, org.w3c.dom.Element dataNode) {
 		assert document != null;
 		assert dataNode != null;
+		assert fileDescriptor != null;
 		this.document = document;
 		this.dataNode = dataNode;
+		this.xmlFile = fileDescriptor;
 		this.client = new DefaultClientAdapter();
 	}
 
@@ -94,18 +102,21 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	class DefaultClientAdapter implements ClientAdapter {
 
 		@Override
-		public Document syncDocument(webarchive.api.xml.DataElement element) {
-			Client cl = Client.getInstance();
-			Connection c = cl.getConnection();
-			Message msg = new Message(Header.ADDXMLEDIT, element);
+		public Document syncDocument(webarchive.api.xml.DataElement element) throws Exception {
+			Message msg = new Message(Header.ADDXMLEDIT, new DataElementContainer((DataElement) element, xmlFile));
 			try {
-				c.send(msg);
+				connection.send(msg);
 			} catch (Exception ex) {
 				Logger.getLogger(XmlEditor.class.getName()).
 					log(Level.SEVERE, null, ex);
 			}
-			Message answer = c.waitForAnswer(msg);
+			Message answer = connection.waitForAnswer(msg,connection.getConnection());
+			if(answer.getHeader()==Header.EXCEPTION) throw (Exception) answer.getData();
 			return (Document) answer.getData();
 		}
+	}
+
+	public void setConnection(ClientConnectionHandler clientConnectionHandler) {
+		this.connection = clientConnectionHandler;
 	}
 }

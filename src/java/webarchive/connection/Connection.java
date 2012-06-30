@@ -124,6 +124,7 @@ public class Connection implements Runnable {
 	 */
 	public void send(Message msg) throws Exception {
 		oos.writeObject(msg);
+		oos.flush();
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class Connection implements Runnable {
 	 */
 	public Message waitForAnswer(Message m) {
 		
-		return conHandler.waitForAnswer(m);
+		return conHandler.waitForAnswer(m,this);
 	}
 
 	// YOU HAVE TO SET conHandler FIRST! OTHERWISE NULLPOINTEREXCEPTION :D
@@ -161,16 +162,18 @@ public class Connection implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while (sock.isConnected()) {
+		while (sock.isConnected() && !sock.isClosed()) {
 			Message msg = null;
 			try {
+				System.out.println("RECEIVING");
 				msg = this.receive();
+				System.out.println("MSG RECEIVED: ["+msg.getHeader()+"] "+msg.getData());
 			} catch (SocketException | EOFException end) {
 				System.out.println("lost connection");
 				conHandler.removeConnection(this);
 				break;
 			} catch (Exception e) {
-				//TODO
+				e.printStackTrace();
 				continue;
 			}
 

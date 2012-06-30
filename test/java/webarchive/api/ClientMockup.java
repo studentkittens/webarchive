@@ -1,7 +1,7 @@
 package webarchive.api;
 
 import java.io.*;
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Scanner;
 import org.w3c.dom.Element;
@@ -9,6 +9,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.SelectCommitTag;
@@ -21,20 +23,21 @@ import webarchive.api.xml.XmlEditor;
  *
  * @author ccwelich
  */
-public class ClientMockup {
+public class ClientMockup  extends WebarchiveObserver {
 
 	public static void main(String[] args) throws Exception {
-		WebarchiveClientFactory factory = new WebarchiveClientFactory(new Inet4Address(
-			"localhost"));
+		WebarchiveClientFactory factory = new WebarchiveClientFactory(InetAddress.getLocalHost());
 		WebarchiveClient client = factory.getInstance();
-
 		System.out.println("client::select: commitTags");
+		@SuppressWarnings("unchecked")
 		List<CommitTag> commits = client.select(new SelectCommitTag(null, null,
 			"commitTime DESC"));
+		System.out.println(commits);
 		for (CommitTag t : commits) {
 			System.out.println("  " + t.getCommitTime().getXmlFormat() + ", " + t.
 				getDomain());
 		}
+		@SuppressWarnings("unchecked")
 		List<MetaData> metaList = client.select(new SelectMetaByCommit(commits.
 			subList(0, 1), null, null, null, "createTime ASC"));
 		System.out.println("client::select: MetaData by CommitTag (1st element)");
@@ -48,11 +51,12 @@ public class ClientMockup {
 		System.out.println("client::getInputStream: data");
 		int wc = wc(client.getInputStream(meta, new File("data")));
 		System.out.println("  wordcount = " + wc);
-
+		System.out.println();
 		System.out.println("client::getOutputStream: write out word count");
 		PrintWriter pw = new PrintWriter(client.getOutputStream(meta, new File(
 			"wc.txt")));
 		pw.println("wordcount=" + wc);
+		pw.close();
 		System.out.println("  done");
 
 		fileListOf(meta, client);
@@ -62,6 +66,7 @@ public class ClientMockup {
 		DataElement dataElement = xmlEditor.createDataElement(new TagName(
 			"wordcount"));
 		Element element = xmlEditor.createElement(new TagName("value"));
+		element.setTextContent(new Integer(wc).toString());
 		System.out.println("Element to add: (value of wordcount)");
 		printNodes("  ", element);
 		dataElement.appendChild(element);
@@ -80,12 +85,15 @@ public class ClientMockup {
 			printNodes("  ", nodes.item(i));
 		}
 
+		client.addObserver(new ClientMockup());
+		fileListOf(meta, client);
 
 	}
 
 	private static void fileListOf(MetaData meta, WebarchiveClient client) throws
 		Exception {
 		System.out.println("client::getFileList: of element: " + meta);
+		
 		List<File> files = client.getFileList(meta);
 		for (File f : files) {
 			System.out.println("  " + f);
@@ -96,7 +104,7 @@ public class ClientMockup {
 		Scanner sc = new Scanner(in);
 		int cnt = 0;
 		while (sc.hasNext()) {
-			sc.next();
+			System.out.print (sc.next() +" ");
 			cnt++;
 		}
 		in.close();
@@ -120,5 +128,13 @@ public class ClientMockup {
 		for (int i = 0; i < children.getLength(); i++) {
 			printNodes(indent, children.item(i));
 		}
+		
 	}
+
+	@Override
+	public void update(WebarchiveClient client, List<CommitTag> changes) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

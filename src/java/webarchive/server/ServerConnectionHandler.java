@@ -42,22 +42,30 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	private static final String WRITE = "Write";
 	private static final String REGISTER = "ResgisterObserver";
 	private static final String DELETE = "DeleteObserver";
+	private static final String HANDSHAKER= "HandShake";
 
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
+		System.out.println("Creating handlers for new connection");
 		Handlers col = ((Server)netMod).getCollection();
+		System.out.println("creating FileHandler");
 		this.io = col.get(FileHandler.class);
-		this.sql = (new SqlHandler(new SqliteAccess(new File(
-				FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path")))));
 		
+		 String absPathDb = FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path");
+		 System.out.println(absPathDb);
+		 System.out.println(FileDescriptor.root);
+		 System.out.println("creating sqlHandler");
+		this.sql = (new SqlHandler(new SqliteAccess(new File(absPathDb))));
+		System.out.println("creating lockhandler");
 		try {
 			this.locker = new LockHandlerImpl(InetAddress.getLocalHost(), 
 					new Integer(col.get(ConfigHandler.class).getValue("webarchive.javadapter.port")));
 		} catch (NumberFormatException | UnknownHostException e) {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, e);
 		}
+		System.out.println("creating xmlhandler");
 		this.xmlMeth = new XmlMethodFactory(this.locker,col.get(XmlConf.class));
-		
+		System.out.println("creating processors");
 		this.processors=new HashMap<String,MessageProcessor>();
 		
 		processors.put(SQL, new SqlProcessor());
@@ -68,6 +76,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		processors.put(WRITE, new WriteProcessor());
 		processors.put(REGISTER, new RegisterObserverProcessor());
 		processors.put(DELETE, new DeleteObserverProcessor());
+		processors.put(HANDSHAKER, new HandshakeProcessor());
 		
 	}
 	
@@ -76,44 +85,36 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		
 		switch (msg.getHeader()) {
 			case SUCCESS:
-			case HANDSHAKE: {
-				wakeUp(msg);
-			}
+				break;
+			case HANDSHAKE: 
+				processors.get(HANDSHAKER).process(msg, this);
 			break;
 			case EXCEPTION: {
 			}
 			break;
-			case SQL: {
+			case SQL: 
 				processors.get(SQL).process(msg, this);
-			}
 			break;
-			case WRITEFILE: {
+			case WRITEFILE: 
 				processors.get(WRITE).process(msg, this);
-			}
 			break;
-			case READFILE: {
+			case READFILE: 
 				processors.get(READ).process(msg, this);
-			}
 			break;
-			case GETXMLEDIT: {
+			case GETXMLEDIT: 
 				processors.get(GETXML).process(msg, this);
-			}
 			break;
-			case ADDXMLEDIT: {
+			case ADDXMLEDIT: 
 				processors.get(ADDXML).process(msg, this);
-			}
 			break;
-			case LS: {
+			case LS: 
 				processors.get(LS).process(msg, this);
-			}
 			break;
-			case REGISTER_OBSERVER: {
+			case REGISTER_OBSERVER: 
 				processors.get(REGISTER).process(msg, this);
-			}
 			break;
-			case DELETE_OBSERVER: {
+			case DELETE_OBSERVER: 
 				processors.get(DELETE).process(msg, this);
-			}
 			break;
 			default:
 				break;

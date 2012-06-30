@@ -1,5 +1,7 @@
 package webarchive.api.xml;
 
+import java.io.Serializable;
+
 import org.w3c.dom.Element;
 
 /**
@@ -15,7 +17,7 @@ import org.w3c.dom.Element;
  * @see TagName
  * @author ccwelich
  */
-public interface XmlEditor {
+public interface XmlEditor extends Serializable {
 
 	/**
 	 * get a data element from the data subtree by its tagname. The method

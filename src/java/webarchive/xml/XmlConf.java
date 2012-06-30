@@ -54,6 +54,7 @@ public class XmlConf extends Handler {
 	}
 
 	private void buildConf(Node xmlRoot) throws IllegalArgumentException {
+		if(xmlRoot==null) return;
 		NodeList items = xmlRoot.getChildNodes();
 		for (int i = 0; i < items.getLength(); i++) {
 			Node n = items.item(i);

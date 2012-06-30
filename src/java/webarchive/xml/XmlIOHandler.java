@@ -1,6 +1,9 @@
 package webarchive.xml;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -71,9 +74,18 @@ public class XmlIOHandler {
 	 * @throws TransformerException
 	 */
 	public void write(Document document) throws TransformerException {
+		System.out.println("XmlIoHandler::write path="+xmlFile.getAbsolutePath() );
 		DOMSource source = new DOMSource(document);
 		StreamResult streamResult = new StreamResult(xmlFile.getAbsolutePath());
 		transformer.transform(source, streamResult);
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileInputStream(xmlFile.getAbsolutePath()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		while(sc.hasNextLine()) System.out.println(">>"+sc.nextLine());
 	}
 
 	/**
@@ -92,5 +104,9 @@ public class XmlIOHandler {
 
 	String getFileName() {
 		return xmlFile.getAbsolutePath().toString();
+	}
+
+	public FileDescriptor getXmlFile() {
+		return xmlFile;
 	}
 }

@@ -13,8 +13,27 @@ import webarchive.xml.XmlHandler;
 
 public class GetXmlProcessor implements MessageProcessor {
 
+	private ServerConnectionHandler cH;
+	private Message msg;
+
 	@Override
 	public void process(Message msg, ServerConnectionHandler cH) {
+		new Thread(new GetXmlProcessor(cH,msg)).start();
+
+	}
+
+	private GetXmlProcessor(ServerConnectionHandler cH, Message msg) {
+		super();
+		this.cH = cH;
+		this.msg = msg;
+	}
+
+	public GetXmlProcessor() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void run() {
 		FileDescriptor fd = (FileDescriptor) msg.getData();
 		XmlHandler xmlH;
 		Message answer;
@@ -34,8 +53,7 @@ public class GetXmlProcessor implements MessageProcessor {
 		} catch (Exception ex) {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).
 				log(Level.SEVERE, null, ex);
-		}
-
+		}		
 	}
 
 }

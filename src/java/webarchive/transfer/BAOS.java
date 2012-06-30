@@ -2,10 +2,11 @@ package webarchive.transfer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 import webarchive.client.ClientConnectionHandler;
 
-public class BAOS extends ByteArrayOutputStream {
+public class BAOS extends ByteArrayOutputStream  implements Serializable{
 	
 	private FileBuffer buf;
 	private ClientConnectionHandler cH;
@@ -27,7 +28,7 @@ public class BAOS extends ByteArrayOutputStream {
 			e.printStackTrace();
 		}
 		
-		Message answer = cH.waitForAnswer(msg);
+		Message answer = cH.waitForAnswer(msg,cH.getConnection());
 		if(answer.getHeader() != Header.SUCCESS)
 		{
 			//EXCEPTION HANDLING UND SO

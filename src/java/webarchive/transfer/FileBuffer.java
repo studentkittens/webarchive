@@ -1,9 +1,15 @@
 package webarchive.transfer;
 
+import java.io.Serializable;
 
 
-public class FileBuffer {
 
+public class FileBuffer implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3598419521913474363L;
 	private FileDescriptor fd;
 	private byte[] data;
 	

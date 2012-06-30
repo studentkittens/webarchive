@@ -22,26 +22,13 @@ public class Client implements NetworkModule  {
 	/** The Constant DEFAULT_PORT. */
 	public static final int DEFAULT_PORT = 42420;
 
-	private String ip;
+	private InetAddress ip;
 	
 	private int port;
 	
 	private Connection c;
 	
-	private static Client cl=null;
-	
 	private Observable observ;
-	
-	/**
-	 * Gets the single instance of Client.
-	 *
-	 * @return single instance of Client
-	 */
-	public static Client getInstance() {
-		if(cl==null)
-			cl = new Client();
-		return cl;
-	}
 	
 	/**
 	 * Gets the connection.
@@ -55,7 +42,7 @@ public class Client implements NetworkModule  {
 	/**
 	 * Instantiates a new client.
 	 */
-	private Client()
+	Client()
 	{
 		this.port = DEFAULT_PORT;
 	}
@@ -65,7 +52,7 @@ public class Client implements NetworkModule  {
 	 *
 	 * @return the ip
 	 */
-	public String getIp() {
+	public InetAddress getIp() {
 		return ip;
 	}
 
@@ -74,7 +61,7 @@ public class Client implements NetworkModule  {
 	 *
 	 * @param ip the new ip
 	 */
-	public void setIp(String ip) {
+	public void setIp(InetAddress ip) {
 		this.ip = ip;
 	}
 
@@ -116,12 +103,12 @@ public class Client implements NetworkModule  {
 	 * @param ip the ip
 	 * @param port the port
 	 */
-	public void connectToServer(String ip, int port)
+	public void connectToServer(InetAddress ip, int port)
 	{
 		
 		try {
 			System.out.println("trying to connect");
-			Socket sock = new Socket(InetAddress.getByName(ip),port);
+			Socket sock = new Socket(ip,port);
 			System.out.println("connected");
 			c = new Connection(sock, new ObjectOutputStream(sock.getOutputStream()) , new ObjectInputStream(sock.getInputStream()));
 			c.setConHandler(new ClientConnectionHandler(c, this));

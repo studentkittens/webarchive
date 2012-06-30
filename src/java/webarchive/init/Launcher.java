@@ -2,6 +2,8 @@ package webarchive.init;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -14,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import webarchive.handler.Handlers;
 import webarchive.server.*;
+import webarchive.transfer.FileDescriptor;
 import webarchive.xml.XmlConf;
 
 /**
@@ -52,22 +55,23 @@ public class Launcher {
 			System.err.println("error: could not initialize the logger subsystem!");
 			System.err.println(e);
 		}
+		
 		Server.init(col); //call once
 
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				Server.getInstance().stop();
-				System.out.println("\nServer stopped!\n");
-				try {
-					Server.getInstance().getThread().join();
-				} catch (InterruptedException ex) {
-					Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
-				ex);
-				}
-			}
-		}));
+//		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				Server.getInstance().stop();
+//				System.out.println("\nServer stopped!\n");
+//				try {
+//					Server.getInstance().getThread().join();
+//				} catch (InterruptedException ex) {
+//					Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
+//				ex);
+//				}
+//			}
+//		}));
 
 		
 		Server.getInstance().start();
@@ -98,13 +102,17 @@ public class Launcher {
 		col.add(configHandler);
 		col.add(new XmlConf(configHandler));
 		col.add(new webarchive.server.FileHandler());
+		FileDescriptor.root = configHandler.getValue("webarchive.general.root");
 
 	}
 	private static void buildLogger(ConfigHandler cfgH) throws IOException {
 		Logger logger = Logger.getLogger("webarchive");
 		Handler handler = null;
+		String archiveRoot = cfgH.getValue("webarchive.general.root");
+		createEnvironment(archiveRoot);
 		try {
-			handler = new FileHandler(cfgH.getValue("webarchive.general.root")+"/logs/java/webarchive.log");
+			
+			handler = new FileHandler(archiveRoot+"/logs/java/webarchive.log");
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,5 +123,11 @@ public class Launcher {
 		Formatter formatter = new SimpleFormatter();
 		handler.setFormatter(formatter);
 		logger.addHandler(handler);
+	}
+	private static void createEnvironment(String archiveRoot) {
+		File dir = new File(archiveRoot+"/logs/java");
+		if(!dir.exists()) {
+			dir.mkdir();
+		}
 	}
 }

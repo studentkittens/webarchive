@@ -2,6 +2,7 @@
 package webarchive.api;
 
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 
 import webarchive.api.model.CommitTag;
@@ -13,7 +14,7 @@ import webarchive.api.model.CommitTag;
  * @author ccwelich
  * @version 1
  */
-public interface WebarchiveObserver extends Observer {
+public abstract class WebarchiveObserver implements Observer {
 	/**
 	 * update called in case of changes in webarchive
 	 * @param client the broadcasting client
@@ -21,5 +22,13 @@ public interface WebarchiveObserver extends Observer {
 	 * Use commitTags combined with client.select() to get changed html-files.
 	 * @see CommitTag
 	 */
-	public void	update(WebarchiveClient client, List<CommitTag> changes);
+	
+	public abstract void update(WebarchiveClient client, List<CommitTag> changes);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void update(Observable o, Object arg) {
+		this.update((WebarchiveClient)o,(List<CommitTag>)arg);
+		
+	}
 }

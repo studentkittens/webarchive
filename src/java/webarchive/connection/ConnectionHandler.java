@@ -21,7 +21,7 @@ public abstract class ConnectionHandler extends Handler {
 
 	protected final Connection c;
 	
-	private final HashMap<Integer,Message> map = new HashMap<Integer,Message>();
+	private final HashMap<Integer,Object[]> map = new HashMap<Integer,Object[]>();
 
 	protected NetworkModule netMod;
 	
@@ -78,7 +78,7 @@ public abstract class ConnectionHandler extends Handler {
 	 *
 	 * @return the map
 	 */
-	public HashMap<Integer,Message> getMap() {
+	public HashMap<Integer,Object[]> getMap() {
 		return map;
 	}
 	
@@ -92,34 +92,49 @@ public abstract class ConnectionHandler extends Handler {
 	 * @param m the sent Message
 	 * @return the answer-Message
 	 */
-	public Message waitForAnswer(Message m)
+	public Message waitForAnswer(Message m,Runnable t)
 	{
-		
-		map.put( m.getId(), null );
-		Message answer = null;
-		do {
-		
-			answer = map.get(m.getId());
-			
+		Message answer=null;
+		Object[] tmp = map.get(m.getId());
+		if(tmp != null) {
+		 answer = (Message) (tmp)[1];
+		}
+		synchronized(map) {
 			if(answer != null  && answer.getId().equals(m.getId())) {
+					map.remove(m.getId());
 				return answer;
 			}
+			map.put( m.getId(), new Object[] {t,null} );
+		}
+		answer = null;
+		do {
+		
+				answer = (Message) map.get(m.getId())[1];
+				
+				if(answer != null  && answer.getId().equals(m.getId())) {
+					synchronized(map) {
+						map.remove(m.getId());
+					}
+					return answer;
+				}
+				
+				answer = null;
 			
-			answer = null;
-			
-			synchronized(map) {
+			synchronized(t) {
 				try {
-					map.wait();
+					System.out.println("goin to sleep");
+					t.wait();
+					System.out.println("woke up");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+				 
 			}	
 			
 		} while (answer == null);
 		
-		return null;
+		return answer;
 	}
 	
 	/**
@@ -138,15 +153,26 @@ public abstract class ConnectionHandler extends Handler {
 	 *
 	 * @param msg the Message that just arrived over the socket
 	 */
-	protected void wakeUp(Message msg)
+	public void wakeUp(Message msg)
 	{
 		if(msg.getId()!=null)
-		{
-			synchronized (getMap())
-			{
-				getMap().put(msg.getId(), msg);
-				getMap().notifyAll();
-			}
+		{		
+			Object[] tmp;
+				synchronized(map) {
+					tmp = map.get(msg.getId());
+				}
+				if(tmp != null) {
+					tmp[1] = msg;
+					synchronized(map.get(msg.getId())[0]) {
+						map.get(msg.getId())[0].notify();
+					}
+				}
+				else {
+					synchronized(map) {
+						map.put(msg.getId(), new Object[] {null,msg});
+					}
+				}
+				
 		}
 	}
 	

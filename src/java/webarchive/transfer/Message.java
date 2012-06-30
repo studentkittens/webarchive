@@ -10,7 +10,7 @@ public class Message implements Serializable {
 	private Object data;
 	
 	private Integer id = null;
-	private static int mId=0;
+	private static volatile int mId=0;
 	
 	public Message(Header h, Object data) {
 		this.h = h;
@@ -57,11 +57,15 @@ public class Message implements Serializable {
 	}
 	
 	private synchronized  int incId() {
-		mId = (mId+2) % Integer.MAX_VALUE;
+		mId = ++mId % Integer.MAX_VALUE;
 		return mId;
 	}
 
 	public void setNoAnswer() {
 		this.setBroadCast();
+	}
+	
+	public String toString() {
+		return "["+this.h+"] "+this.data;
 	}
 }
