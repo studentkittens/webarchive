@@ -26,7 +26,7 @@ def rsync(src_path, dest_path):
     logging.info('Rsyncing: ' + '  '.join(cmd))
     out, err = process.communicate()
     if process.poll() is not 0:
-        logging.warning('rsync failed with stderr-output: {1}'.format(err))
+        logging.warning('rsync failed with stderr-output: {0}'.format(err))
 
 
 ###########################################################################
