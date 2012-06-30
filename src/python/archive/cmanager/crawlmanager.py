@@ -28,7 +28,6 @@ def crawljob(ident, url):
     :ident: identifier given by threadpool
     :url: url to crawl
     """
-    print('CRAWL')
     if has_been_stopped:
         return -1
 
