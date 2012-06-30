@@ -11,6 +11,10 @@ Wget is used with the following params:
     'wget "{user_agent}" \
           -e robots={rob} \
           --recursive \
+          --restrict-file-names=nocontrol \
+          --iri \
+          --timeout=20 \
+          --tries=3 \
           -l {depth} \
           --exclude-domains "{ex_domains}" \
           {custom_parms} \
