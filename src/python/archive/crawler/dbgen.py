@@ -36,13 +36,19 @@ class DBGenerator(object):
             self.__connection = sqlite3.connect(abspath)
 
         self.__cursor = self.__connection.cursor()
-        self.__cursor.executescript(sqlsource.statements['create'])
+
+        try:
+            self.__cursor.executescript(sqlsource.statements['create'])
+        except sqlite3.OperationalError as err:
+            # Most likely locked
+            logging.debug('Not executing CREATE - Already done: ' + str(err))
+
         self.__metalist = meta_list
 
         # We have to maintain a seperate lock for the db,
         # the db itself is locked from itself, but many separate
         # statements are not
-        self.__db_lock = lock.FileLock(file_name='db.lock',
+        self.__db_lock = lock.FileLock(file_name='db',
                 folder=get_archive_root(),
                 timeout=100)
 
