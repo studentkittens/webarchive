@@ -6,7 +6,9 @@ import webarchive.api.model.CommitTag;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
+import webarchive.transfer.HandShake;
 import webarchive.transfer.Message;
+import webarchive.xml.XmlEditor;
 
 /**
  * The Class ClientConnectionHandler is primarily responsible for handling Handshakes, Notifications and Exceptions.
@@ -42,7 +44,9 @@ public class ClientConnectionHandler extends ConnectionHandler {
 		case HANDSHAKE:
 			{
 				try {
+					System.out.println("ANSWER HANDSHAKE");
 					super.getConnection().send(msg);
+					System.out.println("HANDShAKE SENDBACK");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -55,13 +59,11 @@ public class ClientConnectionHandler extends ConnectionHandler {
 			obs.notifyClients((List<CommitTag>)msg.getData());
 			break;
 		}
-		case EXCEPTION:
-		case SUCCESS:
-		case SQL:
-		case WRITEFILE:
-		case READFILE:
-		case GETXMLEDIT:
-		case LS:
+		case GETXMLEDIT: {
+			XmlEditor xmlE = (XmlEditor)msg.getData();
+			xmlE.setConnection(this);
+		}
+		
 		default:
 			wakeUp(msg);
 			break;

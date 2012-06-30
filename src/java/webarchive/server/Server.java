@@ -4,12 +4,14 @@ import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
+import webarchive.transfer.HandShake;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -38,8 +40,8 @@ public class Server implements Runnable, NetworkModule {
 		return thread;
 	}
 
-	private Server() {
-
+	private Server(Handlers col) {
+		this.collection = col;
 		this.listenPort = new Integer(((ConfigHandler) collection.get(
 			ConfigHandler.class)).getValue("webarchive.server.port"));
 		this.cList = new ArrayList<>();
@@ -51,27 +53,22 @@ public class Server implements Runnable, NetworkModule {
 		return sv;
 
 	}
+	
 	public static void init(Handlers col) {
-		sv = new Server();
-		sv.collection = col;
+		sv = new Server(col);
 	}
 
 	public boolean start() {
-		synchronized (running) {
-			if (isRunning()) {
-				return false;
-			}
-			thread = new Thread(sv);
-			thread.start();
-		}
-		return isRunning();
+		if(checkRunning())
+			return false;
+		thread = new Thread(sv);
+		thread.start();
+		return checkRunning();
 	}
 
 	public boolean stop() {
-		synchronized (running) {
-			if (!isRunning()) {
+			if(checkRunning())
 				return false;
-			}
 			try {
 				System.out.println("closing svSock");
 				svSock.close();
@@ -79,28 +76,35 @@ public class Server implements Runnable, NetworkModule {
 				e.printStackTrace();
 
 			}
-		}
 		return true;
 	}
 
 	@Override
 	public void run() {
-//TODO fix synchronization on old reference
-
-		synchronized (running) {
-			if (isRunning()) {
-				return;
-			}
-			setRunning(true);
-		}
+		if (initRunning())
+			return;
 		accept();
-		synchronized (running) {
-			setRunning(false);
-		}
+		finalizeRunning();
 	}
 
 	private void setRunning(boolean running) {
 		this.running = running;
+	}
+	private synchronized boolean checkRunning() {
+		if (isRunning()) {
+			return true;
+		}
+		return false;
+	}
+	private synchronized boolean initRunning() {
+		if (isRunning()) {
+			return true;
+		}
+		setRunning(true);
+		return false;
+	}
+	private synchronized void finalizeRunning() {
+		setRunning(false);
 	}
 
 	private boolean isRunning() {
@@ -158,26 +162,25 @@ public class Server implements Runnable, NetworkModule {
 			} catch (Exception ex) {
 				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null,
 					ex);
-				continue;
 			}
 			Connection c = new Connection(sock, oos, ois);
 			c.setConHandler(new ServerConnectionHandler(c, this));
 
 			new Thread(c).start();
 
-			if (doHandShake(c)) {
+//			if (doHandShake(c)) {
 				addNewConnection(c);
-				System.out.println("HANDSHAKE SUCCESS");
-			} else {
-				System.out.println("HANDSHAKE FAILED");
-				try {
-					sock.close();
-				} catch (IOException ex) {
-					Logger.getLogger(Server.class.getName()).log(Level.WARNING,
-						null, ex);
-				}
-				continue;
-			}
+//				System.out.println("HANDSHAKE SUCCESS");
+//			} else {
+//				System.out.println("HANDSHAKE FAILED");
+//				try {
+//					sock.close();
+//				} catch (IOException ex) {
+//					Logger.getLogger(Server.class.getName()).log(Level.WARNING,
+//						null, ex);
+//				}
+//				continue;
+//			}
 
 
 
@@ -190,17 +193,17 @@ public class Server implements Runnable, NetworkModule {
 		}
 	}
 
-	private boolean doHandShake(Connection c) {
+	boolean doHandShake(Connection c) {
 		Message h = null;
 		try {
 			System.out.println("try sending handshake");
 
-			Message m = new Message(Header.HANDSHAKE);
+			Message m = new Message(Header.HANDSHAKE,new HandShake(Math.random()));
 
 			c.send(m);
 			System.out.println("handshake sent, try receiving handshake");
 
-			h = c.waitForAnswer(m);//Go to sleep
+			h = c.getConHandler().waitForAnswer(m,c);//Go to sleep
 
 			System.out.println("handshake received");
 

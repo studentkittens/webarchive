@@ -103,7 +103,7 @@ public class XmlHandler {
 	 */
 	public XmlEditor newEditor() throws SAXException {
 		ensureDocument();
-		return new XmlEditor(document, dataNode);
+		return new XmlEditor(ioHandler.getXmlFile(),document, dataNode);
 	}
 
 	private void validate() throws SAXException {
@@ -148,6 +148,7 @@ public class XmlHandler {
 		final int length = dataNodes.getLength();
 		for (int i = 0; i < length; i++) {
 			if (dataNodes.item(i).getNodeName().equals(tagName)) {
+				ioHandler.unlock();
 				throw new SAXException(
 					"element " + tagName + " already exists");
 			}

@@ -22,9 +22,12 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Connection con;
 	
 	public WebarchiveClient(InetAddress server, int port) {
-		cl = Client.getInstance();
-		con = cl.getConnection();
+		cl = new Client();
+		
+		cl.setIp(server);
+		cl.setPort(port);
 		cl.connectToServer();
+		con = cl.getConnection();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -60,7 +63,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 
 
 	public XmlEditor getXMLEditor(MetaData meta) throws Exception {
-		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,meta.getPath()));
+		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,new File("data.xml")));
 		assert answer instanceof XmlEditor;
 		return (XmlEditor) answer;
 	}
@@ -105,9 +108,11 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);
 		con.send(msg);
+		
 		Message answer = (Message) con.waitForAnswer(msg);
 		if(answer.getHeader() == Header.EXCEPTION)
 			throw (Exception) answer.getData();
+		System.out.println(answer);
 		return  answer.getData();
 	}
 

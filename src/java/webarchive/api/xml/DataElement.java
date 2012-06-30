@@ -4,6 +4,8 @@
  */
 package webarchive.api.xml;
 
+import java.io.Serializable;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,7 +19,7 @@ import org.w3c.dom.NodeList;
  * @see XmlEditor
  * @author ccwelich
  */
-public interface DataElement {
+public interface DataElement extends Serializable {
 
 	/**
 	 * @see org.w3c.dom.Node#appendChild(org.w3c.dom.Node)

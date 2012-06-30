@@ -72,6 +72,7 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("lock "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
+		System.out.println("Lock "+ domain);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
@@ -84,6 +85,7 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("unlock "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
+		System.out.println("Unlock "+domain);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
@@ -94,11 +96,12 @@ public class LockHandlerImpl extends LockHandler   {
 	@Override
 	public void checkout(FileDescriptor fd) {
 		String domain = fd.getMetaData().getCommitTag().getDomain();
-		String commitTag = fd.getMetaData().getCommitTag().toString();
+		String commitTag = fd.getMetaData().getCommitTag().getCommitTime().getXmlFormat();
+		
 		out.write("checkout "+ domain+" "+commitTag+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		System.out.println(answer);
+		System.out.println("Checkout "+ answer);
 		if(answer.substring(0, 3).equals("ACK")) {
 			//TODO
 			return;
@@ -119,6 +122,42 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("commit "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
+		System.out.println("Commit "+answer);
+		try {
+			processAnswer(answer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void list_branches(String domain) {
+		System.out.println(domain);
+		out.write("list_branches "+ domain+"\n");
+		out.flush();
+		String answer = in.nextLine();
+		while (!answer.equals("OK")) {
+				answer = in.nextLine();
+				System.out.println(answer);
+		}
+		try {
+			processAnswer(answer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public void list_commits(String domain) {
+		System.out.println(domain);
+		out.write("list_commits "+ domain+"\n");
+		out.flush();
+		String answer = in.nextLine();
+		while (!answer.equals("OK")) {
+				answer = in.nextLine();
+				System.out.println(answer);
+		}
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
@@ -140,8 +179,8 @@ public class LockHandlerImpl extends LockHandler   {
 	}
 	
 	private void processAnswer(String answer) throws Exception {
-		System.out.println("Thread "+bla+" "+answer);
-		if(answer.equals("OK"))
+		System.out.println(answer);
+		if(answer.equals("OK") || answer.equals("ACK commit returned 1"))
 			return;
 		System.out.print("Thread "+bla+" caused:");
 		throw new Exception(answer);
@@ -167,30 +206,44 @@ public class LockHandlerImpl extends LockHandler   {
 	public static void main(String args[]) throws UnknownHostException, InterruptedException {
 		final String domain = "www.stackoverflow.com";
 		final LockHandlerImpl l = new LockHandlerImpl(InetAddress.getLocalHost(),42421);
-
+		l.lockDomain(domain);
+		l.unlockDomain(domain);
 		l.lockDomain(domain);
 		System.out.println("l locked");
-		for(int i=0;i<2;i++) {
-			final LockHandlerImpl j = new LockHandlerImpl(InetAddress.getLocalHost(),42421);
-			j.bla=i;
-			new Thread(new Runnable() {
-				public void run() {
-					j.lockDomain(domain);
-					System.out.println(j.bla+" locked");
-					System.out.println("Lock file actually exists: "+new File("/tmp/archive/content/www.stackoverflow.com.lock").exists());
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					j.unlockDomain(domain);
-					System.out.println(j.bla+" unlocked");
-				}
-			}).start();
+		File p = new File("/tmp/archive/content/www.stackoverflow.com/BLAA");
+		p.mkdir();
+		File c = new File(p,"a.txt");
+		try {
+			c.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+//		for(int i=0;i<2;i++) {
+//			final LockHandlerImpl j = new LockHandlerImpl(InetAddress.getLocalHost(),42421);
+//			j.bla=i;
+//			new Thread(new Runnable() {
+//				public void run() {
+//					j.lockDomain(domain);
+//					System.out.println(j.bla+" locked");
+//					System.out.println("Lock file actually exists: "+new File("/tmp/archive/content/www.stackoverflow.com.lock").exists());
+//					try {
+//						Thread.sleep(5000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					j.unlockDomain(domain);
+//					System.out.println(j.bla+" unlocked");
+//				}
+//			}).start();
+//		}
 		l.unlockDomain(domain);
 		System.out.println("l unlocked");
+		l.list_branches(domain);
+		l.list_commits(domain);
 	}
 	
 }

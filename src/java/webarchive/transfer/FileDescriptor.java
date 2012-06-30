@@ -1,10 +1,16 @@
 package webarchive.transfer;
 
 import java.io.File;
+import java.io.Serializable;
 
 import webarchive.api.model.MetaData;
 
-public class FileDescriptor {
+public class FileDescriptor implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2153013948915864227L;
 	
 	private MetaData meta;
 	private File file;
@@ -27,7 +33,8 @@ public class FileDescriptor {
 		this.meta = meta;
 	}
 	public File getAbsolutePath() {
-		return new File(meta.getPath(),file.toString());
+		String tmp = meta.getPath().toString();
+		return new File(tmp.substring(0,tmp.length()-5),file.getName());
 	}
 	public void setFile(File file) {
 		this.file = file;

@@ -87,22 +87,34 @@ public class FileHandler extends Handler {
 	}
 
 	public List<File> getFileTree(MetaData meta) {
-		File root = meta.getPath();
+		File root = meta.getPath().getParentFile();
 		List<File> list = new ArrayList<File>();
-		addSubDirectories(root,list);
+		System.out.println(meta.getPath().getParent());
+		addSubDirectories(root,list,meta.getPath().getParent().length());
 		
 		return list;
 	}
-	private void addSubDirectories(File current, List<File> list) {
+	private void addSubDirectories(File current, List<File> list,int off) {
 		if(current.isDirectory()) {
+			if(current.getName().equals(".git")){
+					return;
+				}
 			File[] subD = current.listFiles();
 			for(int i = 0; i<subD.length; i++) {
-				addSubDirectories(subD[i],list);
+				addSubDirectories(subD[i],list,off);
 			}
 		} else {
-			list.add(current);
+			list.add(new File(current.toString().substring(off+1)));
 		}
 		
+	}
+	
+	public static void main(String args[]) {
+		FileHandler fh = new FileHandler();
+		List<File> l = fh.getFileTree(new MetaData(null,null,null,new File("/tmp/archive/content/www.stackoverflow.com"),null, null));
+		for(File f : l) {
+			System.out.println(f);
+		}
 	}
 	
 }
