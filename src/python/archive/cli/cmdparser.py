@@ -176,10 +176,10 @@ class Cli(object):
         try:
             javadapter.ServerShell(server_instance=server).cmdloop()
         except KeyboardInterrupt:
-             print('Interrupted.')
-
-        if self._args['--start']:
-            server.shutdown()
+            print('Interrupted.')
+        finally:
+            if server is not None:
+                server.shutdown()
 
     def handle_db(self):
         'Handle "db" submodule'

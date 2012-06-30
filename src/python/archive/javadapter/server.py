@@ -67,10 +67,13 @@ def lock_domain(domain, lock_timeout=300, wait=True):
     """
     global GLOBAL_LOCK_TABLE
 
+    if not os.path.exists(paths.get_domain_path(domain)):
+        raise ProtocolError('Domain does not exist.')
+
     if domain in GLOBAL_LOCK_TABLE:
         # We do not want to wait, so raise a ProtocolError immediately
         if GLOBAL_LOCK_TABLE[domain].is_locked and wait is False:
-           raise ProtocolError('Already locked.')
+            raise ProtocolError('Already locked.')
 
     try:
         #if thread_name not in thread_name:
