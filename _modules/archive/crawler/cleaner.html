@@ -140,7 +140,8 @@
 <span class="sd">        Removes empty files and folders</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;removing empty files and folders.&quot;</span><span class="p">)</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;find&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span> <span class="s">&#39;-empty&#39;</span><span class="p">,</span> <span class="s">&#39;-delete&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">):</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s">&#39;find&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__path</span><span class="p">,</span> <span class="s">&#39;-empty&#39;</span><span class="p">,</span> <span class="s">&#39;-delete&#39;</span><span class="p">])</span>
 
 <span class="c">###########################################################################</span>
 <span class="c">#                                 content                                 #</span>

@@ -74,29 +74,29 @@ is in <tt class="docutils literal"><span class="pre">/your/path/webarchive.conf.
     <span class="c">&lt;!-- modules --&gt;</span>
     <span class="nt">&lt;crawler&gt;</span>
         <span class="nt">&lt;depth&gt;</span>1<span class="nt">&lt;/depth&gt;</span>
-        <span class="nt">&lt;interval&gt;</span>0.5<span class="nt">&lt;/interval&gt;</span>
+        <span class="nt">&lt;interval&gt;</span>1<span class="nt">&lt;/interval&gt;</span>
         <span class="nt">&lt;maxInst&gt;</span>10<span class="nt">&lt;/maxInst&gt;</span>
         <span class="nt">&lt;userAgent&gt;</span>webarchive/0.1 +https://github.com/studentkittens/webarchive<span class="nt">&lt;/userAgent&gt;</span>
-        <span class="nt">&lt;tempRoot&gt;</span>tmp/<span class="nt">&lt;/tmpRoot&gt;</span>
+        <span class="nt">&lt;tempRoot&gt;</span>tmp/<span class="nt">&lt;/tempRoot&gt;</span>
         <span class="nt">&lt;ignoreRobots&gt;</span>true<span class="nt">&lt;/ignoreRobots&gt;</span>
         <span class="nt">&lt;urllistpath&gt;</span>url.txt<span class="nt">&lt;/urllistpath&gt;</span>
         <span class="nt">&lt;customWgetParms&gt;&lt;/customWgetParms&gt;</span>
     <span class="nt">&lt;/crawler&gt;</span>
     <span class="nt">&lt;db&gt;</span>
         <span class="nt">&lt;path&gt;</span>metadata.db<span class="nt">&lt;/path&gt;</span>
-        <span class="nt">&lt;sqlSource&gt;</span>../sql/<span class="nt">&lt;/sqlSource&gt;</span>
     <span class="nt">&lt;/db&gt;</span>
-    <span class="nt">&lt;xml&gt;</span>
-        <span class="nt">&lt;schemaPath&gt;</span>xml/<span class="nt">&lt;/schemaPath&gt;</span>
-    <span class="nt">&lt;/xml&gt;</span>
     <span class="nt">&lt;server&gt;</span>
         <span class="nt">&lt;port&gt;</span>42420<span class="nt">&lt;/port&gt;</span>
         <span class="nt">&lt;notify&gt;</span>
             <span class="nt">&lt;interval&gt;</span>15<span class="nt">&lt;/interval&gt;</span>
         <span class="nt">&lt;/notify&gt;</span>
     <span class="nt">&lt;/server&gt;</span>
+    <span class="nt">&lt;xml&gt;</span>
+        <span class="nt">&lt;autoValidatingMode&gt;</span>after update<span class="nt">&lt;/autoValidatingMode&gt;</span>update
+        <span class="nt">&lt;schemaPath&gt;</span>xml/file.xsd<span class="nt">&lt;/schemaPath&gt;</span>
+    <span class="nt">&lt;/xml&gt;</span>
     <span class="nt">&lt;javadapter&gt;</span>
-      <span class="nt">&lt;port&gt;</span>42421<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;port&gt;</span>42421<span class="nt">&lt;/port&gt;</span>
     <span class="nt">&lt;/javadapter&gt;</span>
 <span class="nt">&lt;/webarchive&gt;</span>
 </pre></div>
@@ -104,14 +104,22 @@ is in <tt class="docutils literal"><span class="pre">/your/path/webarchive.conf.
 </div>
 <div class="section" id="implementation">
 <h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Acquiring:</p>
 <dl class="function">
-<dt id="archive.config.reader.get">
-<tt class="descclassname">archive.config.reader.</tt><tt class="descname">get</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/archive/config/reader.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.config.reader.get" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.config.handler.get">
+<tt class="descclassname">archive.config.handler.</tt><tt class="descname">get</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="_modules/archive/config/handler.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.config.handler.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Acquiring Defaults:</p>
 <dl class="function">
-<dt id="archive.config.reader.get_default">
-<tt class="descclassname">archive.config.reader.</tt><tt class="descname">get_default</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/archive/config/reader.html#get_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.config.reader.get_default" title="Permalink to this definition">¶</a></dt>
+<dt id="archive.config.handler.get_default">
+<tt class="descclassname">archive.config.handler.</tt><tt class="descname">get_default</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="_modules/archive/config/handler.html#get_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.config.handler.get_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Setting Values:</p>
+<dl class="function">
+<dt id="archive.config.handler.set">
+<tt class="descclassname">archive.config.handler.</tt><tt class="descname">set</tt><big>(</big><em>url</em>, <em>str</em><big>)</big><a class="reference internal" href="_modules/archive/config/handler.html#set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#archive.config.handler.set" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

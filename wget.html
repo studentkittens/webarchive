@@ -61,6 +61,10 @@
 <div class="highlight-bash"><div class="highlight"><pre><span class="s1">&#39;wget &quot;{user_agent}&quot; \</span>
 <span class="s1">      -e robots={rob} \</span>
 <span class="s1">      --recursive \</span>
+<span class="s1">      --restrict-file-names=nocontrol \</span>
+<span class="s1">      --iri \</span>
+<span class="s1">      --timeout=20 \</span>
+<span class="s1">      --tries=3 \</span>
 <span class="s1">      -l {depth} \</span>
 <span class="s1">      --exclude-domains &quot;{ex_domains}&quot; \</span>
 <span class="s1">      {custom_parms} \</span>

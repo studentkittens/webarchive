@@ -53,29 +53,30 @@
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Florian Bauer&#39;</span>
 
-
+<span class="kn">import</span> <span class="nn">archive.config.xmlhandler</span> <span class="kn">as</span> <span class="nn">xmlhandler</span>
 <span class="kn">import</span> <span class="nn">archive.config.options</span> <span class="kn">as</span> <span class="nn">options</span>
 
-
-<div class="viewcode-block" id="get_default"><a class="viewcode-back" href="../../../config.html#archive.config.reader.get_default">[docs]</a><span class="k">def</span> <span class="nf">get_default</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="c">#   Try find default value for url.</span>
+<span class="c">#   If url is found, return value.</span>
+<span class="c">#   Else it returns &#39;&#39;</span>
+<div class="viewcode-block" id="get_default"><a class="viewcode-back" href="../../../config.html#archive.config.reader.get_default">[docs]</a><span class="k">def</span> <span class="nf">get_default</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">url</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">return</span> <span class="s">&#39;&#39;</span>
 
-</div>
-<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../../config.html#archive.config.reader.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="c">#   Try find value for url.</span>
+<span class="c">#   If url is found, return value.</span>
+<span class="c">#   If url isn&#39;t found, try to get default value</span></div>
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../../config.html#archive.config.reader.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">options</span><span class="o">.</span><span class="n">actual_options</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">xmlhandler</span><span class="o">.</span><span class="n">get_element</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ret</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">get_default</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;&#39;</span>
-
-</div>
-<span class="k">def</span> <span class="nf">get_with_default</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;Actual: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">actual_options</span><span class="p">[</span><span class="n">value</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;   Default: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">default_options</span><span class="p">[</span><span class="n">value</span><span class="p">])</span>
-    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&#39;Wrong Item Name&#39;</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span></div>
 </pre></div>
 
           </div>

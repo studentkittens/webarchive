@@ -58,8 +58,7 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Christoph Piechula&#39;</span>
 
 <span class="kn">import</span> <span class="nn">multiprocessing.pool</span> <span class="kn">as</span> <span class="nn">mpool</span>
-<span class="kn">import</span> <span class="nn">archive.util.files</span> <span class="kn">as</span> <span class="nn">utl</span>
-<span class="kn">import</span> <span class="nn">archive.config.reader</span> <span class="kn">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">archive.config.handler</span> <span class="kn">as</span> <span class="nn">config</span>
 <span class="kn">import</span> <span class="nn">archive.crawler.crawljob</span> <span class="kn">as</span> <span class="nn">job</span>
 
 <span class="kn">import</span> <span class="nn">threading</span>
@@ -85,7 +84,7 @@
         <span class="n">running</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
         <span class="n">running_mtx</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
         <span class="n">j</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;error during starting crawljob pool&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ident</span>
 
@@ -107,7 +106,6 @@
 <div class="viewcode-block" id="CrawlerManager.start"><a class="viewcode-back" href="../../../crawlstuff.html#archive.cmanager.crawlmanager.CrawlerManager.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Starts threadpool with max number of instances</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">crawljob</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__urls</span><span class="p">)]</span>
@@ -116,7 +114,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__done_callback</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__done_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__done_callback</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__done_callback</span> <span class="o">=</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="CrawlerManager.register_done"><a class="viewcode-back" href="../../../crawlstuff.html#archive.cmanager.crawlmanager.CrawlerManager.register_done">[docs]</a>    <span class="k">def</span> <span class="nf">register_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>

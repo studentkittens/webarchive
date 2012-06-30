@@ -61,13 +61,12 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">sqlite3</span>
-<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">archive.util.filelock</span> <span class="kn">as</span> <span class="nn">lock</span>
+<span class="kn">import</span> <span class="nn">archive.crawler.statements</span> <span class="kn">as</span> <span class="nn">sqlsource</span>
 <span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_dbpath</span>
 <span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_archive_root</span>
-<span class="kn">from</span> <span class="nn">archive.util.paths</span> <span class="kn">import</span> <span class="n">get_sqlpath</span>
 
 
 <div class="viewcode-block" id="DBGenerator"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator">[docs]</a><span class="k">class</span> <span class="nc">DBGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -87,8 +86,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_statements</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__statements</span><span class="p">[</span><span class="s">&#39;create&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">sqlsource</span><span class="o">.</span><span class="n">statements</span><span class="p">[</span><span class="s">&#39;create&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span> <span class="o">=</span> <span class="n">meta_list</span>
 
         <span class="c"># We have to maintain a seperate lock for the db,</span>
@@ -98,25 +96,6 @@
                 <span class="n">folder</span><span class="o">=</span><span class="n">get_archive_root</span><span class="p">(),</span>
                 <span class="n">timeout</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DBGenerator.load_statements"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.load_statements">[docs]</a>    <span class="k">def</span> <span class="nf">load_statements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        (Re-)Load Sql Files from Disk</span>
-
-<span class="sd">        This is already called in init</span>
-
-<span class="sd">        :returns: a dictionary with statements, indexed by name (e.g. &#39;create&#39;)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">statements</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_sqlpath</span><span class="p">(),</span> <span class="s">&#39;*.sql&#39;</span><span class="p">)):</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-                <span class="n">source_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">source_base</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.sql&#39;</span><span class="p">):</span>
-                    <span class="n">source_base</span> <span class="o">=</span> <span class="n">source_base</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
-
-                <span class="n">statements</span><span class="p">[</span><span class="n">source_base</span><span class="p">]</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">statements</span>
-</div>
 <div class="viewcode-block" id="DBGenerator.execute_statement"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.execute_statement">[docs]</a>    <span class="k">def</span> <span class="nf">execute_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">,</span> <span class="n">arglist</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exececute a previously loaded statement by name</span>
@@ -124,7 +103,7 @@
 <span class="sd">        :source_name: Sourcename to execute (e.g. &#39;create&#39;)</span>
 <span class="sd">        :arglist: You may pass an additional list of variable elements</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__statements</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">sqlsource</span><span class="o">.</span><span class="n">statements</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">arglist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">arglist</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

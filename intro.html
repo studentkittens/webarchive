@@ -69,7 +69,21 @@ Both sides try to shed some light onto the internal stuff happening.</p>
 <li><tt class="docutils literal"><span class="pre">docopt</span></tt> - Intelligent argument Parsing from Help Text</li>
 </ul>
 <p>You can do this via <tt class="docutils literal"><span class="pre">pip</span></tt>, assuming you have Python 3.x installed:</p>
-<div class="highlight-bash"><div class="highlight"><pre>sudo pip install filemagic docopt
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install filemagic docopt
+</pre></div>
+</div>
+<p>The backend uses a few commandline programs, which have to be installed also:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">rsync</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wget</span></tt> (with IRI Enabled; see below)</li>
+<li><tt class="docutils literal"><span class="pre">git</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">find</span></tt></li>
+</ul>
+<p>For full Unicode-support (e.g. crawling <tt class="docutils literal"><span class="pre">www.köln.de</span></tt>, or URLs that have
+Unicode-characters in them) a wget version with IRI support is needed. Check
+with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget --version | grep <span class="s1">&#39;+iri&#39;</span>
++iri
 </pre></div>
 </div>
 <p>The program will most likely not work for Python 2.x; make sure you have a newer series installed:</p>
