@@ -29,7 +29,6 @@ public class GetXmlProcessor implements MessageProcessor {
 	}
 
 	public GetXmlProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

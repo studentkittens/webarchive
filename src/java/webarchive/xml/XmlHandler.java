@@ -172,6 +172,7 @@ public class XmlHandler {
 		if (mode == AutoValidatingMode.ALWAYS || mode == AutoValidatingMode.AFTER_UPDATE) {
 			validate();
 		}
+		
 	}
 	
 }

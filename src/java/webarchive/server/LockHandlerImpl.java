@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.transfer.FileDescriptor;
 
@@ -31,23 +33,20 @@ public class LockHandlerImpl extends LockHandler   {
 			try {
 				sock.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 			}
 		}
 		
 		try {
 			this.sock = new Socket(ip,port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		try {
 			out = new PrintWriter(sock.getOutputStream());
 			in = new Scanner(sock.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		
 	}
@@ -72,12 +71,10 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("lock "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		System.out.println("Lock "+ domain);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
 	
@@ -85,12 +82,11 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("unlock "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		System.out.println("Unlock "+domain);
+		//System.out.println("Unlock "+domain);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
 	@Override
@@ -101,17 +97,15 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("checkout "+ domain+" "+commitTag+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		System.out.println("Checkout "+ answer);
 		if(answer.substring(0, 3).equals("ACK")) {
-			//TODO
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Checkout returned: "+answer+" "+domain+" "+commitTag);
 			return;
 		}
 		answer = in.nextLine();
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		
 	}
@@ -122,47 +116,42 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("commit "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		System.out.println("Commit "+answer);
+		//System.out.println("Commit "+answer);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		
 	}
 
 	public void list_branches(String domain) {
-		System.out.println(domain);
 		out.write("list_branches "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
 		while (!answer.equals("OK")) {
 				answer = in.nextLine();
-				System.out.println(answer);
 		}
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
+
 		}
 		
 	}
 	public void list_commits(String domain) {
-		System.out.println(domain);
+		//System.out.println(domain);
 		out.write("list_commits "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
 		while (!answer.equals("OK")) {
 				answer = in.nextLine();
-				System.out.println(answer);
 		}
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		
 	}
@@ -179,10 +168,9 @@ public class LockHandlerImpl extends LockHandler   {
 	}
 	
 	private void processAnswer(String answer) throws Exception {
-		System.out.println(answer);
+		//System.out.println(answer);
 		if(answer.equals("OK") || answer.equals("ACK commit returned 1"))
 			return;
-		System.out.print("Thread "+bla+" caused:");
 		throw new Exception(answer);
 	}
 
@@ -191,59 +179,16 @@ public class LockHandlerImpl extends LockHandler   {
 		out.flush();
 		String answer = in.nextLine();
 		if(answer.substring(0, 3).equals("ACK")) {
-			//TODO
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,"Checkout returned: "+answer+" "+domain+" master");
 			return;
 		}
 		answer = in.nextLine();
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
 	
-	public static void main(String args[]) throws UnknownHostException, InterruptedException {
-		final String domain = "www.stackoverflow.com";
-		final LockHandlerImpl l = new LockHandlerImpl(InetAddress.getLocalHost(),42421);
-		l.lockDomain(domain);
-		l.unlockDomain(domain);
-		l.lockDomain(domain);
-		System.out.println("l locked");
-		File p = new File("/tmp/archive/content/www.stackoverflow.com/BLAA");
-		p.mkdir();
-		File c = new File(p,"a.txt");
-		try {
-			c.createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-//		for(int i=0;i<2;i++) {
-//			final LockHandlerImpl j = new LockHandlerImpl(InetAddress.getLocalHost(),42421);
-//			j.bla=i;
-//			new Thread(new Runnable() {
-//				public void run() {
-//					j.lockDomain(domain);
-//					System.out.println(j.bla+" locked");
-//					System.out.println("Lock file actually exists: "+new File("/tmp/archive/content/www.stackoverflow.com.lock").exists());
-//					try {
-//						Thread.sleep(5000);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					j.unlockDomain(domain);
-//					System.out.println(j.bla+" unlocked");
-//				}
-//			}).start();
-//		}
-		l.unlockDomain(domain);
-		System.out.println("l unlocked");
-		l.list_branches(domain);
-		l.list_commits(domain);
-	}
 	
 }

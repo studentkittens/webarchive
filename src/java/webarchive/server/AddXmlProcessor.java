@@ -37,7 +37,6 @@ public class AddXmlProcessor implements MessageProcessor {
 			answer.setHeader(Header.EXCEPTION);
 		}
 		try {
-			System.out.println(answer);
 			cH.send(answer);
 		} catch (Exception ex) {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).

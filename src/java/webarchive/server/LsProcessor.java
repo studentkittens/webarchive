@@ -2,6 +2,8 @@ package webarchive.server;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.api.model.MetaData;
 import webarchive.transfer.FileDescriptor;
@@ -20,13 +22,11 @@ public class LsProcessor implements MessageProcessor {
 	}
 
 	public LsProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void process(Message msg, ServerConnectionHandler cH) {
 		new Thread(new LsProcessor(msg,cH)).start();
-
 	}
 
 	@Override
@@ -40,8 +40,7 @@ public class LsProcessor implements MessageProcessor {
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}		
 	}
 

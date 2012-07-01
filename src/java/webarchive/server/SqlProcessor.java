@@ -2,9 +2,12 @@ package webarchive.server;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
+import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
 public class SqlProcessor implements MessageProcessor {
@@ -33,21 +36,23 @@ public class SqlProcessor implements MessageProcessor {
 		try {
 			list = cH.getSql().select((Select) msg.getData());
 		} catch (UnsupportedOperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Message exception = new Message(msg,e);
+			exception.setHeader(Header.EXCEPTION);
+			try {
+				cH.send(exception);
+			} catch (Exception e1) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not send the exception to the client!\n"+e1 );
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 		Message answer = new Message(msg, list);
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n " + e);
 		}
 		
 	}

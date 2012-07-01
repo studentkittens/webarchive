@@ -46,26 +46,24 @@ public class ServerConnectionHandler extends ConnectionHandler {
 
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
-		System.out.println("Creating handlers for new connection");
+		System.out.println("\tcreating handlers for new connection");
 		Handlers col = ((Server)netMod).getCollection();
-		System.out.println("creating FileHandler");
+		System.out.println("\tcreating FileHandler");
 		this.io = col.get(FileHandler.class);
 		
 		 String absPathDb = FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path");
-		 System.out.println(absPathDb);
-		 System.out.println(FileDescriptor.root);
-		 System.out.println("creating sqlHandler");
+		 System.out.println("\tcreating sqlHandler");
 		this.sql = (new SqlHandler(new SqliteAccess(new File(absPathDb))));
-		System.out.println("creating lockhandler");
+		System.out.println("\tcreating lockhandler");
 		try {
 			this.locker = new LockHandlerImpl(InetAddress.getLocalHost(), 
 					new Integer(col.get(ConfigHandler.class).getValue("webarchive.javadapter.port")));
 		} catch (NumberFormatException | UnknownHostException e) {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).log(Level.SEVERE, null, e);
 		}
-		System.out.println("creating xmlhandler");
+		System.out.println("\tcreating xmlhandler");
 		this.xmlMeth = new XmlMethodFactory(this.locker,col.get(XmlConf.class));
-		System.out.println("creating processors");
+		System.out.println("\tcreating msg-processors");
 		this.processors=new HashMap<String,MessageProcessor>();
 		
 		processors.put(SQL, new SqlProcessor());
@@ -84,13 +82,8 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	public void handle(Message msg) {
 		
 		switch (msg.getHeader()) {
-			case SUCCESS:
-				break;
 			case HANDSHAKE: 
 				processors.get(HANDSHAKER).process(msg, this);
-			break;
-			case EXCEPTION: {
-			}
 			break;
 			case SQL: 
 				processors.get(SQL).process(msg, this);

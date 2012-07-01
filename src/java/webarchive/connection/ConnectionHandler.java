@@ -122,9 +122,9 @@ public abstract class ConnectionHandler extends Handler {
 			
 			synchronized(t) {
 				try {
-					System.out.println("goin to sleep");
+					//System.out.println("goin to sleep");
 					t.wait();
-					System.out.println("woke up");
+					//System.out.println("woke up");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

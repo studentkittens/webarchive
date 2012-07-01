@@ -1,6 +1,8 @@
 package webarchive.server;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
@@ -19,7 +21,6 @@ public class RegisterObserverProcessor implements MessageProcessor {
 	}
 
 	public RegisterObserverProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -30,7 +31,6 @@ public class RegisterObserverProcessor implements MessageProcessor {
 
 	@Override
 	public void run() {
-//		Server.getInstance().doHandShake(cH.getConnection());
 		List<Connection> l = Server.getInstance().getObservers();
 		synchronized (l) {
 			l.remove(cH.getConnection());
@@ -41,8 +41,7 @@ public class RegisterObserverProcessor implements MessageProcessor {
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}		
 	}
 

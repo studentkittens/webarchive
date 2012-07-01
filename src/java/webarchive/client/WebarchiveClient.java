@@ -2,6 +2,7 @@ package webarchive.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -21,7 +22,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Client cl;
 	private Connection con;
 	
-	public WebarchiveClient(InetAddress server, int port) {
+	public WebarchiveClient(InetAddress server, int port) throws IOException {
 		cl = new Client();
 		
 		cl.setIp(server);
@@ -108,11 +109,9 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);
 		con.send(msg);
-		
 		Message answer = (Message) con.waitForAnswer(msg);
 		if(answer.getHeader() == Header.EXCEPTION)
 			throw (Exception) answer.getData();
-		System.out.println(answer);
 		return  answer.getData();
 	}
 

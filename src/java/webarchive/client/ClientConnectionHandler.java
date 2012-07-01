@@ -35,21 +35,15 @@ public class ClientConnectionHandler extends ConnectionHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void handle(Message msg) {
-		// TODO Auto-generated method stub
-
-		
 		
 		switch(msg.getHeader())
 		{
 		case HANDSHAKE:
 			{
 				try {
-					System.out.println("ANSWER HANDSHAKE");
 					super.getConnection().send(msg);
-					System.out.println("HANDShAKE SENDBACK");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			break;

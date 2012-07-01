@@ -20,76 +20,42 @@ public class FileHandler extends Handler {
 
 	public static final int BUFFER_SIZE = 4096; 
 	
-	public FileBuffer read(FileDescriptor fd) {
+	public FileBuffer read(FileDescriptor fd) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		BufferedInputStream bis =null;
 		File f = fd.getAbsolutePath();
 		if(!f.exists()) {
-			//FILENOTFOUND TODO
+			throw new FileNotFoundException(f.toString()+"not found!");
 		}
 		byte[]  tmp = new byte[BUFFER_SIZE];
-		try {
-			bis = new BufferedInputStream(new FileInputStream(f));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		bis = new BufferedInputStream(new FileInputStream(f));
 		
 		int bytesRead = 0;
-		try {
-			while( (bytesRead=bis.read(tmp)) != -1) {
-				baos.write(tmp, 0, bytesRead);
-				baos.flush();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while( (bytesRead=bis.read(tmp)) != -1) {
+			baos.write(tmp, 0, bytesRead);
+			baos.flush();
 		}
-		
-		try {
-			baos.close();
-			bis.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+		baos.close();
+		bis.close();
 		
 		return new FileBuffer(baos.toByteArray(),fd);
 	}
 
-	public void write(FileBuffer buf) {
+	public void write(FileBuffer buf) throws Exception {
 		File f = buf.getFd().getAbsolutePath();
-		
 		if(f.exists()) {
-			//NOOVERWRITE-EXCEPTION //TODO
+			throw new Exception("Overwriting "+f.toString()+" not permitted!");
 		}
 		BufferedOutputStream bos = null; 
-		try {
-			bos = new BufferedOutputStream(new FileOutputStream(f));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			bos.write(buf.getData());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			bos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		bos = new BufferedOutputStream(new FileOutputStream(f));
+		bos.write(buf.getData());
+		bos.close();
 	}
 
 	public List<File> getFileTree(MetaData meta) {
 		File root = meta.getPath().getParentFile();
 		List<File> list = new ArrayList<File>();
-		System.out.println(meta.getPath().getParent());
 		addSubDirectories(root,list,meta.getPath().getParent().length());
 		
 		return list;
@@ -109,12 +75,5 @@ public class FileHandler extends Handler {
 		
 	}
 	
-	public static void main(String args[]) {
-		FileHandler fh = new FileHandler();
-		List<File> l = fh.getFileTree(new MetaData(null,null,null,new File("/tmp/archive/content/www.stackoverflow.com"),null, null));
-		for(File f : l) {
-			System.out.println(f);
-		}
-	}
 	
 }
