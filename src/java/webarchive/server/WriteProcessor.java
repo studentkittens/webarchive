@@ -1,9 +1,7 @@
 package webarchive.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.Header;
@@ -21,7 +19,6 @@ public class WriteProcessor implements MessageProcessor {
 	}
 	
 	public WriteProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -34,15 +31,26 @@ public class WriteProcessor implements MessageProcessor {
 	public void run() {
 		FileBuffer buf = (FileBuffer) msg.getData();
 		cH.getLocker().lock(buf.getFd());
-		cH.getIo().write(buf);
+		try {
+			cH.getIo().write(buf);
+		} catch (Exception e1) {
+			Message exception = new Message(msg,e1);
+			exception.setHeader(Header.EXCEPTION);
+			try {
+				cH.send(exception);
+			} catch (Exception e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not send the exception to the client!\n"+e );
+			}
+			cH.getLocker().unlock(buf.getFd());
+			return;
+		}
 		cH.getLocker().unlock(buf.getFd());
 		Message answer = new Message(msg, null);
 		answer.setHeader(Header.SUCCESS);
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n " + e);
 		}		
 	}
 

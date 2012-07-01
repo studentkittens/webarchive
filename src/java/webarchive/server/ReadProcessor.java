@@ -1,5 +1,10 @@
 package webarchive.server;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Header;
@@ -23,7 +28,6 @@ public class ReadProcessor implements MessageProcessor {
 	}
 
 	public ReadProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -31,14 +35,26 @@ public class ReadProcessor implements MessageProcessor {
 		FileDescriptor fd = (FileDescriptor) msg.getData();
 		
 		cH.getLocker().lock(fd);
-		FileBuffer buf = cH.getIo().read(fd);
+		FileBuffer buf;
+		try {
+			buf = cH.getIo().read(fd);
+		} catch (IOException e1) {
+			Message exception = new Message(msg,e1);
+			exception.setHeader(Header.EXCEPTION);
+			try {
+				cH.send(exception);
+			} catch (Exception e) {
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not send the exception to the client!\n"+e );
+			}
+			cH.getLocker().unlock(fd);
+			return;
+		}
 		cH.getLocker().unlock(fd);
 		Message answer = new Message(msg, buf);
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n " + e);
 		}		
 	}
 

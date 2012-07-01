@@ -141,6 +141,7 @@ public class Server implements Runnable, NetworkModule {
 			try {
 				System.out.println("awaiting incomming connection");
 				sock = svSock.accept();
+				System.out.println("client connected!");
 			} catch (SocketException e) {
 				Logger.getLogger(Server.class.getName()).log(Level.INFO, null,
 						e);
@@ -155,7 +156,7 @@ public class Server implements Runnable, NetworkModule {
 
 			ObjectInputStream ois = null;
 			ObjectOutputStream oos = null;
-			System.out.println("trying to get streams");
+			System.out.println("\ttrying to get streams");
 			try {
 				oos = new ObjectOutputStream(sock.getOutputStream());
 				ois = new ObjectInputStream(sock.getInputStream());
@@ -208,7 +209,6 @@ public class Server implements Runnable, NetworkModule {
 			System.out.println("handshake received");
 
 		} catch (Exception ex) {
-			// TODO Auto-generated catch block
 			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 			return false;
 		}

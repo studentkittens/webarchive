@@ -165,11 +165,11 @@ public class Connection implements Runnable {
 		while (sock.isConnected() && !sock.isClosed()) {
 			Message msg = null;
 			try {
-				System.out.println("RECEIVING");
+				//System.out.println("RECEIVING");
 				msg = this.receive();
-				System.out.println("MSG RECEIVED: ["+msg.getHeader()+"] "+msg.getData());
+				//System.out.println("MSG RECEIVED: ["+msg.getHeader()+"] "+msg.getData());
 			} catch (SocketException | EOFException end) {
-				System.out.println("lost connection");
+				//System.out.println("lost connection");
 				conHandler.removeConnection(this);
 				break;
 			} catch (Exception e) {

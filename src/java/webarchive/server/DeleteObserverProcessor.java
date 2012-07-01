@@ -1,6 +1,8 @@
 package webarchive.server;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
@@ -29,8 +31,7 @@ public class DeleteObserverProcessor implements MessageProcessor {
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n " + e);
 		}		
 	}
 
@@ -41,7 +42,6 @@ public class DeleteObserverProcessor implements MessageProcessor {
 	}
 
 	public DeleteObserverProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

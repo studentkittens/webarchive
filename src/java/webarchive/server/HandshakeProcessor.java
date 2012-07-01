@@ -13,7 +13,6 @@ public class HandshakeProcessor implements MessageProcessor  {
 	}
 
 	public HandshakeProcessor() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -86,8 +86,9 @@ public class Client implements NetworkModule  {
 	
 	/**
 	 * Connect to server.
+	 * @throws IOException 
 	 */
-	public void connectToServer()
+	public void connectToServer() throws IOException
 	{
 		//TODO
 		if(ip==null)
@@ -102,8 +103,9 @@ public class Client implements NetworkModule  {
 	 *
 	 * @param ip the ip
 	 * @param port the port
+	 * @throws IOException 
 	 */
-	public void connectToServer(InetAddress ip, int port)
+	public void connectToServer(InetAddress ip, int port) throws IOException
 	{
 		
 		try {
@@ -113,10 +115,7 @@ public class Client implements NetworkModule  {
 			c = new Connection(sock, new ObjectOutputStream(sock.getOutputStream()) , new ObjectInputStream(sock.getInputStream()));
 			c.setConHandler(new ClientConnectionHandler(c, this));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			//could not connect und so
-			return;
+			throw e;
 		}
 		
 		new Thread(c).start();
