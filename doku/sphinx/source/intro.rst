@@ -20,14 +20,31 @@ You can do this via ``pip``, assuming you have Python 3.x installed:
 
 .. code-block:: bash
 
-  sudo pip install filemagic docopt
-    
+  $ sudo pip install filemagic docopt
+
+
+The backend uses a few commandline programs, which have to be installed also:
+
+- ``rsync``
+- ``wget`` (with IRI Enabled; see below)
+- ``git``
+- ``find``
+
+For full Unicode-support (e.g. crawling ``www.köln.de``, or URLs that have
+Unicode-characters in them) a wget version with IRI support is needed. Check
+with: 
+
+.. code-block:: bash
+
+  $ wget --version | grep '+iri'
+  +iri
+
 
 The program will most likely not work for Python 2.x; make sure you have a newer series installed:
 
 .. code-block:: bash
 
-   python --version
+   $ python --version
 
 Listen and Repeat
 -----------------

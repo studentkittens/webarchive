@@ -34,7 +34,7 @@ class Wget(object):
         self.__user_agent = config.get('crawler.userAgent')
         self.__custom_cmd = config.get('crawler.customWgetParms')
         self.__base = 'wget "{user_agent}" -e robots={rob} -r -l {depth} \
-                      --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
+                      --restrict-file-names=nocontrol --iri --timeout=20 --tries=3 --exclude-domains "{ex_domains}" {custom_parms} -P {folder} {url}'
         self.__process = None
         self.__pid = None
         self.__wget_logfile = None
@@ -57,7 +57,7 @@ class Wget(object):
                                  url=self.__url)
 
         cmd = shlex.split(cmd)
-        wget_path = os.path.join(paths.get_log_dir(), 'wget_' + self.__url + '.log')
+        wget_path = os.path.join(paths.get_log_dir(), 'wget_' + self.__url.replace('/', '.') + '.log')
         self.__wget_logfile = open(wget_path, 'w')
 
         self.__process = subprocess.Popen(cmd, shell=False,

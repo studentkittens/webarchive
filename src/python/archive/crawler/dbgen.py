@@ -36,13 +36,14 @@ class DBGenerator(object):
             self.__connection = sqlite3.connect(abspath)
 
         self.__cursor = self.__connection.cursor()
-        self.__cursor.executescript(sqlsource.statements['create'])
+
+
         self.__metalist = meta_list
 
         # We have to maintain a seperate lock for the db,
         # the db itself is locked from itself, but many separate
         # statements are not
-        self.__db_lock = lock.FileLock(file_name='db.lock',
+        self.__db_lock = lock.FileLock(file_name='db',
                 folder=get_archive_root(),
                 timeout=100)
 
@@ -67,10 +68,14 @@ class DBGenerator(object):
         """
         try:
             self.__db_lock.acquire()
+            try:
+                self.__cursor.executescript(sqlsource.statements['create'])
+            except sqlite3.OperationalError as err:
+                # Most likely locked
+                logging.debug('Not executing CREATE - Already done: ' + str(err))
             self.insert_mime_domain()
             self.insert_mdata_ctag()
             self.insert_history()
-            self.__db_lock.release()
         except lock.FileLockException:
             logging.critical('File-lock timed out; no db update was done')
         except:
@@ -79,6 +84,8 @@ class DBGenerator(object):
             return False
         else:
             return True
+        finally:
+            self.__db_lock.release()
 
     def insert_mime_domain(self):
         """

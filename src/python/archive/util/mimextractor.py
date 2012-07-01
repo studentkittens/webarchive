@@ -11,6 +11,7 @@ import magic
 import unittest
 import subprocess
 import os
+import logging
 
 
 def get_mime(filepath):
@@ -24,7 +25,6 @@ def get_mime(filepath):
     result = "application/octet-stream"
     try:
         with magic.Magic(flags=magic.MAGIC_MIME_TYPE) as m:
-            print('--', filepath)
             result = m.id_filename(filepath)
     except:
         # something may go wrong
@@ -59,3 +59,13 @@ if __name__ == '__main__':
                 self.assertEqual(value, get_mime(path))
 
     unittest.main()
+
+"""
+import sys
+
+if __name__ == '__main__':
+    files = sys.argv[1:]
+    for item in files:
+        print(item)
+        print(get_mime(item))
+"""
