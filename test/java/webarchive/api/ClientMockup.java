@@ -74,11 +74,12 @@ public class ClientMockup  extends WebarchiveObserver {
 		try {
 			xmlEditor.addDataElement(dataElement);
 		} catch (SAXException ex) {
-			System.out.println("asserted SAXException:");
-			System.out.println(ex);
+			System.out.println("asserted SAXException (validation failed):");
+			System.out.println("  "+ex);
 		}
 		
 		System.out.println("client::getDataElement: wordcount");
+		client.getXMLEditor(meta);
 		dataElement = xmlEditor.getDataElement(new TagName(("wordcount")));
 		NodeList nodes = dataElement.getChildNodes();
 		for(int i=0; i<nodes.getLength(); i++) {

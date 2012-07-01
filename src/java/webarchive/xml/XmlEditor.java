@@ -56,9 +56,11 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	}
 
 	private void updateDocument(Document document) {
+		if(document!=null) {
 		this.document = document;
 		dataNode = (Element) document.getElementsByTagName(
 			TagName.DATA_TAG.toString()).item(0);
+		}
 	}
 
 	@Override
@@ -87,9 +89,7 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	}
 
 	@Override
-	public void addDataElement(webarchive.api.xml.DataElement element) throws NullPointerException,
-		IllegalArgumentException,
-		Exception {
+	public void addDataElement(webarchive.api.xml.DataElement element) throws Exception {
 		
 		// send element to XmlHandler in server
 		updateDocument(client.syncDocument(element));

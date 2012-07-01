@@ -41,7 +41,7 @@ public class MetaData implements Serializable {
 		assert path != null;
 		assert createTime != null;
 		assert commitTag != null;
-		assert title == null || !title.isEmpty();
+		//assert title == null || !title.isEmpty() : "title = "+title;
 		this.url = url;
 		this.mimeType = mimeType;
 		this.title = title;

@@ -30,7 +30,7 @@ CONFIG_TEMPLATE = """
     </server>
     <xml>
         <autoValidatingMode>after update</autoValidatingMode>update
-        <schemaPath>xml/file.xsd</schemaPath>
+        <schemaPath>src/xml/file.xsd</schemaPath>
     </xml>
     <javadapter>
         <port>{javadapter_port}</port>
