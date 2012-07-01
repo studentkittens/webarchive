@@ -30,6 +30,11 @@ public class DataElement implements webarchive.api.xml.DataElement {
 	}
 
 	@Override
+	public String toString() {
+		return "DataElement{" + "name=" + dataElement.getTagName() + ", canWrite=" + canWrite+'}';
+	}
+
+	@Override
 	public Node appendChild(Node node) throws DOMException,
 		IllegalArgumentException {
 		if (!canWrite) {

@@ -1,6 +1,7 @@
 package webarchive.api.xml;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.w3c.dom.Element;
 
@@ -58,8 +59,11 @@ public interface XmlEditor extends Serializable {
 	public DataElement createDataElement(TagName tagName);
 
 	
-	
-	
+	/**
+	 * returns a list of all DataElements.
+	 * @return list of DataElements, which may be empty.
+	 */
+	public List<DataElement> listDataElements();
 	
 	
 }

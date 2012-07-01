@@ -1,10 +1,13 @@
 package webarchive.xml;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import webarchive.api.xml.TagName;
 import webarchive.client.Client;
@@ -18,6 +21,7 @@ import webarchive.transfer.Message;
 /**
  * XmlEditor is used on client-side to read and add DataElements.
  * usually XmlEditor is created by {@link XmlHandler}
+ *
  * @see webarchive.api.xml.XmlEditor for interface details
  * @author ccwelich
  */
@@ -31,12 +35,14 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 
 	/**
 	 * create XmlEditor
-	 * @param fileDescriptor 
+	 *
+	 * @param fileDescriptor
 	 *
 	 * @param document document used for editing
 	 * @param conf config data
 	 */
-	XmlEditor(FileDescriptor fileDescriptor, org.w3c.dom.Document document, org.w3c.dom.Element dataNode) {
+	XmlEditor(FileDescriptor fileDescriptor, org.w3c.dom.Document document,
+		org.w3c.dom.Element dataNode) {
 		assert document != null;
 		assert dataNode != null;
 		assert fileDescriptor != null;
@@ -56,10 +62,10 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	}
 
 	private void updateDocument(Document document) {
-		if(document!=null) {
-		this.document = document;
-		dataNode = (Element) document.getElementsByTagName(
-			TagName.DATA_TAG.toString()).item(0);
+		if (document != null) {
+			this.document = document;
+			dataNode = (Element) document.getElementsByTagName(
+				TagName.DATA_TAG.toString()).item(0);
 		}
 	}
 
@@ -89,8 +95,24 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	}
 
 	@Override
-	public void addDataElement(webarchive.api.xml.DataElement element) throws Exception {
-		
+	public List<webarchive.api.xml.DataElement> listDataElements() {
+		NodeList list = dataNode.getChildNodes();
+		final int length = list.getLength();
+		List<webarchive.api.xml.DataElement> rc = new LinkedList<>();
+		for (int i = 0; i < length; i++) {
+			Node item = list.item(i);
+			if (item.getNodeName().equals("#text")) {
+				continue;
+			}
+			rc.add(new DataElement((Element)item, false));
+		}
+		return rc;
+	}
+
+	@Override
+	public void addDataElement(webarchive.api.xml.DataElement element) throws
+		Exception {
+
 		// send element to XmlHandler in server
 		updateDocument(client.syncDocument(element));
 	}
@@ -102,16 +124,21 @@ public class XmlEditor implements webarchive.api.xml.XmlEditor, Serializable {
 	class DefaultClientAdapter implements ClientAdapter {
 
 		@Override
-		public Document syncDocument(webarchive.api.xml.DataElement element) throws Exception {
-			Message msg = new Message(Header.ADDXMLEDIT, new DataElementContainer((DataElement) element, xmlFile));
+		public Document syncDocument(webarchive.api.xml.DataElement element) throws
+			Exception {
+			Message msg = new Message(Header.ADDXMLEDIT,
+				new DataElementContainer((DataElement) element, xmlFile));
 			try {
 				connection.send(msg);
 			} catch (Exception ex) {
 				Logger.getLogger(XmlEditor.class.getName()).
 					log(Level.SEVERE, null, ex);
 			}
-			Message answer = connection.waitForAnswer(msg,connection.getConnection());
-			if(answer.getHeader()==Header.EXCEPTION) throw (Exception) answer.getData();
+			Message answer = connection.waitForAnswer(msg, connection.
+				getConnection());
+			if (answer.getHeader() == Header.EXCEPTION) {
+				throw (Exception) answer.getData();
+			}
 			return (Document) answer.getData();
 		}
 	}

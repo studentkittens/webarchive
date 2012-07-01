@@ -23,12 +23,13 @@ import webarchive.api.xml.XmlEditor;
  *
  * @author ccwelich
  */
-public class ClientMockup  extends WebarchiveObserver {
+public class ClientMockup extends WebarchiveObserver {
 
 	public static void main(String[] args) throws Exception {
-		WebarchiveClientFactory factory = new WebarchiveClientFactory(InetAddress.getLocalHost());
+		WebarchiveClientFactory factory = new WebarchiveClientFactory(InetAddress.
+			getLocalHost());
 		WebarchiveClient client = factory.getInstance();
-		System.out.println("client::select: commitTags");
+		System.out.println("\nclient:select: commitTags");
 		@SuppressWarnings("unchecked")
 		List<CommitTag> commits = client.select(new SelectCommitTag(null, null,
 			"commitTime DESC"));
@@ -40,7 +41,8 @@ public class ClientMockup  extends WebarchiveObserver {
 		@SuppressWarnings("unchecked")
 		List<MetaData> metaList = client.select(new SelectMetaByCommit(commits.
 			subList(0, 1), null, null, null, "createTime ASC"));
-		System.out.println("client::select: MetaData by CommitTag (1st element)");
+		System.out.println(
+			"\nclient:select: MetaData by CommitTag (1st element)");
 		for (MetaData m : metaList) {
 			System.out.println("  " + m);
 		}
@@ -48,41 +50,44 @@ public class ClientMockup  extends WebarchiveObserver {
 		MetaData meta = metaList.get(0);
 		fileListOf(meta, client);
 
-		System.out.println("client::getInputStream: data");
+		System.out.println("\nclient:getInputStream: data");
 		int wc = wc(client.getInputStream(meta, new File("data")));
 		System.out.println("  wordcount = " + wc);
-		System.out.println();
-		System.out.println("client::getOutputStream: write out word count");
-		PrintWriter pw = new PrintWriter(client.getOutputStream(meta, new File(
-			"wc.txt")));
-		pw.println("wordcount=" + wc);
-		pw.close();
+
+		System.out.println("\nclient:getOutputStream: write out word count");
+		try (PrintWriter pw = new PrintWriter(client.getOutputStream(meta,
+				new File(
+				"wc.txt")))) {
+			pw.println("wordcount=" + wc);
+		}
 		System.out.println("  done");
 
 		fileListOf(meta, client);
 
-		System.out.println("client::getXmlEditor");
+		System.out.println("\nclient:getXmlEditor");
 		XmlEditor xmlEditor = client.getXMLEditor(meta);
+		listDataElements(xmlEditor);
+		
+		//create new Elements
 		DataElement dataElement = xmlEditor.createDataElement(new TagName(
 			"wordcount"));
 		Element element = xmlEditor.createElement(new TagName("value"));
 		element.setTextContent(new Integer(wc).toString());
-		System.out.println("Element to add: (value of wordcount)");
-		printNodes("  ", element);
 		dataElement.appendChild(element);
-		System.out.println("client::addDataElement");
+
+		System.out.println("\nclient:addDataElement");
 		try {
 			xmlEditor.addDataElement(dataElement);
 		} catch (SAXException ex) {
-			System.out.println("asserted SAXException (validation failed):");
-			System.out.println("  "+ex);
+			System.out.println("  " + ex);
 		}
-		
-		System.out.println("client::getDataElement: wordcount");
-		client.getXMLEditor(meta);
+
+		listDataElements(xmlEditor);
+
+		System.out.println("\nclient:getDataElement: wordcount:");
 		dataElement = xmlEditor.getDataElement(new TagName(("wordcount")));
 		NodeList nodes = dataElement.getChildNodes();
-		for(int i=0; i<nodes.getLength(); i++) {
+		for (int i = 0; i < nodes.getLength(); i++) {
 			printNodes("  ", nodes.item(i));
 		}
 
@@ -91,10 +96,15 @@ public class ClientMockup  extends WebarchiveObserver {
 
 	}
 
+	private static void listDataElements(XmlEditor xmlEditor) {
+		List<DataElement> list = xmlEditor.listDataElements();
+		System.out.println("\nclient:lsDataelements: "+list);
+	}
+
 	private static void fileListOf(MetaData meta, WebarchiveClient client) throws
 		Exception {
-		System.out.println("client::getFileList: of element: " + meta);
-		
+		System.out.println("\nclient:getFileList: of element: " + meta);
+
 		List<File> files = client.getFileList(meta);
 		for (File f : files) {
 			System.out.println("  " + f);
@@ -105,7 +115,7 @@ public class ClientMockup  extends WebarchiveObserver {
 		Scanner sc = new Scanner(in);
 		int cnt = 0;
 		while (sc.hasNext()) {
-			System.out.print (sc.next() +" ");
+			System.out.print(sc.next() + " ");
 			cnt++;
 		}
 		in.close();
@@ -129,13 +139,11 @@ public class ClientMockup  extends WebarchiveObserver {
 		for (int i = 0; i < children.getLength(); i++) {
 			printNodes(indent, children.item(i));
 		}
-		
+
 	}
 
 	@Override
 	public void update(WebarchiveClient client, List<CommitTag> changes) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }
