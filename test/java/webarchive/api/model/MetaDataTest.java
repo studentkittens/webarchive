@@ -138,14 +138,17 @@ public class MetaDataTest {
 			thrown = true;
 		}
 		assertTrue(thrown); 
+		
+		//changed: empty 
 		//title. Asserted as either null or not empty.
-		thrown = false;
-		inst = new MetaData(url, mime, null, path, createTime, commitTag); //legal
-		try {
-			inst = new MetaData(url, mime, "", path, createTime, commitTag);
-		} catch(AssertionError exc) {
-			thrown = true;
-		}
+		
+//		thrown = false;
+//		inst = new MetaData(url, mime, null, path, createTime, commitTag); //legal
+//		try {
+//			inst = new MetaData(url, mime, "", path, createTime, commitTag);
+//		} catch(AssertionError exc) {
+//			thrown = true;
+//		}
 		assertTrue(thrown); 
 		// path, asserted not null.
 	 

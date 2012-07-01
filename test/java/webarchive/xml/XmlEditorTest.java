@@ -5,6 +5,7 @@
 package webarchive.xml;
 
 import java.io.IOException;
+import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import static org.junit.Assert.*;
@@ -20,7 +21,7 @@ import webarchive.api.xml.TagName;
 public class XmlEditorTest {
 
 	private XmlEditor instance;
-	
+
 	public XmlEditorTest() {
 	}
 
@@ -33,17 +34,19 @@ public class XmlEditorTest {
 	public static void tearDownClass() throws Exception {
 		XmlPrepare.shutDownFactory();
 	}
-	
+
 	@Before
-	public void setUp() throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException {
-				XmlPrepare.restoreFiles();
+	public void setUp() throws ParserConfigurationException, SAXException,
+		IOException, TransformerConfigurationException {
+		XmlPrepare.restoreFiles();
 
 		XmlMethodFactory fac = XmlPrepare.factory;
-		XmlHandler hdl = fac.newXmlHandler(new FileDescriptorMockup(XmlPrepare.XML_TARGET));
+		XmlHandler hdl = fac.newXmlHandler(new FileDescriptorMockup(
+			XmlPrepare.XML_TARGET));
 		instance = hdl.newEditor();
 		instance.setClient(new ClientAdapterMockup(hdl));
 	}
-	
+
 	@After
 	public void tearDown() {
 	}
@@ -72,12 +75,11 @@ public class XmlEditorTest {
 		assertEquals("wa:testData1", result.getDataElement().getTagName());
 	}
 
-
 	/**
 	 * Test of add- and getDataElement method, of class XmlEditor.
 	 */
 	@Test
-	public void testAddGetDataElement() throws Exception {
+	public void testAddGetListDataElement() throws Exception {
 		System.out.println("addDataElement");
 		TagName tagNameDE = new TagName("testData1");
 		DataElement dataElement = instance.createDataElement(tagNameDE);
@@ -85,25 +87,27 @@ public class XmlEditorTest {
 		Element element = instance.createElement(tagNameCo);
 		element.setTextContent("bla");
 		dataElement.appendChild(element);
-		DataElement expected = instance.getDataElement(tagNameDE);
-		assertTrue(expected==null);
+		DataElement expected1 = instance.getDataElement(tagNameDE);
+		assertTrue(expected1 == null);
 		instance.addDataElement(dataElement);
-		expected = instance.getDataElement(tagNameDE);
-		assertFalse(expected.canWrite());
-		assertTrue(dataElement.isEqualNode(expected));
+		expected1 = instance.getDataElement(tagNameDE);
+		assertFalse(expected1.canWrite());
+		assertTrue(dataElement.isEqualNode(expected1));
 
 		tagNameDE = new TagName("testData2");
 		dataElement = instance.createDataElement(tagNameDE);
 		element = instance.createElement(tagNameCo);
 		element.setTextContent("bla");
 		dataElement.appendChild(element);
-		
+
 		instance.addDataElement(dataElement);
-				expected = instance.getDataElement(tagNameDE);
-				assertTrue(dataElement.isEqualNode(expected));
+		DataElement expected2 = instance.getDataElement(tagNameDE);
+		assertTrue(dataElement.isEqualNode(expected2));
 
+		List<webarchive.api.xml.DataElement> l = instance.listDataElements();
+		assertEquals(expected1, l.get(0));
+		assertEquals(expected2, l.get(1));
 
-		
 		//illegal access
 		//dublicate
 		boolean hasThrown = false;
@@ -124,7 +128,7 @@ public class XmlEditorTest {
 		//writeprotected
 		hasThrown = false;
 		dataElement = instance.getDataElement(tagNameDE);
-		try{
+		try {
 			instance.addDataElement(dataElement);
 		} catch (SAXException e) {
 			hasThrown = true;
@@ -136,19 +140,16 @@ public class XmlEditorTest {
 		element = instance.createElement(tagNameCo);
 		element.setTextContent("bla");
 		dataElement.appendChild(element);
-		try{
+		try {
 			instance.addDataElement(dataElement);
 		} catch (SAXException e) {
 			hasThrown = true;
 		}
 		assertTrue(hasThrown);
-		
+
 		// element not in file
 		TagName tagName = new TagName("testData4");
-		assertTrue(instance.getDataElement(tagName)==null);
-		
-	}
-	
+		assertTrue(instance.getDataElement(tagName) == null);
 
-	
+	}
 }
