@@ -147,5 +147,12 @@ public class Client implements NetworkModule  {
 	public void setObservable(Observable observ) {
 		this.observ = observ;
 	}
+
+	public void disconnect() {
+		try {
+			c.getSocket().close();
+		} catch (IOException e) {
+		}
+	}
 	
 }

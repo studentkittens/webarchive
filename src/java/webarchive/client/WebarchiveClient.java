@@ -104,7 +104,9 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 		super.deleteObservers();
 
 	}
-	
+	public Client getClient() {
+		return cl;
+	}
 	
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);

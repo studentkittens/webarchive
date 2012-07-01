@@ -84,16 +84,17 @@ public class ClientMockup extends WebarchiveObserver {
 
 		listDataElements(xmlEditor);
 
-		System.out.println("\nclient:getDataElement: wordcount:");
-		dataElement = xmlEditor.getDataElement(new TagName(("wordcount")));
-		NodeList nodes = dataElement.getChildNodes();
-		for (int i = 0; i < nodes.getLength(); i++) {
-			printNodes("  ", nodes.item(i));
-		}
+//		System.out.println("\nclient:getDataElement: wordcount:");
+//		dataElement = xmlEditor.getDataElement(new TagName(("wordcount")));
+//		NodeList nodes = dataElement.getChildNodes();
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			printNodes("  ", nodes.item(i));
+//		}
 
 		client.addObserver(new ClientMockup());
 		fileListOf(meta, client);
 
+		factory.disconnect(client);
 	}
 
 	private static void listDataElements(XmlEditor xmlEditor) {

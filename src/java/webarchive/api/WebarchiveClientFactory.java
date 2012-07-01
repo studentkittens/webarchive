@@ -23,4 +23,20 @@ public class WebarchiveClientFactory {
 	public WebarchiveClient getInstance() throws IOException {
 		return new webarchive.client.WebarchiveClient(server,port);
 	}
+	public void disconnect(WebarchiveClient cl) {
+		((webarchive.client.WebarchiveClient)cl).getClient().disconnect();
+	}
+	public InetAddress getHostAddress() {
+		return server;
+	}
+	public void setHostAddress(InetAddress server) {
+		this.server = server;
+	}
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
 }
