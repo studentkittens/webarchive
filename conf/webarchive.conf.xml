@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <webarchive>
 	<general>
-        <root>/tmp/archive</root>
+        <root>/tmp/archive/</root>
 		<filterpath>filter/</filterpath>
 	</general>
     <crawler> 
         <depth>1</depth>
-        <!-- in minutes -->
+        
         <interval>1</interval>
         <maxInst>20</maxInst>
         <userAgent>webarchive/0.1 +https://github.com/studentkittens/webarchive</userAgent>
