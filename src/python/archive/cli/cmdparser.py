@@ -205,7 +205,7 @@ class Cli(object):
         elif self._args['--default']:
             print(config.get_default(self._args['--default']))
         elif self._args['--config']:
-            config.load(self._args['<path>'])
+            config.load(self._args['--config'])
 
     def handle_log(self):
         if self._args['--severity']:

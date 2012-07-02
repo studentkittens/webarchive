@@ -20,22 +20,23 @@ def _as_int(value):
 def get(url):
     '''
     Returns actual value for url.
-    If not found, it returns default value.
+    If not found, it trys to return default value.
     '''
     return _as_int(reader.get(url))
 
 def get_default(url):
     '''
-    Returns defaulft value for url
+    Returns defaulft value for url.
     '''
     return _as_int(reader.get_default(url))
 
-def set(url, str):
+def set(url, value):
     '''
-    Set value of url to given string
+    Set value of url to given value.
     '''
-    return writer.set_value(url, str)
+    return writer.set_value(url, value)
 
+#   Not used
 def set_default(url):
     return writer.set_default(url)
 
@@ -54,7 +55,7 @@ class TestHandler(unittest.TestCase):
         self.assertFalse(load('notfound.xml'))
 
     def test_get(self):
-        self.assertEqual(get('general.root'), '/tmp/archive/')
+        self.assertNotEqual(get('general.root'), False)
         self.assertFalse(get('not.found'))
         self.assertEqual(get('test.main'), -1)
 
@@ -63,7 +64,7 @@ class TestHandler(unittest.TestCase):
         self.assertTrue(set('general.root', '/tmp'))
 
     def test_getDefault(self):
-        self.assertEqual(get_default('general.root'), '/tmp/archive/')
+        self.assertNotEqual(get_default('general.root'), False)
         self.assertFalse(get_default('not.found'))
     
 
