@@ -32,7 +32,7 @@ public class SqlProcessor implements MessageProcessor {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void run() {
-		List<MetaData> list = null;
+		List list = null;
 		try {
 			list = cH.getSql().select((Select) msg.getData());
 		} catch (UnsupportedOperationException e) {
@@ -43,7 +43,7 @@ public class SqlProcessor implements MessageProcessor {
 			try {
 				cH.send(exception);
 			} catch (Exception e1) {
-				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not send the exception to the client!\n"+e1 );
+				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not send the exception to the client!\n{0}",e1 );
 			}
 		} catch (Exception e) {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
@@ -52,7 +52,7 @@ public class SqlProcessor implements MessageProcessor {
 		try {
 			cH.send(answer);
 		} catch (Exception e) {
-			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n " + e);
+			Logger.getLogger(getClass().getName()).log(Level.WARNING,"Could not send an answer to the client!\n{0}",e);
 		}
 		
 	}

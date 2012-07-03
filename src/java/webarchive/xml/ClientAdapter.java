@@ -1,9 +1,7 @@
 package webarchive.xml;
 
 import java.io.Serializable;
-
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * Usage: bypass Client-Singleton in XmlEditor-unittests.

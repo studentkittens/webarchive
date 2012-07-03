@@ -86,21 +86,21 @@ public class XmlMethodFactoryTest {
 	}
 
 	/**
-	 * Test of getXmlErrorHandler method, of class XmlMethodFactory.
+	 * Test of getErrorHandler method, of class XmlMethodFactory.
 	 */
 	@Test
 	public void testSetGetXmlErrorHandler() {
 		System.out.println("getXmlErrorHandler");
-		ErrorHandler result = instance.getXmlErrorHandler();
+		ErrorHandler result = instance.getErrorHandler();
 		assertTrue(result == null); //default
 
 		System.out.println("setXmlErrorHandler");
 		final XmlErrorHandler xmlErrorHandler = new XmlErrorHandler();
 		instance.setXmlErrorHandler(xmlErrorHandler);
-		result = instance.getXmlErrorHandler();
+		result = instance.getErrorHandler();
 		assertEquals(xmlErrorHandler, result);
 		instance.setXmlErrorHandler(null);
-		result = instance.getXmlErrorHandler();
+		result = instance.getErrorHandler();
 
 		assertTrue(result == null);
 	}

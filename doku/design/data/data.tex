@@ -9,12 +9,12 @@ Abbildung vonnöten.
 Bei der Umsetzung des Datenmodells in ein Datenbankschema wird besonders auf kompakte Datenhaltung geachtet. 
 Die Typenbezeichnungen sind leicht SQLITE-affin, könnten aber bei der Änderung des DBMS relativ einfach umgewandelt werden.
 \subsection{Normalisierung} Um die angesprochene kompakte Speicherung der Daten zu erreichen,
-wird die Struktur stark normalisiert \ref{req:Db:normalize}. \\ 
+wird die Struktur normalisiert \ref{req:Db:normalize}. \\ 
 paragraph{Beschreibung:}
 \begin{description}
 	\item [metaData]
-		In dieser Tabelle liegen alle statischen Teile einer Datei, die sich nicht mehr
-		ändern können. 
+		In dieser Tabelle liegen alle statischen Teile einer Datei, 
+		die sich nach dem ersten Herunterladen nicht mehr ändern können. 
 		Pro im Archiv gespeicherter Datei kommt unabhängig von deren Version deshalb 
 		immer nur \emph{ein} Eintrag in der Tabelle vor.
 	\item [history]
@@ -62,9 +62,9 @@ Im Gegensatz zum DB-Schema erfassen die XML-Metadaten immer den gesamten Zustand
 \subsection{Daten}
 \ref{req:Xm:content:data} \\
 Das ,,data''-Element ist anfangs immer leer, kann aber durch Benutzer mittels der API-Schnittstellen 
-um weitere Elemente erweitert.
+um weitere Elemente (sog. DataElemente) erweitert.
 Dabei ist auch das XSD-Schema entsprechend dem auskommentierten Template zu erweitern.
-Der Name des umschließenden Elements muss dabei einmalig sein.
+Der Name des umschließenden DataElements muss dabei einmalig sein.
 
 Folgendes Listing zeigt ein Beispiel XML mit leerem data-Knoten:
 \lstinputlisting[language=XML,basicstyle=\ttfamily\fontsize{8}{10}\selectfont]{../src/xml/example.xml}

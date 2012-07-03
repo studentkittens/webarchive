@@ -41,11 +41,11 @@ public interface DataElement extends Serializable {
 	/**
 	 * @see org.w3c.dom.Element#getElementsByTagName(java.lang.String)
 	 */
-	public NodeList getElementsByTagName(String string);
+	public NodeList getElementsByTagName(TagName tagName);
 
 	/**
 	 * @see org.w3c.dom.Node#isEqualNode(org.w3c.dom.Node) 
 	 */
-	public boolean isEqualNode(webarchive.xml.DataElement other);
+	public boolean isEqualNode(DataElement other);
 	
 }

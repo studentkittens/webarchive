@@ -31,12 +31,10 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 		con = cl.getConnection();
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<MetaData> select(Select select) throws Exception {
+	public <T> List<T> select(Select<T> select) throws Exception {
 		Object answer = queryServer(Header.SQL,select);
-		assert answer instanceof List<?>;
-		return (List<MetaData>) answer;
+		return (List<T>) answer;
 	}
 
 	@SuppressWarnings("unchecked")

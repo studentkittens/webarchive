@@ -91,7 +91,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 			String tmp = where[i];
 			where[i] = (tmp == null) ? "" : " WHERE " + truncSemiColon(tmp);
 		}
-		return String.format(sqlTemplate, where);
+		return String.format(sqlTemplate, (Object[]) where);
 	}
 
 	private static String buildSqlTemplate(String[] tables, String[] using) {

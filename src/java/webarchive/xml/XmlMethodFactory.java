@@ -94,7 +94,7 @@ public class XmlMethodFactory extends Handler {
 	 * get XmlErrorHandler
 	 * @return xmlErroHandler, default null
 	 */
-	ErrorHandler getXmlErrorHandler() {
+	ErrorHandler getErrorHandler() {
 		return xmlErrorHandler;
 	}
 	/**

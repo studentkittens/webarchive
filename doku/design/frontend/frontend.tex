@@ -1,5 +1,5 @@
 \chapter{Frontend}
-Untergruppe{\sab, \eddy, \cii} \\
+Untergruppe: \sab, \eddy, \cii \\
 Bei dem Frontend handelt es sich um den in Java programmierten Client und Server.
 Mit Ausnahme der Dateisynchronisation arbeitet es völlig unabhängig vom Backend.
 Im Großen und Ganzen werden folgende Aufgaben erfüllt:
@@ -63,7 +63,8 @@ Java User stellen alle Akteure dar die den Client in ihr Programm einbinden.
 \end{description}
 
 \section{API}
-Neben den in Abschnitt \ref{design:data:classes} beschriebenen Datenklassen enthält die
+\liable{\cii}
+Neben den in Abschnitt \ref{design:data:classes} beschriebenen Model-klassen enthält die
 API noch folgende Klassen und Interfaces:
 \begin{description}
 	\item [WebarchiveClientFactory]
@@ -71,16 +72,24 @@ API noch folgende Klassen und Interfaces:
 	\item [WebarchiveClient]
 		Der WebarchiveClient ist die Zentrale Programmierschnittstelle an das Webarchiv.
 		Es lassen sich Aktionen wie unter Abschnitt \ref{design:frontend:usecase:user} ausführen.
-	\item [XmlEdit]
-		Hilfsklasse zum Bearbeiten der XML-Dateien.
 	\item [WebarchiveObserver]
 		Implementierer dieser Schnittstelle werden über Updates benachrichtigt.
+	\item [XmlEditor]
+		Hilfsklasse zum Bearbeiten der XML-Dateien. Es kann die data.xml Datei nach
+		DataElementen durchsucht werden, oder neue hinzugefügt werden.
+	\item [DataElement]
+		DataElemente sind die obersten Elemente im Datenknoten.
+	\item [TagName]
+		Hilfsklasse zum Erstellen von TagNames mit Webarchive-Präfix.
+	\item [Select...]
+		Verschiedene Select-Methoden zum Durchsuchen der Datenbank
+
 \end{description}
 Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
-\begin{figure}[!h]
+\begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:cl:api}
-	\includegraphics[angle=270, width=1.1\textwidth]{design/frontend/classes/api-Klassen.pdf}
+	\includegraphics[width=.8\textwidth]{design/frontend/classes/api-Klassen.pdf}
 	\caption{Klassendiagramm: API}
 \end{figure}
 
@@ -120,7 +129,7 @@ Die Liste kann dann an den Client zurückgesendet und schließlich dem Analyzer 
 
 Bei Schreib- und Lesezugriffen auf das Archiv wird ein Datei-Mutex gesetzt.
 
-Die Lock-Sequenz fragt beim Python-Lock-Modul einen Mutex in einem bestimmten Domain-Ordner an.
+Die Lock-Sequenz fragt beim Python-Javadapter einen Mutex in einem bestimmten Domain-Ordner an.
 
 Ist dieser Ordner bereits gesperrt, blockiert das Python-Modul solange bis der Lock erfolgreich oder eine Zeitgrenze überschritten wurde.
 Bei letzterem wird eine Exception erzeugt und an den Client weitergegen.
@@ -301,8 +310,38 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 	\caption{Klassendiagramm: Datenklassen}
 \end{figure}
 
-\subsection{xmlaccess-Klassen}
+\subsection{xml-Klassen}
+Über die XmlMethodFactory kann im Server eine neuer XmlHandler erzeugt werden.
+Die XmlMethodFactory bietet auch die Erzeugung anderer Xml-Hilfsobjekte an wie Validator und Transformer zur Ausgabe.
+
+Der XmlHandler übernimmt auf der Serverseite die Steuerung der anderen Low-Level-Controller, wie dem
+XmlIOHandler, der Ein- und Ausgabe von Xmldateien kapselt. 
+
+Über den XmlHandler kann eine Implementierung des XmlEditors (siehe API) erzeugt werden, welche
+vom Server an den aufrufenden Client geschickt wird.
+
+Da der XmlEditor ein DOM-Document enthält, können auf der Client-Seite neue Elemente erzeugt werden.
+Werden diese per addDataElement()-Methode hinzugefügt, wird nur das neue Datenelement an den
+XmlHandler im Server geschickt. Hier kann nun geprüft werden, ob das Datenelement hinzugefügt
+werden kann, oder eine Exception geworfen wird, z.B. weil es namentlich schon vorhanden ist oder
+schreibgeschützt ist. 
+
+DataElement-Objekte kapseln normale DOM-Elemente, verhindern aber den 
+direkten Zugriff durch den Benutzer.
+
+Die DOM-Documente können außerdem mittels eines Schema-Validators validiert werden. 
+Der Zeitpunkt kann über den AutoValidatingMode bestimmt werden (Default: \lstinline{AFTER\_UPDATE}).
+AutoValidatingMode und der Pfad des xsd-files können im Config-file eingetragen werden
+und werden bei Programmstart an ein XmlConf-objekt übertragen.
+
+
 \liable{\cii}
+\begin{figure}[H]
+	%\centering
+	\label{dia:design:frontend:classes:xml}
+	\includegraphics[angle=270, width=1.2\textwidth]{design/frontend/classes/xml.pdf}
+	\caption{Klassendiagramm: Xmlklassen}
+\end{figure}
 \subsection{dbaccess-Klassen}
 \liable{\cii}
 

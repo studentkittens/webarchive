@@ -117,10 +117,9 @@ public class DataElementTest {
 	@Test
 	public void testGetElementsByTagName() {
 		System.out.println("getElementsByTagName");
-		NodeList result = instWP.getElementsByTagName(new TagName("content").
-			getAbsoluteName());
+		NodeList result = instWP.getElementsByTagName(new TagName("content"));
 		assertTrue(result.getLength()==1);
-		result = instWP.getElementsByTagName(new TagName("testData3").getAbsoluteName());
+		result = instWP.getElementsByTagName(new TagName("testData3"));
 		assertTrue(result.getLength() == 0);
 	}
 }

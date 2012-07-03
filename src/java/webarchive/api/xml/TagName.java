@@ -22,7 +22,7 @@ public class TagName implements Serializable {
 	 */
 	public static final String NAMESPACE = "http://www.hof-university.de/webarchive";
 	public static final TagName DATA_TAG = new TagName("data");
-	private final String name;
+	private final String absName;
 
 	/**
 	 * Adds the PREFIX to a given name by the default webarchive PREFIX. If the
@@ -41,7 +41,7 @@ public class TagName implements Serializable {
 	 */
 	public TagName(String name) throws NullPointerException {
 		assert name != null;
-		this.name = addPrefixTo(name);
+		this.absName = addPrefixTo(name);
 	}
 	/**
 	 * the absoluteName. 
@@ -49,13 +49,13 @@ public class TagName implements Serializable {
 	 * @return PREFIX+name 
 	 */
 	public String getAbsoluteName() {
-		return name;
+		return absName;
 
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return absName;
 	}
 
 	private String addPrefixTo(String name) {
