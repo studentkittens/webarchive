@@ -44,7 +44,7 @@ public class SqlHandler extends Handler {
 	 * added in list.
 	 * @throws Exception if select has failed
 	 */
-	public List select(webarchive.api.select.Select select) throws Exception {
+	public <T> List<T> select(webarchive.api.select.Select<T> select) throws Exception {
 		Select selectMethod = selectMethods.get(select.getClass().
 			getSimpleName());
 		if (selectMethod == null) {

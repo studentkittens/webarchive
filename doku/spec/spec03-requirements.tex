@@ -51,7 +51,7 @@ und die Daten in das Archiv schreiben.
 \subsection{Ausführung des Crawlvorgangs} \label{spec:crawler:exec}
 \begin{description}
 	\item [\req{Start in Intervallen}{startInterval}]
-		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:conf:interval} festgelegtem
+		Der Crawlvorgang wird immer wieder nach einem gemäß \ref{req:Cr:conf:interval} festgelegtem
 		Interval neu in Gang gesetzt. 
 	\item [\req{Parallelität}{concurrent}]
 		Die Ausführung der Crawlvorgänge soll parallel durchgeführt werden.
@@ -118,7 +118,7 @@ und die Daten in das Archiv schreiben.
 			\item [\subreq{mimeType}{mimeType}]
 				Der MIME-Typ der Datei wird mit einer geeigneten Maßnahme ermittelt.
 			\item [\subreq{path}{path}]
-				Es wird der aktuelle absolute Ordnerpfad auf das \arc gespeichert.
+				Es wird der aktuelle absolute Ordnerpfad auf das\ \arc gespeichert.
 			\item [\subreq{domain}{domain}]
 				Der Name der Domain wird aus der dem Domainordnernamen kopiert.
 			\item [\subreq{createTime}{createTime}]
@@ -222,8 +222,10 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Beim darunterliegenden Dateisystem wird von einem vorhandenen Unix-Filesystem ausgegangen.
 	\item [\req{Komprimierung}{compress}]
 		Eine explizite Dateikomprimierung wird nicht vorgesehen, 
-		ist aber zum Teil schon durch die Versionierung gegeben, 
-		da alte Revisionen gepackt abgelegt werden.
+		ist aber schon durch die Versionierung gegeben (Beschreibung wie man manuell 
+		Datenobjekte anlegen kann:\href
+		{http://git-scm.com/book/en/Git-Internals-Git-Objects\#Object-Storage}
+		{http://git-scm.com/book/en/Git-Internals-Git-Objects\#Object-Storage}).
 \end{description}
 
 \subsection{Versionierung}
@@ -377,7 +379,7 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
 		Die XML-Dateien enthalten in ihrem Wurzelknoten eine Meta- und einen Datenknoten.
 		\begin{description}
 			\item [\subreq{Metaknoten}{meta}]
-				Der Metaknoten ist für die in \ref{spec:model} beschriebenen Metadaten reserviert.
+				Der Metaknoten ist für die in Abschnitt \ref{spec:model} beschriebenen Metadaten reserviert.
 			\item [\subreq{Datenknoten}{data}]
 				Der Datenknoten ist anfangs leer und kann von Benutzern um weitere Knoten erweitert werden.
 		\end{description}
@@ -420,10 +422,10 @@ Die Dateistruktur wird bereits vom Crawlvorgang vorgegeben, wird hier aber nochm
         Die gespeicherten Daten entsprechen dem Datenmodell des Abschnitts \ref{spec:model}.
 	\item [\req{Normalisierung}{normalize}]
 		Um die Datenbank bei der großen Datenmenge klein zu halten soll die Datenbankstruktur
-		weitestgehend normalisiert werden.
+		sinnvoll normalisiert werden.
 	\item [\req{Erweiterbarkeit}{extense}] 
 		Eine Möglichkeit zum dynamischen Erweitern der Datenbank ist nicht vorgesehen.
-	\item [\req{Berechtigungen}{rights}]
+	\item [\req{Berechtigungen}{rights}] Schreib- und Leserechte
 		\begin{description}
 			\item [\subreq{Schreiben}{write}] Schreibrechte werden nur dem Crawlmodul erteilt.
 			\item [\subreq{Lesen}{read}] Gelesen kann falls notwendig von allen Komponenten werden.

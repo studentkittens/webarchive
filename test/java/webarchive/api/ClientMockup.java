@@ -30,7 +30,7 @@ public class ClientMockup extends WebarchiveObserver {
 			getLocalHost());
 		WebarchiveClient client = factory.getInstance();
 		System.out.println("\nclient:select: commitTags");
-		@SuppressWarnings("unchecked")
+		
 		List<CommitTag> commits = client.select(new SelectCommitTag(null, null,
 			"commitTime DESC"));
 		System.out.println(commits);
@@ -38,7 +38,7 @@ public class ClientMockup extends WebarchiveObserver {
 			System.out.println("  " + t.getCommitTime().getXmlFormat() + ", " + t.
 				getDomain());
 		}
-		@SuppressWarnings("unchecked")
+		
 		List<MetaData> metaList = client.select(new SelectMetaByCommit(commits.
 			subList(0, 1), null, null, null, "createTime ASC"));
 		System.out.println(
