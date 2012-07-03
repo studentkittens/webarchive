@@ -237,18 +237,11 @@ Diese kann einfach an den Analyzer zurückgegeben werden.
 
 \section {Client Notifier}
 \liable{\sab}
-Zum Benachrichtigen über Neuerungen des Webarchivs für die Observer (Clients) wird ein Notifier eingesetzt.
-
-Dieser erhält beim Start ein Intervall, welches beschreibt, 
-innerhalb welchen Zeitraums die Observer  benachrichtigt werden müssen. 
-Ist das der Fall, startet Observerble die Benachrichtigungsroutine NotificationSequence. 
-Sobald diese Beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen.
 
 Zum benachrichtigen über Neuerungen des Webarchivs für die Observer (Clients) wird ein Notifier eingesetzt.
 
 Dieser erhält beim Start ein Intervall, welches beschreibt, innerhalb welchen Zeitraum die Observer  benachrichtigt werden müssen. 
-Ist das der Fall, startet ,,Observerble'' die Benachrichtigungsroutine  ,,NotificationSequence''.
-Sobald diese beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen.
+Ist das der Fall, startet die Benachrichtigungsroutine. Sobald diese beendet ist, legt sich der Threat  für das vorgegeben Intervall schlafen und beginnt danach von neuen.
 
 \begin{figure}[H]
 	\centering
@@ -259,14 +252,11 @@ Sobald diese beendet ist, legt sich der Threat  für das vorgegeben Intervall sc
 %\subsection {Exception Handling}
 %\ref{req:Sv:comm:exceptions}
 
-Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, 
-macht diese eine Anfrage bei der Datenbank. 
-Als Antwort erhält sie Commit-Tags, welche anschließend in einer Liste zwischengespeichert werden. 
-Danach sendet sie diese Liste an alle Clients. 
 
-Sobald Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, macht diese eine Anfrage bei der Datenbank. Als Antwort er hält sie Commit-Tags, welche anschließend in einer Liste zwischengespeichert werden. Danach sendet sie diese Liste an alle Clients. 
+Wird die Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, macht diese eine Anfrage bei der Datenbank. Als Antwort er hält sie eine Liste Commit-Tags, welche anschließend an alle Clients gesendet wird. 
 
 \section{Log}
+\liable{\sab}
 Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' von Java.
 
 \section{Klassen und Komponenten}
