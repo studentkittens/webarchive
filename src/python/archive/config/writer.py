@@ -8,9 +8,10 @@ import archive.config.xmlhandler as xmlhandler
 
 #   Set url to value
 def set_value(url, value):
-    xmlhandler.set_element(url, value)
+    return xmlhandler.set_element(url, value)
 
 #   Set url back to default
+#   Not used
 def set_default(value):
     default = reader.get_default(value)
     if default == '':

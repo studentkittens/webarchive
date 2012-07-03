@@ -11,9 +11,10 @@ import archive.config.options as options
 #   Else it returns ''
 def get_default(url):
     try:
-        return options.default_options[url]
+        value = options.default_options[url]
+        return value
     except KeyError:
-        return ''
+        return False
 
 #   Try find value for url.
 #   If url is found, return value.
@@ -21,9 +22,10 @@ def get_default(url):
 def get(url):
     try:
         ret = xmlhandler.get_element(url)
-        if ret == '':
+        if ret == False:
             return get_default(url)
         else:
             return ret
     except KeyError:
-        return ''
+        return False
+

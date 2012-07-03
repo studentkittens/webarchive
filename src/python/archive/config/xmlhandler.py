@@ -7,13 +7,17 @@ from xml.etree.ElementTree import ElementTree
 
 tree = ElementTree()
 
-gConfigPath = 'webarchive.conf.xml'
+gConfigPath ='webarchive.conf.xml'
 
 #   Load xml config file by the given path
 def load(configPath):
     global gConfigPath
     gConfigPath = configPath
-    tree.parse(configPath)
+    try:
+        tree.parse(configPath)
+        return True
+    except IOError:
+        return False
 
 #   Set url to value.
 #   If url is found, it is set to value and writes file and return is true.
@@ -21,7 +25,7 @@ def load(configPath):
 def set_element(url, value):
     tagname = url_to_xpath(url)
     try:
-        tree.find(url).text = value
+        tree.find(tagname).text = value
     except AttributeError:
         return False
     else:
@@ -37,10 +41,14 @@ def write_file():
 def get_element(url):
     xpath = url_to_xpath(url)
     try:
-        return tree.findtext(xpath)
-    except:
-        return ''
+        value = tree.findtext(xpath)
+        if value == None:
+            return False
+        return value
+    except AttributeError:
+        return False
 
 #   Converts the given url string
 def url_to_xpath(url):
     return url.strip().replace('.', '/')
+
