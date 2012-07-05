@@ -5,12 +5,15 @@ __author__ = 'Florian Bauer'
 
 from xml.etree.ElementTree import ElementTree
 
-tree = ElementTree()
 
+tree = ElementTree()
 gConfigPath ='webarchive.conf.xml'
 
-#   Load xml config file by the given path
+
 def load(configPath):
+    """
+    Load xml config file by the given path
+    """
     global gConfigPath
     gConfigPath = configPath
     try:
@@ -19,10 +22,13 @@ def load(configPath):
     except IOError:
         return False
 
-#   Set url to value.
-#   If url is found, it is set to value and writes file and return is true.
-#   If not, return is False
+
 def set_element(url, value):
+    """
+    Set url to value.
+    If url is found, it is set to value and writes file and return is true.
+    If not, return is False
+    """
     tagname = url_to_xpath(url)
     try:
         tree.find(tagname).text = value
@@ -32,13 +38,19 @@ def set_element(url, value):
         write_file()
         return True
 
-#   Writes the actual Element Tree to xml file.
+
 def write_file():
+    """
+    Writes the actual Element Tree to xml file.
+    """
     tree.write(gConfigPath)
 
-#   Returns value for url
-#   If not found, it returns ''
+
 def get_element(url):
+    """
+    Returns value for url
+    If not found, it returns ''
+    """
     xpath = url_to_xpath(url)
     try:
         value = tree.findtext(xpath)
@@ -48,7 +60,9 @@ def get_element(url):
     except AttributeError:
         return False
 
-#   Converts the given url string
-def url_to_xpath(url):
-    return url.strip().replace('.', '/')
 
+def url_to_xpath(url):
+    """
+    Converts the given url string
+    """
+    return url.strip().replace('.', '/')

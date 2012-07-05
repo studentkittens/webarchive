@@ -9,6 +9,7 @@ import os
 
 import archive.init.default_cfg as default_cfg
 import archive.config.handler as config
+import archive.init.xsdtemplate as xsd
 
 __author__ = 'Christopher Pahl'
 
@@ -21,6 +22,7 @@ www.stackoverflow.com
 """
 
 
+
 def init_archive(init_path=os.getcwd()):
     """
     Gets and sets parms at on the first start of archive
@@ -30,34 +32,34 @@ def init_archive(init_path=os.getcwd()):
         try:
             # Create top direcoty
             os.mkdir(base_path)
-
+            ACTUAL_CONFIG = default_cfg.CONFIG_TEMPLATE.format(
+                        archive_path=base_path,
+                        filter_path=config.get_default('general.filterpath'),
+                        depth=config.get_default('crawler.depth'),
+                        interval_in_min=config.get_default('crawler.interval'),
+                        max_inst=config.get_default('crawler.maxInst'),
+                        user_agent=config.get_default('crawler.userAgent'),
+                        temp_dir=config.get_default('crawler.tempRoot'),
+                        robots=config.get_default('crawler.ignoreRobots'),
+                        url_path=config.get_default('crawler.urllistpath'),
+                        custom_wget=config.get_default('crawler.customWgetParms'),
+                        db_file=config.get_default('db.path'),
+                        sql_source=config.get_default('db.sqlSource'),
+                        server_port=config.get_default('server.port'),
+                        notify_in_min=config.get_default('server.notify.interval'),
+                        javadapter_port=config.get_default('javadapter.port'))
             # Create base structure
-            for folder in ['content', 'tmp', 'filter', 'logs', 'pickle_cache']:
+            for folder in ['content', 'tmp', 'filter', 'logs', 'pickle_cache', 'xml']:
                 os.mkdir(os.path.join(base_path, folder))
 
             # Default url.txt
-            with open(os.path.join(base_path, 'url.txt'), 'w') as urltxt:
-                urltxt.write(DEFAULT_URLS)
+            files = [('url.txt', DEFAULT_URLS),
+                     (os.path.join('xml', 'file.xsd'), xsd.XSD_TEMPLATE),
+                     ('webarchive.conf.xml', ACTUAL_CONFIG)]
 
-            # Write a default config template... that's a bit ugly
-            with open(os.path.join(base_path, 'webarchive.conf.xml'), 'w') as cfg_handle:
-                cfg_handle.write(default_cfg.CONFIG_TEMPLATE.format(
-                    archive_path=base_path,
-                    filter_path=config.get_default('general.filterpath'),
-                    depth=config.get_default('crawler.depth'),
-                    interval_in_min=config.get_default('crawler.interval'),
-                    max_inst=config.get_default('crawler.maxInst'),
-                    user_agent=config.get_default('crawler.userAgent'),
-                    temp_dir=config.get_default('crawler.tempRoot'),
-                    robots=config.get_default('crawler.ignoreRobots'),
-                    url_path=config.get_default('crawler.urllistpath'),
-                    custom_wget=config.get_default('crawler.customWgetParms'),
-                    db_file=config.get_default('db.path'),
-                    sql_source=config.get_default('db.sqlSource'),
-                    server_port=config.get_default('server.port'),
-                    notify_in_min=config.get_default('server.notify.interval'),
-                    javadapter_port=config.get_default('javadapter.port')
-                ))
+            for item in files:
+                with open(os.path.join(base_path, item[0]), 'w') as item_handle:
+                    item_handle.write(item[1])
 
             print('Initialized new archive at', base_path)
         except OSError as err:

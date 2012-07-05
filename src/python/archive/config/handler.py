@@ -8,6 +8,7 @@ import archive.config.writer as writer
 import archive.config.xmlhandler as xmlhandler
 import unittest
 
+
 def _as_int(value):
     '''
     Converts value to int if string is numeric
@@ -17,6 +18,7 @@ def _as_int(value):
     else:
         return value
 
+
 def get(url):
     '''
     Returns actual value for url.
@@ -24,17 +26,20 @@ def get(url):
     '''
     return _as_int(reader.get(url))
 
+
 def get_default(url):
     '''
-    Returns defaulft value for url.
+    Returns default value for url.
     '''
     return _as_int(reader.get_default(url))
+
 
 def set(url, value):
     '''
     Set value of url to given value.
     '''
     return writer.set_value(url, value)
+
 
 #   Not used
 def set_default(url):
@@ -46,10 +51,16 @@ def load(path):
     '''
     return xmlhandler.load(path)
 
+###########################################################################
+#                                unittest                                 #
+###########################################################################
+
+CONFIG_FILE = 'archive/testdata/webarchive.conf.xml'
+
 class TestHandler(unittest.TestCase):
     def setUp(self):
-        self.assertTrue(load('webarchive.conf.xml'))
-        
+        self.assertTrue(load(CONFIG_FILE))
+
     def test_load(self):
         self.assertTrue(load(xmlhandler.gConfigPath))
         self.assertFalse(load('notfound.xml'))
@@ -66,8 +77,8 @@ class TestHandler(unittest.TestCase):
     def test_getDefault(self):
         self.assertNotEqual(get_default('general.root'), False)
         self.assertFalse(get_default('not.found'))
-    
+
 
 if __name__ == '__main__':
     unittest.main()
-   
+
