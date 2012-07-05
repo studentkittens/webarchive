@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>archive.crawler.wget &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.wget &mdash; Webarchive 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="top" title="Webarchive 1.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -84,7 +84,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__user_agent</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;crawler.userAgent&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__custom_cmd</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;crawler.customWgetParms&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__base</span> <span class="o">=</span> <span class="s">&#39;wget &quot;{user_agent}&quot; -e robots={rob} -r -l {depth} </span><span class="se">\</span>
-<span class="s">                      --exclude-domains &quot;{ex_domains}&quot; {custom_parms} -P {folder} {url}&#39;</span>
+<span class="s">                      --restrict-file-names=nocontrol --iri --timeout=20 --tries=3 --exclude-domains &quot;{ex_domains}&quot; {custom_parms} -P {folder} {url}&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__process</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pid</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wget_logfile</span> <span class="o">=</span> <span class="bp">None</span>
@@ -107,7 +107,7 @@
                                  <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">)</span>
 
         <span class="n">cmd</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-        <span class="n">wget_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">get_log_dir</span><span class="p">(),</span> <span class="s">&#39;wget_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">+</span> <span class="s">&#39;.log&#39;</span><span class="p">)</span>
+        <span class="n">wget_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">get_log_dir</span><span class="p">(),</span> <span class="s">&#39;wget_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.log&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__wget_logfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">wget_path</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -179,12 +179,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula, Florian Bauer.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

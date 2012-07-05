@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>archive.config.handler &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.config.handler &mdash; Webarchive 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="top" title="Webarchive 1.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -56,36 +56,81 @@
 <span class="kn">import</span> <span class="nn">archive.config.reader</span> <span class="kn">as</span> <span class="nn">reader</span>
 <span class="kn">import</span> <span class="nn">archive.config.writer</span> <span class="kn">as</span> <span class="nn">writer</span>
 <span class="kn">import</span> <span class="nn">archive.config.xmlhandler</span> <span class="kn">as</span> <span class="nn">xmlhandler</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
 
 
-<span class="c"># Convert string to int,</span>
-<span class="c"># if it&#39;s a numerical string</span>
 <span class="k">def</span> <span class="nf">_as_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts value to int if string is numeric</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
 
-<span class="c">#   Returns actual value for url.</span>
-<span class="c">#   If not found, it returns default value.</span>
+
 <div class="viewcode-block" id="get"><a class="viewcode-back" href="../../../config.html#archive.config.handler.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns actual value for url.</span>
+<span class="sd">    If not found, it trys to return default value.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">_as_int</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
 
-<span class="c">#   Returns default value for url.</span></div>
+</div>
 <div class="viewcode-block" id="get_default"><a class="viewcode-back" href="../../../config.html#archive.config.handler.get_default">[docs]</a><span class="k">def</span> <span class="nf">get_default</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns default value for url.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">_as_int</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
 
-<span class="c">#   Sets value of url to str.</span></div>
-<div class="viewcode-block" id="set"><a class="viewcode-back" href="../../../config.html#archive.config.handler.set">[docs]</a><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="set"><a class="viewcode-back" href="../../../config.html#archive.config.handler.set">[docs]</a><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set value of url to given value.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-<span class="c">#   Sets value of url back to default value.</span></div>
+
+<span class="c">#   Not used</span></div>
 <span class="k">def</span> <span class="nf">set_default</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
-<span class="c">#   Load xml file with given path</span>
 <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Load xml file with given path</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">xmlhandler</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="c">###########################################################################</span>
+<span class="c">#                                unittest                                 #</span>
+<span class="c">###########################################################################</span>
+
+<span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="s">&#39;archive/testdata/webarchive.conf.xml&#39;</span>
+
+<span class="k">class</span> <span class="nc">TestHandler</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">xmlhandler</span><span class="o">.</span><span class="n">gConfigPath</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;notfound.xml&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;not.found&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test.main&#39;</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="s">&#39;not.found&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">,</span> <span class="s">&#39;/tmp&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_getDefault</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">get_default</span><span class="p">(</span><span class="s">&#39;general.root&#39;</span><span class="p">),</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">get_default</span><span class="p">(</span><span class="s">&#39;not.found&#39;</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -119,12 +164,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula, Florian Bauer.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>archive.crawler.dbgen &mdash; Webarchiv 1.0 documentation</title>
+    <title>archive.crawler.dbgen &mdash; Webarchive 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="Webarchiv 1.0 documentation" href="../../../index.html" />
+    <link rel="top" title="Webarchive 1.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -86,13 +86,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">abspath</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">sqlsource</span><span class="o">.</span><span class="n">statements</span><span class="p">[</span><span class="s">&#39;create&#39;</span><span class="p">])</span>
+
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__metalist</span> <span class="o">=</span> <span class="n">meta_list</span>
 
         <span class="c"># We have to maintain a seperate lock for the db,</span>
         <span class="c"># the db itself is locked from itself, but many separate</span>
         <span class="c"># statements are not</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&#39;db.lock&#39;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&#39;db&#39;</span><span class="p">,</span>
                 <span class="n">folder</span><span class="o">=</span><span class="n">get_archive_root</span><span class="p">(),</span>
                 <span class="n">timeout</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
@@ -117,10 +118,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__cursor</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">sqlsource</span><span class="o">.</span><span class="n">statements</span><span class="p">[</span><span class="s">&#39;create&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">OperationalError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="c"># Most likely locked</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Not executing CREATE - Already done: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">insert_mime_domain</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">insert_mdata_ctag</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">insert_history</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
         <span class="k">except</span> <span class="n">lock</span><span class="o">.</span><span class="n">FileLockException</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;File-lock timed out; no db update was done&#39;</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -129,6 +134,8 @@
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__db_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="DBGenerator.insert_mime_domain"><a class="viewcode-back" href="../../../dbgen.html#archive.crawler.dbgen.DBGenerator.insert_mime_domain">[docs]</a>    <span class="k">def</span> <span class="nf">insert_mime_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -335,12 +342,12 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">Webarchiv 1.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula.
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula, Florian Bauer.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

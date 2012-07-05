@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>archive.logger.loghandler &mdash; Webarchive 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Webarchive 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for archive.logger.loghandler</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># encoding: utf-8</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Florian Bauer&#39;</span>
+
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">archive.config.handler</span> <span class="kn">as</span> <span class="nn">config</span>
+
+<span class="n">debug</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">info</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">warning</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">error</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">critical</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">loglevel</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">logfile</span> <span class="o">=</span> <span class="s">&#39;log.txt&#39;</span>
+
+<div class="viewcode-block" id="file"><a class="viewcode-back" href="../../../logger.html#archive.logger.loghandler.file">[docs]</a><span class="k">def</span> <span class="nf">file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set Path for Logfile.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">logfile</span>
+    <span class="n">logfile</span> <span class="o">=</span> <span class="n">path</span>
+</div>
+<div class="viewcode-block" id="severity"><a class="viewcode-back" href="../../../logger.html#archive.logger.loghandler.severity">[docs]</a><span class="k">def</span> <span class="nf">severity</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Set Loglevel.</span>
+<span class="sd">    Possible level&#39;s:</span>
+<span class="sd">    debug, info, warning, error and critical.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">loglevel</span>
+    <span class="n">loglevel</span> <span class="o">=</span> <span class="n">value</span>
+</div>
+<span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">log_print</span><span class="p">(</span><span class="s">&#39; Debug: &#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">log_print</span><span class="p">(</span><span class="s">&#39; Info: &#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">warning</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">log_print</span><span class="p">(</span><span class="s">&#39; Warning: &#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">log_print</span><span class="p">(</span><span class="s">&#39; Error: &#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">critical</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="n">log_print</span><span class="p">(</span><span class="s">&#39; Critical: &#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">log_print</span><span class="p">(</span><span class="n">art</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Prints Log message to shell, if message level is highter than loglevel.</span>
+<span class="sd">    Calls method to write log message to Log file.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;=</span> <span class="n">loglevel</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">art</span> <span class="o">+</span> <span class="n">message</span><span class="p">)</span>
+    <span class="n">log_write</span><span class="p">(</span><span class="n">art</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">log_write</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Write Log message to log file</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="nb">open</span> <span class="p">(</span><span class="s">&#39;log.txt&#39;</span><span class="p">,</span> <span class="s">&#39;a+&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="log_read"><a class="viewcode-back" href="../../../logger.html#archive.logger.loghandler.log_read">[docs]</a><span class="k">def</span> <span class="nf">log_read</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Prints all Log Messages to shell</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="nb">open</span> <span class="p">(</span><span class="s">&#39;log.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<span class="k">def</span> <span class="nf">time</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Get Timestamp for Log Messages</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">strftime</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.%m.%Y %H:%M:%S :&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">Webarchive 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Christopher Pahl, Christoph Piechula, Florian Bauer.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
