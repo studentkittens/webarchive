@@ -13,9 +13,13 @@ All messages obove loglevel are written to shell.
 
 Additional Notes:
 
-- Possible Log levels: debug, info, warning, error and critical
+Possible Log levels: 
+- debug
+- info
+- warning
+- error
+- critical
 
-.. code-block:: 
 
 Implementation
 --------------
