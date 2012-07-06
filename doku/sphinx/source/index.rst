@@ -28,6 +28,7 @@ External Documentation
    intervalmanager
    filter
    extractor
+   logger
 
 Internal Documentation
 ----------------------
