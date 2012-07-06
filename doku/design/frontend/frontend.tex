@@ -89,7 +89,7 @@ Details zeigt Diagramm \ref{dia:design:frontend:cl:api}
 \begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:cl:api}
-	\includegraphics[width=.8\textwidth]{design/frontend/classes/api-Klassen.pdf}
+	\includegraphics[width=\textwidth]{design/frontend/classes/api-Klassen.pdf}
 	\caption{Klassendiagramm: API}
 \end{figure}
 
@@ -302,35 +302,45 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 
 \subsection{xml-Klassen}
 \label{\cii}
-Über die XmlMethodFactory kann im Server eine neuer XmlHandler erzeugt werden.
-Die XmlMethodFactory bietet auch die Erzeugung anderer Xml-Hilfsobjekte an wie Validator und Transformer zur Ausgabe.
+\begin{description}
+	\item [XmlMethodFactory] Über die XmlMethodFactory kann unter anderem im Server ein neuer XmlHandler erzeugt werden.
+	Die XmlMethodFactory bietet auch die Erzeugung anderer Xml-Hilfsobjekte an wie Xml-Schema-Validator und Transformer zur Ausgabe, welche paketintern benötigt werden.
 
-Der XmlHandler übernimmt auf der Serverseite die Steuerung der anderen Low-Level-Controller, wie dem
-XmlIOHandler, der Ein- und Ausgabe von Xmldateien kapselt. 
+	\item [XmlHandler] Der XmlHandler übernimmt auf der Serverseite die Steuerung der anderen Low-Level-Controller, wie dem XmlIOHandler. Außerdem werden hier die möglichen Exceptions gefiltert, die auftreten können und je nach Ursache geloggt oder nach oben (in Richtung Clients) weitergegeben. 
 
-Über den XmlHandler kann eine Implementierung des XmlEditors (siehe API) erzeugt werden, welche
-vom Server an den aufrufenden Client geschickt wird.
+	Über den XmlHandler kann eine Instanz des XmlEditors (siehe API) erzeugt werden, welche
+	vom Server an den aufrufenden Client geschickt wird. 
+	Dabei wird auch das vorher erzeugte DOM-Document-Objekt verschickt.
+	Der XmlHandler verarbeitet dann Eingaben durch
+	Benutzer des XmlEditors im Server (addDataElement()-Methode). 
+	Diese werden in Form von DataElement-instanzen vom XmlEditor zurückgeschickt
+	und werden im XmlHandler geprüft, ob sie dem Dokument hinzugefügt werden dürfen.
 
-Da der XmlEditor ein DOM-Document enthält, können auf der Client-Seite neue Elemente erzeugt werden.
-Werden diese per addDataElement()-Methode hinzugefügt, wird nur das neue Datenelement an den
-XmlHandler im Server geschickt. Hier kann nun geprüft werden, ob das Datenelement hinzugefügt
-werden kann, oder eine Exception geworfen wird, z.B. weil es namentlich schon vorhanden ist oder
-schreibgeschützt ist. 
-
-DataElement-Objekte kapseln normale DOM-Elemente, verhindern aber den 
-direkten Zugriff durch den Benutzer.
-
-Die DOM-Documente können außerdem mittels eines Schema-Validators validiert werden. 
-Der Zeitpunkt kann über den AutoValidatingMode bestimmt werden (Default: \lstinline{AFTER\_UPDATE}).
-AutoValidatingMode und der Pfad des xsd-files können im Config-file eingetragen werden
-und werden bei Programmstart an ein XmlConf-objekt übertragen.
+	Die DOM-Documente können außerdem mittels eines Schema-objekts validiert werden. 
+	Der Zeitpunkt kann über den AutoValidatingMode bestimmt werden (Default: \lstinline{AFTER\_UPDATE}).
+	AutoValidatingMode und der Pfad des xsd-files können im Config-file eingetragen werden
+	und werden bei Programmstart an ein XmlConf-objekt übertragen.
 
 
-\liable{\cii}
+	\item [XmlEditor] Da der XmlEditor ein DOM-Document enthält, können auf der Client-Seite neue Elemente erzeugt werden. 
+		Dabei muss ein neues DataElement erzeugt werden, welcher das Wurzelelement für beliebige
+		neue DOM-Elemente (ebenfalls über XmlEditor erzeugbar) bildet.
+		Das so zusammengebaute DataElement kann dann mittels der addDataElement()-Methode hinzugefügt werden, 		welches dann an den XmlHandler im Server geschickt wird (siehe oben). 
+	\item [ClientAdapter] Der ClientAdapter kapselt die Verbindung zum Server für den XmlEditor.
+		Die Klasse wird hauptsächlich für den Unittest des XmlEditors benötigt.
+	\item [DataElement] Ein DataElement-Objekt kapselt ein normales DOM-Element, 
+			verhindert aber den direkten Zugriff durch den Benutzer. 
+		DataElemente stellen praktische die obersten Elemente im ,,data''-Knoten des XML-Files dar.
+		Mit Ausnahme vom Hinzufügen neuer Elemente (nur nach der Erzeugung durch XmlEditor.createDataElement()) sollen diese nicht bearbeitbar sein.
+	\item [XmlConf] Kapselt die einstellbaren Werte aus der Configdatei.
+	\item [XmlIOHandler] der XmlIOHandler führt direkt Auslese- und Schreiboperationen auf ein XML-File durch. Dabei wird beim Einlesen eine DOM-Document-objekt erzeugt und beim Schreiben dieses wieder in XML-Code transformiert. Der Handler kapselt auch den Lock- und Unlockzugriff. 
+		XmlIOHandler werden von XmlHandler als untergeordnete Hilfsobjekte benötigt.
+\end{description}
+
 \begin{figure}[H]
 	%\centering
 	\label{dia:design:frontend:classes:xml}
-	\includegraphics[angle=270, width=1.2\textwidth]{design/frontend/classes/xml.pdf}
+	\includegraphics[width=.8\textwidth]{design/frontend/classes/xml.pdf}
 	\caption{Klassendiagramm: Xmlklassen}
 \end{figure}
 
@@ -348,8 +358,7 @@ Die dbaccess-Klassen gliedern sich in die folgenden Teile:
 \begin{description}
 	\item [DbAccess und Ableitungen] kapseln die Verbindung zur Datenbank,
 		wobei die Connection für SQLITE implementiert wird.
-	\item [SQL-Klassen] diese setzen das Mapping zwischen Objektorientierung und Relationärer Datenbank her, 
-		wobei nur SELECT-Statements benötigt werden. 
+	\item [Select$<Type>$ Klassen] diese setzen das Mapping zwischen Objektorientierung und Relationärer Datenbank her. 
 
 		Da alle Selects bisher JOINs benötigen, 
 		wurde die abstrakte Klasse SelectJoin eingeführt, 
@@ -357,12 +366,18 @@ Die dbaccess-Klassen gliedern sich in die folgenden Teile:
 
 		Vom Benutzer übergebenene WHERE und ORDER BY Klauseln können dann dynamisch eingefügt werden. 
 		Die so erzeugten SQL-Statements werden dann per JDBC an die Datenbank geschickt und 
-		das zurückgegebene ResultSet wird weiterverarbeitet und als Liste des Templatetypen zurückgegeben.
+		das zurückgegebene ResultSet wird weiterverarbeitet und als Liste vom Templatetypen $<Type>$ zurückgegeben. Implementiert sind Selects bislang für CommitTag und MetaData-objekte.
+		Für MetaData-objekte existiert auch eine schlankere Abfrage der unter anderem eine Liste
+		von CommitTags übergeben wird. Für die zurückgegebenen MetaData-instanzen gilt dann: 
+		\[ MetaDaten.getCommitTag() \in List<CommitTag>\] 
+		Diese ist z.B. sinnvoll wenn Aktualisierungen in Form von CommitTags vom Notifier zur Verfügung gestellt wird.
 	\item [SqlHandler]
-		Der SqlHandler nimmt vom Benutzer erzeugte api.Select-Objekte entgegen, 
-		verteilt diese an ein passendes Select-objekt (siehe oben).
+		Der SqlHandler nimmt vom Benutzer erzeugte api.Select-Objekte entgegen und
+		gibt dieses an das zugehörige Select-objekt (siehe oben) weiter.
+		Der SqlHandler stellt dabei die Schnittstelle nach außen hin dar.
 \end{description}
-
+\paragraph{Anmerkung:} Da kein Schreibzugriff auf die Datenbank seitens der Benutzer erfolgen soll,
+	werden nur SELECT-statements benötigt.
 \ref{req:Sv:comm}
 \section{Test Analysetool} 
 \label{\sab} 
@@ -378,5 +393,6 @@ Die dbaccess-Klassen gliedern sich in die folgenden Teile:
 		\item Das Ergebnis wird mittels  getOutputStream in eine Textdatei auf dem Archiv geschrieben.
 		\item Zusätzlich wird das Ergebnis als neues Element in die XML-Begleitdatei geschrieben.
 			Dazu muss vorher ein XMLEdit-objekt vom Client angefordert werden.
+		\item Es wird ein Observer hinzugefügt, der die Updates vom Notifier am Bildschirm ausgibt.
 	\end{enumerate}
 		

@@ -11,6 +11,8 @@ import javax.xml.validation.Validator;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import webarchive.handler.Handlers;
 import webarchive.transfer.FileDescriptor;
 
@@ -95,7 +97,23 @@ public class XmlMethodFactoryTest {
 		assertTrue(result == null); //default
 
 		System.out.println("setXmlErrorHandler");
-		final XmlErrorHandler xmlErrorHandler = new XmlErrorHandler();
+		final ErrorHandler xmlErrorHandler = new ErrorHandler() {
+
+			@Override
+			public void warning(SAXParseException saxpe) throws SAXException {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void error(SAXParseException saxpe) throws SAXException {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+
+			@Override
+			public void fatalError(SAXParseException saxpe) throws SAXException {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		};
 		instance.setXmlErrorHandler(xmlErrorHandler);
 		result = instance.getErrorHandler();
 		assertEquals(xmlErrorHandler, result);

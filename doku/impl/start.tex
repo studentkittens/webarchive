@@ -1,0 +1,25 @@
+\chapter{Programmstart und Benutzung}
+	\section{Backend}
+	\section{Frontend}
+		\subsection{Start Server}
+		Das Frontend (der Java-Server) kann über das mitgelieferte jar gestartet werden.
+		Wird der Server über den source-code gestartet (bzw. compiliert) dann ist der Einstiegspunkt
+		die Klasse \lstinline{webarchive.init.Launcher.java}.
+
+		Beim Start muss der Pfad (i.d.R. absolut) des Config-files übergeben werden. 
+		Dieses befindet sich normalerweise direkt im Installationsordner des Archivs.
+
+		Damit der Server funktionsfähig ist muss mindestens der javadapter (siehe Backend)
+		vorher gestartet werden.
+		\subsection{Start Client}
+		Ein Client kann mittels eines \lstinline{webarchive.api.WebarchiveClientFactory} erzeugt werden,
+		wobei vorher in der Factory die Serveraddresse gesetzt muss.
+		
+		Über den Client können dann Abfragen gestartet oder Daten dem Archiv hinzugefügt werden. 
+		Der Benutzer sollte sich vor der Benutzung mit der javadoc des api-Pakets und der Unterpakete vertraut machen,
+		da hier alle Details zur Benutzung beschrieben sind.
+		\paragraph{Anmerkung:} Werden über die Xml-Methoden Datenelemente hinzugefügt, 
+		sollte auch umbedingt das sich im Archivordner befindliche \lstinline{file.xsd} (XML-Schema)
+		angepasst werden.
+	
+

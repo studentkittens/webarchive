@@ -51,7 +51,7 @@ public abstract class SelectJoin<Type> extends Select<Type> {
 	 * @return a list of Type
 	 * @throws SQLException
 	 */
-	public List<Type> select(String[] where, String[] orderBy, Object arg) throws
+	List<Type> select(String[] where, String[] orderBy, Object arg) throws
 		Exception {
 		String s = insertWhere(where);
 		StringBuilder sql = new StringBuilder(s);

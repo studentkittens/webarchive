@@ -5,9 +5,8 @@
 package webarchive.dbaccess;
 
 import java.io.File;
-import java.sql.ResultSet;
 import java.util.List;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.*;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.MetaData;

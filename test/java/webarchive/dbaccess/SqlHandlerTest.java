@@ -6,8 +6,9 @@ package webarchive.dbaccess;
 
 import java.io.File;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.*;
-import static org.junit.Assert.*;
 import webarchive.api.model.CommitTag;
 import webarchive.api.model.TimeStamp;
 import webarchive.api.select.Select;
