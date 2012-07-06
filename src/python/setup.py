@@ -19,6 +19,6 @@ if __name__ == '__main__':
                     ],
         data_files=[('/usr/bin', ['archive.py'])],
         url = "www.github.com/studentkittens/webarchive",
-        author = "Christopher Pahl, Christoph Piechula",
-        author_email = "cpahl@hof-university.de, cpiechula@hof-university.de"
+        author = "Christopher Pahl, Christoph Piechula, Florian Bauer",
+        author_email = "cpahl@hof-university.de, cpiechula@hof-university.de, florian.steffen.joerg.bauer@hof-university.de"
         )

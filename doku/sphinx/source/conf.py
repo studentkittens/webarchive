@@ -42,8 +42,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Webarchiv'
-copyright = '2012, Christopher Pahl, Christoph Piechula'
+project = 'Webarchive'
+copyright = '2012, Christopher Pahl, Christoph Piechula, Florian Bauer'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -216,7 +216,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'webarchiv', 'Webarchiv Documentation',
-     ['Christopher Pahl, Christoph Piechula'], 1)
+     ['Christopher Pahl, Christoph Piechula, Florian Bauer'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -230,7 +230,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Webarchiv', 'Webarchiv Documentation',
-   'Christopher Pahl, Christoph Piechula', 'Webarchiv', 'One line description of project.',
+   'Christopher Pahl, Christoph Piechula', 'Florian Bauer', 'Webarchiv', 'One line description of project.',
    'Miscellaneous'),
 ]
 

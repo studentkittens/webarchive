@@ -236,7 +236,7 @@ Es wird auf Serverseite eine Liste von File-Objekten erzeugt und an den Client g
 Diese kann einfach an den Analyzer zurückgegeben werden.
 
 \section {Client Notifier}
-\liable{\sab}
+\label{\sab}
 
 Zum benachrichtigen über Neuerungen des Webarchivs für die Observer (Clients) wird ein Notifier eingesetzt.
 
@@ -256,13 +256,13 @@ Ist das der Fall, startet die Benachrichtigungsroutine. Sobald diese beendet ist
 Wird die Benachrichtigungsroutine mit dem Datum der letzten Suche gestartet wird, macht diese eine Anfrage bei der Datenbank. Als Antwort er hält sie eine Liste Commit-Tags, welche anschließend an alle Clients gesendet wird. 
 
 \section{Log}
-\liable{\sab}
+\label{\sab}
 Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' von Java.
 
 \section{Klassen und Komponenten}
 
 \subsection{Server und Client}
-\liable{\eddy}
+\label{\eddy}
 \begin{figure}[H]
 	\centering
 	\label{dia:design:frontend:classes:svcl}
@@ -271,7 +271,7 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 \end{figure}
 
 \subsection{Messagedaten-Klassen}
-\liable{\eddy}
+\label{\eddy}
 
 \begin{figure}[H]
 	\centering
@@ -281,7 +281,7 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 \end{figure}
 
 \subsection{Message-Klassen}
-\liable{\eddy}
+\label{\eddy}
 
 \begin{figure}[H]
 	\centering
@@ -291,7 +291,7 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 \end{figure}
 
 \subsection{Notifier-Klassen}
-\liable{\sab}
+\label{\sab}
 
 \begin{figure}[H]
 	\centering
@@ -301,6 +301,7 @@ Zum loggen von möglichen Fehler verwenden wir das Paket ,,java.util.logging'' v
 \end{figure}
 
 \subsection{xml-Klassen}
+\label{\cii}
 Über die XmlMethodFactory kann im Server eine neuer XmlHandler erzeugt werden.
 Die XmlMethodFactory bietet auch die Erzeugung anderer Xml-Hilfsobjekte an wie Validator und Transformer zur Ausgabe.
 
@@ -332,8 +333,9 @@ und werden bei Programmstart an ein XmlConf-objekt übertragen.
 	\includegraphics[angle=270, width=1.2\textwidth]{design/frontend/classes/xml.pdf}
 	\caption{Klassendiagramm: Xmlklassen}
 \end{figure}
+
 \subsection{dbaccess-Klassen}
-\liable{\cii}
+\label{\cii}
 
 \begin{figure}[H]
 	\centering
@@ -363,7 +365,7 @@ Die dbaccess-Klassen gliedern sich in die folgenden Teile:
 
 \ref{req:Sv:comm}
 \section{Test Analysetool} 
-\liable{\sab} 
+\label{\sab} 
 \ref{req:Cl:testanalyzer} \\
 	Das Analysetool wird als einfach Klasse mit main()-funktion implementiert.
 	Die Funktion hat den folgenden Ablauf.

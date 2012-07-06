@@ -15,55 +15,64 @@ critical = 5
 loglevel = 3
 logfile = 'log.txt'
 
-#   Set Path for Log File
 def file(path):
+    '''
+    Set Path for Logfile.
+    '''
     global logfile
     logfile = path
 
-#    Set loglebel
 def severity(value):
+    '''
+    Set Loglevel.
+    Possible level's:
+    debug, info, warning, error and critical.
+    '''
     global loglevel
     loglevel = value
 
-#   Log Debug message
 def debug(message):
     log_print(' Debug: ', message, 1)
 
-#   Log Info message
 def info(message):
     log_print(' Info: ', message, 2)
 
-#   Log Warning message
 def warning(message):
     log_print(' Warning: ', message, 3)
 
-#   Log Error message
 def error(message):
     log_print(' Error: ', message, 4)
 
-#   Log Critical message
 def critical(message):
     log_print(' Critical: ', message, 5)
 
-#   Print Log message to shell
-#   Calls method to write log message to Log file
 def log_print(art, message, value):
+    '''
+    Prints Log message to shell, if message level is highter than loglevel.
+    Calls method to write log message to Log file.
+    '''
     if (value >= loglevel):
         print(time() + art + message)
     log_write(art, message)
 
-#   Write Log message to Log file
 def log_write(value, message):
+    '''
+    Write Log message to log file
+    '''
     log = open ('log.txt', 'a+')
     log.write(time() + value + message + '\n')
     log.close()
 
-#   Print all Log messages to shell
 def log_read():
+    '''
+    Prints all Log Messages to shell
+    '''
     log = open ('log.txt', 'r')
     print (log.read())
     log.close()
 
-#   Returns Timestamp for Log messages
 def time():
+    '''
+    Get Timestamp for Log Messages
+    '''
     return strftime("%d.%m.%Y %H:%M:%S :")
