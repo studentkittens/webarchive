@@ -1,11 +1,9 @@
 package webarchive.server;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +18,6 @@ public class LockHandlerImpl extends LockHandler   {
 	private InetAddress ip;
 	private int port;
 	private Socket sock;
-	private int bla=-1;
 	public LockHandlerImpl(InetAddress ip, int port) {
 		this.ip = ip;
 		this.port=port;
@@ -116,7 +113,6 @@ public class LockHandlerImpl extends LockHandler   {
 		out.write("commit "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
-		//System.out.println("Commit "+answer);
 		try {
 			processAnswer(answer);
 		} catch (Exception e) {

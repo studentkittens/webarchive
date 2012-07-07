@@ -44,6 +44,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	private static final String DELETE = "DeleteObserver";
 	private static final String HANDSHAKER= "HandShake";
 
+	public ServerConnectionHandler() {super(null,null);}
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
 		System.out.println("\tcreating handlers for new connection");
@@ -109,6 +110,7 @@ public class ServerConnectionHandler extends ConnectionHandler {
 			case DELETE_OBSERVER: 
 				processors.get(DELETE).process(msg, this);
 			break;
+			case PING: wakeUp(msg);
 			default:
 				break;
 		}

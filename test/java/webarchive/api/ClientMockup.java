@@ -55,11 +55,11 @@ public class ClientMockup extends WebarchiveObserver {
 		System.out.println("  wordcount = " + wc);
 
 		System.out.println("\nclient:getOutputStream: write out word count");
-		try (PrintWriter pw = new PrintWriter(client.getOutputStream(meta,
+		PrintWriter pw = new PrintWriter(client.getOutputStream(meta,
 				new File(
-				"wc.txt")))) {
+				"wc.txt"))) ;
 			pw.println("wordcount=" + wc);
-		}
+		pw.close();
 		System.out.println("  done");
 
 		fileListOf(meta, client);
@@ -91,10 +91,11 @@ public class ClientMockup extends WebarchiveObserver {
 //			printNodes("  ", nodes.item(i));
 //		}
 
-		client.addObserver(new ClientMockup());
 		fileListOf(meta, client);
+		System.out.println("\nclient:addObserver");
+		client.addObserver(new ClientMockup());
 
-		factory.disconnect(client);
+//		factory.disconnect(client);
 	}
 
 	private static void listDataElements(XmlEditor xmlEditor) {
@@ -145,6 +146,6 @@ public class ClientMockup extends WebarchiveObserver {
 
 	@Override
 	public void update(WebarchiveClient client, List<CommitTag> changes) {
-		// TODO Auto-generated method stub
+		System.out.println(changes);
 	}
 }

@@ -81,6 +81,6 @@ public class CommitTag implements Serializable {
 
 	@Override
 	public String toString() {
-		return commitTime.toString();
+		return "CommitTag{"+domain+","+commitTime.toString()+"}";
 	}
 }

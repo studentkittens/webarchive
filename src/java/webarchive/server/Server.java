@@ -4,14 +4,10 @@ import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
 import webarchive.handler.Handlers;
 import webarchive.init.ConfigHandler;
-import webarchive.transfer.HandShake;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -143,7 +139,7 @@ public class Server implements Runnable, NetworkModule {
 				sock = svSock.accept();
 				System.out.println("client connected!");
 			} catch (SocketException e) {
-				Logger.getLogger(Server.class.getName()).log(Level.INFO, null,
+				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null,
 						e);
 				disconnectClients();
 				break;
@@ -153,72 +149,14 @@ public class Server implements Runnable, NetworkModule {
 					ex);
 				continue;
 			}
-
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
-			System.out.println("\ttrying to get streams");
-			try {
-				oos = new ObjectOutputStream(sock.getOutputStream());
-				ois = new ObjectInputStream(sock.getInputStream());
-			} catch (Exception ex) {
-				Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null,
-					ex);
-			}
-			Connection c = new Connection(sock, oos, ois);
-			c.setConHandler(new ServerConnectionHandler(c, this));
-
-			new Thread(c).start();
-
-//			if (doHandShake(c)) {
-				addNewConnection(c);
-//				System.out.println("HANDSHAKE SUCCESS");
-//			} else {
-//				System.out.println("HANDSHAKE FAILED");
-//				try {
-//					sock.close();
-//				} catch (IOException ex) {
-//					Logger.getLogger(Server.class.getName()).log(Level.WARNING,
-//						null, ex);
-//				}
-//				continue;
-//			}
-
-
-
+			new Thread(new ClientManager(this,sock)).start();
 		}
 	}
 
-	private void addNewConnection(Connection c) {
-		synchronized (cList) {
+	synchronized void addNewConnection(Connection c) {
 			cList.add(c);
-		}
 	}
 
-	boolean doHandShake(Connection c) {
-		Message h = null;
-		try {
-			System.out.println("try sending handshake");
-
-			Message m = new Message(Header.HANDSHAKE,new HandShake(Math.random()));
-
-			c.send(m);
-			System.out.println("handshake sent, try receiving handshake");
-
-			h = c.getConHandler().waitForAnswer(m,c);//Go to sleep
-
-			System.out.println("handshake received");
-
-		} catch (Exception ex) {
-			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-			return false;
-		}
-
-		if ((h != null) && (h.getHeader() == Header.HANDSHAKE)) {
-			return true;
-		}
-
-		return false;
-	}
 
 	@Override
 	public void removeConnection(Connection c) {
@@ -230,6 +168,30 @@ public class Server implements Runnable, NetworkModule {
 		}
 	}
 
+	public Connection[] getObserverArray() {
+		Connection[] cons=null;
+			
+			synchronized (observers) {
+				Message ping = new Message(Header.PING);
+				ping.setBroadCast();
+				for(Connection c : observers) {
+					try {
+						c.send(ping);
+					} catch (Exception e) {
+						observers.remove(c);
+						cList.remove(c);
+						try {
+							c.getSocket().close();
+						} catch (IOException e1) {
+						}
+						Logger.getLogger(Server.class.getName()).log(Level.INFO,"Client "+c+" was not reachable and has been removed!");
+					}
+				}
+				cons = new Connection[observers.size()];
+				cons = observers.toArray(cons);
+			}
+		return cons;
+	}
 	public List<Connection> getObservers() {
 		return observers;
 	}

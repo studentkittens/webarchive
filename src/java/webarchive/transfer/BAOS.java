@@ -24,14 +24,18 @@ public class BAOS extends ByteArrayOutputStream  implements Serializable{
 		try {
 			cH.send(msg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			if(e instanceof IOException )
+				throw (IOException)e;
 			e.printStackTrace();
 		}
 		
 		Message answer = cH.waitForAnswer(msg,cH.getConnection());
-		if(answer.getHeader() != Header.SUCCESS)
+		if(answer.getHeader() == Header.EXCEPTION)
 		{
-			//EXCEPTION HANDLING UND SO
+			Exception e = (Exception)answer.getData();
+			if(e instanceof IOException )
+				throw (IOException)e;
+			e.printStackTrace();
 		}
 	}
 	
