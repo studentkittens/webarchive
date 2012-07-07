@@ -5,8 +5,8 @@
 package webarchive.api.select;
 
 import java.util.Arrays;
+import static org.junit.Assert.assertArrayEquals;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -37,9 +37,9 @@ public class SelectCommitTagTest {
 		whereDomain = "whereDomain";
 		orderBy = new String[]{"orderby1",
 			"orderby2"};
-		inst[0] = new SelectCommitTag(null, null, null);
-		inst[1] = new SelectCommitTag(whereCommitTag, null, null);
-		inst[2] = new SelectCommitTag(null, whereDomain, null);
+		inst[0] = new SelectCommitTag(null, null);
+		inst[1] = new SelectCommitTag(whereCommitTag, null);
+		inst[2] = new SelectCommitTag(null, whereDomain);
 		inst[3] = new SelectCommitTag(null, null, orderBy);
 		inst[4] = new SelectCommitTag(whereCommitTag, whereDomain, orderBy);
 
@@ -57,9 +57,9 @@ public class SelectCommitTagTest {
 	public void testGetOrderBy() {
 		System.out.println("getOrderBy");
 		String[][] expResult = {
-			null,
-			null,
-			null,
+			{},
+			{},
+			{},
 			orderBy,
 			orderBy,};
 		for (int i = 0; i < N; i++) {

@@ -5,6 +5,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import webarchive.api.xml.TagName;
 
 /**
  * DataElement implementation used in client.
@@ -74,11 +75,11 @@ public class DataElement implements webarchive.api.xml.DataElement {
 
 	
 	@Override
-	public boolean isEqualNode(DataElement e) {
+	public boolean isEqualNode(webarchive.api.xml.DataElement e) {
 		if (e == null) {
 			return false;
 		}
-		return dataElement.isEqualNode(e.dataElement);
+		return dataElement.isEqualNode(((DataElement)e).dataElement);
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public class DataElement implements webarchive.api.xml.DataElement {
 	}
 
 	@Override
-	public NodeList getElementsByTagName(String string) {
-		return dataElement.getElementsByTagName(string);
+	public NodeList getElementsByTagName(TagName tagName) {
+		return dataElement.getElementsByTagName(tagName.getAbsoluteName());
 	}
 }

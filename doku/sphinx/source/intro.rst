@@ -73,6 +73,7 @@ First, you have to install the backend:
   -rw-r--r-- metadata.db         # SQLite DB 
   drwxr-xr-x pickle_cache        # Additional Cache for metalists, explained later
   drwxr-xr-x tmp                 # tmp-Root
+  drwxr-xr-x xml                 # file.xsd for validation (Frontend only)
   $ ls -l content/
   drwxr-xr-x blog.fefe.de
   drwxr-xr-x www.0pointer.de

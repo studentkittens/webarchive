@@ -46,7 +46,7 @@ public class SelectMetaByCommitTest {
 	@Test
 	public void testSelect() throws Exception {
 		System.out.println("select");
-		List<CommitTag> commits = new ArrayList<CommitTag>();
+		List<CommitTag> commits = new ArrayList<>();
 		commits.add(new CommitTag(1, new TimeStamp("2012-05-15T17:30:00"), "www.heise.de"));
 		commits.add(new CommitTag(2, new TimeStamp("2012-05-15T17:35:00"), "www.wikipedia.de"));
 		commits.add(new CommitTag(3, new TimeStamp("2012-05-15T18:30:00"), "www.heise.de"));

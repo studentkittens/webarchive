@@ -6,14 +6,20 @@ __author__ = 'Florian Bauer'
 import archive.config.reader as reader
 import archive.config.xmlhandler as xmlhandler
 
-#   Set url to value
-def set_value(url, value):
-    xmlhandler.set_element(url, value)
 
-#   Set url back to default
-def set_default(value):
-    default = reader.get_default(value)
+def set_value(url, value):
+    """
+    Sets given value
+    """
+    return xmlhandler.set_element(url, value)
+
+
+def set_default(url):
+    """
+    Sets given url to default value
+    """
+    default = reader.get_default(url)
     if default == '':
         return ''
     else:
-        set_value(value, default)
+        set_value(url, default)

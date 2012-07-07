@@ -26,7 +26,7 @@ import webarchive.transfer.FileDescriptor;
  */
 public class XmlMethodFactory extends Handler {
 	private final DocumentBuilderFactory documentBuilderFactory;
-	private ErrorHandler xmlErrorHandler;
+	private ErrorHandler errorHandler;
 	private Schema schema;
 	private final TransformerFactory transformerFactory;
 	private LockHandler locker;
@@ -40,7 +40,7 @@ public class XmlMethodFactory extends Handler {
 		assert conf != null;
 		this.locker = locker;
 		this.conf = conf;
-		xmlErrorHandler=null; // not used
+		errorHandler=null; // not used
 		//build final documentBuilderFactory
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(false);
@@ -86,7 +86,7 @@ public class XmlMethodFactory extends Handler {
 			rc = documentBuilderFactory.newDocumentBuilder();
 	
 		assert rc!=null;
-		rc.setErrorHandler(xmlErrorHandler);
+		rc.setErrorHandler(errorHandler);
 		return rc;
 	}
 
@@ -94,8 +94,8 @@ public class XmlMethodFactory extends Handler {
 	 * get XmlErrorHandler
 	 * @return xmlErroHandler, default null
 	 */
-	ErrorHandler getXmlErrorHandler() {
-		return xmlErrorHandler;
+	ErrorHandler getErrorHandler() {
+		return errorHandler;
 	}
 	/**
 	 * set ErrorHandler.
@@ -103,7 +103,7 @@ public class XmlMethodFactory extends Handler {
 	 * @param xmlErrorHandler 
 	 */
 	public void setXmlErrorHandler(ErrorHandler xmlErrorHandler) {
-		this.xmlErrorHandler = xmlErrorHandler;
+		this.errorHandler = xmlErrorHandler;
 		buildSchema();
 	}
 	
@@ -114,13 +114,13 @@ public class XmlMethodFactory extends Handler {
 	Validator newXmlValidator() {
 		// schema is threadsafe
 		Validator v = schema.newValidator();
-		v.setErrorHandler(xmlErrorHandler);
+		v.setErrorHandler(errorHandler);
 		return v;
 	}
 
 	private void buildSchema()  {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		factory.setErrorHandler(xmlErrorHandler);
+		factory.setErrorHandler(errorHandler);
 		try {
 			schema = factory.newSchema(conf.getSchemaPath());
 		} catch (SAXException ex) {

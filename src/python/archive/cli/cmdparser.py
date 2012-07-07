@@ -204,6 +204,8 @@ class Cli(object):
             config.set(self._args['--set'], self._args['<value>'])
         elif self._args['--default']:
             print(config.get_default(self._args['--default']))
+        elif self._args['--config']:
+            config.load(self._args['--config'])
 
     def handle_log(self):
         if self._args['--severity']:

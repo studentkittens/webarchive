@@ -34,7 +34,7 @@ public interface WebarchiveClient {
 	 * E.g. the result of SelectMetaData is castable to List<lt/>MetaData<gt/>.
 	 * @throws Exception on syntax errors or the connection failed.
 	 */
-	public List select(Select select) throws Exception;
+	public <T> List<T> select(Select<T> select) throws Exception;
 
 	/**
 	 * get a file list of all files in a file-archive-folder

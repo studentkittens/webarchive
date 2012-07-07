@@ -10,7 +10,7 @@ import java.io.Serializable;
  * OrderBy-clauses have the shape <lt/>column<gt/> [ ASC | DESC ]
  *
  * @author ccwelich
- * @param <Type> type to bind Select to. Type is the result which is returned by a select as a list.
+ * @param <Type> return type to bind Select to. Type is the type of resultset which is returned by a select as a list.
  * @see webarchive.dbaccess.Select
  */
 public abstract class Select<Type> implements Serializable {

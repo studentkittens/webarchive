@@ -3,7 +3,6 @@ package webarchive.api;
 
 import java.io.IOException;
 import java.net.InetAddress;
-
 import webarchive.client.Client;
 /**
  * Factory class to create WebarchiveClient-instances.
