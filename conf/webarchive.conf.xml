@@ -18,7 +18,15 @@
         <sqlSource>sql/</sqlSource>
     </db>
     <xml>
+		<!-- This determines when xml files will be validated.
+			 There are following possible values:
+				"never": documents will never be validated
+				"always": documents will be validated after each change and after each built of Dom-object
+				"after update": documents will be validated after changes
+				"after built dom": documents will be validated after each built of the dom
+		-->
 		<autoValidatingMode>after update</autoValidatingMode>
+		<!-- sets the path to the global xsd-schema. Relative paths are located in the general.root path --> 
 		<schemaPath>xml/file.xsd</schemaPath>
     </xml>
     <server>
