@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import webarchive.connection.Connection;
 import webarchive.connection.NetworkModule;
+import webarchive.transfer.Message;
 
 /**
  * Client is a NetworkModule holding the Connection to the Server NetworkModule and can be used as an Observable.
@@ -90,12 +91,15 @@ public class Client implements NetworkModule  {
 	 */
 	public void connectToServer() throws IOException
 	{
-		//TODO
 		if(ip==null)
 		{
 			throw new NullPointerException();
 		}
-		this.connectToServer(ip,port);
+		try {
+			this.connectToServer(ip,port);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -104,8 +108,9 @@ public class Client implements NetworkModule  {
 	 * @param ip the ip
 	 * @param port the port
 	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void connectToServer(InetAddress ip, int port) throws IOException
+	public void connectToServer(InetAddress ip, int port) throws IOException, ClassNotFoundException
 	{
 		
 		try {
@@ -117,8 +122,14 @@ public class Client implements NetworkModule  {
 		} catch (IOException e) {
 			throw e;
 		}
-		
+		Message shake = (Message) c.getInputStream().readObject();
+		try {
+			c.send(shake);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		new Thread(c).start();
+		
 		
 	}
 

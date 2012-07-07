@@ -61,8 +61,9 @@ public class FileHandler extends Handler {
 		return list;
 	}
 	private void addSubDirectories(File current, List<File> list,int off) {
+		
 		if(current.isDirectory()) {
-			if(current.getName().equals(".git")){
+			if(current.getName().toCharArray()[0] == '.'){
 					return;
 				}
 			File[] subD = current.listFiles();
@@ -70,6 +71,9 @@ public class FileHandler extends Handler {
 				addSubDirectories(subD[i],list,off);
 			}
 		} else {
+			if(current.getName().toCharArray()[0] == '.'){
+				return;
+			}
 			list.add(new File(current.toString().substring(off+1)));
 		}
 		

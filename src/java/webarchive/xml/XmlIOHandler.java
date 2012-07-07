@@ -74,18 +74,9 @@ public class XmlIOHandler {
 	 * @throws TransformerException
 	 */
 	public void write(Document document) throws TransformerException {
-		System.out.println("XmlIoHandler::write path="+xmlFile.getAbsolutePath() );
 		DOMSource source = new DOMSource(document);
 		StreamResult streamResult = new StreamResult(xmlFile.getAbsolutePath());
 		transformer.transform(source, streamResult);
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new FileInputStream(xmlFile.getAbsolutePath()));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		while(sc.hasNextLine()) System.out.println(">>"+sc.nextLine());
 	}
 
 	/**

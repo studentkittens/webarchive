@@ -14,7 +14,11 @@ import java.util.logging.XMLFormatter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+
+import webarchive.dbaccess.SqlHandler;
+import webarchive.dbaccess.SqliteAccess;
 import webarchive.handler.Handlers;
+import webarchive.notifier.Notifier;
 import webarchive.server.*;
 import webarchive.transfer.FileDescriptor;
 import webarchive.xml.XmlConf;
@@ -78,11 +82,13 @@ public class Launcher {
 		System.out.println("\nServer started!\n");
 
 		// TODO start notifier
-		/*
-		 * Notifier notifier = new Notifier(3600000);// 1 hour; 43200000 for 12 hours
-		 * notifier.run();
-		 * System.out.println("\nNotifier started!\n");
-		 */
+		String absPathDb = FileDescriptor.root+"/"+((ConfigHandler) col.get(ConfigHandler.class)).getValue("webarchive.db.path");
+		SqlHandler sql  = (new SqlHandler(new SqliteAccess(new File(absPathDb))));
+		Integer interval = new Integer(col.get(ConfigHandler.class).getValue("webarchive.server.notify.interval"));
+		 Notifier notifier = new Notifier(interval*2000,sql);// TODO intervall umrechnung
+		 notifier.start();
+		 System.out.println("\nNotifier started!\n");
+		
 
 
 	}

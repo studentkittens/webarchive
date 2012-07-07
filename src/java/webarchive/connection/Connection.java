@@ -6,6 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.logging.Level;
+
+import com.sun.istack.internal.logging.Logger;
 
 import webarchive.transfer.Message;
 
@@ -161,19 +164,16 @@ public class Connection implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		while (sock.isConnected() && !sock.isClosed()) {
+		while (!sock.isClosed()) {
 			Message msg = null;
 			try {
-				//System.out.println("RECEIVING");
 				msg = this.receive();
-				//System.out.println("MSG RECEIVED: ["+msg.getHeader()+"] "+msg.getData());
 			} catch (SocketException | EOFException end) {
-				//System.out.println("lost connection");
+				System.out.println("lost connection");
 				conHandler.removeConnection(this);
 				break;
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.getLogger(getClass()).log(Level.INFO, e.toString());
 				continue;
 			}
 
@@ -182,8 +182,7 @@ public class Connection implements Runnable {
 		try {
 			sock.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(getClass()).log(Level.INFO, e.toString());
 		}
 	}
 }

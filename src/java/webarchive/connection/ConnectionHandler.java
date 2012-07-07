@@ -95,29 +95,34 @@ public abstract class ConnectionHandler extends Handler {
 	public Message waitForAnswer(Message m,Runnable t)
 	{
 		Message answer=null;
-		Object[] tmp = map.get(m.getId());
-		if(tmp != null) {
-		 answer = (Message) (tmp)[1];
-		}
+		Object[] runArray=null;
 		synchronized(map) {
-			if(answer != null  && answer.getId().equals(m.getId())) {
-					map.remove(m.getId());
-				return answer;
+			runArray = map.get(m.getId());
+			if(runArray != null) {
+				synchronized(runArray) {
+					answer = (Message) (runArray)[1];
+					if(answer != null  && answer.getId().equals(m.getId())) {
+							map.remove(m.getId());
+						return answer;
+					}
+				}
+				
+			} else {
+				runArray =  new Object[] {t,null};
+				map.put( m.getId(),runArray );
 			}
-			map.put( m.getId(), new Object[] {t,null} );
 		}
 		answer = null;
 		do {
-		
-				answer = (Message) map.get(m.getId())[1];
-				
-				if(answer != null  && answer.getId().equals(m.getId())) {
-					synchronized(map) {
-						map.remove(m.getId());
+				synchronized(runArray) {
+					answer = (Message) runArray[1];
+					if(answer != null  && answer.getId().equals(m.getId())) {
+						synchronized(map) {
+							map.remove(m.getId());
+						}
+						return answer;
 					}
-					return answer;
 				}
-				
 				answer = null;
 			
 			synchronized(t) {
@@ -135,6 +140,7 @@ public abstract class ConnectionHandler extends Handler {
 		} while (answer == null);
 		
 		return answer;
+		
 	}
 	
 	/**
@@ -157,22 +163,24 @@ public abstract class ConnectionHandler extends Handler {
 	{
 		if(msg.getId()!=null)
 		{		
-			Object[] tmp;
-				synchronized(map) {
-					tmp = map.get(msg.getId());
-				}
-				if(tmp != null) {
-					tmp[1] = msg;
-					synchronized(map.get(msg.getId())[0]) {
-						map.get(msg.getId())[0].notify();
+			Object[] runArray= null;
+			synchronized(map) {
+				runArray = map.get(msg.getId());
+				if(runArray != null) {
+					synchronized(runArray) {
+						runArray[1] = msg;
+						if(runArray[0] != null)
+							synchronized(runArray[0]) {
+								runArray[0].notify();
+							}
 					}
 				}
 				else {
 					synchronized(map) {
 						map.put(msg.getId(), new Object[] {null,msg});
-					}
+					}	
 				}
-				
+			}
 		}
 	}
 	

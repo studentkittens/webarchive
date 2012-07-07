@@ -43,7 +43,7 @@ public class ClientConnectionHandler extends ConnectionHandler {
 				try {
 					super.getConnection().send(msg);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			break;
@@ -56,8 +56,13 @@ public class ClientConnectionHandler extends ConnectionHandler {
 		case GETXMLEDIT: {
 			XmlEditor xmlE = (XmlEditor)msg.getData();
 			xmlE.setConnection(this);
+			wakeUp(msg);
 		}
-		
+		break;
+		case PING: {
+			
+		}
+		break;
 		default:
 			wakeUp(msg);
 			break;

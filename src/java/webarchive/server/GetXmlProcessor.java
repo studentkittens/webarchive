@@ -36,6 +36,7 @@ public class GetXmlProcessor implements MessageProcessor {
 		FileDescriptor fd = (FileDescriptor) msg.getData();
 		XmlHandler xmlH;
 		Message answer;
+		System.out.println("getxml");
 		try {
 			xmlH = cH.getXmlHandler(fd);
 			XmlEditor xmlEd = xmlH.newEditor();
@@ -53,6 +54,7 @@ public class GetXmlProcessor implements MessageProcessor {
 			Logger.getLogger(ServerConnectionHandler.class.getName()).
 				log(Level.SEVERE, null, ex);
 		}		
+		System.out.println("sent xmledit");
 	}
 
 }
