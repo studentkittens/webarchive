@@ -30,6 +30,7 @@ public class XmlPrepare {
 		SAXException, IOException, IllegalArgumentException {
 		ConfigHandler conf = new ConfigHandler(new File("test/java/webarchive/xml/mockup.conf.xml"));
 		xmlConf = new XmlConf(conf);
+		xmlConf.setSchemaPath(new File("test/xml/file.xsd"));
 		lockHandler = new LockHandlerMockup();
 		factory = new XmlMethodFactory(lockHandler,xmlConf);
 	}

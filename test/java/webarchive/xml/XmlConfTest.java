@@ -5,9 +5,13 @@
 package webarchive.xml;
 
 import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.xml.sax.SAXException;
 import webarchive.handler.Handlers;
+import webarchive.init.ConfigHandler;
 
 /**
  *
@@ -54,11 +58,18 @@ public class XmlConfTest {
 	 * Test of getSchemaPath method, of class XmlConf.
 	 */
 	@Test
-	public void testGetSchemaPath() {
+	public void testGetSchemaPath() throws ParserConfigurationException, SAXException, IOException {
 		System.out.println("getSchemaPath");
 		File expResult = new File("test/xml/file.xsd");
+		assertTrue(expResult.exists());
 		File result = instance.getSchemaPath();
 		assertEquals(expResult, result);
+		ConfigHandler conf = new ConfigHandler(new File("test/java/webarchive/xml/mockup.conf.xml"));
+		instance = new XmlConf(conf);
+		expResult = new File("/tmp/archive/xml/file.xsd");
+		result = instance.getSchemaPath();
+		assertEquals(expResult, result);
+
 	}
 
 }
