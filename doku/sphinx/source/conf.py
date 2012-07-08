@@ -186,7 +186,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'Webarchiv.tex', 'Webarchiv Documentation',
-   'Christopher Pahl, Christoph Piechula', 'manual'),
+   'Christopher Pahl, Christoph Piechula, Florian Bauer', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
