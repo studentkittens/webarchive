@@ -122,8 +122,8 @@ in der Server-Clientkommunikation zurückgeschickt und im Client erneut geworfen
 		
 		Anschließend wird mit ein paar simplen Tests die Richtigkeit der geschriebenen und gelesenen Daten überprüft.
 		
-	\subsubsection{webarchive.server.ServerTestSuit}
-		Die Tests der Klassen ConnectionHandler, ConfigHandler, LockHandler und FileHandler sollten über die ServerTestSuit ausgeführt werden.
-		Zu beachten ist, dass die ServerTestSuit im Gegensatz zu den anderen Tests des dbaccess,xml,etc. mit deaktivierten Assertions ausgeführt werden muss, da beim initialisieren von einigen temporär erzeugten Klassen ansonsten null werde nicht zugelassen werden.
+	\subsubsection{webarchive.server.ServerTestSuite}
+		Die Tests der Klassen ConnectionHandler, ConfigHandler, LockHandler und FileHandler sollten über die ServerTestSuite ausgeführt werden.
+		Zu beachten ist, dass die ServerTestSuite im Gegensatz zu den anderen Tests des dbaccess,xml,etc. mit deaktivierten Assertions ausgeführt werden muss, da beim initialisieren von einigen temporär erzeugten Klassen ansonsten null werde nicht zugelassen werden.
 		Diese assertions sind allerdings nur für den normalen Betrieb gedacht und nicht für das Testen von einzelnen Modulen.
 		
