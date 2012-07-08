@@ -63,7 +63,7 @@ public class Server implements Runnable, NetworkModule {
 	}
 
 	public boolean stop() {
-			if(checkRunning())
+			if(!checkRunning())
 				return false;
 			try {
 				System.out.println("closing svSock");

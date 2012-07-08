@@ -29,8 +29,7 @@ public class XmlConf extends Handler {
 	public XmlConf(ConfigHandler conf) throws IllegalArgumentException {
 		Document confDom = conf.getConfig();
 		Element xmlRoot = (Element) confDom.getElementsByTagName("xml").item(0);
-		buildConf(xmlRoot);
-		this.schemaPath = new File(conf.getValue("webarchive.general.root")+"/xml/file.xsd");
+		buildConf(xmlRoot, conf);
 	}
 
 	/**
@@ -53,7 +52,11 @@ public class XmlConf extends Handler {
 		return schemaPath;
 	}
 
-	private void buildConf(Node xmlRoot) throws IllegalArgumentException {
+	void setSchemaPath(File schemaPath) {
+		this.schemaPath = schemaPath;
+	}
+
+	private void buildConf(Node xmlRoot, ConfigHandler conf) throws IllegalArgumentException {
 		if(xmlRoot==null) return;
 		NodeList items = xmlRoot.getChildNodes();
 		for (int i = 0; i < items.getLength(); i++) {
@@ -72,11 +75,16 @@ public class XmlConf extends Handler {
 					break;
 				case "schemaPath":
 					schemaPath = new File(val);
+					if(!schemaPath.isAbsolute()) {
+						this.schemaPath = new File(conf.getValue("webarchive.general.root"),val);
+					}
 					break;
 				default:
 					throw new IllegalArgumentException(
 						"unsupported attribute: " + tagName + "=" + val);
 			}
+					
+
 		}
 	}
 
