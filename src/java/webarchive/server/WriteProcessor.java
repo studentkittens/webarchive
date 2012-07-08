@@ -6,7 +6,11 @@ import java.util.logging.Logger;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Proceses Write-File Requests by Clients.
+ * @author Schneider
+ *
+ */
 public class WriteProcessor implements MessageProcessor {
 
 	private Message msg;

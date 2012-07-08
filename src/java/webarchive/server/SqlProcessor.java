@@ -9,7 +9,11 @@ import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Processes Select-Requests by Clients.
+ * @author Schneider
+ *
+ */
 public class SqlProcessor implements MessageProcessor {
 
 	private ServerConnectionHandler cH;

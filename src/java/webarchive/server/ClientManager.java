@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import webarchive.connection.Connection;
-import webarchive.transfer.HandShake;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 /**
@@ -32,7 +31,7 @@ public class ClientManager implements Runnable {
 	private boolean doHandShake(Connection c) {
 		Message h = null;
 		try {
-			Message m = new Message(Header.HANDSHAKE,new HandShake(Math.random()));
+			Message m = new Message(Header.HANDSHAKE,null);
 			c.send(m);
 			h = c.getConHandler().waitForAnswer(m,c);//Go to sleep
 

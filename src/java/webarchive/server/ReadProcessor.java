@@ -9,7 +9,11 @@ import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Processes ReadFile-Requests by Clients.
+ * @author Schneider
+ *
+ */
 public class ReadProcessor implements MessageProcessor {
 
 	private ServerConnectionHandler cH;

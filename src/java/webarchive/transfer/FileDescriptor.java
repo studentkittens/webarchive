@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.Serializable;
 
 import webarchive.api.model.MetaData;
-
+/**
+ * Represents a File and it's MetaData containg information like domain and path.
+ * @author Schneider
+ *
+ */
 public class FileDescriptor implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2153013948915864227L;
 	
 	private MetaData meta;

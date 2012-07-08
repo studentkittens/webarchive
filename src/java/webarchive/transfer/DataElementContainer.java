@@ -3,7 +3,11 @@ package webarchive.transfer;
 import java.io.Serializable;
 
 import webarchive.xml.DataElement;
-
+/**
+ * 
+ * @author ccwelich
+ *
+ */
 public class DataElementContainer implements Serializable {
 	private DataElement dataElement;
 	private FileDescriptor xmlFile;

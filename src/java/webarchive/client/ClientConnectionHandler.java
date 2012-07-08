@@ -6,7 +6,6 @@ import webarchive.api.model.CommitTag;
 import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.connection.NetworkModule;
-import webarchive.transfer.HandShake;
 import webarchive.transfer.Message;
 import webarchive.xml.XmlEditor;
 

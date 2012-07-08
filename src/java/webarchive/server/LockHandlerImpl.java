@@ -9,13 +9,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import webarchive.transfer.FileDescriptor;
-
+/**
+ * Represents the counterpart to the Python Module "Javadapter".
+ * It connects to an active  Javadapter and manages lock,unlock,checkout and commit requests by MessageProcessors.
+ * Every connected Client gets a new LockHandler with an own connection to the Javadapter.
+ * @author Schneider
+ *
+ */
 public class LockHandlerImpl extends LockHandler   {
 
 	private PrintWriter out = null;
 	private Scanner in = null;
 	
 	private InetAddress ip;
+	
 	private int port;
 	private Socket sock;
 	public LockHandlerImpl(InetAddress ip, int port) {
@@ -23,7 +30,10 @@ public class LockHandlerImpl extends LockHandler   {
 		this.port=port;
 		reconnect();
 	}
-	
+	/**
+	 * Closes and removes the Connection to the Javadapter.
+	 * Then creates a new Connection using the set ip and port.
+	 */
 	@Override
 	public void reconnect() {
 		if(sock != null && !sock.isClosed()) {
@@ -48,21 +58,30 @@ public class LockHandlerImpl extends LockHandler   {
 		
 	}
 	
-	
+	/**
+	 * Tells the Javadapter to lock and then checkout the domain and commit in the fd.getMetaData().
+	 */
 	@Override
 	public void lock(FileDescriptor fd) {
 		String domain = fd.getMetaData().getCommitTag().getDomain();
 		lockDomain(domain);
 		checkout(fd);
 	}
-
+	/**
+	 * Tells the Javadapter to commit, checkout the master branche and then unlock the domain;
+	 */
 	@Override
 	public void unlock(FileDescriptor fd) {
 		commit(fd);
 		String domain = fd.getMetaData().getCommitTag().getDomain();
-		unlockDomain(domain);
 		checkoutMaster(domain);
+		unlockDomain(domain);
 	}
+	
+	/**
+	 * Implementation of the locking communication with the Javadapter.
+	 * @param domain to Lock
+	 */
 	
 	private void lockDomain(String domain) {
 		out.write("lock "+ domain+"\n");
@@ -74,7 +93,10 @@ public class LockHandlerImpl extends LockHandler   {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
-	
+	/**
+	 * Implementation of the unlocking communication with the Javadapter.
+	 * @param domain to Lock
+	 */
 	private void unlockDomain(String domain) {
 		out.write("unlock "+ domain+"\n");
 		out.flush();
@@ -86,6 +108,10 @@ public class LockHandlerImpl extends LockHandler   {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
+	/**
+	 * Implementation of the checkout communication with the Javadapter.
+	 * @param fd FileDescriptor with metaData and CommitTag
+	 */
 	@Override
 	public void checkout(FileDescriptor fd) {
 		String domain = fd.getMetaData().getCommitTag().getDomain();
@@ -106,7 +132,10 @@ public class LockHandlerImpl extends LockHandler   {
 		}
 		
 	}
-	
+	/**
+	 * Implementation of the commit communication with the Javadapter.
+	 * @param fd FileDescriptor with metaData and CommitTag
+	 */
 	@Override
 	public void commit(FileDescriptor fd) {
 		String domain = fd.getMetaData().getCommitTag().getDomain();
@@ -120,7 +149,10 @@ public class LockHandlerImpl extends LockHandler   {
 		}
 		
 	}
-
+	/**
+	 * Was only used for testing purposes. Works as intended.
+	 * @param domain
+	 */
 	public void list_branches(String domain) {
 		out.write("list_branches "+ domain+"\n");
 		out.flush();
@@ -136,8 +168,11 @@ public class LockHandlerImpl extends LockHandler   {
 		}
 		
 	}
+	/**
+	 * Was only used for testing purposes. Works as intended.
+	 * @param domain
+	 */
 	public void list_commits(String domain) {
-		//System.out.println(domain);
 		out.write("list_commits "+ domain+"\n");
 		out.flush();
 		String answer = in.nextLine();
@@ -151,7 +186,10 @@ public class LockHandlerImpl extends LockHandler   {
 		}
 		
 	}
-	
+	/**
+	 * Was only used for testing purposes. Works as intended.
+	 * @param domain
+	 */
 	@SuppressWarnings("unused")
 	private boolean tryLockDomain(String domain) {
 		out.write("try_lock "+ domain+"\n");
@@ -162,14 +200,20 @@ public class LockHandlerImpl extends LockHandler   {
 		}
 		return false;
 	}
-	
+	/**
+	 * Reacts to messages from the Javadapter. Filters "OK" Messages and the nothing to commit Message.
+	 * @param answer from Javadapter
+	 * @throws Exception containing the Error Message directly from the Javadapter
+	 */
 	private void processAnswer(String answer) throws Exception {
-		//System.out.println(answer);
 		if(answer.equals("OK") || answer.equals("ACK commit returned 1"))
 			return;
 		throw new Exception(answer);
 	}
-
+	/**
+	 * Checks out the master branch after all changes have been commited.
+	 * @param domain
+	 */
 	private void checkoutMaster(String domain) {
 		out.write("checkout "+domain+" master\n");
 		out.flush();
@@ -185,6 +229,33 @@ public class LockHandlerImpl extends LockHandler   {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE,null,e);
 		}
 	}
-	
-	
+	/**
+	 * Gets the current InetAddress.
+	 * @return current InetAddress set in this LockHandlerImpl 
+	 */
+	public InetAddress getIp() {
+		return ip;
+	}
+	/**
+	 * Sets a new InetAddress for Connections to the Javadapter.
+	 * Does not take effect until reconnect() has been called.
+	 */
+	public void setIp(InetAddress ip) {
+		this.ip = ip;
+	}
+	/**
+	 * Get Current Port in this LockHandlerImpl.
+	 * @return Current Port in this LockHandlerImpl.
+	 */
+	public int getPort() {
+		return port;
+	}
+	/**
+	 * Sets a new Port for Connections to the Javadapter.
+	 * Does not take effect until reconnect() has been called.
+	 */
+	public void setPort(int port) {
+		this.port = port;
+	}
+
 }

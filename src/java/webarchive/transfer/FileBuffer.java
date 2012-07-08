@@ -1,14 +1,15 @@
 package webarchive.transfer;
 
 import java.io.Serializable;
-
+/**
+ * Represents a File with it's Data stored in a byte[].
+ * Can be sent over a ObjectStream.
+ * @author Schneider
+ *
+ */
 
 
 public class FileBuffer implements Serializable{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3598419521913474363L;
 	private FileDescriptor fd;
 	private byte[] data;
@@ -32,7 +33,10 @@ public class FileBuffer implements Serializable{
 	public byte[] getData() {
 		return data;
 	}
-
+	/**
+	 * should not be called from anyone but the BAOS
+	 * @param baos
+	 */
 	void finish(BAOS baos) {
 		 this.data = baos.toByteArray();
 	}
