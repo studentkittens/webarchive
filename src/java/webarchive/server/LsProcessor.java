@@ -8,7 +8,11 @@ import java.util.logging.Logger;
 import webarchive.api.model.MetaData;
 import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Message;
-
+/**
+ * Processes ListAllFiles-Requests from Clients.
+ * @author Schneider
+ *
+ */
 public class LsProcessor implements MessageProcessor {
 
 	private Message msg;

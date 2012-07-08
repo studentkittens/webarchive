@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import com.sun.istack.internal.logging.Logger;
 
 import webarchive.api.model.MetaData;
 import webarchive.handler.Handler;
@@ -59,7 +62,7 @@ public class FileHandler extends Handler {
 	public void write(FileBuffer buf) throws Exception {
 		File f = buf.getFd().getAbsolutePath();
 		if(f.exists()) {
-			throw new Exception("Overwriting "+f.toString()+" not permitted!");
+			Logger.getLogger(getClass()).log(Level.INFO, "Overwriting "+f.toString()+" not permitted!");
 		}
 		BufferedOutputStream bos = null; 
 		bos = new BufferedOutputStream(new FileOutputStream(f));

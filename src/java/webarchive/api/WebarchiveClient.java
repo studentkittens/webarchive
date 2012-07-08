@@ -7,8 +7,6 @@ import java.util.List;
 import webarchive.api.model.MetaData;
 import webarchive.api.select.Select;
 import webarchive.api.xml.XmlEditor;
-//TODO implementation by Eddy
-
 /**
  * Client interface to webarchive. Provides following functions: 
  * <ul>

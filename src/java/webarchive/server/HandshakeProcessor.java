@@ -1,7 +1,11 @@
 package webarchive.server;
 
 import webarchive.transfer.Message;
-
+/**
+ * Redirects Handshake-Answers to ClientManager.
+ * @author Schneider
+ *
+ */
 public class HandshakeProcessor implements MessageProcessor  {
 
 	private Message msg;

@@ -1,9 +1,15 @@
 
-public class Analysetool {
 
-	/**
-	 * @param args
-	 */
+/**
+ *Implement a simple Testclient.
+ *This was substitute.
+ *@author SBiersack
+ */
+
+/*
+ * public class Analysetool {
+
+	
 	public static void main(String[] args) {
 		
 		/*
@@ -15,7 +21,7 @@ public class Analysetool {
 		 *  ### Write into File (How much words, new file)
 		 *  ### Get XMLEdit-object
 		 *  ### Write to XML as new Attribute 
-		 */	
+		 *	
 		new Testclient();
 		
 		
@@ -23,3 +29,5 @@ public class Analysetool {
 	
 
 }
+
+ */

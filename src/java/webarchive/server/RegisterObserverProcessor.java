@@ -8,7 +8,11 @@ import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Processes ObserverRegistrations.
+ * @author Schneider
+ *
+ */
 public class RegisterObserverProcessor implements MessageProcessor {
 
 	private ConnectionHandler cH;

@@ -22,7 +22,13 @@ import webarchive.transfer.Message;
 import webarchive.xml.XmlConf;
 import webarchive.xml.XmlHandler;
 import webarchive.xml.XmlMethodFactory;
-
+/**
+ * Handles incoming requests from Clients and delegates them to different MessageProcessors.
+ * Every Connection gets a new ServerConnectionHandler, which creates a new Set of Handlers and MessageProcessors.
+ * 
+ * @author Schneider
+ *
+ */
 public class ServerConnectionHandler extends ConnectionHandler {
 	
 	//Handlers
@@ -43,8 +49,17 @@ public class ServerConnectionHandler extends ConnectionHandler {
 	private static final String REGISTER = "ResgisterObserver";
 	private static final String DELETE = "DeleteObserver";
 	private static final String HANDSHAKER= "HandShake";
-
+	/**
+	 * For JUnitTesting purposes only
+	 */
 	public ServerConnectionHandler() {super(null,null);}
+	
+	/**
+	 * Default Ctor for creating ServerConnectionHandlers.
+	 * Each ServerConnectionsHandler is associated a Connection and the Server instance.
+	 * @param c Connection
+	 * @param netMod Server
+	 */
 	public ServerConnectionHandler(Connection c, NetworkModule netMod) {
 		super(c, netMod);
 		System.out.println("\tcreating handlers for new connection");
@@ -78,7 +93,10 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		processors.put(HANDSHAKER, new HandshakeProcessor());
 		
 	}
-	
+	/**
+	 * delegates Messages to specific threaded Processors.
+	 * @param msg the Message to be processed
+	 */
 	@Override
 	public void handle(Message msg) {
 		
@@ -115,7 +133,12 @@ public class ServerConnectionHandler extends ConnectionHandler {
 				break;
 		}
 	}
-	
+	/**
+	 * creates a new XmlHandler using the FileDescriptor fd.
+	 * @param fd the FileDescriptor
+	 * @return new XmlHandler
+	 * @throws SAXException
+	 */
 	XmlHandler getXmlHandler(FileDescriptor fd) throws SAXException {
 		XmlHandler xmlH = null;
 		xmlH = xmlMeth.newXmlHandler(fd);
@@ -123,6 +146,10 @@ public class ServerConnectionHandler extends ConnectionHandler {
 		return xmlH;
 	}
 	
+	/**
+	 * sends a Message to the Client on the other side of the Connection c.
+	 * @param msg Message to be sent
+	 */
 	@Override
 	public void send(Message msg) throws Exception {
 		c.send(msg);

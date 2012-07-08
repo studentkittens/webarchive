@@ -10,7 +10,11 @@ import webarchive.transfer.FileDescriptor;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 import webarchive.xml.XmlHandler;
-
+/**
+ * Handles Get Xml requests by clients.
+ * @author Schneider
+ *
+ */
 public class GetXmlProcessor implements MessageProcessor {
 
 	private ServerConnectionHandler cH;
