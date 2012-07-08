@@ -1,5 +1,13 @@
-package test;
 
+
+/**
+ *Implement a simple Testclient.
+ *This was substitute.
+ *@author SBiersack
+ */
+/*
+ * package test;
+ * 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
@@ -116,3 +124,6 @@ Testclient() throws Exception{
 	}
 			
 }
+
+ */
+

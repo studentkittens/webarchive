@@ -1,7 +1,9 @@
 /**
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *Describes how to implement the logging properties file and the logger.
+ *This was substitute.
+ *@author SBiersack
  */
+/*
 package logger;
 
 import java.io.File;
@@ -49,7 +51,8 @@ FileReader r;
 		/*
 		* = 4 Files
 		*/
-		
+		/*
 		
 	}
 }
+*/
