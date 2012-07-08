@@ -2,8 +2,7 @@
 # encoding: utf-8
 
 
-XSD_TEMPLATE ="""
-<?xml version="1.0"?>
+XSD_TEMPLATE ="""<?xml version="1.0"?>
 <!--
 
 -->
