@@ -16,6 +16,6 @@ import webarchive.init.*;
 
 @RunWith(Suite.class)
 @SuiteClasses({ FileHandlerTest.class, LockHandlerTest.class, ConfigHandlerTest.class, ConnectionHandlerTest.class })
-public class ServerTestSuit {
+public class ServerTestSuite {
 
 }
