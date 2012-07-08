@@ -69,3 +69,61 @@ in der Server-Clientkommunikation zurückgeschickt und im Client erneut geworfen
 
 		Die Klasse SqlHandler, welche als Fassadenschnittstelle nach aussen dient, wird daraufhin
 		geprüft, dass übergeben Select-objekte (aus dem api-package) den richtigen Ausführungsselects zugeordnet werden. Das Ergebnis kann wiederum anhand erwartbar Rückgabewerte geprüft werden.
+	\subsubsection{webarchive.server.Server}
+		Der Server konnte über UnitTests nur sehr umständlich und unzuverlässig getestet werden, da er im Grunde von allen anderen Modulen und Klassen abhängig ist.
+		
+		Nach unzähligen Versuchen eine minimalistische Testumgebung für den Server zu schaffen, hat man sich dazu entschieden, die Tests auf den MockupClient auszulagern und keine separaten JUnitTests für ihn zu schreiben.
+	\subsubsection{webarchive.client.Client}
+		Für den Client wurde ein MockupClient geschrieben, der alle wesentlichen API-Calls aufruft. 
+		Da es nur seine Aufgabe ist, Daten an den Server zu schicken und zu empfangen, war das Testen relativ leicht und benötigte auch keine JUnitTestCases, die ohnehin nicht so schnell realisierbar gewesen wären, da der Client auf eine funktionsfähige Serverstruktur angewiesen ist.
+		Letztere ginge nicht ohne einen Laufenden Webarchive Crawler, eine Datenbank mit Daten, einem laufenden Javadapter und alle restlichen Java Module.
+		Da dies dem Sinn von UnitTests widerspricht, wurde nur auf ein simples API Testen mit einem MockupClient ausgewichen.
+	\subsubsection{webarchive.connection.ConnectionHandler}
+		Die grundlegende Intelligenz hinter dem Server und Client steckt im ConnectionHandler, der Nachrichten an wartende Threads weiterleitet.
+		
+		Dieser lässt sich im Gegensatz zum Server und Client direkt testen.
+		So wurde ein JUnitTest erzeugt, der zunächst einen ServerConnectionHandler und 1500 Messages mit verschiedenen id's anlegt.
+		Anschließend werden 1500 Threads erzeugt, die auf eingehende Nachrichten warten.
+		Hiermit wird ein senden und anschließendes warten auf eine Antwort simuliert.
+		Nachdem alle 1500 Threads warten, werden weitere 1500 Threads erzeugt die ein wakeUp() auf je eine Nachricht ausführen.
+		Sobald ein wartender Thread aufwacht, wird geprüft ob die über wakeUp() zugeordnete Nachricht dieselbe id wie die anfängliche Message hat.
+		Zum Schluss joined der Test-Thread allen noch wartenden Threads für maximal 30 sekunden. Wenn diese Zeit überschritten wird, gilt der Test als nicht bestanden.
+		Auf der Entwicklermaschine mit nur 2 Kernen und je 2 GHz dauerte der gesammte Vorgang nur wenige sekunden (weniger als 5).
+		Damit der Test als erfolgreich gilt, muss die HashMap nachdem alle Threads geweckt wurden leer sein.
+		
+		Dieser Test wird mehrere Male in verschiedenen Kombinationen ausgeführt.
+		Auch ein in der Praxis eher nicht vorkommendes Ereignis, nämlich das Senden von mehreren Antworten direkt hintereinander wurde mit Erfolg getestet.
+		
+	\subsubsection{webarchive.init.ConfigHandler}
+		Der ConfigHandler muss in der Lage sein eine auf der Festplatte liegende XML-Datei einzulesen und einen bestimmten Wert als String wiederzugeben.
+		
+		Hierfür wurde eine simple XML-Datei als static final String in den Quelltest gepackt und beim setUp des JUnitTests in das aktuelle Verzeichnis geschrieben.
+		Anschließend wurden einige Tests bezüglich der Korrektheit der zurückgegebenen Daten gemacht.
+		So wurde zum Beispiel getestet ob ein langer XML-Knoten-Pfad wie a.b.c.d.e.f funktioniert, oder beim ausgeben eines übergeordneten Knotens alle sub-Knoten-Inhalte zurückgegeben werden.
+		
+	\subsubsection{webarchive.server.LockHandler}
+		Der LockHandler war genau wie der Server und Client schwer mit JUnit zu testen.
+		Allerdings gab es hier die Möglichkeit eine minimalistische Testumgebung zu erzeugen.
+		
+		Um den LockHandler effektiv zu testen, wurde zunächst ein Javadapter Emulator geschrieben.
+		Dieser nimmt eine Verbindung (der echte nimmt viele) an und reagiert ähnlich wie der echte Javadapter auf lock, unlock, commit... Befehle.
+		
+		Der JavadapterEmu besteht aus dem Verbindungspart in der Klasse selbst und dem EmuHandler, der auf die Befehle regiert und prüft. 
+		Bei einem Fehler wird eine Exception an den LockerHandlerTest wieder gereicht.
+		
+		Für alle Kernbefehle wurden verschiedene Tests geschrieben. 
+		Zum einen werden absichtlich nicht vorhandene Domains gelockt, was einen Fehler verursachen MUSS.
+		Zum anderen wird geprüft ob der LockHandler mit inkorrekter Anzahl an Parametern zurechtkommt.
+	\subsubsection{webarchive.server.FileHandler}
+		Der FileHandler muss Dateien von der Festplatte lesen und auf sie schreiben können.
+		Auch muss er alle nicht versteckten Dateien in einer Ordnerstruktur anzeigen können.
+		
+		Hierzu werden vor jedem Test mehrere Ordner und Dateien angelegt.
+		
+		Anschließend wird mit ein paar simplen Tests die Richtigkeit der geschriebenen und gelesenen Daten überprüft.
+		
+	\subsubsection{webarchive.server.ServerTestSuit}
+		Die Tests der Klassen ConnectionHandler, ConfigHandler, LockHandler und FileHandler sollten über die ServerTestSuit ausgeführt werden.
+		Zu beachten ist, dass die ServerTestSuit im Gegensatz zu den anderen Tests des dbaccess,xml,etc. mit deaktivierten Assertions ausgeführt werden muss, da beim initialisieren von einigen temporär erzeugten Klassen ansonsten null werde nicht zugelassen werden.
+		Diese assertions sind allerdings nur für den normalen Betrieb gedacht und nicht für das Testen von einzelnen Modulen.
+		
