@@ -8,7 +8,11 @@ import webarchive.connection.Connection;
 import webarchive.connection.ConnectionHandler;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Removes a registered Observer from the Observer-List in the Server.
+ * @author Schneider
+ *
+ */
 public class DeleteObserverProcessor implements MessageProcessor {
 
 	private ConnectionHandler cH;

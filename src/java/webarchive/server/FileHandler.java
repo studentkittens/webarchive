@@ -15,11 +15,20 @@ import webarchive.api.model.MetaData;
 import webarchive.handler.Handler;
 import webarchive.transfer.FileBuffer;
 import webarchive.transfer.FileDescriptor;
-
+/**
+ * Reads and writes from and to the archive using FileIn and FileOutputstreams.
+ * @author Schneider
+ *
+ */
 public class FileHandler extends Handler {
 
 	public static final int BUFFER_SIZE = 4096; 
-	
+	/**
+	 * 
+	 * @param fd FileDescriptor that contains the File-Object to the File to be read 
+	 * @return a FileBuffer with the content of the read File in form of byte[]
+	 * @throws IOException
+	 */
 	public FileBuffer read(FileDescriptor fd) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		BufferedInputStream bis =null;
@@ -42,6 +51,11 @@ public class FileHandler extends Handler {
 		return new FileBuffer(baos.toByteArray(),fd);
 	}
 
+	/**
+	 * Writes a FileBuffer to the archive.
+	 * @param buf FileBuffer that contains the data and a FileDescriptor
+	 * @throws Exception
+	 */
 	public void write(FileBuffer buf) throws Exception {
 		File f = buf.getFd().getAbsolutePath();
 		if(f.exists()) {
@@ -52,7 +66,12 @@ public class FileHandler extends Handler {
 		bos.write(buf.getData());
 		bos.close();
 	}
-
+	/**
+	 * Lists all Files in the directory and sub-directories from meta.getPath().
+	 * Ignores hidden Files and Folders, that start with '.', such as ".git"
+	 * @param meta Metadata pointing to target Folder
+	 * @return a List of Files in the target Folder
+	 */
 	public List<File> getFileTree(MetaData meta) {
 		File root = meta.getPath().getParentFile();
 		List<File> list = new ArrayList<File>();
@@ -60,6 +79,7 @@ public class FileHandler extends Handler {
 		
 		return list;
 	}
+	
 	private void addSubDirectories(File current, List<File> list,int off) {
 		
 		if(current.isDirectory()) {

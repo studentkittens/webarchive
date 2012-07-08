@@ -9,7 +9,11 @@ import webarchive.transfer.Header;
 import webarchive.transfer.Message;
 import webarchive.xml.DataElement;
 import webarchive.xml.XmlHandler;
-
+/**
+ * Handles Add Datalement Requests by Clients.
+ * @author Schneider
+ *
+ */
 public class AddXmlProcessor implements MessageProcessor {
 
 	

@@ -11,25 +11,30 @@ import webarchive.connection.Connection;
 import webarchive.transfer.HandShake;
 import webarchive.transfer.Header;
 import webarchive.transfer.Message;
-
+/**
+ * Separate Thread, that is started every time a Client tries to connect to the Server.
+ * Upon running, it creates Input and Outputstreams and sends a HandShake-Message to the Client.
+ * Only if the Client responds with the same message, the connection is accepted and will be added to the connected Clients-List in the Server.
+ * Otherwise the Connection will be closed and the Thread terminates.
+ * @author Schneider
+ *
+ */
 public class ClientManager implements Runnable {
 
 	private Server sv;
 	private Socket sock;
 	
+	/**
+	 * Verifies, that the other side of the Connection behaves like a WebarchiveClient.
+	 * @param c The Connection to the Client
+	 * @return true if the Client is accpeted
+	 */
 	private boolean doHandShake(Connection c) {
 		Message h = null;
 		try {
-//			System.out.println("try sending handshake");
-
 			Message m = new Message(Header.HANDSHAKE,new HandShake(Math.random()));
-
 			c.send(m);
-//			System.out.println("handshake sent, try receiving handshake");
-
 			h = c.getConHandler().waitForAnswer(m,c);//Go to sleep
-
-//			System.out.println("handshake received");
 
 		} catch (Exception ex) {
 			Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,6 +47,7 @@ public class ClientManager implements Runnable {
 
 		return false;
 	}
+
 	@Override
 	public void run() {
 		ObjectInputStream ois = null;

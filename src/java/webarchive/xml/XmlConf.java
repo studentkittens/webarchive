@@ -7,6 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import webarchive.handler.Handler;
 import webarchive.init.ConfigHandler;
+import webarchive.server.Server;
 
 /**
  * Config class for all Xml-related classes. Extracts config-values from xml
@@ -17,7 +18,7 @@ import webarchive.init.ConfigHandler;
 public class XmlConf extends Handler {
 
 	private AutoValidatingMode autoValidatingMode = AutoValidatingMode.AFTER_UPDATE;
-	private File schemaPath = new File("xml/file.xsd");
+	private File schemaPath=null;
 
 	/**
 	 * Default constructor
@@ -29,6 +30,7 @@ public class XmlConf extends Handler {
 		Document confDom = conf.getConfig();
 		Element xmlRoot = (Element) confDom.getElementsByTagName("xml").item(0);
 		buildConf(xmlRoot);
+		this.schemaPath = new File(conf.getValue("webarchive.general.root")+"/xml/file.xsd");
 	}
 
 	/**

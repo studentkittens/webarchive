@@ -62,20 +62,20 @@ public class Launcher {
 		
 		Server.init(col); //call once
 
-//		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				Server.getInstance().stop();
-//				System.out.println("\nServer stopped!\n");
-//				try {
-//					Server.getInstance().getThread().join();
-//				} catch (InterruptedException ex) {
-//					Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
-//				ex);
-//				}
-//			}
-//		}));
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				Server.getInstance().stop();
+				System.out.println("\nServer stopped!\n");
+				try {
+					Server.getInstance().getThread().join();
+				} catch (InterruptedException ex) {
+					Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null,
+				ex);
+				}
+			}
+		}));
 
 		
 		Server.getInstance().start();
@@ -120,10 +120,8 @@ public class Launcher {
 			
 			handler = new FileHandler(archiveRoot+"/logs/java/webarchive.log");
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Formatter formatter = new SimpleFormatter();

@@ -1,12 +1,9 @@
 package webarchive.handler;
 
 /**
- * OBSOLETE
+ * Convenience Interface-Like Abstract-Class
  */
 public abstract class Handler {
 	
-	public String getName() {
-		return getClass().getSimpleName();
-	}
 	
 }

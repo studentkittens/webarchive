@@ -22,19 +22,17 @@ public class Notifier extends Thread {
 	private SqlHandler sqlHandler;
 	private long mIntervall;
 	
-	public Notifier(long intervall){		
+	public Notifier(long intervall, SqlHandler sql){		
 		mIntervall = intervall;	
 		lastSearch= new TimeStamp(new Date());
+		this.sqlHandler = sql;
 	}
 		
 	public void run() {	
-		while(true){			
-			//#############//
-			// start routine
-			 routine(lastSearch);			
-			//#############//
-			// set Date				
-				lastSearch= new TimeStamp(new Date ());				
+		while(true){	
+			 TimeStamp tmp = new TimeStamp(new Date ());	
+			 routine(lastSearch);	
+			 lastSearch  = 	tmp;
 			//#############//
 			// sleep (mIntervall)
 				try {
@@ -43,13 +41,17 @@ public class Notifier extends Thread {
 				    catch(InterruptedException e) {
 				   Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null,
 								e);
-				    }				
+				    }			
+				
 		}
 	}	
 	@SuppressWarnings("unchecked")
 	private void routine(TimeStamp mLastSearch) {
+		Server sv = Server.getInstance();
+		Connection[] cons = sv.getObserverArray();
+		if(cons.length == 0) return;
 		//DB-Query & get list
-		String where = "commitTime > " + mLastSearch.getXmlFormat(); // build where-clause example
+		String where = "commitTime > \"" + mLastSearch.getXmlFormat()+"\""; // build where-clause example
 		String orderBy = "commitTime ASC"; // order by clause example -- domainName ASC,
 		List<CommitTag> list = null; 
 		try {
@@ -58,15 +60,16 @@ public class Notifier extends Thread {
 			Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null,
 				e2);
 		}
-
+		if(list.size()==0) return;
+		
 		//send list
-		Server sv = Server.getInstance();
+		
 		Message msg = new Message(Header.NOTIFY, list);
 		msg.setBroadCast();
 		
-		List<Connection> listConnection = sv.getObservers();
-		synchronized (listConnection) {
-			for ( Connection c : listConnection ) {
+		
+		synchronized (cons) {
+			for ( Connection c : cons ) {
 			 	try {
 			 			c.send(msg); 
 			 		} catch (Exception e3) {

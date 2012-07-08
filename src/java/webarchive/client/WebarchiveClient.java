@@ -16,7 +16,11 @@ import webarchive.api.select.Select;
 import webarchive.api.xml.XmlEditor;
 import webarchive.connection.Connection;
 import webarchive.transfer.*;
-
+/**
+ * This WebarchiveClient Class delegates Webarchive-API-Calls to the NetworkModule Client and returns the answer to the caller.
+ * @author Schneider
+ *
+ */
 public class WebarchiveClient extends Observable implements webarchive.api.WebarchiveClient {
 
 	private Client cl;
@@ -24,7 +28,6 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 	
 	public WebarchiveClient(InetAddress server, int port) throws IOException {
 		cl = new Client();
-		
 		cl.setIp(server);
 		cl.setPort(port);
 		cl.connectToServer();
@@ -60,7 +63,7 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 		return new BAOS(new FileBuffer(new FileDescriptor(meta,file)),(ClientConnectionHandler) con.getConHandler());
 	}
 
-
+	@Override
 	public XmlEditor getXMLEditor(MetaData meta) throws Exception {
 		Object answer = queryServer(Header.GETXMLEDIT,new FileDescriptor(meta,new File("data.xml")));
 		assert answer instanceof XmlEditor;
@@ -102,10 +105,20 @@ public class WebarchiveClient extends Observable implements webarchive.api.Webar
 		super.deleteObservers();
 
 	}
+	/**
+	 * Convenience Method, mainly used for disconnecting the NetworkModule
+	 * @return instance of NetMod Client
+	 */
 	public Client getClient() {
 		return cl;
 	}
-	
+	/**
+	 * 
+	 * @param head Header enumaration, which defines the type of Message to be sent
+	 * @param toSend THe Object, which shall be sent to the Server
+	 * @return the Data-Object, which was received from the server as an answer
+	 * @throws Exception the Exception, which the Server sent to the Client, indicating a problem with the prevous request
+	 */
 	private Object queryServer(Header head, Object toSend) throws Exception {
 		Message msg = new Message(head, toSend);
 		con.send(msg);
