@@ -9,7 +9,7 @@ __author__ = 'Christopher Pahl'
 
 import os
 import unittest
-import archive.config.reader as config
+import archive.config.handler as config
 
 
 def get_dbpath():
@@ -74,19 +74,20 @@ def get_urllist_path():
 #                                unittest                                 #
 ###########################################################################
 
-# some predefined values to test with
-ROOT = config.get('general.root')
-SQL_PATH = 'sql/'
-DB_PATH = 'metadata.db'
-CRAWLER_TMP_ROOT = 'tmp/'
-
-CONTENT_DIR = 'content/'
-LOG_DIR = 'logs/'
-TEMP_DIR = 'tmp/'
-DOMAIN = 'www.domain_name.org'
-URL = 'url.txt'
 
 if __name__ == '__main__':
+    # some predefined values to test with
+    ROOT = config.get('general.root')
+    SQL_PATH = 'sql/'
+    DB_PATH = 'metadata.db'
+    CRAWLER_TMP_ROOT = 'tmp/'
+
+    CONTENT_DIR = 'content/'
+    LOG_DIR = 'logs/'
+    TEMP_DIR = 'tmp/'
+    DOMAIN = 'www.domain_name.org'
+    URL = 'url.txt'
+
     class TestPaths(unittest.TestCase):
 
         def test_get_db_path(self):
