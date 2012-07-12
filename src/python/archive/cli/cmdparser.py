@@ -79,8 +79,12 @@ class Cli(object):
                 }
 
         try:
-            loglevel = self._args['--loglevel'].upper()
-            severity = getattr(logging, loglevel)
+            loglevel = self._args['--loglevel']
+            if loglevel is not None:
+                loglevel = loglevel.upper()
+                severity = getattr(logging, loglevel)
+            else:
+                raise KeyError
         except KeyError:
             severity = logging.INFO
         except AttributeError:
