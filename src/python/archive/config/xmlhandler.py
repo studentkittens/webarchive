@@ -34,6 +34,8 @@ def set_element(url, value):
         tree.find(tagname).text = value
     except AttributeError:
         return False
+    except AssertionError:
+        return False
     else:
         write_file()
         return True
@@ -58,6 +60,8 @@ def get_element(url):
             return False
         return value
     except AttributeError:
+        return False
+    except AssertionError:
         return False
 
 
